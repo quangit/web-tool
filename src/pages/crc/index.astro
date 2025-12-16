@@ -1,22 +1,17 @@
 ﻿---
-import EncodingPage from '../../components/EncodingPage.astro';
+import CRCPage from '../../components/CRCPage.astro';
 
 const title = "CRC Calculator";
 const description = "Calculate CRC checksums. Free online CRC calculator tool.";
 const toolName = "Calculate";
 const jsFile = "crc.js?v=1";
 const activePage = "crc/";
-const reverseLink = "";
 ---
 
-<EncodingPage 
+<CRCPage 
     title={title}
     description={description}
     toolName={toolName}
     jsFile={jsFile}
     activePage={activePage}
-    reverseLink={reverseLink}
-    hasInputSettings={false}
-    hasOutputSettings={false}
-    hasFormatSettings={false}
 />
