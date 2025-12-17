@@ -1,0 +1,325 @@
+﻿---
+import BaseLayout from '../../../../layouts/BaseLayout.astro';
+import Sidebar from '../../../../components/Sidebar.astro';
+
+const title = "Triple DES Decryption";
+const description = "This online tool helps you decrypt text or a file using Triple DES. It supports various modes and padding schemes. It also supports PBKDF2 or EvpKDF, with customizable salt, iteration, and hash settings.";
+const activePage = "cryptography/triple-des/decrypt";
+---
+
+<BaseLayout title={title} description={description}>
+  <div id="app">
+    <Sidebar activePage={activePage} />
+    
+    <div id="content">
+    <div class="top-nav">
+      <button id="sidebar-toggler" aria-controls="sidebar" aria-expanded="false" aria-label="Menu">
+        <img src="/images/menu.svg" width="24" height="24" alt="Menu">
+      </button>
+    </div>
+    <header>
+      <h1>Triple DES Decryption</h1>
+      <p>This online tool helps you decrypt text or a file using Triple DES. It supports various modes and padding schemes. It also supports PBKDF2 or EvpKDF, with customizable salt, iteration, and hash settings.</p>
+    </header>
+    <main>
+      <div class="layout">
+        <div class="layout-block">
+          <div class="input">
+            <div class="block block-fill">
+              <div class="block-title">Input
+                <div class="toolbar">
+                  <button class="icon" data-toggle="fullscreen">
+                    <img class="fullscreen-icon" src="/images/fullscreen.svg" alt="Full Screen" title="Full Screen">
+                    <img class="fullscreen-icon-exit" src="/images/fullscreen-exit.svg" alt="Full Screen" title="Full Screen">
+                  </button>
+                </div>
+              </div>
+              <textarea class="container" id="input" spellcheck="false" placeholder="Enter here..." data-remember="input" data-share="input" data-encoding-from="#input-type" data-auto-update data-toggle="monacoEditor"></textarea>
+              <div class="droppable-zone container" id="droppable-zone" style="display:none;">
+                <input class="droppable-file" type="file" id="file" data-auto-update>
+                <div class="droppable-zone-wrapper">
+                  <img class="droppable-zone-icon" src="/images/file.svg" alt="File">
+                  <div class="droppable-zone-text">Drag and drop the file here or click to select a file. It will process locally and won't be uploaded.</div>
+                </div>
+              </div>
+            </div>
+          </div>
+          <div class="output">
+            <div class="block block-fill">
+              <div class="block-title">Output
+                <div class="toolbar">
+                  <a class="icon" id="download-image" download="download" style="display:none">
+                    <img src="/images/download.svg" alt="Download" title="Download"/>
+                  </a>
+                  <button class="icon" data-toggle="copy" data-clipboard-target="#output" data-message="Output copied">
+                    <img src="/images/copy.svg" alt="Copy" title="Copy"/>
+                  </button>
+                  <button class="icon" data-toggle="fullscreen">
+                    <img class="fullscreen-icon" src="/images/fullscreen.svg" alt="Full Screen" title="Full Screen">
+                    <img class="fullscreen-icon-exit" src="/images/fullscreen-exit.svg" alt="Full Screen" title="Full Screen">
+                  </button>
+                </div>
+              </div>
+              <textarea class="container" id="output" spellcheck="false" placeholder="Output here..." data-encoding-from="#output-type" data-toggle="monacoEditor" readonly="readonly"></textarea>
+            </div>
+            <details class="block text-only" data-toggle="copyblock">
+              <summary class="block-title">Share Link
+                <div class="toolbar">
+                  <button class="icon" data-toggle="copy" data-clipboard-target="#share-link" data-message="Share link copied">
+                    <img src="/images/copy.svg" alt="Copy" title="Copy"/>
+                  </button>
+                </div>
+              </summary>
+              <input id="share-link" type="text" placeholder="Share Link" readonly="readonly"/>
+            </details>
+          </div>
+        </div>
+        <div class="settings">
+          <div class="block block-fill">
+            <div class="block-title">Settings</div>
+            <div class="container">
+              <div class="setting">
+                <a class="btn" id="execute">Decrypt</a>
+              </div>
+              <div class="setting">
+                <label class="switcher">
+                  <input type="checkbox" value="1" id="auto-update" checked>
+                  <div class="toggle"></div>
+                  <span>Auto Update</span>
+                </label>
+              </div>
+              <div class="setting">
+                <label class="switcher">
+                  <input type="checkbox" value="1" id="remember-input">
+                  <div class="toggle"></div>
+                  <span>Remember Input</span>
+                </label>
+              </div>
+              <div class="setting">
+                <label for="file-type">Input Type</label>
+                <select id="file-type" data-remember="source" data-share="source" data-auto-update data-url-placeholder="Enter the URL here, and it will attempt to download. If it cannot be downloaded programmatically, you may need to download it manually.">
+                  <option value="text">Text</option>
+                  <option value="file">File</option>
+                  <option value="url">URL</option>
+                </select>
+              </div>
+              <div class="setting text-only">
+                <label for="input-type">Input Encoding</label>
+                <select data-toggle="encoding" id="input-type" data-remember="input-type" data-share="input_type" data-auto-update>
+                  <option value="hex">Hex</option>
+                  <option value="base64" data-load-encoding="base64">Base64</option>
+                </select>
+              </div>
+              <div class="setting text-only">
+                <label for="output-type">Output Encoding</label>
+                <select data-toggle="encoding" id="output-type" data-remember="output-type" data-share="output_type" data-auto-update>
+                  <optgroup label="Binary">
+                    <option value="hex">Hex (Lower Case)</option>
+                    <option value="hex_upper">Hex (Upper Case)</option>
+                    <option value="base64" data-load-encoding="base64">Base64</option>
+                  </optgroup>
+                  <optgroup label="Text">
+                    <option value="utf-8" selected>UTF-8</option>
+                    <option value="utf-16le" data-load-encoding="1">UTF-16LE</option>
+                    <option value="utf-16be" data-load-encoding="1">UTF-16BE</option>
+                  </optgroup>
+                </select>
+              </div>
+              <div class="setting">
+                <label for="key-size">Key Size</label>
+                <select id="key-size" data-remember="key-size" data-option="key-size" data-share="key_size">
+                  <option value="128">128 Bits</option>
+                  <option value="192">192 Bits</option>
+                  <option value="256" selected>256 Bits</option>
+                </select>
+              </div>
+              <div class="setting">
+                <label for="mode">Mode</label>
+                <select id="mode" data-remember="mode" data-option="mode" data-share="mode">
+                  <option value="CBC">CBC</option>
+                  <option value="CFB">CFB</option>
+                  <option value="CTR">CTR</option>
+                  <option value="OFB">OFB</option>
+                  <option value="ECB">ECB</option>
+                </select>
+              </div>
+              <div class="setting" id="padding-block">
+                <label for="padding">Padding</label>
+                <select id="padding" data-remember="padding" data-option="padding" data-share="padding">
+                  <option value="Pkcs7">Pkcs7</option>
+                  <option value="Iso97971">Iso97971</option>
+                  <option value="AnsiX923">AnsiX923</option>
+                  <option value="Iso10126">Iso10126</option>
+                  <option value="ZeroPadding">ZeroPadding</option>
+                  <option value="NoPadding">NoPadding</option>
+                </select>
+              </div>
+              <div class="setting">
+                <label for="key-type">Key Type</label>
+                <select id="key-type" data-remember="key-type" data-option="key-type" data-share="key_type">
+                  <option value="custom">Custom</option>
+                  <option value="PBKDF2" selected>PBKDF2</option>
+                  <option value="EvpKDF">EvpKDF</option>
+                </select>
+              </div>
+              <div class="setting" id="derivation-block">
+                <div class="setting" id="passphrase-block">
+                  <label for="passphrase">Passphrase</label>
+                  <input type="text" id="passphrase" data-remember="passphrase" data-option="passphrase" data-share="passphrase">
+                </div>
+                <div class="setting">
+                  <label for="hash">Hash</label>
+                  <select id="hash" data-remember="hash" data-option="hash" data-share="hash">
+                    <option value="MD5">MD5</option>
+                    <option value="SHA1">SHA1</option>
+                    <option value="SHA224">SHA224</option>
+                    <option value="SHA256" selected>SHA256</option>
+                    <option value="SHA384">SHA384</option>
+                    <option value="SHA512">SHA512</option>
+                    <option value="RIPEMD160">RIPEMD160</option>
+                  </select>
+                </div>
+                <div class="setting">
+                  <label for="salt-type">Salt Type</label>
+                  <select id="salt-type" data-remember="salt-type" data-option="salt-type" data-share="salt_type">
+                    <option value="random">Random</option>
+                    <option value="nosalt">No Salt</option>
+                    <option value="custom">Custom</option>
+                  </select>
+                </div>
+                <details class="setting-group" open id="salt-block">
+                  <summary>Salt</summary>
+                  <div class="setting">
+                    <label for="salt-input-type">Type</label>
+                    <select data-toggle="encoding" id="salt-input-type" data-remember="salt-input-type" data-share="salt_input_type" data-auto-update>
+                      <optgroup label="Binary">
+                        <option value="hex">Hex</option>
+                        <option value="base64" data-load-encoding="base64">Base64</option>
+                      </optgroup>
+                      <optgroup label="Text">
+                        <option value="utf-8" selected>UTF-8</option>
+                      </optgroup>
+                    </select>
+                  </div>
+                  <div class="setting">
+                    <label for="salt">Data</label>
+                    <input type="text" id="salt" data-option="salt" data-remember="salt" data-share="salt" data-option-type="encoding" data-encoding-from="#salt-input-type">
+                  </div>
+                </details>
+                <div class="setting" id="custom-iteration-block">
+                  <label class="switcher">
+                    <input type="checkbox" value="1" id="custom-iteration" data-option="custom-iteration" data-remember="custom-iteration" data-share="custom_iteration_enabled" data-toggle="toggle" data-target="#iteration-block">
+                    <div class="toggle"></div>
+                    <span>Custom Iteration</span>
+                  </label>
+                </div>
+                <div class="setting" id="iteration-block">
+                  <label for="iteration">Iteration</label>
+                  <input type="number" id="iteration" data-remember="iteration" data-option="iteration" data-share="iteration" value="1" min="1" step="1">
+                </div>
+              </div>
+              <div class="setting" id="key-iv">
+                <details class="setting-group" open id="key-block">
+                  <summary>Key</summary>
+                  <div class="setting">
+                    <label for="key-input-type">Type</label>
+                    <select data-toggle="encoding" id="key-input-type" data-remember="key-input-type" data-share="key_input_type" data-auto-update>
+                      <optgroup label="Binary">
+                        <option value="hex">Hex</option>
+                        <option value="base64" data-load-encoding="base64">Base64</option>
+                      </optgroup>
+                      <optgroup label="Text">
+                        <option value="utf-8" selected>UTF-8</option>
+                      </optgroup>
+                    </select>
+                  </div>
+                  <div class="setting">
+                    <label for="key">Data</label>
+                    <input type="text" id="key" data-option="key" data-remember="key" data-share="key" data-option-type="encoding" data-encoding-from="#key-input-type">
+                  </div>
+                </details>
+                <details class="setting-group" open id="iv-block">
+                  <summary>IV</summary>
+                  <div class="setting">
+                    <label for="iv-input-type">Type</label>
+                    <select data-toggle="encoding" id="iv-input-type" data-remember="iv-input-type" data-share="iv_input_type" data-auto-update>
+                      <optgroup label="Binary">
+                        <option value="hex">Hex</option>
+                        <option value="base64" data-load-encoding="base64">Base64</option>
+                      </optgroup>
+                      <optgroup label="Text">
+                        <option value="utf-8" selected>UTF-8</option>
+                      </optgroup>
+                    </select>
+                  </div>
+                  <div class="setting">
+                    <label for="iv">Data</label>
+                    <input type="text" id="iv" data-option="iv" data-remember="iv" data-share="iv" data-option-type="encoding" data-encoding-from="#iv-input-type">
+                  </div>
+                </details>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </main>
+  </div>
+  </div>
+
+  <script is:inline>
+    function methodLoad() {
+      waitLoadCount--;
+      if (waitLoadCount === 0) {
+        // All scripts loaded
+      }
+    }
+
+    // Load crypto-js from CDN
+    ++waitLoadCount;
+    delayScripts.push({
+      src: 'https://cdnjs.cloudflare.com/ajax/libs/crypto-js/4.2.0/crypto-js.min.js',
+      onload: function () {
+        methodLoad();
+      }
+    });
+
+    // Load crypto-js wrapper
+    ++waitLoadCount;
+    delayScripts.push({
+      src: '/js/crypto-js.js?v=5',
+      onload: function() {
+        if (typeof aes !== 'undefined' && typeof withOptions !== 'undefined') {
+          window.method = withOptions(tripleDes.decrypt, ['key-size', 'mode', 'padding', 'key-type', 'passphrase', 'hash', 'custom-iteration', 'iteration', 'key', 'iv', 'salt-type', 'salt']);
+        }
+        methodLoad();
+      }
+    });
+
+    // Load encoding.js
+    ++waitLoadCount;
+    delayScripts.push({
+      src: '/js/encoding.js?v=8',
+      onload: function () {
+        methodLoad();
+      }
+    });
+
+    // Load clipboard
+    ++waitLoadCount;
+    delayScripts.push({
+      src: '/js/clipboard.min.js',
+      onload: function () {
+        methodLoad();
+      }
+    });
+
+    // Load file-loader
+    ++waitLoadCount;
+    delayScripts.push({
+      src: '/js/file-loader.js',
+      onload: function () {
+        methodLoad();
+      }
+    });
+  </script>
+</BaseLayout>

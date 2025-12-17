@@ -144,47 +144,47 @@ export const toolSections: ToolSection[] = [
       {
         title: "AES",
         items: [
-          { url: "aes/encrypt/", name: "Encryption" },
-          { url: "aes/decrypt/", name: "Decryption" },
+          { url: "cryptography/aes/encrypt", name: "Encryption" },
+          { url: "cryptography/aes/decrypt", name: "Decryption" },
         ],
       },
       {
         title: "DES",
         items: [
-          { url: "des/encrypt/", name: "Encryption" },
-          { url: "des/decrypt/", name: "Decryption" },
+          { url: "cryptography/des/encrypt", name: "Encryption" },
+          { url: "cryptography/des/decrypt", name: "Decryption" },
         ],
       },
       {
         title: "Triple DES",
         items: [
-          { url: "triple-des/encrypt/", name: "Encryption" },
-          { url: "triple-des/decrypt/", name: "Decryption" },
+          { url: "cryptography/triple-des/encrypt", name: "Encryption" },
+          { url: "cryptography/triple-des/decrypt", name: "Decryption" },
         ],
       },
       {
         title: "RC4",
         items: [
-          { url: "rc4/encrypt/", name: "Encryption" },
-          { url: "rc4/decrypt/", name: "Decryption" },
+          { url: "cryptography/rc4/encrypt", name: "Encryption" },
+          { url: "cryptography/rc4/decrypt", name: "Decryption" },
         ],
       },
       {
         title: "ECDSA",
         items: [
-          { url: "ecdsa/key-generator/", name: "Key Generator" },
-          { url: "ecdsa/sign/", name: "Sign Message" },
-          { url: "ecdsa/verify/", name: "Verify Signature" },
+          { url: "cryptography/ecdsa/key-generator", name: "Key Generator" },
+          { url: "cryptography/ecdsa/sign", name: "Sign Message" },
+          { url: "cryptography/ecdsa/verify", name: "Verify Signature" },
         ],
       },
       {
         title: "RSA",
         items: [
-          { url: "rsa/key-generator/", name: "Key Generator" },
-          { url: "rsa/sign/", name: "Sign Message" },
-          { url: "rsa/verify/", name: "Verify Signature" },
-          { url: "rsa/encrypt/", name: "Encryption" },
-          { url: "rsa/decrypt/", name: "Decryption" },
+          { url: "cryptography/rsa/key-generator", name: "Key Generator" },
+          { url: "cryptography/rsa/sign", name: "Sign Message" },
+          { url: "cryptography/rsa/verify", name: "Verify Signature" },
+          { url: "cryptography/rsa/encrypt", name: "Encryption" },
+          { url: "cryptography/rsa/decrypt", name: "Decryption" },
         ],
       },
     ],

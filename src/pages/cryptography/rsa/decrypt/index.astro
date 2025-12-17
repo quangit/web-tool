@@ -1,0 +1,22 @@
+﻿---
+import EncodingPage from '../../../../components/EncodingPage.astro';
+
+const title = "RSA Decryption";
+const description = "This online tool helps you decrypt text or a file using RSA. Supports various modes and padding schemes.";
+const toolName = "Decrypt";
+const jsFile = "rsa.js?v=3";
+const activePage = "cryptography/rsa/decrypt";
+const reverseLink = "";
+---
+
+<EncodingPage 
+    title={title}
+    description={description}
+    toolName={toolName}
+    jsFile={jsFile}
+    activePage={activePage}
+    reverseLink={reverseLink}
+    hasInputSettings={false}
+    hasOutputSettings={false}
+    hasFormatSettings={false}
+/>
