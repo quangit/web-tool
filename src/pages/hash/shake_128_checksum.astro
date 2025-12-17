@@ -1,0 +1,15 @@
+﻿---
+import FileHashPage from '../../components/FileHashPage.astro';
+const title = "SHAKE-128 Checksum";
+const description = "Calculate SHAKE-128 hash from file. Free online SHAKE-128 checksum calculator.";
+const algorithmName = "SHAKE-128";
+const jsFile = "hash-wasm.js";
+const activePage = "hash/shake_128_checksum";
+---
+<FileHashPage 
+    title={title}
+    description={description}
+    algorithmName={algorithmName}
+    jsFile={jsFile}
+    activePage={activePage}
+/>

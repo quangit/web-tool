@@ -1,0 +1,15 @@
+﻿---
+import FileHashPage from '../../components/FileHashPage.astro';
+const title = "SHA3-384 Checksum";
+const description = "Calculate SHA3-384 hash from file. Free online SHA3-384 checksum calculator.";
+const algorithmName = "SHA3-384";
+const jsFile = "https://cdnjs.cloudflare.com/ajax/libs/js-sha3/0.9.3/sha3.min.js";
+const activePage = "hash/sha3_384_checksum";
+---
+<FileHashPage 
+    title={title}
+    description={description}
+    algorithmName={algorithmName}
+    jsFile={jsFile}
+    activePage={activePage}
+/>

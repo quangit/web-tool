@@ -1,0 +1,17 @@
+﻿---
+import FileHashPage from '../../components/FileHashPage.astro';
+
+const title = "MD2 File Hash";
+const description = "This MD2 online tool helps you calculate the hash of a file from local or URL using MD2 without uploading the file. It also supports HMAC.";
+const algorithmName = "MD2";
+const jsFile = "md2.min.js";
+const activePage = "hash/md2_file_hash";
+---
+
+<FileHashPage 
+    title={title}
+    description={description}
+    algorithmName={algorithmName}
+    jsFile={jsFile}
+    activePage={activePage}
+/>

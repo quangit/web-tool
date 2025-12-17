@@ -1,0 +1,15 @@
+﻿---
+import FileHashPage from '../../components/FileHashPage.astro';
+const title = "SHA512 File Hash";
+const description = "Calculate SHA512 hash from file. Free online SHA512 checksum calculator.";
+const algorithmName = "SHA512";
+const jsFile = "https://cdnjs.cloudflare.com/ajax/libs/js-sha512/0.9.0/sha512.min.js";
+const activePage = "hash/sha512_file_hash";
+---
+<FileHashPage 
+    title={title}
+    description={description}
+    algorithmName={algorithmName}
+    jsFile={jsFile}
+    activePage={activePage}
+/>

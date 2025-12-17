@@ -1,0 +1,15 @@
+﻿---
+import FileHashPage from '../../components/FileHashPage.astro';
+const title = "Keccak-256 Checksum";
+const description = "Calculate Keccak-256 hash from file. Free online Keccak-256 checksum calculator.";
+const algorithmName = "Keccak-256";
+const jsFile = "https://cdnjs.cloudflare.com/ajax/libs/js-sha3/0.9.3/sha3.min.js";
+const activePage = "hash/keccak_256_checksum";
+---
+<FileHashPage 
+    title={title}
+    description={description}
+    algorithmName={algorithmName}
+    jsFile={jsFile}
+    activePage={activePage}
+/>
