@@ -1,15 +1,108 @@
 ﻿---
-import FileHashPage from '../../components/FileHashPage.astro';
-const title = "RIPEMD-320 Checksum";
-const description = "Calculate RIPEMD-320 hash from file. Free online RIPEMD-320 checksum calculator.";
-const algorithmName = "RIPEMD-320";
-const jsFile = "crypto-api.js";
-const activePage = "hash/ripemd_320_checksum";
+import BaseHashPage from '../../components/BaseHashPage.astro';
+import OutputEncodingSelect from '../../components/OutputEncodingSelect.astro';
+import FileTypeSelect from '../../components/FileTypeSelect.astro';
+import HMACSettings from '../../components/HMACSettings.astro';
 ---
-<FileHashPage 
-    title={title}
-    description={description}
-    algorithmName={algorithmName}
-    jsFile={jsFile}
-    activePage={activePage}
-/>
+
+<BaseHashPage
+  title="RIPEMD-320 File Hash"
+  description="This RIPEMD-320 online tool helps you calculate the hash of a file from local or URL using RIPEMD-320 without uploading the file. It also supports HMAC."
+  activePage="hash/ripemd_320_checksum"
+  isUseFile={true}
+>
+  <div class="setting">
+    <label for="file-type">Input Type</label>
+    <FileTypeSelect id="file-type" dataRemember="file-type" dataAutoUpdate={true} />
+  </div>
+
+  <div class="setting">
+    <label for="output-type">Output Encoding</label>
+    <OutputEncodingSelect id="output-type" dataShare="output_type" dataAutoUpdate={true} />
+  </div>
+
+  <HMACSettings />
+
+  <!-- Load HMAC support FIRST (like in HTML) -->
+  <script is:inline slot="scripts">
+    ++waitLoadCount;
+    delayScripts.push({
+      src: '/js/hmac.js?v=2'
+    });
+  </script>
+
+  <!-- Load crypto-api wrapper and set window.method -->
+  <script is:inline slot="scripts">
+    ++waitLoadCount;
+    delayScripts.push({
+      src: '/js/crypto-api.js',
+      onload: function () {
+        window.method = ripemd320;
+        methodLoad();
+      }
+    });
+  </script>
+
+  <!-- Load crypto-api library from CDN -->
+  <script is:inline slot="scripts">
+    ++waitLoadCount;
+    delayScripts.push({
+      src: 'https://nf404.github.io/crypto-api/crypto-api.min.js',
+      onload: function () {
+        methodLoad();
+      }
+    });
+  </script>
+
+  <!-- Load encoding support -->
+  <script is:inline slot="scripts">
+    ++waitLoadCount;
+    delayScripts.push({
+      src: '/js/encoding.js?v=8',
+      onload: function () {
+        methodLoad();
+      }
+    });
+  </script>
+
+  <!-- Load clipboard support -->
+  <script is:inline slot="scripts">
+    delayScripts.push({
+      src: '/js/clipboard.min.js',
+      onload: function () {
+        new ClipboardJS('[data-toggle="copy"]').on('success', function (e) {
+          showMessage(e.trigger.getAttribute('data-message'));
+          gtag('event', 'copy');
+        });
+      },
+      delay: 100
+    });
+  </script>
+
+  <!-- Load file handling scripts -->
+  <script is:inline slot="scripts">
+    ++waitLoadCount;
+    delayScripts.push({
+      src: '/js/url-blob.js?v=1',
+      onload: function () {
+        methodLoad();
+      }
+    });
+
+    ++waitLoadCount;
+    delayScripts.push({
+      src: '/js/droppable-file.js',
+      onload: function () {
+        methodLoad();
+      }
+    });
+
+    ++waitLoadCount;
+    delayScripts.push({
+      src: '/js/file.js?v=10',
+      onload: function () {
+        methodLoad();
+      }
+    });
+  </script>
+</BaseHashPage>

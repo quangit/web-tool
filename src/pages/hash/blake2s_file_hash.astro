@@ -1,15 +1,135 @@
 ﻿---
-import FileHashPage from '../../components/FileHashPage.astro';
-const title = "BLAKE2s File Hash";
-const description = "Calculate BLAKE2s hash from file. Free online BLAKE2s checksum calculator.";
-const algorithmName = "BLAKE2s";
-const jsFile = "blake2s.min.js";
-const activePage = "hash/blake2s_file_hash";
+import BaseHashPage from '../../components/BaseHashPage.astro';
+import OutputEncodingSelect from '../../components/OutputEncodingSelect.astro';
+import FileTypeSelect from '../../components/FileTypeSelect.astro';
 ---
-<FileHashPage 
-    title={title}
-    description={description}
-    algorithmName={algorithmName}
-    jsFile={jsFile}
-    activePage={activePage}
-/>
+
+<BaseHashPage
+  title="BLAKE2s File Hash"
+  description="This BLAKE2s online tool helps you calculate the hash of a file from local or URL using BLAKE2s without uploading the file."
+  activePage="hash/blake2s_file_hash"
+  isUseFile={true}
+>
+  <div class="setting">
+    <label for="file-type">Input Type</label>
+    <FileTypeSelect id="file-type" dataRemember="file-type" dataAutoUpdate={true} />
+  </div>
+
+  <div class="setting">
+    <label for="output-type">Output Encoding</label>
+    <OutputEncodingSelect id="output-type" dataShare="output_type" dataAutoUpdate={true} />
+  </div>
+
+  <div class="setting">
+    <label for="bits">Output Bits</label>
+    <input type="number" id="bits" data-option="bits" data-remember="bits-256" data-share="bits" value="256" step="8" min="8" />
+  </div>
+  
+  <details class="setting-group" open>
+    <summary>Key</summary>
+    <div class="setting">
+      <label for="key-input-type">Type</label>
+      <select data-toggle="encoding" id="key-input-type" data-remember="key-input-type" data-share="key_input_type" data-auto-update>
+        <optgroup label="Binary">
+          <option value="hex">Hex</option>
+          <option value="base64" data-load-encoding="base64">Base64</option>
+        </optgroup>
+        <optgroup label="Text">
+          <option value="utf-8" selected>UTF-8</option>
+          <option value="utf-16le" data-load-encoding="1">UTF-16LE</option>
+          <option value="utf-16be" data-load-encoding="1">UTF-16BE</option>
+        </optgroup>
+      </select>
+    </div>
+    <div class="setting">
+      <label for="key">Data</label>
+      <input type="text" id="key" data-option="key" data-remember="key" data-share="key" data-option-type="encoding" data-encoding-from="#key-input-type" />
+    </div>
+  </details>
+
+  <!-- Load hash-wasm.js and set window.method -->
+  <script is:inline slot="scripts">
+    ++waitLoadCount;
+    delayScripts.push({
+      src: '/js/hash-wasm.js',
+      onload: function () {
+        window.method = withOptions(hashwasm_blake2s, ['bits', 'key']);
+        methodLoad();
+      }
+    });
+  </script>
+
+  <!-- Load blake2s library -->
+  <script is:inline slot="scripts">
+    ++waitLoadCount;
+    delayScripts.push({
+      src: '/js/blake2s.umd.min.js',
+      onload: function () {
+        methodLoad();
+      }
+    });
+  </script>
+
+  <!-- Load HMAC library -->
+  <script is:inline slot="scripts">
+    ++waitLoadCount;
+    delayScripts.push({
+      src: '/js/hmac.umd.min.js',
+      onload: function () {
+        methodLoad();
+      }
+    });
+  </script>
+
+  <!-- Load encoding support -->
+  <script is:inline slot="scripts">
+    ++waitLoadCount;
+    delayScripts.push({
+      src: '/js/encoding.js?v=8',
+      onload: function () {
+        methodLoad();
+      }
+    });
+  </script>
+
+  <!-- Load clipboard support -->
+  <script is:inline slot="scripts">
+    delayScripts.push({
+      src: '/js/clipboard.min.js',
+      onload: function () {
+        new ClipboardJS('[data-toggle="copy"]').on('success', function (e) {
+          showMessage(e.trigger.getAttribute('data-message'));
+          gtag('event', 'copy');
+        });
+      },
+      delay: 100
+    });
+  </script>
+
+  <!-- Load file handling scripts -->
+  <script is:inline slot="scripts">
+    ++waitLoadCount;
+    delayScripts.push({
+      src: '/js/url-blob.js?v=1',
+      onload: function () {
+        methodLoad();
+      }
+    });
+
+    ++waitLoadCount;
+    delayScripts.push({
+      src: '/js/droppable-file.js',
+      onload: function () {
+        methodLoad();
+      }
+    });
+
+    ++waitLoadCount;
+    delayScripts.push({
+      src: '/js/file.js?v=10',
+      onload: function () {
+        methodLoad();
+      }
+    });
+  </script>
+</BaseHashPage>

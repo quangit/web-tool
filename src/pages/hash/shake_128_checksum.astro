@@ -1,15 +1,25 @@
 ﻿---
-import FileHashPage from '../../components/FileHashPage.astro';
-const title = "SHAKE-128 Checksum";
-const description = "Calculate SHAKE-128 hash from file. Free online SHAKE-128 checksum calculator.";
-const algorithmName = "SHAKE-128";
-const jsFile = "hash-wasm.js";
-const activePage = "hash/shake_128_checksum";
+import BaseFileHashPage from "../../components/BaseFileHashPage.astro";
 ---
-<FileHashPage 
-    title={title}
-    description={description}
-    algorithmName={algorithmName}
-    jsFile={jsFile}
-    activePage={activePage}
-/>
+
+<BaseFileHashPage
+  title="SHAKE128 File Hash"
+  description="This SHAKE128 online tool helps you calculate the hash of a file from local or URL using SHAKE128 without uploading the file."
+  activePage="hash/shake_128_checksum"
+>
+  <div class="setting">
+    <label for="bits">Output Bits</label>
+    <input type="number" id="bits" data-option="bits" data-remember="bits-256" data-share="bits" value="256" step="8" min="8" />
+  </div>
+
+  <script is:inline slot="algorithm-script">
+    ++waitLoadCount;
+    delayScripts.push({
+      src: "https://cdnjs.cloudflare.com/ajax/libs/js-sha3/0.9.3/sha3.min.js",
+      onload: function () {
+        window.method = withOptions(shake_128, ["bits"]);
+        methodLoad();
+      },
+    });
+  </script>
+</BaseFileHashPage>

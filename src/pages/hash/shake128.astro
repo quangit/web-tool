@@ -1,11 +1,42 @@
 ﻿---
-import HashPage from '../../components/HashPage.astro';
+import BaseHashPage from "../../components/BaseHashPage.astro";
+import InputEncodingSelect from "../../components/InputEncodingSelect.astro";
+import OutputEncodingSelect from "../../components/OutputEncodingSelect.astro";
+
+const title = "SHAKE128";
+const description = "This SHAKE128 online tool helps you calculate hashes from strings. You can input UTF-8, UTF-16, Hex, Base64, or other encodings.";
+const activePage = "hash/shake128";
 ---
-<HashPage 
-  title="SHAKE128"
-  description="This SHAKE128 online tool helps you calculate hashes from strings. You can input UTF-8, UTF-16, Hex, Base64, or other encodings. It also supports HMAC."
-  algorithmName="shake128"
-  jsFile="https://cdnjs.cloudflare.com/ajax/libs/js-sha3/0.9.3/sha3.min.js"
-  methodWrapper="withOptions(shake_128, ['bits'])"
-  activePage="hash/shake128"
-/>
+
+<BaseHashPage title={title} description={description} activePage={activePage}>
+  <div class="setting">
+    <label for="input-type">Input Encoding</label>
+    <InputEncodingSelect id="input-type" dataShare="input_type" dataAutoUpdate={true} />
+  </div>
+  <div class="setting">
+    <label for="output-type">Output Encoding</label>
+    <OutputEncodingSelect id="output-type" dataShare="output_type" dataAutoUpdate={true} />
+  </div>
+  <div class="setting">
+    <label for="bits">Output Bits</label>
+    <input type="number" id="bits" data-option="bits" data-remember="bits-256" data-share="bits" value="256" step="8" min="8" />
+  </div>
+
+  <script is:inline>
+    ++waitLoadCount;
+    delayScripts.push({
+      src: "https://cdnjs.cloudflare.com/ajax/libs/js-sha3/0.9.3/sha3.min.js",
+      onload: function () {
+        window.method = withOptions(shake_128, ["bits"]);
+        methodLoad();
+      },
+    });
+  </script>
+
+  <script is:inline>
+    // Encoding script already increments waitLoadCount internally
+    delayScripts.push({
+      src: "/js/encoding.js?v=8",
+    });
+  </script>
+</BaseHashPage>

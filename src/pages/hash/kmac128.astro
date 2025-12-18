@@ -1,11 +1,108 @@
 ﻿---
-import HashPage from '../../components/HashPage.astro';
+import BaseHashPage from '../../components/BaseHashPage.astro';
+import OutputEncodingSelect from '../../components/OutputEncodingSelect.astro';
+import InputEncodingSelect from "../../components/InputEncodingSelect.astro";
 ---
-<HashPage 
+
+<BaseHashPage
   title="KMAC128"
   description="This KMAC128 online tool helps you calculate hashes from strings. You can input UTF-8, UTF-16, Hex, Base64, or other encodings. It also supports HMAC."
-  algorithmName="kmac128"
-  jsFile="https://cdnjs.cloudflare.com/ajax/libs/js-sha3/0.9.3/sha3.min.js"
-  methodWrapper="withOptions(kmac128, ['bits', 'key'])"
   activePage="hash/kmac128"
-/>
+  isUseFile={false}
+>
+  <div class="setting">
+    <label for="input-type">Input Encoding</label>
+    <InputEncodingSelect id="input-type" dataShare="input_type" dataAutoUpdate={true} />
+  </div>
+
+  <div class="setting">
+    <label for="output-type">Output Encoding</label>
+    <OutputEncodingSelect id="output-type" dataShare="output_type" dataAutoUpdate={true} />
+  </div>
+
+  <div class="setting">
+    <label for="bits">Output Bits</label>
+    <input type="number" id="bits" data-option="bits" data-remember="bits-256" data-share="bits" value="256" step="8" min="8" />
+  </div>
+
+  <details class="setting-group" open>
+    <summary>Key</summary>
+    <div class="setting">
+      <label for="kmac-input-type">Type</label>
+      <select data-toggle="encoding" id="kmac-input-type" data-remember="kmac-input-type" data-share="kmac_input_type" data-auto-update>
+        <optgroup label="Binary">
+          <option value="hex">Hex</option>
+          <option value="base64" data-load-encoding="base64">Base64</option>
+        </optgroup>
+        <optgroup label="Text">
+          <option value="utf-8" selected>UTF-8</option>
+          <option value="utf-16le" data-load-encoding="1">UTF-16LE</option>
+          <option value="utf-16be" data-load-encoding="1">UTF-16BE</option>
+        </optgroup>
+      </select>
+    </div>
+    <div class="setting">
+      <label for="kmac">Data</label>
+      <input type="text" id="kmac" data-option="kmac" data-remember="kmac" data-share="kmac" data-option-type="encoding" data-encoding-from="#kmac-input-type" />
+    </div>
+  </details>
+
+  <details class="setting-group" open>
+    <summary>Customization</summary>
+    <div class="setting">
+      <label for="customization-input-type">Type</label>
+      <select data-toggle="encoding" id="customization-input-type" data-remember="customization-input-type" data-share="customization_input_type" data-auto-update>
+        <optgroup label="Binary">
+          <option value="hex">Hex</option>
+          <option value="base64" data-load-encoding="base64">Base64</option>
+        </optgroup>
+        <optgroup label="Text">
+          <option value="utf-8" selected>UTF-8</option>
+          <option value="utf-16le" data-load-encoding="1">UTF-16LE</option>
+          <option value="utf-16be" data-load-encoding="1">UTF-16BE</option>
+        </optgroup>
+      </select>
+    </div>
+    <div class="setting">
+      <label for="customization">Data</label>
+      <input type="text" id="customization" data-option="customization" data-remember="customization" data-share="customization" data-option-type="encoding" data-encoding-from="#customization-input-type" />
+    </div>
+  </details>
+
+  <!-- Load sha3 library and set window.method -->
+  <script is:inline slot="scripts">
+    ++waitLoadCount;
+    delayScripts.push({
+      src: 'https://cdnjs.cloudflare.com/ajax/libs/js-sha3/0.9.3/sha3.min.js',
+      onload: function () {
+        window.method = withOptions(kmac128, ['kmac', 'bits', 'customization'], 1);
+        methodLoad();
+      }
+    });
+  </script>
+
+  <!-- Load encoding support -->
+  <script is:inline slot="scripts">
+    ++waitLoadCount;
+    delayScripts.push({
+      src: '/js/encoding.js?v=8',
+      onload: function () {
+        methodLoad();
+      }
+    });
+  </script>
+
+  <!-- Load clipboard support -->
+  <script is:inline slot="scripts">
+    delayScripts.push({
+      src: '/js/clipboard.min.js',
+      onload: function () {
+        new ClipboardJS('[data-toggle="copy"]').on('success', function (e) {
+          showMessage(e.trigger.getAttribute('data-message'));
+          gtag('event', 'copy');
+        });
+      },
+      delay: 100
+    });
+  </script>
+</BaseHashPage>

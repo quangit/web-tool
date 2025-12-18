@@ -1,0 +1,60 @@
+---
+import BaseHashPage from "./BaseHashPage.astro";
+import OutputEncodingSelect from "./OutputEncodingSelect.astro";
+import FileTypeSelect from "./FileTypeSelect.astro";
+
+interface Props {
+    title: string;
+    description: string;
+    activePage: string;
+}
+
+const { title, description, activePage } = Astro.props;
+---
+
+<BaseHashPage title={title} description={description} activePage={activePage} isUseFile={true}>
+  <div class="setting">
+    <label for="file-type">Input Type</label>
+    <FileTypeSelect id="file-type" dataRemember="file-type" dataAutoUpdate={true} />
+  </div>
+
+  <div class="setting">
+    <label for="output-type">Output Encoding</label>
+    <OutputEncodingSelect id="output-type" dataShare="output_type" dataAutoUpdate={true} />
+  </div>
+
+  <slot />
+
+  <slot name="algorithm-script" slot="scripts" />
+
+  <script is:inline slot="scripts">
+    // Encoding script already increments waitLoadCount internally
+    delayScripts.push({
+      src: "/js/encoding.js?v=8",
+    });
+  </script>
+
+  <script is:inline slot="scripts">
+    ++waitLoadCount;
+    delayScripts.push({
+      src: "/js/url-blob.js?v=1",
+      onload: function () {
+        methodLoad();
+      },
+    });
+    ++waitLoadCount;
+    delayScripts.push({
+      src: "/js/droppable-file.js",
+      onload: function () {
+        methodLoad();
+      },
+    });
+    ++waitLoadCount;
+    delayScripts.push({
+      src: "/js/file.js?v=10",
+      onload: function () {
+        methodLoad();
+      },
+    });
+  </script>
+</BaseHashPage>
