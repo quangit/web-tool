@@ -1,22 +1,220 @@
 ﻿---
-import EncodingPage from '../../../../components/EncodingPage.astro';
-
-const title = "RSA Key Generator";
-const description = "Generate RSA key pairs online. Free cryptographic key generator tool.";
-const toolName = "Generate";
-const jsFile = "rsa.js?v=3";
-const activePage = "cryptography/rsa/key-generator";
-const reverseLink = "";
+import BaseLayout from "../../../../layouts/BaseLayout.astro";
+import Sidebar from "../../../../components/Sidebar.astro";
 ---
 
-<EncodingPage 
-    title={title}
-    description={description}
-    toolName={toolName}
-    jsFile={jsFile}
-    activePage={activePage}
-    reverseLink={reverseLink}
-    hasInputSettings={false}
-    hasOutputSettings={false}
-    hasFormatSettings={false}
-/>
+<BaseLayout
+  title="RSA Key Generator - Web Tools"
+  description="This online tool helps you generate a pair of RSA keys. The PEM format supports PKCS#1, PKCS#5, and PKCS#8."
+>
+  <div id="app">
+    <Sidebar activePage="cryptography/rsa/key-generator" />
+    <div id="content">
+      <div class="top-nav">
+        <button id="sidebar-toggler" aria-controls="sidebar" aria-expanded="false" aria-label="Menu"
+          ><img src="/images/menu.svg" width="24" height="24" alt="Menu" /></button
+        >
+      </div>
+      <header>
+        <h1>RSA Key Generator</h1>
+        <p>This online tool helps you generate a pair of RSA keys. The PEM format supports PKCS#1, PKCS#5, and PKCS#8.</p>
+      </header>
+      <main>
+        <div class="layout">
+          <div class="layout-block">
+            <div class="output">
+              <div class="block block-fill">
+                <div class="block-title">
+                  Private Key
+                  <div class="toolbar">
+                    <a
+                      class="icon"
+                      id="download-image"
+                      download="download"
+                      style="display:none"
+                      onclick="gtag('event', 'download');"
+                      ><img src="/images/download.svg" alt="Download" title="Download" /></a
+                    >
+                    <button class="icon" data-toggle="copy" data-clipboard-target="#output" data-message="Private Key copied"
+                      ><img src="/images/copy.svg" alt="Copy" title="Copy" /></button
+                    >
+                    <button class="icon" data-toggle="fullscreen"
+                      ><img class="fullscreen-icon" src="/images/fullscreen.svg" alt="Full Screen" title="Full Screen" /><img
+                        class="fullscreen-icon-exit"
+                        src="/images/fullscreen-exit.svg"
+                        alt="Full Screen"
+                        title="Full Screen"
+                      /></button
+                    >
+                  </div>
+                </div>
+                <textarea class="container" id="output" spellcheck="false" placeholder="Private key here..." readonly="readonly"
+                ></textarea>
+              </div>
+              <div class="block block-fill">
+                <div class="block-title">
+                  Public Key
+                  <div class="toolbar">
+                    <a class="icon" id="download-public" download="public.pem" style="display:none"
+                      ><img src="/images/download.svg" alt="Download" title="Download" /></a
+                    >
+                    <button class="icon" data-toggle="copy" data-clipboard-target="#public-key" data-message="Public Key copied"
+                      ><img src="/images/copy.svg" alt="Copy" title="Copy" /></button
+                    >
+                    <button class="icon" data-toggle="fullscreen"
+                      ><img class="fullscreen-icon" src="/images/fullscreen.svg" alt="Full Screen" title="Full Screen" /><img
+                        class="fullscreen-icon-exit"
+                        src="/images/fullscreen-exit.svg"
+                        alt="Full Screen"
+                        title="Full Screen"
+                      /></button
+                    >
+                  </div>
+                </div>
+                <textarea
+                  class="container"
+                  id="public-key"
+                  spellcheck="false"
+                  placeholder="Public key here..."
+                  readonly="readonly"></textarea>
+              </div>
+              <details class="block text-only" data-toggle="copyblock">
+                <summary class="block-title"
+                  >Share Link<div class="toolbar">
+                    <button class="icon" data-toggle="copy" data-clipboard-target="#share-link" data-message="Share link copied"
+                      ><img src="/images/copy.svg" alt="Copy" title="Copy" /></button
+                    >
+                  </div></summary
+                >
+                <input id="share-link" type="text" placeholder="Share Link" readonly="readonly" />
+              </details>
+            </div>
+          </div>
+          <div class="settings">
+            <div class="block block-fill">
+              <div class="block-title">Settings</div>
+              <div class="container">
+                <div class="setting"><a class="btn" id="execute">Generate</a></div>
+                <div class="setting">
+                  <label class="switcher"
+                    ><input type="checkbox" value="1" id="auto-update" checked /><div class="toggle"></div>
+                    <span>Auto Update</span></label
+                  >
+                </div>
+                <div class="setting">
+                  <label class="switcher"
+                    ><input type="checkbox" value="1" id="remember-input" /><div class="toggle"></div>
+                    <span>Remember Input</span></label
+                  >
+                </div>
+                <div class="setting">
+                  <label for="rsa-bits">Bits</label><input
+                    type="number"
+                    id="rsa-bits"
+                    data-option="rsa-bits"
+                    data-remember="rsa-bits"
+                    data-share="rsa_bits"
+                    min="512"
+                    max="4096"
+                    step="1"
+                    value="1024"
+                  />
+                </div>
+                <div class="setting">
+                  <label for="pem-format">Format</label><select
+                    id="pem-format"
+                    data-option="pem-format"
+                    data-remember="pem-format"
+                    data-share="pem_format"
+                  >
+                    <option value="PKCS1">PKCS#1</option>
+                    <option value="PKCS5">PKCS#5</option>
+                    <option value="PKCS8" selected>PKCS#8</option>
+                  </select>
+                </div>
+                <div class="setting" id="cipher-algorithm-block">
+                  <label for="cipher-algorithm">Cipher Algorithm</label><select
+                    id="cipher-algorithm"
+                    data-option="cipher-algorithm"
+                    data-remember="cipher-algorithm"
+                    data-share="cipher_algorithm"
+                  >
+                    <option value="AES-128-CBC">AES-128-CBC</option>
+                    <option value="AES-192-CBC">AES-192-CBC</option>
+                    <option value="AES-256-CBC" selected>AES-256-CBC</option>
+                    <option value="DES-CBC">DES-CBC</option>
+                    <option value="DES-EDE3-CBC">DES-EDE3-CBC</option>
+                  </select>
+                </div>
+                <div class="setting" id="passpharse-wrap">
+                  <div class="setting" id="passphrase-enabled-block">
+                    <label class="switcher"
+                      ><input
+                        type="checkbox"
+                        value="1"
+                        id="passphrase-enabled"
+                        data-option="passphrase-enabled"
+                        data-remember="passphrase-enabled"
+                        data-share="passphrase_enabled"
+                        data-toggle="toggle"
+                        data-target="#passphrase-block"
+                      /><div class="toggle"></div>
+                      <span>Passphrase</span></label
+                    >
+                  </div>
+                  <div class="setting" id="passphrase-block" style="display:none;">
+                    <label for="passphrase">Passphrase</label><input
+                      type="text"
+                      id="passphrase"
+                      data-option="passphrase"
+                      data-remember="passphrase"
+                      data-share="passphrase"
+                    />
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+        <script is:inline>
+          ++waitLoadCount;
+          delayScripts.push({
+            src: "/js/jsrsasign.js?v=1",
+            onload: function () {
+              window.method = withOptions(rsa.generate, [
+                "rsa-bits",
+                "pem-format",
+                "cipher-algorithm",
+                "passphrase-enabled",
+                "passphrase",
+              ]);
+              methodLoad();
+            },
+          });
+        </script>
+        <script is:inline>
+          ++waitLoadCount;
+          delayScripts.push({
+            src: "/js/jsrsasign-all-min.min.js",
+            onload: function () {
+              methodLoad();
+            },
+          });
+        </script>
+        <script is:inline>
+          delayScripts.push({
+            src: "/js/clipboard.min.js",
+            onload: function () {
+              new ClipboardJS('[data-toggle="copy"]').on("success", function (e) {
+                showMessage(e.trigger.getAttribute("data-message"));
+                gtag("event", "copy");
+              });
+            },
+            delay: 100,
+          });
+        </script>
+      </main>
+    </div>
+    <div id="message"></div>
+  </div>
+</BaseLayout>
