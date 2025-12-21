@@ -37,20 +37,24 @@ const currentLang = languages.find(l => l.code === lang) || languages[0];
 // Helper to generate language switch URL
 function getLangSwitchUrl(targetLang: string) {
   const currentPath = Astro.url.pathname;
-  const currentLangPath = `/${lang}`;
   
-  // Remove current language prefix from path
-  let pathWithoutLang = currentPath;
-  if (currentPath.startsWith(currentLangPath)) {
-    pathWithoutLang = currentPath.substring(currentLangPath.length);
+  // Split path into segments
+  const segments = currentPath.split('/').filter(Boolean);
+  
+  // Remove current language code if it exists at the start
+  if (segments.length > 0 && segments[0] === lang) {
+    segments.shift();
   }
-
-  // Ensure path starts with /
-  if (!pathWithoutLang.startsWith('/')) {
-    pathWithoutLang = '/' + pathWithoutLang;
+  
+  // Reconstruct path
+  const pathRest = segments.join('/');
+  
+  // Handle root or index.html
+  if (pathRest === '' || pathRest === 'index.html') {
+    return `/${targetLang}`;
   }
-
-  return `/${targetLang}${pathWithoutLang === '/' ? '' : pathWithoutLang}`;
+  
+  return `/${targetLang}/${pathRest}`;
 }
 ---
 
