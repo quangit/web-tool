@@ -445,4 +445,6 @@ export const pt = {
   'ecdsa_verify.description': 'Esta ferramenta online ajuda você a verificar assinaturas ECDSA.',
   'ecdsa_key_generator.title': 'Gerador de chaves ECDSA',
   'ecdsa_key_generator.description': 'Esta ferramenta online ajuda você a gerar um par de chaves ECDSA. Ele suporta formatos PEM, HEX e Base64, bem como várias curvas. O formato PEM suporta PKCS#1, PKCS#5 e PKCS#8.',
+  'hex_lower': 'Hexadecimal (minúsculas)',
+  'hex_upper': 'Hexadecimal (maiúsculas)',
 };

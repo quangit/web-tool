@@ -445,4 +445,6 @@ export const ja = {
   'ecdsa_verify.description': 'このオンライン ツールは、ECDSA 署名を検証するのに役立ちます。',
   'ecdsa_key_generator.title': 'ECDSA 鍵生成器',
   'ecdsa_key_generator.description': 'このオンライン ツールは、ECDSA 鍵のペアを生成するのに役立ちます。PEM、HEX、Base64 形式、およびさまざまな曲線をサポートしています。PEM 形式は PKCS#1、PKCS#5、および PKCS#8 をサポートしています。',
+  'hex_lower': '16進数（小文字）',
+  'hex_upper': '16進数（大文字）',
 };

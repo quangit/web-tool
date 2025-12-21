@@ -445,4 +445,6 @@ export const zh = {
   'ecdsa_verify.description': '此在线工具可帮助您验证 ECDSA 签名。',
   'ecdsa_key_generator.title': 'ECDSA 密钥生成器',
   'ecdsa_key_generator.description': '此在线工具可帮助您生成一对 ECDSA 密钥。它支持 PEM、HEX 和 Base64 格式，以及各种曲线。PEM 格式支持 PKCS#1、PKCS#5 和 PKCS#8。',
+  'hex_lower': '十六进制（小写）',
+  'hex_upper': '十六进制（大写）',
 };

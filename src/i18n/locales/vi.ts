@@ -99,6 +99,8 @@ export const vi = {
   'curve': 'Đường cong',
   'customization': 'Tùy chỉnh',
   'function_name': 'Tên hàm',
+  'hex_lower': 'Hex (Chữ thường)',
+  'hex_upper': 'Hex (Chữ hoa)',
 
   // Syntax Highlight
   'syntax_highlight.title': 'Tô màu cú pháp',

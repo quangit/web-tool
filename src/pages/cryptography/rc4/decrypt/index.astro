@@ -136,15 +136,8 @@ const activePage = "cryptography/rc4/decrypt";
                 </details>
                 
               </div>
-            </div>
-          </div>
-        </div>
-      </div>
-    </main>
-  </div>
-  </div>
 
-  <script is:inline>
+  <script is:inline slot="scripts">
     function methodLoad() {
       waitLoadCount--;
       if (waitLoadCount === 0) {
@@ -187,6 +180,10 @@ const activePage = "cryptography/rc4/decrypt";
     delayScripts.push({
       src: '/js/clipboard.min.js',
       onload: function () {
+        new ClipboardJS('[data-toggle="copy"]').on('success', function (e) {
+            showMessage(e.trigger.getAttribute('data-message'));
+            gtag('event', 'copy');
+        });
         methodLoad();
       }
     });

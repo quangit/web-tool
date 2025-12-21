@@ -445,4 +445,6 @@ export const fr = {
   'ecdsa_verify.description': 'Cet outil en ligne vous aide à vérifier des signatures ECDSA.',
   'ecdsa_key_generator.title': 'Générateur de clés ECDSA',
   'ecdsa_key_generator.description': 'Cet outil en ligne vous aide à générer une paire de clés ECDSA. Il prend en charge les formats PEM, HEX et Base64, ainsi que diverses courbes. Le format PEM prend en charge PKCS#1, PKCS#5 et PKCS#8.',
+  'hex_lower': 'Hexadécimal (minuscules)',
+  'hex_upper': 'Hexadécimal (majuscules)',
 };

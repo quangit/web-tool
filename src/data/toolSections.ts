@@ -15,6 +15,18 @@ export interface ToolSection {
 
 export const toolSections: ToolSection[] = [
   {
+    title: "Tools",
+    blocks: [
+      {
+        title: "Popular tool",
+        items: [
+          { url: "qr-code/generator", name: "QR Code Generator" },
+          { url: "syntax-highlight", name: "Syntax Highlight" },
+        ],
+      },
+    ],
+  },
+  {
     title: "Hash",
     blocks: [
       { title: "CRC", items: [{ url: "hash/crc", name: "CRC" }] },
@@ -287,16 +299,5 @@ export const toolSections: ToolSection[] = [
       },
     ],
   },
-  {
-    title: "Others",
-    blocks: [
-      {
-        title: "Others",
-        items: [
-          { url: "qr-code/generator", name: "QR Code Generator" },
-          { url: "syntax-highlight", name: "Syntax Highlight" },
-        ],
-      },
-    ],
-  },
+
 ];

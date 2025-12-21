@@ -445,4 +445,6 @@ export const hi = {
   'ecdsa_verify.description': 'यह online tool आपको ECDSA हस्ताक्षरों को सत्यापित करने में मदद करता है।',
   'ecdsa_key_generator.title': 'ECDSA कुंजी जनरेटर',
   'ecdsa_key_generator.description': 'यह online tool आपको ECDSA कुंजियों की एक जोड़ी उत्पन्न करने में मदद करता है। यह PEM, HEX और Base64 प्रारूपों के साथ-साथ विभिन्न वक्रों का समर्थन करता है। PEM प्रारूप PKCS#1, PKCS#5 और PKCS#8 का समर्थन करता है।',
+  'hex_lower': 'हेक्स (लोअर केस)',
+  'hex_upper': 'हेक्स (अपर केस)',
 };

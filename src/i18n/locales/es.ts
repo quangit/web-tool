@@ -99,6 +99,8 @@ export const es = {
   'curve': 'Curva',
   'customization': 'Personalización',
   'function_name': 'Nombre de la función',
+  'hex_lower': 'Hex (Minúsculas)',
+  'hex_upper': 'Hex (Mayúsculas)',
 
   // Syntax Highlight
   'syntax_highlight.title': 'Resaltado de sintaxis',

@@ -99,6 +99,8 @@ export const en = {
   'curve': 'Curve',
   'customization': 'Customization',
   'function_name': 'Function Name',
+  'hex_lower': 'Hex (Lower Case)',
+  'hex_upper': 'Hex (Upper Case)',
 
   // Syntax Highlight
   'syntax_highlight.title': 'Syntax Highlight',
