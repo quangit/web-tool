@@ -2,14 +2,16 @@
 import EncodingPage from '../../../components/EncodingPage.astro';
 
 const title = "JSON Validator";
-const description = "Free online JSON validateter. Format, minify, validate or view JSON data.";
+const description = "This free online JSON validator helps you validate your JSON string.";
 const toolName = "Validate";
 const jsFile = "json.js?v=6";
-const activePage = "json/validator/";
+const activePage = "json/validator";
 const reverseLink = "";
+const initScript = `window.method = json.validate; methodLoad();`;
+const extraJsFile = "validator.js";
 ---
 
-<EncodingPage 
+<EncodingPage
     title={title}
     description={description}
     toolName={toolName}
@@ -19,4 +21,11 @@ const reverseLink = "";
     hasInputSettings={false}
     hasOutputSettings={false}
     hasFormatSettings={false}
-/>
+    initScript={initScript}
+    extraJsFile={extraJsFile}
+    editorLanguage="json"
+    outputToggleMonaco={false}
+    outputPlaceholder="Error message..."
+>
+    <div slot="before-output-textarea" class="container" id="validate-result"></div>
+</EncodingPage>

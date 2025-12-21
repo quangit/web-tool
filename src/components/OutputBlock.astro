@@ -10,16 +10,19 @@ const {
     // Data attributes
     dataEncodingFrom = null,
     dataToggleMonaco = true,
+    dataLanguage = null,
     // Share link
     showShareLink = true,
     isReadonly = true,
     textareaStyle = "",
+    hasTextarea = true,
 } = Astro.props;
 
 // Build data attributes object
 const dataAttrs: Record<string, any> = {};
 if (dataEncodingFrom) dataAttrs["data-encoding-from"] = dataEncodingFrom;
 if (dataToggleMonaco) dataAttrs["data-toggle"] = "monacoEditor";
+if (dataLanguage) dataAttrs["data-language"] = dataLanguage;
 ---
 
 <div class="output">
@@ -52,7 +55,9 @@ if (dataToggleMonaco) dataAttrs["data-toggle"] = "monacoEditor";
                 }
             </div>
         </div>
-        <textarea class="container" id={id} spellcheck="false" placeholder={placeholder} readonly={isReadonly ? "readonly" : undefined} style={textareaStyle} {...dataAttrs}></textarea>
+        <slot name="before-textarea" />
+        {hasTextarea && <textarea class="container" id={id} spellcheck="false" placeholder={placeholder} readonly={isReadonly ? "readonly" : undefined} style={textareaStyle} {...dataAttrs}></textarea>}
+        <slot name="after-textarea" />
     </div>
     {
         showShareLink && (

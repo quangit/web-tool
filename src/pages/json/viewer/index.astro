@@ -2,14 +2,15 @@
 import EncodingPage from '../../../components/EncodingPage.astro';
 
 const title = "JSON Viewer";
-const description = "Free online JSON viewter. Format, minify, validate or view JSON data.";
+const description = "This JSON Viewer online tool helps you view JSON object in a readable way.";
 const toolName = "View";
 const jsFile = "json.js?v=6";
-const activePage = "json/viewer/";
+const activePage = "json/viewer";
 const reverseLink = "";
+const initScript = `window.method = json.view; methodLoad();`;
 ---
 
-<EncodingPage 
+<EncodingPage
     title={title}
     description={description}
     toolName={toolName}
@@ -19,4 +20,19 @@ const reverseLink = "";
     hasInputSettings={false}
     hasOutputSettings={false}
     hasFormatSettings={false}
-/>
+    initScript={initScript}
+    editorLanguage="json"
+    hasOutputTextarea={false}
+    outputToggleMonaco={false}
+>
+    <script slot="scripts" is:inline>
+        ++waitLoadCount;
+        delayScripts.push({
+            src: 'https://pfau-software.de/json-viewer/dist/iife/index.js',
+            onload: function () {
+                methodLoad();
+            }
+        });
+    </script>
+    <div slot="after-output-textarea" class="container json-viewer" id="output"></div>
+</EncodingPage>

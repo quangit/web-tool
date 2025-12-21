@@ -26,6 +26,12 @@ interface Props {
     hasFileInput?: boolean;
     inputFileUrlPlaceholder?: string;
     inputFileDropText?: string;
+    // Editor language
+    editorLanguage?: string;
+    hasOutputTextarea?: boolean;
+    outputToggleMonaco?: boolean;
+    loadMonaco?: boolean;
+    outputPlaceholder?: string;
 }
 
 const { 
@@ -43,7 +49,12 @@ const {
     outputDataType,
     hasFileInput = false,
     inputFileUrlPlaceholder,
-    inputFileDropText
+    inputFileDropText,
+    editorLanguage,
+    hasOutputTextarea = true,
+    outputToggleMonaco = true,
+    loadMonaco = true,
+    outputPlaceholder
 } = Astro.props;
 ---
 
@@ -82,23 +93,28 @@ const {
                                 dataEncodingFrom="#input-type" 
                                 dataAutoUpdate={true} 
                                 dataToggleMonaco={true} 
+                                dataLanguage={editorLanguage}
                             />
                         )}
                         
                         <OutputBlock 
                             id="output" 
                             title="Output" 
-                            placeholder="Output here..." 
+                            placeholder={outputPlaceholder || "Output here..."}
                             dataEncodingFrom="#output-type" 
-                            dataToggleMonaco={true} 
+                            dataToggleMonaco={outputToggleMonaco} 
+                            dataLanguage={editorLanguage}
                             isReadonly={true}
                             textareaStyle="word-break:break-all;"
+                            hasTextarea={hasOutputTextarea}
                         >
                             {!hasFileInput && (
                                 <button slot="toolbar" class="icon" id="swap" onclick={`swap('${reverseLink}', [['#output', '#input'], ['#input-type', '#output-type']])`}>
                                     <img src="/images/swap.svg" alt="Swap" title="Swap"/>
                                 </button>
                             )}
+                            <slot name="before-output-textarea" slot="before-textarea" />
+                            <slot name="after-output-textarea" slot="after-textarea" />
                         </OutputBlock>
                     </div>
                     
@@ -161,6 +177,15 @@ const {
         ++waitLoadCount;
         delayScripts.push({
             src: '/js/${extraJsFile}',
+            onload: function () {
+                methodLoad();
+            }
+        });
+        ` : ''}
+        ${loadMonaco ? `
+        ++waitLoadCount;
+        delayScripts.push({
+            src: '/js/monaco-editor.js?v=1',
             onload: function () {
                 methodLoad();
             }

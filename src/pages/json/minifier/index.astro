@@ -2,14 +2,15 @@
 import EncodingPage from '../../../components/EncodingPage.astro';
 
 const title = "JSON Minifier";
-const description = "Free online JSON minifyter. Format, minify, validate or view JSON data.";
+const description = "This free online JSON minifier helps you minify your JSON string and make it more cleaner. It can remove indentation and new lines to reduce size and make it one line.";
 const toolName = "Minify";
 const jsFile = "json.js?v=6";
-const activePage = "json/minifier/";
+const activePage = "json/minifier";
 const reverseLink = "";
+const initScript = `window.method = json.minify; methodLoad();`;
 ---
 
-<EncodingPage 
+<EncodingPage
     title={title}
     description={description}
     toolName={toolName}
@@ -19,4 +20,6 @@ const reverseLink = "";
     hasInputSettings={false}
     hasOutputSettings={false}
     hasFormatSettings={false}
+    initScript={initScript}
+    editorLanguage="json"
 />

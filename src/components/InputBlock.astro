@@ -16,6 +16,7 @@ const {
     dataEncodingFrom = null,
     dataAutoUpdate = false,
     dataToggleMonaco = true,
+    dataLanguage = null,
 } = Astro.props;
 
 // Build data attributes object
@@ -25,6 +26,7 @@ if (dataShare) dataAttrs["data-share"] = dataShare;
 if (dataEncodingFrom) dataAttrs["data-encoding-from"] = dataEncodingFrom;
 if (dataAutoUpdate) dataAttrs["data-auto-update"] = true;
 if (dataToggleMonaco) dataAttrs["data-toggle"] = "monacoEditor";
+if (dataLanguage) dataAttrs["data-language"] = dataLanguage;
 ---
 
 <div class="input">

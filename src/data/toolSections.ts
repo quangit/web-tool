@@ -250,10 +250,10 @@ export const toolSections: ToolSection[] = [
       {
         title: "JSON",
         items: [
-          { url: "json/validator/", name: "Validator" },
-          { url: "json/minifier/", name: "Minifier" },
-          { url: "json/formatter/", name: "Formatter" },
-          { url: "json/viewer/", name: "Viewer" },
+          { url: "json/validator", name: "Validator" },
+          { url: "json/minifier", name: "Minifier" },
+          { url: "json/formatter", name: "Formatter" },
+          { url: "json/viewer", name: "Viewer" },
         ],
       },
       {
