@@ -36,7 +36,7 @@ const t = useTranslations(lang as any);
             <div class="input">
               <div class="block block-fill">
                 <div class="block-title">
-                  {t('syntax_highlight.input')}
+                  {t('input')}
                   <div class="toolbar">
                     <button class="icon" data-toggle="fullscreen"
                       ><img class="fullscreen-icon" src="/images/fullscreen.svg" alt="Full Screen" title="Full Screen" /><img
@@ -52,7 +52,7 @@ const t = useTranslations(lang as any);
                   class="container"
                   id="input"
                   spellcheck="false"
-                  placeholder={t('syntax_highlight.placeholder')}
+                  placeholder={t('enter_here')}
                   data-remember="input"
                   data-share="input"
                   data-encoding-from="#input-type"
@@ -63,7 +63,7 @@ const t = useTranslations(lang as any);
             <div class="output">
               <div class="block block-fill">
                 <div class="block-title">
-                  {t('syntax_highlight.output')}
+                  {t('output')}
                   <div class="toolbar">
                     <button class="icon" data-toggle="fullscreen"
                       ><img class="fullscreen-icon" src="/images/fullscreen.svg" alt="Full Screen" title="Full Screen" /><img
@@ -81,29 +81,29 @@ const t = useTranslations(lang as any);
           </div>
           <div class="settings">
             <div class="block block-fill">
-              <div class="block-title">{t('syntax_highlight.settings')}</div>
+              <div class="block-title">{t('settings')}</div>
               <div class="container">
-                <div class="setting"><a class="btn" id="execute">{t('syntax_highlight.highlight')}</a></div>
+                <div class="setting"><a class="btn" id="execute">{t('highlight')}</a></div>
                 <div class="setting">
                   <label class="switcher"
                     ><input type="checkbox" value="1" id="auto-update" checked /><div class="toggle"></div>
-                    <span>{t('syntax_highlight.auto_update')}</span></label
+                    <span>{t('auto_update')}</span></label
                   >
                 </div>
                 <div class="setting">
                   <label class="switcher"
                     ><input type="checkbox" value="1" id="remember-input" /><div class="toggle"></div>
-                    <span>{t('syntax_highlight.remember_input')}</span></label
+                    <span>{t('remember_input')}</span></label
                   >
                 </div>
                 <div class="setting">
-                  <label for="language">{t('syntax_highlight.language')}</label><select id="language" data-auto-update>
+                  <label for="language">{t('language')}</label><select id="language" data-auto-update>
                     <optgroup label="Recent"></optgroup>
                     <optgroup label="All"></optgroup>
                   </select>
                 </div>
                 <div class="setting">
-                  <label for="style">{t('syntax_highlight.style')}</label><select id="style"></select>
+                  <label for="style">{t('style')}</label><select id="style"></select>
                 </div>
                 <link
                   rel="stylesheet"

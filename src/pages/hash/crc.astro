@@ -1,9 +1,11 @@
 ﻿---
 import CRCPage from '../../components/CRCPage.astro';
+import { useTranslations } from '../../i18n/utils';
 
-const title = "CRC Calculator";
-const description = "Calculate CRC checksums. Free online CRC calculator tool.";
-const toolName = "Calculate";
+const t = useTranslations('en');
+const title = t('crc.title');
+const description = t('crc.description');
+const toolName = t('crc.tool_name');
 const jsFile = "crc.js?v=1";
 const activePage = "hash/crc";
 ---

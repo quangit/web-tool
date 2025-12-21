@@ -1,0 +1,28 @@
+---
+import CRCPage from '../../../components/CRCPage.astro';
+import { languages } from '../../../i18n/ui';
+import { useTranslations } from '../../../i18n/utils';
+
+export function getStaticPaths() {
+  return Object.keys(languages).map((lang) => {
+      return { params: { lang } };
+  });
+}
+
+const { lang = 'en' } = Astro.params;
+const t = useTranslations(lang as any);
+
+const title = t('crc.title');
+const description = t('crc.description');
+const toolName = t('crc.tool_name');
+const jsFile = "crc.js?v=1";
+const activePage = "hash/crc";
+---
+
+<CRCPage 
+    title={title}
+    description={description}
+    toolName={toolName}
+    jsFile={jsFile}
+    activePage={activePage}
+/>
