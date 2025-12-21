@@ -37,24 +37,32 @@ const currentLang = languages.find(l => l.code === lang) || languages[0];
 // Helper to generate language switch URL
 function getLangSwitchUrl(targetLang: string) {
   const currentPath = Astro.url.pathname;
+  console.log(`[Sidebar] Generating switch URL for target: ${targetLang}, currentPath: ${currentPath}, currentLang: ${lang}`);
   
   // Split path into segments
   const segments = currentPath.split('/').filter(Boolean);
+  console.log(`[Sidebar] Segments before: ${JSON.stringify(segments)}`);
   
   // Remove current language code if it exists at the start
   if (segments.length > 0 && segments[0] === lang) {
     segments.shift();
   }
+  console.log(`[Sidebar] Segments after shift: ${JSON.stringify(segments)}`);
   
   // Reconstruct path
   const pathRest = segments.join('/');
+  console.log(`[Sidebar] pathRest: "${pathRest}"`);
   
+  let result;
   // Handle root or index.html
   if (pathRest === '' || pathRest === 'index.html') {
-    return `/${targetLang}`;
+    result = `/${targetLang}`;
+  } else {
+    result = `/${targetLang}/${pathRest}`;
   }
   
-  return `/${targetLang}/${pathRest}`;
+  console.log(`[Sidebar] Result: ${result}`);
+  return result;
 }
 ---
 
