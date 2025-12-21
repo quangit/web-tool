@@ -13,6 +13,7 @@ const {
     // Share link
     showShareLink = true,
     isReadonly = true,
+    textareaStyle = "",
 } = Astro.props;
 
 // Build data attributes object
@@ -26,6 +27,7 @@ if (dataToggleMonaco) dataAttrs["data-toggle"] = "monacoEditor";
         <div class="block-title">
             {title}
             <div class="toolbar">
+                <slot name="toolbar" />
                 {
                     showDownload && (
                         <a class="icon" id="download-image" download="download" style="display:none" onclick="gtag('event', 'download');">
@@ -50,7 +52,7 @@ if (dataToggleMonaco) dataAttrs["data-toggle"] = "monacoEditor";
                 }
             </div>
         </div>
-        <textarea class="container" id={id} spellcheck="false" placeholder={placeholder} readonly={isReadonly ? "readonly" : undefined} {...dataAttrs}></textarea>
+        <textarea class="container" id={id} spellcheck="false" placeholder={placeholder} readonly={isReadonly ? "readonly" : undefined} style={textareaStyle} {...dataAttrs}></textarea>
     </div>
     {
         showShareLink && (

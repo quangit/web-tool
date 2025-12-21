@@ -1,23 +1,73 @@
 ﻿---
-import EncodingPage from '../../../../../components/EncodingPage.astro';
+import EncodingPage from '../../../../components/EncodingPage.astro';
 
-const title = "Base58 to File";
-const description = "Decode Base58 to text or file. Free online Base58 decoding tool.";
+const title = "Decode Base58 to File";
+const description = "This online Base58 decoding tool helps you decode Base58 to a file for download.";
 const toolName = "Decode";
-const jsFile = "base58.js?v=7";
-const activePage = "encoding/base58/decode/file";
-const reverseLink = "";
+const jsFile = "base58.js?v=3";
+const activePage = "base58/decode/file";
 ---
 
-<EncodingPage 
+<EncodingPage
     title={title}
     description={description}
     toolName={toolName}
     jsFile={jsFile}
     activePage={activePage}
-    reverseLink={reverseLink}
+    reverseLink=""
     hasInputSettings={false}
-    hasOutputSettings={true}
-    hasFormatSettings={false}
-    outputDataType=""
-/>
+    hasOutputSettings={false}
+    hasFileInput={true}
+    inputFileUrlPlaceholder="Enter here..."
+    inputFileDropText="Drag and drop the file here or click to select a file. It will process locally and won't be uploaded."
+    initScript={`
+        window.method = download;
+        methodLoad();
+    `}
+>
+    <div slot="settings">
+        <div class="setting">
+            <label for="file-type">Input Type</label>
+            <select id="file-type" data-remember="file-type" data-auto-update>
+                <option value="text">Encoded Text</option>
+                <option value="file">Encoded File</option>
+            </select>
+        </div>
+        <div class="setting">
+            <label for="download-file-name">File Name</label>
+            <input type="text" id="download-file-name" data-remember="download-file-name" value="download.txt" placeholder="Download File Name">
+        </div>
+    </div>
+
+    <script is:inline slot="scripts" set:html={`
+        ++waitLoadCount;
+        delayScripts.push({
+            src: '/js/base-x.min.js',
+            onload: function () {
+                methodLoad();
+            }
+        });
+        ++waitLoadCount;
+        delayScripts.push({
+            src: '/js/url-blob.js?v=1',
+            onload: function () {
+                methodLoad();
+            }
+        });
+        ++waitLoadCount;
+        delayScripts.push({
+            src: '/js/droppable-file.js',
+            onload: function () {
+                methodLoad();
+            }
+        });
+        ++waitLoadCount;
+        delayScripts.push({
+            src: '/js/file.js?v=10',
+            onload: function () {
+                methodLoad();
+            }
+        });
+        window.PROCESSING_MESSAGE = 'decoding...';
+    `}></script>
+</EncodingPage>

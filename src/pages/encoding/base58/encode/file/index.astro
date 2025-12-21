@@ -1,22 +1,79 @@
 ﻿---
-import EncodingPage from '../../../../../components/EncodingPage.astro';
+import EncodingPage from '../../../../components/EncodingPage.astro';
 
-const title = "File to Base58";
-const description = "Encode text or file to Base58. Free online Base58 encoding tool.";
+const title = "Encode File to Base58";
+const description = "This online Base58 encoding tool helps you encode a file from local or URL to Base58 without uploading the file.";
 const toolName = "Encode";
-const jsFile = "base58.js?v=7";
-const activePage = "encoding/base58/encode/file";
-const reverseLink = "";
+const jsFile = "base58.js?v=3";
+const activePage = "base58/encode/file";
 ---
 
-<EncodingPage 
+<EncodingPage
     title={title}
     description={description}
     toolName={toolName}
     jsFile={jsFile}
     activePage={activePage}
-    reverseLink={reverseLink}
-    hasInputSettings={true}
+    reverseLink=""
+    hasInputSettings={false}
     hasOutputSettings={false}
-    hasFormatSettings={false}
-/>
+    hasFileInput={true}
+    inputFileUrlPlaceholder="Enter the URL here, and it will attempt to download. If it cannot be downloaded programmatically, you may need to download it manually."
+    inputFileDropText="Drag and drop the file here or click to select a file. It will process locally and won't be uploaded."
+    initScript={`
+        window.method = base58EncodeFile;
+        methodLoad();
+    `}
+>
+    <div slot="settings">
+        <div class="setting">
+            <label for="file-type">Input Type</label>
+            <select id="file-type" data-remember="file-type" data-auto-update>
+                <option value="file">File</option>
+                <option value="url">URL</option>
+            </select>
+        </div>
+    </div>
+
+    <script is:inline slot="scripts" set:html={`
+        ++waitLoadCount;
+        delayScripts.push({
+            src: '/js/base-x.min.js',
+            onload: function () {
+                methodLoad();
+            }
+        });
+        delayScripts.push({
+            src: '/js/clipboard.min.js',
+            onload: function () {
+                new ClipboardJS('[data-toggle="copy"]').on('success', function (e) {
+                    showMessage(e.trigger.getAttribute('data-message'));
+                    gtag('event', 'copy');
+                });
+            },
+            delay: 100
+        });
+        ++waitLoadCount;
+        delayScripts.push({
+            src: '/js/url-blob.js?v=1',
+            onload: function () {
+                methodLoad();
+            }
+        });
+        ++waitLoadCount;
+        delayScripts.push({
+            src: '/js/droppable-file.js',
+            onload: function () {
+                methodLoad();
+            }
+        });
+        ++waitLoadCount;
+        delayScripts.push({
+            src: '/js/file.js?v=10',
+            onload: function () {
+                methodLoad();
+            }
+        });
+        window.PROCESSING_MESSAGE = 'encoding...';
+    `}></script>
+</EncodingPage>

@@ -4,6 +4,10 @@ import Sidebar from './Sidebar.astro';
 import PageHeader from './PageHeader.astro';
 import InputEncodingSelect from './InputEncodingSelect.astro';
 import OutputEncodingSelect from './OutputEncodingSelect2.astro';
+import InputBlock from './InputBlock.astro';
+import InputFileBlock from './InputFileBlock.astro';
+import OutputBlock from './OutputBlock.astro';
+import SettingBlock from './SettingBlock.astro';
 
 interface Props {
     title: string;
@@ -18,9 +22,29 @@ interface Props {
     initScript?: string;
     extraJsFile?: string;
     outputDataType?: string;
+    // File input support
+    hasFileInput?: boolean;
+    inputFileUrlPlaceholder?: string;
+    inputFileDropText?: string;
 }
 
-const { title, description, toolName, jsFile, activePage, reverseLink, hasInputSettings = true, hasOutputSettings = false, hasFormatSettings = false, initScript, extraJsFile, outputDataType } = Astro.props;
+const { 
+    title, 
+    description, 
+    toolName, 
+    jsFile, 
+    activePage, 
+    reverseLink, 
+    hasInputSettings = true, 
+    hasOutputSettings = false, 
+    hasFormatSettings = false, 
+    initScript, 
+    extraJsFile, 
+    outputDataType,
+    hasFileInput = false,
+    inputFileUrlPlaceholder,
+    inputFileDropText
+} = Astro.props;
 ---
 
 <BaseLayout title={title} description={description}>
@@ -39,117 +63,82 @@ const { title, description, toolName, jsFile, activePage, reverseLink, hasInputS
             <main>
                 <div class="layout">
                     <div class="layout-block">
-                        <div class="input">
-                            <div class="block block-fill">
-                                <div class="block-title">Input
-                                    <div class="toolbar">
-                                        <button class="icon" data-toggle="fullscreen">
-                                            <img class="fullscreen-icon" src="/images/fullscreen.svg" alt="Full Screen" title="Full Screen">
-                                            <img class="fullscreen-icon-exit" src="/images/fullscreen-exit.svg" alt="Full Screen" title="Full Screen">
-                                        </button>
-                                    </div>
-                                </div>
-                                <textarea class="container" id="input" spellcheck="false" placeholder="Enter here..." 
-                                    data-remember="input" data-share="input" data-encoding-from="#input-type" 
-                                    data-auto-update data-toggle="monacoEditor"></textarea>
-                            </div>
-                        </div>
+                        {hasFileInput ? (
+                            <InputFileBlock
+                                title="Input"
+                                urlPlaceholder={inputFileUrlPlaceholder}
+                                dropText={inputFileDropText}
+                                dataRemember="input"
+                                dataShare="input"
+                                dataAutoUpdate={true}
+                            />
+                        ) : (
+                            <InputBlock 
+                                id="input" 
+                                title="Input" 
+                                placeholder="Enter here..." 
+                                dataRemember="input" 
+                                dataShare="input" 
+                                dataEncodingFrom="#input-type" 
+                                dataAutoUpdate={true} 
+                                dataToggleMonaco={true} 
+                            />
+                        )}
                         
-                        <div class="output">
-                            <div class="block block-fill">
-                                <div class="block-title">Output
-                                    <div class="toolbar">
-                                        <button class="icon" id="swap" onclick={`swap('${reverseLink}', [['#output', '#input'], ['#input-type', '#output-type']])`}>
-                                            <img src="/images/swap.svg" alt="Swap" title="Swap"/>
-                                        </button>
-                                        <button class="icon" data-toggle="copy" data-clipboard-target="#output" data-message="Output copied">
-                                            <img src="/images/copy.svg" alt="Copy" title="Copy"/>
-                                        </button>
-                                        <button class="icon" data-toggle="fullscreen">
-                                            <img class="fullscreen-icon" src="/images/fullscreen.svg" alt="Full Screen" title="Full Screen">
-                                            <img class="fullscreen-icon-exit" src="/images/fullscreen-exit.svg" alt="Full Screen" title="Full Screen">
-                                        </button>
-                                    </div>
-                                </div>
-                                <textarea class="container" id="output" spellcheck="false" placeholder="Output here..." 
-                                    data-encoding-from="#output-type" data-toggle="monacoEditor" readonly="readonly" 
-                                    style="word-break:break-all;"></textarea>
-                            </div>
-                            
-                            <details class="block text-only" data-toggle="copyblock">
-                                <summary class="block-title">Share Link
-                                    <div class="toolbar">
-                                        <button class="icon" data-toggle="copy" data-clipboard-target="#share-link" data-message="Share link copied">
-                                            <img src="/images/copy.svg" alt="Copy" title="Copy"/>
-                                        </button>
-                                    </div>
-                                </summary>
-                                <input id="share-link" type="text" placeholder="Share Link" readonly="readonly"/>
-                            </details>
-                        </div>
+                        <OutputBlock 
+                            id="output" 
+                            title="Output" 
+                            placeholder="Output here..." 
+                            dataEncodingFrom="#output-type" 
+                            dataToggleMonaco={true} 
+                            isReadonly={true}
+                            textareaStyle="word-break:break-all;"
+                        >
+                            {!hasFileInput && (
+                                <button slot="toolbar" class="icon" id="swap" onclick={`swap('${reverseLink}', [['#output', '#input'], ['#input-type', '#output-type']])`}>
+                                    <img src="/images/swap.svg" alt="Swap" title="Swap"/>
+                                </button>
+                            )}
+                        </OutputBlock>
                     </div>
                     
-                    <div class="settings">
-                        <div class="block block-fill">
-                            <div class="block-title">Settings</div>
-                            <div class="container">
-                                <div class="setting">
-                                    <a class="btn" id="execute">{toolName}</a>
-                                </div>
-                                
-                                <div class="setting">
-                                    <label class="switcher">
-                                        <input type="checkbox" value="1" id="auto-update" checked>
-                                        <div class="toggle"></div>
-                                        <span>Auto Update</span>
-                                    </label>
-                                </div>
-                                
-                                <div class="setting">
-                                    <label class="switcher">
-                                        <input type="checkbox" value="1" id="remember-input">
-                                        <div class="toggle"></div>
-                                        <span>Remember Input</span>
-                                    </label>
-                                </div>
-                                
-                                {hasInputSettings && (
-                                    <div class="setting">
-                                        <label for="input-type">Input Encoding</label>
-                                        <InputEncodingSelect id="input-type" dataShare="input_type" dataAutoUpdate={true} />
-                                    </div>
-                                )}
-                                
-                                {hasOutputSettings && (
-                                    <div class="setting">
-                                        <label for="output-type">Output Encoding</label>
-                                        <OutputEncodingSelect id="output-type" dataShare="output_type" dataAutoUpdate={true} dataType={outputDataType} />
-                                    </div>
-                                )}
-                                
-                                {hasFormatSettings && (
-                                    <div class="setting">
-                                        <label for="format">Format</label>
-                                        <select id="format" data-remember="format" data-option="format" data-share="format">
-                                            <option value="rfc_4648">RFC 4648</option>
-                                            <option value="rfc_4648_url_safe">RFC 4648 URL Safe</option>
-                                            <option value="rfc_2045">RFC 2045 (MIME)</option>
-                                            <option value="rfc_2152">RFC 2152 (UTF-7)</option>
-                                            <option value="rfc_3501">RFC 3501 (IMAP)</option>
-                                        </select>
-                                    </div>
-                                )}
-
-                                <slot name="settings" />
+                    <SettingBlock executeLabel={toolName}>
+                        {hasInputSettings && (
+                            <div class="setting">
+                                <label for="input-type">Input Encoding</label>
+                                <InputEncodingSelect id="input-type" dataShare="input_type" dataAutoUpdate={true} />
                             </div>
-                        </div>
-                    </div>
+                        )}
+                        
+                        {hasOutputSettings && (
+                            <div class="setting">
+                                <label for="output-type">Output Encoding</label>
+                                <OutputEncodingSelect id="output-type" dataShare="output_type" dataAutoUpdate={true} dataType={outputDataType} />
+                            </div>
+                        )}
+                        
+                        {hasFormatSettings && (
+                            <div class="setting">
+                                <label for="format">Format</label>
+                                <select id="format" data-remember="format" data-option="format" data-share="format">
+                                    <option value="rfc_4648">RFC 4648</option>
+                                    <option value="rfc_4648_url_safe">RFC 4648 URL Safe</option>
+                                    <option value="rfc_2045">RFC 2045 (MIME)</option>
+                                    <option value="rfc_2152">RFC 2152 (UTF-7)</option>
+                                    <option value="rfc_3501">RFC 3501 (IMAP)</option>
+                                </select>
+                            </div>
+                        )}
+
+                        <slot name="settings" />
+                    </SettingBlock>
                 </div>
             </main>
         </div>
     </div>
     
     <script is:inline set:html={`
+        ${jsFile ? `
         ++waitLoadCount;
         delayScripts.push({
             src: '/js/${jsFile}',
@@ -157,6 +146,17 @@ const { title, description, toolName, jsFile, activePage, reverseLink, hasInputS
                 ${initScript || `console.log('Loaded ${jsFile}');`}
             }
         });
+        ` : `
+        ${initScript ? `
+        ++waitLoadCount;
+        delayScripts.push({
+            src: '',
+            onload: function () {
+                ${initScript}
+            }
+        });
+        ` : ''}
+        `}
         ${extraJsFile ? `
         ++waitLoadCount;
         delayScripts.push({
@@ -167,4 +167,5 @@ const { title, description, toolName, jsFile, activePage, reverseLink, hasInputS
         });
         ` : ''}
     `}></script>
+    <slot name="scripts" />
 </BaseLayout>

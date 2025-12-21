@@ -1,10 +1,5 @@
 ﻿---
-import BaseLayout from '../../layouts/BaseLayout.astro';
-import Sidebar from '../../components/Sidebar.astro';
-import PageHeader from '../../components/PageHeader.astro';
-import InputFileBlock from '../../components/InputFileBlock.astro';
-import OutputBlock from '../../components/OutputBlock.astro';
-import SettingBlock from '../../components/SettingBlock.astro';
+import EncodingPage from '../../components/EncodingPage.astro';
 
 const title = "Encode File to Hex";
 const description = "Encode file to Hex. Free online Hex encoding tool.";
@@ -13,80 +8,43 @@ const jsFile = "hex.js?v=3";
 const activePage = "encoding/hex_encode_file";
 ---
 
-<BaseLayout title={title} description={description}>
-    <div id="app">
-        <Sidebar activePage={activePage} />
-        
-        <div id="content">
-            <div class="top-nav">
-                <button id="sidebar-toggler" aria-controls="sidebar" aria-expanded="false" aria-label="Menu">
-                    <img src="/images/menu.svg" width="24" height="24" alt="Menu">
-                </button>
-            </div>
-            
-            <PageHeader title={title} description={description} />
-            
-            <main>
-                <div class="layout">
-                    <div class="layout-block">
-                        <InputFileBlock
-                            title="Input"
-                            urlPlaceholder="Enter the URL here, and it will attempt to download. If it cannot be downloaded programmatically, you may need to download it manually."
-                            dropText="Drag and drop the file here or click to select a file. It will process locally and won't be uploaded."
-                            dataRemember="input"
-                            dataShare="input"
-                            dataAutoUpdate={true}
-                        />
-                        
-                        <OutputBlock 
-                            title="Output"
-                            placeholder="Output here..."
-                            dataEncodingFrom="#output-type"
-                            isReadonly={true}
-                            showDownload={true}
-                            showCopy={true}
-                            showShareLink={false}
-                        />
-                    </div>
-                    
-                    <SettingBlock executeLabel="Encode">
-                        <div class="setting">
-                            <label for="file-type">Input Type</label>
-                            <select id="file-type" data-remember="file-type" data-auto-update>
-                                <option value="file">File</option>
-                                <option value="url">URL</option>
-                            </select>
-                        </div>
+<EncodingPage
+    title={title}
+    description={description}
+    toolName={toolName}
+    jsFile={jsFile}
+    activePage={activePage}
+    reverseLink=""
+    hasInputSettings={false}
+    hasOutputSettings={false}
+    hasFileInput={true}
+    inputFileUrlPlaceholder="Enter the URL here, and it will attempt to download. If it cannot be downloaded programmatically, you may need to download it manually."
+    inputFileDropText="Drag and drop the file here or click to select a file. It will process locally and won't be uploaded."
+    initScript={`
+        window.method = withOptions(hexEncode, ['upper-case']);
+        methodLoad();
+    `}
+    extraJsFile="encoding.js?v=8"
+>
+    <div slot="settings">
+        <div class="setting">
+            <label for="file-type">Input Type</label>
+            <select id="file-type" data-remember="file-type" data-auto-update>
+                <option value="file">File</option>
+                <option value="url">URL</option>
+            </select>
+        </div>
 
-                        <div class="setting">
-                            <label class="switcher">
-                                <input type="checkbox" value="1" id="upper-case" data-option="upper-case" data-remember="upper-case" data-share="upper_case" />
-                                <div class="toggle"></div>
-                                <span>Upper Case</span>
-                            </label>
-                        </div>
-                    </SettingBlock>
-                </div>
-            </main>
+        <div class="setting">
+            <label class="switcher">
+                <input type="checkbox" value="1" id="upper-case" data-option="upper-case" data-remember="upper-case" data-share="upper_case" />
+                <div class="toggle"></div>
+                <span>Upper Case</span>
+            </label>
         </div>
     </div>
     
-    <script is:inline set:html={`
-        ++waitLoadCount;
-        delayScripts.push({
-            src: '/js/${jsFile}',
-            onload: function () {
-                window.method = withOptions(hexEncode, ['upper-case']);
-                methodLoad();
-            }
-        });
-        ++waitLoadCount;
-        delayScripts.push({
-            src: '/js/encoding.js?v=8',
-            onload: function () {
-                methodLoad();
-            }
-        });
+    <script is:inline slot="scripts" set:html={`
         delayScripts.push({
             src: '/js/clipboard.min.js',
             onload: function () {
@@ -120,4 +78,4 @@ const activePage = "encoding/hex_encode_file";
         });
         window.PROCESSING_MESSAGE = 'encoding...';
     `}></script>
-</BaseLayout>
+</EncodingPage>

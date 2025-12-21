@@ -1,21 +1,38 @@
 ﻿---
 import EncodingPage from '../../components/EncodingPage.astro';
+
 const title = "Base32 Decode";
-const description = "Decode Base32 to text or file. Free online Base32 decoding tool.";
+const description = "This online Base32 decoding tool helps you decode Base32 to text or binary. You can output UTF-8, UTF-16, Hex, Base64, or other encodings.";
 const toolName = "Decode";
-const jsFile = "base32.js?v=3";
+const jsFile = "base32.min.js";
 const activePage = "encoding/base32_decode";
-const reverseLink = "encoding/base32_encode";
 ---
-<EncodingPage 
+
+<EncodingPage
     title={title}
     description={description}
     toolName={toolName}
     jsFile={jsFile}
     activePage={activePage}
-    reverseLink={reverseLink}
+    reverseLink="encoding/base32_encode"
     hasInputSettings={false}
     hasOutputSettings={true}
-    hasFormatSettings={false}
-    outputDataType=""
-/>
+    initScript={`
+        window.method = base32.decode.asBytes;
+        methodLoad();
+    `}
+    extraJsFile="encoding.js?v=8"
+>
+    <script is:inline slot="scripts" set:html={`
+        delayScripts.push({
+            src: '/js/clipboard.min.js',
+            onload: function () {
+                new ClipboardJS('[data-toggle="copy"]').on('success', function (e) {
+                    showMessage(e.trigger.getAttribute('data-message'));
+                    gtag('event', 'copy');
+                });
+            },
+            delay: 100
+        });
+    `}></script>
+</EncodingPage>

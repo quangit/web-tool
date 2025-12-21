@@ -2,22 +2,44 @@
 import EncodingPage from '../../../../components/EncodingPage.astro';
 
 const title = "Base58 Decode";
-const description = "Decode Base58 to text or file. Free online Base58 decoding tool.";
+const description = "This online Base58 decoding tool helps you decode Base58 to text or binary. You can output UTF-8, UTF-16, Hex, Base64, or other encodings.";
 const toolName = "Decode";
-const jsFile = "base58.js?v=7";
-const activePage = "encoding/base58/decode";
-const reverseLink = "";
+const jsFile = "base58.js?v=3";
+const activePage = "base58/decode";
 ---
 
-<EncodingPage 
+<EncodingPage
     title={title}
     description={description}
     toolName={toolName}
     jsFile={jsFile}
     activePage={activePage}
-    reverseLink={reverseLink}
+    reverseLink="base58/encode"
     hasInputSettings={false}
     hasOutputSettings={true}
-    hasFormatSettings={false}
-    outputDataType=""
-/>
+    initScript={`
+        window.method = base58Decode;
+        methodLoad();
+    `}
+    extraJsFile="encoding.js?v=8"
+>
+    <script is:inline slot="scripts" set:html={`
+        ++waitLoadCount;
+        delayScripts.push({
+            src: '/js/base-x.min.js',
+            onload: function () {
+                methodLoad();
+            }
+        });
+        delayScripts.push({
+            src: '/js/clipboard.min.js',
+            onload: function () {
+                new ClipboardJS('[data-toggle="copy"]').on('success', function (e) {
+                    showMessage(e.trigger.getAttribute('data-message'));
+                    gtag('event', 'copy');
+                });
+            },
+            delay: 100
+        });
+    `}></script>
+</EncodingPage>

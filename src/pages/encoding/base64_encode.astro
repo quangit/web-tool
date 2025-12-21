@@ -1,20 +1,52 @@
 ﻿---
 import EncodingPage from '../../components/EncodingPage.astro';
+
 const title = "Base64 Encode";
-const description = "Encode text or file to Base64. Free online Base64 encoding tool.";
+const description = "This online Base64 encoding tool helps you encode text or binary to Base64. You can input UTF-8, UTF-16, Hex, or other encodings. It also supports various formats such as RFC 4648 (standard and URL Safe), RFC 2045 (MIME), RFC 2152 (UTF-7), and RFC 3501 (IMAP).";
 const toolName = "Encode";
-const jsFile = "base64.js?v=3";
+const jsFile = "base64.js?v=6";
 const activePage = "encoding/base64_encode";
-const reverseLink = "encoding/base64_decode";
 ---
-<EncodingPage 
+
+<EncodingPage
     title={title}
     description={description}
     toolName={toolName}
     jsFile={jsFile}
     activePage={activePage}
-    reverseLink={reverseLink}
+    reverseLink="encoding/base64_decode"
     hasInputSettings={true}
     hasOutputSettings={false}
     hasFormatSettings={true}
-/>
+    initScript={`
+        window.method = withOptions(base64Encode, ['format']);
+        methodLoad();
+    `}
+>
+    <script is:inline slot="scripts" set:html={`
+        ++waitLoadCount;
+        delayScripts.push({
+            src: '/js/base64.min.js?v=0.4.1',
+            onload: function () {
+                methodLoad();
+            }
+        });
+        ++waitLoadCount;
+        delayScripts.push({
+            src: '/js/encoding.js?v=8',
+            onload: function () {
+                methodLoad();
+            }
+        });
+        delayScripts.push({
+            src: '/js/clipboard.min.js',
+            onload: function () {
+                new ClipboardJS('[data-toggle="copy"]').on('success', function (e) {
+                    showMessage(e.trigger.getAttribute('data-message'));
+                    gtag('event', 'copy');
+                });
+            },
+            delay: 100
+        });
+    `}></script>
+</EncodingPage>

@@ -1,20 +1,37 @@
 ﻿---
 import EncodingPage from '../../components/EncodingPage.astro';
+
 const title = "URL Decode";
-const description = "Decode URL to text or file. Free online URL decoding tool.";
+const description = "This URL decode online tool helps you decode percent-encoding string to URL.";
 const toolName = "Decode";
-const jsFile = "url.js?v=3";
+const jsFile = ""; // No external JS file needed for decodeURIComponent
 const activePage = "encoding/url_decode";
-const reverseLink = "encoding/url_encode";
 ---
-<EncodingPage 
+
+<EncodingPage
     title={title}
     description={description}
     toolName={toolName}
     jsFile={jsFile}
     activePage={activePage}
-    reverseLink={reverseLink}
+    reverseLink="encoding/url_encode"
     hasInputSettings={false}
     hasOutputSettings={false}
-    hasFormatSettings={false}
-/>
+    initScript={`
+        window.method = decodeURIComponent;
+        methodLoad();
+    `}
+>
+    <script is:inline slot="scripts" set:html={`
+        delayScripts.push({
+            src: '/js/clipboard.min.js',
+            onload: function () {
+                new ClipboardJS('[data-toggle="copy"]').on('success', function (e) {
+                    showMessage(e.trigger.getAttribute('data-message'));
+                    gtag('event', 'copy');
+                });
+            },
+            delay: 100
+        });
+    `}></script>
+</EncodingPage>

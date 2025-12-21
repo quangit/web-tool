@@ -1,20 +1,54 @@
 ﻿---
 import EncodingPage from '../../components/EncodingPage.astro';
-const title = "HTML Decode";
-const description = "Decode HTML to text. Free online HTML decoding tool.";
+
+const title = "HTML Decode / Unescape";
+const description = "This HTML decode online tool helps you decode entities encoding string to HTML.";
 const toolName = "Decode";
-const jsFile = "html.js?v=3";
+const jsFile = "htmlencode.min.js";
 const activePage = "encoding/html_decode";
-const reverseLink = "encoding/html_encode";
 ---
-<EncodingPage 
+
+<EncodingPage
     title={title}
     description={description}
     toolName={toolName}
     jsFile={jsFile}
     activePage={activePage}
-    reverseLink={reverseLink}
+    reverseLink="encoding/html_encode"
     hasInputSettings={false}
     hasOutputSettings={false}
-    hasFormatSettings={false}
-/>
+    initScript={`
+        window.method = htmlDecode;
+        methodLoad();
+    `}
+>
+    <div slot="settings">
+        <div class="setting">
+            <label class="switcher">
+                <input type="checkbox" value="1" id="pretty-display" data-option="pretty-display" data-remember="pretty-display" />
+                <div class="toggle"></div>
+                <span>Pretty Display</span>
+            </label>
+        </div>
+    </div>
+
+    <script is:inline slot="scripts" set:html={`
+        delayScripts.push({
+            src: '/js/clipboard.min.js',
+            onload: function () {
+                new ClipboardJS('[data-toggle="copy"]').on('success', function (e) {
+                    showMessage(e.trigger.getAttribute('data-message'));
+                    gtag('event', 'copy');
+                });
+            },
+            delay: 100
+        });
+        ++waitLoadCount;
+        delayScripts.push({
+            src: '/js/monaco-editor.js?v=1',
+            onload: function () {
+                methodLoad();
+            }
+        });
+    `}></script>
+</EncodingPage>

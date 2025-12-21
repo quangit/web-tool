@@ -1,20 +1,73 @@
 ﻿---
 import EncodingPage from '../../components/EncodingPage.astro';
-const title = "File to Base32";
-const description = "Encode file to Base32. Free online Base32 encoding tool.";
-const toolName = "FileEncode";
-const jsFile = "base32.js?v=3";
+
+const title = "Encode File to Base32";
+const description = "This online Base32 encoding tool helps you encode a file from local or URL to Base32 without uploading the file.";
+const toolName = "Encode";
+const jsFile = "base32.js?v=2";
 const activePage = "encoding/base32_encode_file";
-const reverseLink = "encoding/base32_decode_file";
 ---
-<EncodingPage 
+
+<EncodingPage
     title={title}
     description={description}
     toolName={toolName}
     jsFile={jsFile}
     activePage={activePage}
-    reverseLink={reverseLink}
+    reverseLink=""
     hasInputSettings={false}
     hasOutputSettings={false}
-    hasFormatSettings={false}
-/>
+    hasFileInput={true}
+    inputFileUrlPlaceholder="Enter the URL here, and it will attempt to download. If it cannot be downloaded programmatically, you may need to download it manually."
+    inputFileDropText="Drag and drop the file here or click to select a file. It will process locally and won't be uploaded."
+    initScript={`
+        window.method = base32Encode;
+        methodLoad();
+    `}
+    extraJsFile="base32.min.js"
+>
+    <div slot="settings">
+        <div class="setting">
+            <label for="file-type">Input Type</label>
+            <select id="file-type" data-remember="file-type" data-auto-update>
+                <option value="file">File</option>
+                <option value="url">URL</option>
+            </select>
+        </div>
+    </div>
+
+    <script is:inline slot="scripts" set:html={`
+        delayScripts.push({
+            src: '/js/clipboard.min.js',
+            onload: function () {
+                new ClipboardJS('[data-toggle="copy"]').on('success', function (e) {
+                    showMessage(e.trigger.getAttribute('data-message'));
+                    gtag('event', 'copy');
+                });
+            },
+            delay: 100
+        });
+        ++waitLoadCount;
+        delayScripts.push({
+            src: '/js/url-blob.js?v=1',
+            onload: function () {
+                methodLoad();
+            }
+        });
+        ++waitLoadCount;
+        delayScripts.push({
+            src: '/js/droppable-file.js',
+            onload: function () {
+                methodLoad();
+            }
+        });
+        ++waitLoadCount;
+        delayScripts.push({
+            src: '/js/file.js?v=10',
+            onload: function () {
+                methodLoad();
+            }
+        });
+        window.PROCESSING_MESSAGE = 'encoding...';
+    `}></script>
+</EncodingPage>
