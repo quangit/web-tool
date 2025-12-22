@@ -1,0 +1,456 @@
+---
+import BaseLayout from "../../layouts/BaseLayout.astro";
+import Sidebar from "../../components/Sidebar.astro";
+import PageHeader from "../../components/PageHeader.astro";
+import { languages } from '../../i18n/ui';
+import { useTranslations } from '../../i18n/utils';
+
+export function getStaticPaths() {
+  return Object.keys(languages).map((lang) => {
+      return { params: { lang } };
+  });
+}
+
+const { lang } = Astro.params;
+const t = useTranslations(lang as any);
+---
+
+<BaseLayout title={t('nav.about')} description={t('sidebar.description')}>
+  <div id="app">
+    <Sidebar activePage="about" />
+    <div id="content">
+      <div class="top-nav"><button id="sidebar-toggler" aria-controls="sidebar" aria-expanded="false" aria-label={t('sidebar.toggle_menu')}><i data-lucide="menu" width="24" height="24" alt={t('sidebar.toggle_menu')}></i></button></div>
+      <PageHeader title={t('nav.about')} description={t('sidebar.description')} />
+      <main>
+        <div class="about-container">
+            <!-- Hero Section -->
+            <div class="hero-section animate-fade-in">
+                <div class="hero-content">
+                    <h2>Your Privacy-First Developer Toolkit</h2>
+                    <p>
+                        <strong>Astro Web Tools</strong> is a comprehensive, open-source collection of utilities designed for developers, security professionals, and digital creators. 
+                        Built with performance and privacy at its core, we provide essential tools that run entirely in your browser.
+                    </p>
+                    <div class="hero-badges">
+                        <span class="badge"><i data-lucide="shield-check"></i> 100% Client-Side</span>
+                        <span class="badge"><i data-lucide="zap"></i> Lightning Fast</span>
+                        <span class="badge"><i data-lucide="wifi-off"></i> Works Offline</span>
+                        <span class="badge"><i data-lucide="gift"></i> Free & Open Source</span>
+                    </div>
+                </div>
+                <div class="hero-image">
+                    <img src="/images/web-tools-banner.png" alt="Web Tools Banner" />
+                </div>
+            </div>
+
+            <!-- Features Grid -->
+            <div class="section-title animate-slide-up" style="animation-delay: 0.1s;">
+                <h2>Why Choose Us?</h2>
+            </div>
+            
+            <div class="features-grid">
+                <div class="feature-card animate-slide-up" style="animation-delay: 0.2s;">
+                    <div class="icon-wrapper privacy">
+                        <i data-lucide="lock"></i>
+                    </div>
+                    <h3>Privacy First</h3>
+                    <p>All operations happen locally in your browser. Your data never leaves your device, ensuring complete confidentiality for sensitive information.</p>
+                </div>
+                <div class="feature-card animate-slide-up" style="animation-delay: 0.3s;">
+                    <div class="icon-wrapper performance">
+                        <i data-lucide="zap"></i>
+                    </div>
+                    <h3>High Performance</h3>
+                    <p>Built with Astro's static site generation, our tools load instantly and perform complex calculations with native-like speed.</p>
+                </div>
+                <div class="feature-card animate-slide-up" style="animation-delay: 0.4s;">
+                    <div class="icon-wrapper accessibility">
+                        <i data-lucide="smartphone"></i>
+                    </div>
+                    <h3>Accessible Anywhere</h3>
+                    <p>Responsive design that works seamlessly across desktop, tablet, and mobile devices. No installation or setup required.</p>
+                </div>
+            </div>
+
+            <!-- Tools Categories -->
+            <div class="section-title animate-slide-up" style="animation-delay: 0.5s;">
+                <h2>Explore Our Toolkit</h2>
+            </div>
+
+            <div class="tools-grid">
+                <div class="tool-category animate-scale-in" style="animation-delay: 0.6s;">
+                    <div class="category-header">
+                        <i data-lucide="key"></i>
+                        <h3>Cryptography & Hashing</h3>
+                    </div>
+                    <ul>
+                        <li>MD5, SHA-1, SHA-2, SHA-3</li>
+                        <li>Keccak, BLAKE, RIPEMD</li>
+                        <li>AES, DES, Triple DES, RC4</li>
+                        <li>RSA, ECDSA Signatures</li>
+                    </ul>
+                </div>
+
+                <div class="tool-category animate-scale-in" style="animation-delay: 0.7s;">
+                    <div class="category-header">
+                        <i data-lucide="file-code"></i>
+                        <h3>Encoding & Decoding</h3>
+                    </div>
+                    <ul>
+                        <li>Base32, Base58, Base64</li>
+                        <li>Hex (Base16) Encoding</li>
+                        <li>URL & HTML Entities</li>
+                        <li>File Encoding Support</li>
+                    </ul>
+                </div>
+
+                <div class="tool-category animate-scale-in" style="animation-delay: 0.8s;">
+                    <div class="category-header">
+                        <i data-lucide="wrench"></i>
+                        <h3>Data & Utilities</h3>
+                    </div>
+                    <ul>
+                        <li>JSON/XML Formatter</li>
+                        <li>SQL Formatter</li>
+                        <li>QR Code Generator</li>
+                        <li>Syntax Highlighting</li>
+                    </ul>
+                </div>
+
+                <div class="tool-category animate-scale-in" style="animation-delay: 0.9s;">
+                    <div class="category-header">
+                        <i data-lucide="image"></i>
+                        <h3>Productivity</h3>
+                    </div>
+                    <ul>
+                        <li>Image Processing</li>
+                        <li>Secure Note Taking</li>
+                        <li>JWT Debugging</li>
+                        <li>File Comparison</li>
+                    </ul>
+                </div>
+            </div>
+            
+            <!-- Call to Action -->
+            <div class="cta-section animate-fade-in" style="animation-delay: 1s;">
+                <h2>Ready to get started?</h2>
+                <p>Explore the sidebar to find the tool you need or use the search bar for quick access.</p>
+                <div class="cta-buttons">
+                    <a href="https://github.com/quangit/web-tool" target="_blank" class="btn-github">
+                        <i data-lucide="github"></i> Star on GitHub
+                    </a>
+                </div>
+            </div>
+        </div>
+      </main>
+    </div>
+  </div>
+
+  <style>
+    .about-container {
+        max-width: 1200px;
+        margin: 0 auto;
+        padding: 24px;
+    }
+
+    /* Hero Section */
+    .hero-section {
+        display: flex;
+        flex-direction: column-reverse;
+        gap: 32px;
+        background: var(--bg-card);
+        border-radius: 16px;
+        padding: 32px;
+        margin-bottom: 48px;
+        box-shadow: var(--var-shadow-md);
+        border: 1px solid var(--border-color);
+        overflow: hidden;
+    }
+
+    @media (min-width: 768px) {
+        .hero-section {
+            flex-direction: row;
+            align-items: center;
+            padding: 48px;
+        }
+    }
+
+    .hero-content {
+        flex: 1;
+    }
+
+    .hero-content h2 {
+        font-size: 2rem;
+        margin-bottom: 16px;
+        background: linear-gradient(135deg, var(--var-primary) 0%, var(--var-purple) 100%);
+        -webkit-background-clip: text;
+        -webkit-text-fill-color: transparent;
+        background-clip: text;
+    }
+
+    .hero-content p {
+        font-size: 1.1rem;
+        color: var(--text-secondary);
+        margin-bottom: 24px;
+        line-height: 1.6;
+    }
+
+    .hero-badges {
+        display: flex;
+        flex-wrap: wrap;
+        gap: 12px;
+    }
+
+    .badge {
+        display: inline-flex;
+        align-items: center;
+        gap: 6px;
+        padding: 6px 12px;
+        background: var(--var-icon-hover-bg-color);
+        border-radius: 20px;
+        font-size: 0.9rem;
+        font-weight: 500;
+        color: var(--text-primary);
+        border: 1px solid var(--border-color);
+    }
+
+    .badge i {
+        width: 16px;
+        height: 16px;
+        color: var(--var-primary);
+    }
+
+    .hero-image {
+        flex: 1;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+    }
+
+    .hero-image img {
+        max-width: 100%;
+        height: auto;
+        border-radius: 12px;
+        box-shadow: var(--var-shadow-lg);
+        transition: transform 0.3s ease;
+    }
+
+    .hero-image img:hover {
+        transform: scale(1.02);
+    }
+
+    /* Section Titles */
+    .section-title {
+        text-align: center;
+        margin-bottom: 32px;
+    }
+
+    .section-title h2 {
+        font-size: 1.8rem;
+        color: var(--text-primary);
+        position: relative;
+        display: inline-block;
+    }
+
+    .section-title h2::after {
+        content: '';
+        position: absolute;
+        bottom: -8px;
+        left: 50%;
+        transform: translateX(-50%);
+        width: 60px;
+        height: 4px;
+        background: var(--var-primary);
+        border-radius: 2px;
+    }
+
+    /* Features Grid */
+    .features-grid {
+        display: grid;
+        grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+        gap: 24px;
+        margin-bottom: 48px;
+    }
+
+    .feature-card {
+        background: var(--bg-card);
+        padding: 24px;
+        border-radius: 12px;
+        border: 1px solid var(--border-color);
+        box-shadow: var(--var-shadow-sm);
+        transition: transform 0.3s ease, box-shadow 0.3s ease;
+        text-align: center;
+    }
+
+    .feature-card:hover {
+        transform: translateY(-5px);
+        box-shadow: var(--var-shadow-md);
+        border-color: var(--var-primary);
+    }
+
+    .icon-wrapper {
+        width: 64px;
+        height: 64px;
+        border-radius: 50%;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        margin: 0 auto 16px;
+        font-size: 24px;
+    }
+
+    .icon-wrapper.privacy { background: rgba(16, 185, 129, 0.1); color: var(--var-green); }
+    .icon-wrapper.performance { background: rgba(59, 130, 246, 0.1); color: var(--var-blue); }
+    .icon-wrapper.accessibility { background: rgba(245, 158, 11, 0.1); color: var(--var-orange); }
+
+    .feature-card h3 {
+        margin: 0 0 12px;
+        color: var(--text-primary);
+        font-size: 1.25rem;
+    }
+
+    .feature-card p {
+        color: var(--text-secondary);
+        margin: 0;
+        line-height: 1.5;
+    }
+
+    /* Tools Grid */
+    .tools-grid {
+        display: grid;
+        grid-template-columns: repeat(auto-fill, minmax(250px, 1fr));
+        gap: 24px;
+        margin-bottom: 48px;
+    }
+
+    .tool-category {
+        background: var(--bg-card);
+        border-radius: 12px;
+        padding: 24px;
+        border: 1px solid var(--border-color);
+        box-shadow: var(--var-shadow-sm);
+        transition: all 0.3s ease;
+    }
+
+    .tool-category:hover {
+        transform: translateY(-3px);
+        box-shadow: var(--var-shadow-md);
+    }
+
+    .category-header {
+        display: flex;
+        align-items: center;
+        gap: 12px;
+        margin-bottom: 16px;
+        padding-bottom: 12px;
+        border-bottom: 1px solid var(--border-color);
+    }
+
+    .category-header i {
+        color: var(--var-primary);
+    }
+
+    .category-header h3 {
+        margin: 0;
+        font-size: 1.1rem;
+        color: var(--text-primary);
+    }
+
+    .tool-category ul {
+        list-style: none;
+        padding: 0;
+        margin: 0;
+    }
+
+    .tool-category li {
+        padding: 6px 0;
+        color: var(--text-secondary);
+        display: flex;
+        align-items: center;
+    }
+
+    .tool-category li::before {
+        content: '•';
+        color: var(--var-primary);
+        font-weight: bold;
+        margin-right: 8px;
+    }
+
+    /* CTA Section */
+    .cta-section {
+        text-align: center;
+        background: linear-gradient(135deg, rgba(59,130,246,0.1) 0%, rgba(147,51,234,0.1) 100%);
+        padding: 48px 24px;
+        border-radius: 16px;
+        border: 1px solid var(--border-color);
+    }
+
+    .cta-section h2 {
+        margin-top: 0;
+        color: var(--text-primary);
+    }
+
+    .cta-section p {
+        color: var(--text-secondary);
+        margin-bottom: 24px;
+        font-size: 1.1rem;
+    }
+
+    .btn-github {
+        display: inline-flex;
+        align-items: center;
+        gap: 8px;
+        background-color: #24292e;
+        color: white;
+        padding: 12px 24px;
+        border-radius: 8px;
+        font-weight: 600;
+        transition: background-color 0.2s;
+    }
+
+    .btn-github:hover {
+        background-color: #1b1f23;
+        color: white;
+        text-decoration: none;
+    }
+
+    .dark-theme .btn-github {
+        background-color: #f0f6fc;
+        color: #24292e;
+    }
+    
+    .dark-theme .btn-github:hover {
+        background-color: #c9d1d9;
+    }
+
+    /* Animations */
+    .animate-fade-in {
+        animation: fadeIn 0.8s ease-out forwards;
+        opacity: 0;
+    }
+
+    .animate-slide-up {
+        animation: slideUp 0.8s ease-out forwards;
+        opacity: 0;
+        transform: translateY(20px);
+    }
+
+    .animate-scale-in {
+        animation: scaleIn 0.6s ease-out forwards;
+        opacity: 0;
+        transform: scale(0.9);
+    }
+
+    @keyframes fadeIn {
+        to { opacity: 1; }
+    }
+
+    @keyframes slideUp {
+        to { opacity: 1; transform: translateY(0); }
+    }
+
+    @keyframes scaleIn {
+        to { opacity: 1; transform: scale(1); }
+    }
+  </style>
+</BaseLayout>

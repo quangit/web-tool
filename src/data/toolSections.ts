@@ -300,4 +300,15 @@ export const toolSections: ToolSection[] = [
       },
     ],
   },
+  {
+    title: "Info",
+    blocks: [
+      {
+        title: "About",
+        items: [
+          { url: "about", name: "About", icon: "info" },
+        ],
+      },
+    ],
+  },
 ];
