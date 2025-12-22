@@ -1,6 +1,7 @@
 ﻿---
 import BaseLayout from "../../layouts/BaseLayout.astro";
 import Sidebar from "../../components/Sidebar.astro";
+import PageHeader from "../../components/PageHeader.astro";
 ---
 
 <BaseLayout
@@ -15,10 +16,7 @@ import Sidebar from "../../components/Sidebar.astro";
           ><img src="/images/menu.svg" width="24" height="24" alt="Menu" /></button
         >
       </div>
-      <header>
-        <h1>Syntax Highlight</h1>
-        <p>This syntax highlight online tool helps you highlight your code. Supports many languages such as JavaScript, C++, C#, Java... and so on.</p>
-      </header>
+      <PageHeader title="Syntax Highlight" description="This syntax highlight online tool helps you highlight your code. Supports many languages such as JavaScript, C++, C#, Java... and so on." />
       <main>
         <div class="layout">
           <div class="layout-block">

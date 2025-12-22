@@ -1,6 +1,7 @@
 ﻿---
 import BaseLayout from "../../../../layouts/BaseLayout.astro";
 import Sidebar from "../../../../components/Sidebar.astro";
+import PageHeader from "../../../../components/PageHeader.astro";
 ---
 
 <BaseLayout
@@ -15,10 +16,7 @@ import Sidebar from "../../../../components/Sidebar.astro";
           ><img src="/images/menu.svg" width="24" height="24" alt="Menu" /></button
         >
       </div>
-      <header>
-        <h1>ECDSA Verify Signature</h1>
-        <p>This online tool helps you verify signatures using ECDSA. It supports various curves and signature algorithms.</p>
-      </header>
+      <PageHeader title="ECDSA Verify Signature" description="This online tool helps you verify signatures using ECDSA. It supports various curves and signature algorithms." />
       <main>
         <div class="layout">
           <div class="layout-block">

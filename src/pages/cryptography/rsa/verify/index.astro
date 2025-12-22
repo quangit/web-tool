@@ -1,6 +1,7 @@
 ﻿---
 import BaseLayout from "../../../../layouts/BaseLayout.astro";
 import Sidebar from "../../../../components/Sidebar.astro";
+import PageHeader from "../../../../components/PageHeader.astro";
 import { useTranslations } from "../../../../i18n/utils";
 
 const t = useTranslations('en');
@@ -18,10 +19,7 @@ const activePage = "cryptography/rsa/verify";
           ><img src="/images/menu.svg" width="24" height="24" alt={t('sidebar.toggle_menu')} /></button
         >
       </div>
-      <header>
-        <h1>{t('rsa_verify.title')}</h1>
-        <p>{t('rsa_verify.description')}</p>
-      </header>
+      <PageHeader title={title} description={description} />
       <main>
         <div class="layout">
           <div class="layout-block">

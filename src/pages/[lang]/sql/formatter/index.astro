@@ -1,6 +1,7 @@
 ---
 import BaseLayout from '../../../../layouts/BaseLayout.astro';
 import Sidebar from '../../../../components/Sidebar.astro';
+import PageHeader from '../../../../components/PageHeader.astro';
 import { languages } from '../../../../i18n/ui';
 import { useTranslations } from '../../../../i18n/utils';
 
@@ -29,10 +30,7 @@ const activePage = "sql/formatter/";
                 </button>
             </div>
             
-            <header>
-                <h1>{title}</h1>
-                <p>{description}</p>
-            </header>
+            <PageHeader title={title} description={description} />
             
             <main>
                 <div class="layout">

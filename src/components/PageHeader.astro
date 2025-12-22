@@ -5,4 +5,97 @@ const { title, description } = Astro.props;
 <header>
   <h1>{title}</h1>
   <p>{description}</p>
+  <div class="feedback-button-wrapper">
+    <button class="feedback-btn" id="feedback-btn" aria-label="Feedback/Report Bug">
+      <i data-lucide="message-square-plus"></i>
+    </button>
+    <div class="feedback-dropdown" id="feedback-dropdown">
+      <a class="feedback-link" href="https://github.com/quangit/web-tool/issues" target="_blank" rel="noopener noreferrer" title="Report on GitHub">
+        <i data-lucide="github"></i>
+      </a>
+      <a class="feedback-link" href="mailto:quang49a9@gmail.com" title="Send an Email">
+        <i data-lucide="mail"></i>
+      </a>
+    </div>
+  </div>
 </header>
+
+<style>
+  header {
+    position: relative;
+  }
+
+  .feedback-button-wrapper {
+    position: absolute;
+    top: 10px;
+    right: 10px;
+    z-index: 1001;
+  }
+
+  .feedback-btn {
+    background-color: transparent;
+    color: var(--text-color);
+    border: none;
+    padding: 8px;
+    border-radius: 4px;
+    cursor: pointer;
+    display: flex;
+  }
+
+  .feedback-btn:hover {
+    background-color: var(--hover-bg-color, rgba(0, 0, 0, 0.05));
+  }
+
+  .feedback-dropdown {
+    display: none;
+    position: absolute;
+    right: 100%;
+    top: 0;
+    margin-right: 10px;
+    background-color: var(--bg-color, white);
+    border: 1px solid var(--border-color, #ddd);
+    border-radius: 4px;
+    box-shadow: 0 2px 5px rgba(0,0,0,0.2);
+    z-index: 1002;
+    overflow: hidden; /* Ensures children conform to border-radius */
+  }
+
+  .feedback-dropdown.show {
+    display: flex;
+  }
+
+  .feedback-dropdown .feedback-link {
+    display: flex;
+    padding: 10px;
+    color: var(--text-color, #333);
+    border-right: 1px solid var(--border-color, #eee);
+  }
+
+  .feedback-dropdown .feedback-link:last-child {
+    border-right: none;
+  }
+
+  .feedback-dropdown .feedback-link:hover {
+    background-color: var(--hover-bg-color, #f0f0f0);
+  }
+</style>
+
+<script is:inline>
+  document.addEventListener('DOMContentLoaded', () => {
+    const feedbackBtn = document.getElementById('feedback-btn');
+    const feedbackDropdown = document.getElementById('feedback-dropdown');
+
+    if (feedbackBtn && feedbackDropdown) {
+      feedbackBtn.addEventListener('click', (e) => {
+        e.stopPropagation();
+        feedbackDropdown.classList.toggle('show');
+      });
+
+      document.addEventListener('click', (e) => {
+        if (!feedbackDropdown.contains(e.target) && !feedbackBtn.contains(e.target)) {
+          feedbackDropdown.classList.remove('show');
+        }
+      });
+    }
+  });
+</script>

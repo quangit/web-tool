@@ -84,11 +84,19 @@ const { title, description } = Astro.props;
     }
   </script>
   <link rel="stylesheet" href="/css/style.css?v=27">
+  <script src="https://unpkg.com/lucide@latest" defer></script>
   <slot name="head-css" />
 </head>
 <body>
   <slot />
   <script src="https://code.jquery.com/jquery-1.10.1.min.js" defer></script>
   <script src="/js/main.js?v=41" defer></script>
+  <script is:inline>
+    document.addEventListener('DOMContentLoaded', () => {
+      if (window.lucide) {
+        window.lucide.createIcons();
+      }
+    });
+  </script>
 </body>
 </html>
