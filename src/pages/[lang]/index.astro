@@ -68,7 +68,10 @@ const t = useTranslations(lang as any);
                           <ol>
                             {block.items.map((item) => (
                               <li>
-                                <a href={`/${lang}/${item.url}`}>{item.name}</a>
+                                <a href={`/${lang}/${item.url}`}>
+                                  {item.icon && <i data-lucide={item.icon} class="tool-icon"></i>}
+                                  <span>{item.name}</span>
+                                </a>
                               </li>
                             ))}
                           </ol>
@@ -116,14 +119,14 @@ const t = useTranslations(lang as any);
         localStorage.setItem(FAVORITES_KEY, JSON.stringify(favorites));
       }
 
-      function toggleFavorite(url, title) {
+      function toggleFavorite(url, title, icon) {
         let favorites = getFavorites();
         const index = favorites.findIndex((f) => f.url === url);
 
         if (index > -1) {
           favorites.splice(index, 1);
         } else {
-          favorites.push({ url: url, title: title });
+          favorites.push({ url: url, title: title, icon: icon });
         }
 
         saveFavorites(favorites);
@@ -140,7 +143,19 @@ const t = useTranslations(lang as any);
         if (favorites.length === 0) {
           list.innerHTML = `<li class="empty-state">${emptyFavoritesText}</li>`;
         } else {
-          list.innerHTML = favorites.map((fav) => `<li><a href="/${currentLang}/${fav.url}">${fav.title}</a><span class="favorite-toggle active" data-url="${fav.url}" data-title="${fav.title}"></span></li>`).join("");
+          list.innerHTML = favorites.map((fav) => `
+            <li>
+              <a href="/${currentLang}/${fav.url}">
+                ${fav.icon ? `<i data-lucide="${fav.icon}" class="tool-icon"></i>` : ''}
+                <span>${fav.title}</span>
+              </a>
+              <span class="favorite-toggle active" data-url="${fav.url}" data-title="${fav.title}" data-icon="${fav.icon || ''}"></span>
+            </li>
+          `).join("");
+          
+          if (window.lucide) {
+            window.lucide.createIcons();
+          }
         }
 
         // Attach event listeners to favorite toggles in My Tools
@@ -148,7 +163,7 @@ const t = useTranslations(lang as any);
           toggle.addEventListener("click", function (e) {
             e.preventDefault();
             e.stopPropagation();
-            toggleFavorite(this.dataset.url, this.dataset.title);
+            toggleFavorite(this.dataset.url, this.dataset.title, this.dataset.icon);
           });
         });
       }
@@ -172,7 +187,9 @@ const t = useTranslations(lang as any);
           const rawUrl = new URL(link.href).pathname;
           // Remove the language prefix to get the base URL
           const url = rawUrl.startsWith(`/${currentLang}/`) ? rawUrl.substring(`/${currentLang}/`.length) : rawUrl.substring(1);
-          const itemName = link.textContent;
+          const itemName = link.querySelector("span")?.textContent || link.textContent;
+          const iconElement = link.querySelector("i[data-lucide]");
+          const icon = iconElement ? iconElement.getAttribute("data-lucide") : "";
 
           // Get category from the block's h3 element
           const block = li.closest(".block");
@@ -185,11 +202,12 @@ const t = useTranslations(lang as any);
           heart.className = "favorite-toggle";
           heart.dataset.url = url;
           heart.dataset.title = title;
+          heart.dataset.icon = icon;
 
           heart.addEventListener("click", function (e) {
             e.preventDefault();
             e.stopPropagation();
-            toggleFavorite(url, title);
+            toggleFavorite(url, title, icon);
           });
 
           li.appendChild(heart);
@@ -400,6 +418,20 @@ const t = useTranslations(lang as any);
 
     #index .section-content {
       transition: opacity 0.2s;
+    }
+
+    /* Icon styles */
+    .tool-icon {
+      width: 16px;
+      height: 16px;
+      margin-right: 8px;
+      vertical-align: middle;
+      display: inline-block;
+    }
+    
+    #index li a {
+      display: flex;
+      align-items: center;
     }
   </style>
 </BaseLayout>
