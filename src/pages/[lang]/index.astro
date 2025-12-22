@@ -39,6 +39,7 @@ const t = useTranslations(lang as any);
             </div>
           </div>
 
+          <hr/>
           <!-- Search Box -->
           <div class="section" id="search-section">
             <div class="search-container">
@@ -67,7 +68,7 @@ const t = useTranslations(lang as any);
                           <ol>
                             {block.items.map((item) => (
                               <li>
-                                <a href={`/${lang}${item.url}`}>{item.name}</a>
+                                <a href={`/${lang}/${item.url}`}>{item.name}</a>
                               </li>
                             ))}
                           </ol>
@@ -89,6 +90,7 @@ const t = useTranslations(lang as any);
       data-no-result={t('sidebar.search.no_result')}
       data-found={t('sidebar.search.found')}
       data-empty={t('sidebar.my_tools.empty')}
+      data-lang={lang}
       style="display: none;">
     </div>
   </div>
@@ -98,6 +100,7 @@ const t = useTranslations(lang as any);
     (function () {
       const i18nData = document.getElementById('i18n-data');
       const emptyFavoritesText = i18nData ? i18nData.getAttribute('data-empty') : 'Click the heart icon next to any tool to add it to your favorites!';
+      const currentLang = i18nData ? i18nData.getAttribute('data-lang') : 'en';
 
       const FAVORITES_KEY = "favorite-tools";
 
@@ -137,7 +140,7 @@ const t = useTranslations(lang as any);
         if (favorites.length === 0) {
           list.innerHTML = `<li class="empty-state">${emptyFavoritesText}</li>`;
         } else {
-          list.innerHTML = favorites.map((fav) => `<li><a href="${fav.url}">${fav.title}</a><span class="favorite-toggle active" data-url="${fav.url}" data-title="${fav.title}"></span></li>`).join("");
+          list.innerHTML = favorites.map((fav) => `<li><a href="/${currentLang}/${fav.url}">${fav.title}</a><span class="favorite-toggle active" data-url="${fav.url}" data-title="${fav.title}"></span></li>`).join("");
         }
 
         // Attach event listeners to favorite toggles in My Tools
@@ -166,7 +169,9 @@ const t = useTranslations(lang as any);
           const link = li.querySelector("a");
           if (!link) return;
 
-          const url = link.getAttribute("href");
+          const rawUrl = new URL(link.href).pathname;
+          // Remove the language prefix to get the base URL
+          const url = rawUrl.startsWith(`/${currentLang}/`) ? rawUrl.substring(`/${currentLang}/`.length) : rawUrl.substring(1);
           const itemName = link.textContent;
 
           // Get category from the block's h3 element
