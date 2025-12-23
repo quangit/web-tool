@@ -16,9 +16,11 @@ Web Tools is a privacy-focused web toolkit built with Astro framework. All opera
 - **pnpm**: Efficient package manager
 
 ### Code Quality
-- **ESLint**: JavaScript/TypeScript linting
-- **Prettier**: Code formatting
+- **ESLint**: JavaScript/TypeScript linting (excludes `public/js/**` directory)
+- **Prettier**: Code formatting (excludes `public/js/**` directory)
 - **TypeScript Strict Mode**: Enhanced type safety
+
+**Note**: The `public/js` directory contains third-party libraries and legacy code that is excluded from code quality checks to focus reviews on the core project source code in the `src` directory.
 
 ## Project Structure
 

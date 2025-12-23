@@ -66,6 +66,15 @@ pnpm run format
 pnpm run format:check
 ```
 
+### Code Review Configuration
+
+The project is configured to exclude certain directories from linting and formatting:
+
+- **ESLint**: Ignores `public/js/**` - third-party libraries and legacy code
+- **Prettier**: Ignores `public/js/**` - third-party libraries and legacy code
+
+These exclusions are defined in `.eslintrc.json` and `.prettierignore` respectively.
+
 ## Coding Standards
 
 ### JavaScript/TypeScript
