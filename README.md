@@ -141,6 +141,18 @@ Join us in building the most comprehensive web tool collection:
 
 Together, we can make this the go-to toolkit for developers worldwide.
 
+## 📧 Contact
+
+Have questions, suggestions, or want to report an issue? We'd love to hear from you!
+
+- **Email**: [service@webtool.center](mailto:service@webtool.center)
+- **GitHub Issues**: [Report a bug or request a feature](https://github.com/quangit/web-tool/issues)
+
+Feel free to reach out for:
+- 💡 Sharing ideas for new features or improvements
+- 🐛 Reporting bugs or issues
+- 💬 General inquiries or feedback
+
 ## 🌐 Features
 
 - Static site generation with Astro

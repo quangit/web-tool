@@ -19,12 +19,43 @@ const { title, description } = Astro.props;
       >
         <i data-lucide="github"></i>
       </a>
-      <a class="feedback-link" href="mailto:quang49a9@gmail.com" title="Send an Email">
+      <button class="feedback-link" id="email-btn" title="Send an Email">
         <i data-lucide="mail"></i>
-      </a>
+      </button>
     </div>
   </div>
 </header>
+
+<!-- Email Popup Modal -->
+<div class="email-modal" id="email-modal">
+  <div class="email-modal-content">
+    <div class="email-modal-header">
+      <h3><i data-lucide="mail"></i> Contact Us</h3>
+      <button class="close-modal" id="close-modal" aria-label="Close">
+        <i data-lucide="x"></i>
+      </button>
+    </div>
+    <div class="email-modal-body">
+      <div class="email-info">
+        <p class="email-label">Email Address:</p>
+        <div class="email-display">
+          <code id="email-text">service@webtool.center</code>
+          <button class="copy-email-btn" id="copy-email" title="Copy email">
+            <i data-lucide="copy"></i>
+          </button>
+        </div>
+      </div>
+      <div class="email-instructions">
+        <p><strong>How to reach us:</strong></p>
+        <ul>
+          <li><i data-lucide="lightbulb"></i> <strong>Share your ideas</strong> - We welcome suggestions for new features or improvements</li>
+          <li><i data-lucide="bug"></i> <strong>Report bugs</strong> - Help us improve by reporting any issues you encounter</li>
+          <li><i data-lucide="message-circle"></i> <strong>General inquiries</strong> - Feel free to ask questions or provide feedback</li>
+        </ul>
+      </div>
+    </div>
+  </div>
+</div>
 
 <style>
   header {
@@ -75,6 +106,11 @@ const { title, description } = Astro.props;
     padding: 10px;
     color: var(--text-color, #333);
     border-right: 1px solid var(--border-color, #eee);
+    background: none;
+    border-top: none;
+    border-bottom: none;
+    border-left: none;
+    cursor: pointer;
   }
 
   .feedback-dropdown .feedback-link:last-child {
@@ -84,12 +120,211 @@ const { title, description } = Astro.props;
   .feedback-dropdown .feedback-link:hover {
     background-color: var(--hover-bg-color, #f0f0f0);
   }
+
+  /* Email Modal Styles */
+  .email-modal {
+    display: none;
+    position: fixed;
+    z-index: 2000;
+    left: 0;
+    top: 0;
+    width: 100%;
+    height: 100%;
+    background-color: rgba(0, 0, 0, 0.5);
+    backdrop-filter: blur(4px);
+    animation: fadeIn 0.2s ease-in-out;
+  }
+
+  .email-modal.show {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+  }
+
+  .email-modal-content {
+    background-color: var(--bg-color, white);
+    border-radius: 12px;
+    max-width: 550px;
+    width: 90%;
+    max-height: 90vh;
+    overflow-y: auto;
+    box-shadow: 0 10px 40px rgba(0, 0, 0, 0.3);
+    animation: slideDown 0.3s ease-out;
+  }
+
+  .email-modal-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 20px 24px;
+    border-bottom: 1px solid var(--border-color, #eee);
+  }
+
+  .email-modal-header h3 {
+    margin: 0;
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    color: var(--text-color);
+    font-size: 1.3rem;
+  }
+
+  .close-modal {
+    background: none;
+    border: none;
+    cursor: pointer;
+    padding: 4px;
+    color: var(--text-color);
+    border-radius: 4px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+  }
+
+  .close-modal:hover {
+    background-color: var(--hover-bg-color, rgba(0, 0, 0, 0.05));
+  }
+
+  .email-modal-body {
+    padding: 24px;
+  }
+
+  .email-info {
+    margin-bottom: 24px;
+  }
+
+  .email-label {
+    font-weight: 600;
+    margin-bottom: 8px;
+    color: var(--text-color);
+  }
+
+  .email-display {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    padding: 12px;
+    background-color: var(--bg-card, #f8f9fa);
+    border: 1px solid var(--border-color, #ddd);
+    border-radius: 8px;
+  }
+
+  .email-display code {
+    flex: 1;
+    font-size: 1.1rem;
+    color: var(--var-primary, #3b82f6);
+    font-family: 'Courier New', monospace;
+  }
+
+  .copy-email-btn {
+    background: none;
+    border: none;
+    cursor: pointer;
+    padding: 6px;
+    color: var(--text-color);
+    border-radius: 4px;
+    display: flex;
+    align-items: center;
+    transition: all 0.2s;
+  }
+
+  .copy-email-btn:hover {
+    background-color: var(--hover-bg-color, rgba(0, 0, 0, 0.05));
+    transform: scale(1.1);
+  }
+
+  .copy-email-btn.copied {
+    color: #22c55e;
+  }
+
+  .email-instructions {
+    margin-bottom: 24px;
+  }
+
+  .email-instructions p {
+    margin-bottom: 12px;
+    color: var(--text-color);
+  }
+
+  .email-instructions ul {
+    list-style: none;
+    padding: 0;
+    margin: 0;
+  }
+
+  .email-instructions li {
+    display: flex;
+    align-items: flex-start;
+    gap: 10px;
+    padding: 10px;
+    margin-bottom: 8px;
+    background-color: var(--bg-card, #f8f9fa);
+    border-radius: 6px;
+    color: var(--text-secondary);
+    line-height: 1.5;
+  }
+
+  .email-instructions li i {
+    flex-shrink: 0;
+    margin-top: 2px;
+    color: var(--var-primary, #3b82f6);
+  }
+
+  .email-actions {
+    display: flex;
+    justify-content: center;
+  }
+
+  .btn-primary {
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+    padding: 12px 24px;
+    background-color: var(--var-primary, #3b82f6);
+    color: white;
+    border: none;
+    border-radius: 8px;
+    font-weight: 600;
+    cursor: pointer;
+    transition: all 0.2s;
+    text-decoration: none;
+  }
+
+  .btn-primary:hover {
+    background-color: var(--var-primary-dark, #2563eb);
+    transform: translateY(-2px);
+    box-shadow: 0 4px 12px rgba(59, 130, 246, 0.3);
+  }
+
+  @keyframes fadeIn {
+    from {
+      opacity: 0;
+    }
+    to {
+      opacity: 1;
+    }
+  }
+
+  @keyframes slideDown {
+    from {
+      transform: translateY(-50px);
+      opacity: 0;
+    }
+    to {
+      transform: translateY(0);
+      opacity: 1;
+    }
+  }
 </style>
 
 <script is:inline>
   document.addEventListener('DOMContentLoaded', () => {
     const feedbackBtn = document.getElementById('feedback-btn');
     const feedbackDropdown = document.getElementById('feedback-dropdown');
+    const emailBtn = document.getElementById('email-btn');
+    const emailModal = document.getElementById('email-modal');
+    const closeModal = document.getElementById('close-modal');
+    const copyEmailBtn = document.getElementById('copy-email');
 
     if (feedbackBtn && feedbackDropdown) {
       feedbackBtn.addEventListener('click', (e) => {
@@ -100,6 +335,72 @@ const { title, description } = Astro.props;
       document.addEventListener('click', (e) => {
         if (!feedbackDropdown.contains(e.target) && !feedbackBtn.contains(e.target)) {
           feedbackDropdown.classList.remove('show');
+        }
+      });
+    }
+
+    // Email modal functionality
+    if (emailBtn && emailModal) {
+      emailBtn.addEventListener('click', (e) => {
+        e.preventDefault();
+        e.stopPropagation();
+        emailModal.classList.add('show');
+        feedbackDropdown.classList.remove('show');
+        // Re-initialize Lucide icons in the modal
+        if (window.lucide) {
+          window.lucide.createIcons();
+        }
+      });
+    }
+
+    if (closeModal && emailModal) {
+      closeModal.addEventListener('click', () => {
+        emailModal.classList.remove('show');
+      });
+    }
+
+    if (emailModal) {
+      emailModal.addEventListener('click', (e) => {
+        if (e.target === emailModal) {
+          emailModal.classList.remove('show');
+        }
+      });
+
+      // Close on Escape key
+      document.addEventListener('keydown', (e) => {
+        if (e.key === 'Escape' && emailModal.classList.contains('show')) {
+          emailModal.classList.remove('show');
+        }
+      });
+    }
+
+    // Copy email functionality
+    if (copyEmailBtn) {
+      copyEmailBtn.addEventListener('click', async () => {
+        const emailText = document.getElementById('email-text');
+        if (emailText) {
+          try {
+            await navigator.clipboard.writeText(emailText.textContent);
+            copyEmailBtn.classList.add('copied');
+            const icon = copyEmailBtn.querySelector('i');
+            if (icon) {
+              icon.setAttribute('data-lucide', 'check');
+              if (window.lucide) {
+                window.lucide.createIcons();
+              }
+            }
+            setTimeout(() => {
+              copyEmailBtn.classList.remove('copied');
+              if (icon) {
+                icon.setAttribute('data-lucide', 'copy');
+                if (window.lucide) {
+                  window.lucide.createIcons();
+                }
+              }
+            }, 2000);
+          } catch (err) {
+            console.error('Failed to copy email:', err);
+          }
         }
       });
     }
