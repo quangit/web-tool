@@ -1,0 +1,53 @@
+---
+interface Props {
+    title: string;
+    showFullscreen?: boolean;
+    showCopy?: boolean;
+    showDownload?: boolean;
+    copyTarget?: string;
+    copyMessage?: string;
+}
+
+const { 
+    title,
+    showFullscreen = true,
+    showCopy = false,
+    showDownload = false,
+    copyTarget,
+    copyMessage = "Output copied"
+} = Astro.props;
+---
+
+<div class="output">
+    <div class="block block-fill">
+        <div class="block-title">
+            {title}
+            <div class="toolbar">
+                <slot name="toolbar" />
+                {
+                    showDownload && (
+                        <a class="icon" id="download-image" download="download" style="display:none" onclick="gtag('event', 'download');">
+                            <i data-lucide="download" title="Download"></i>
+                        </a>
+                    )
+                }
+                {
+                    showCopy && (
+                        <button class="icon" data-toggle="copy" data-clipboard-target={copyTarget} data-message={copyMessage}>
+                            <i data-lucide="copy" title="Copy"></i>
+                        </button>
+                    )
+                }
+                {
+                    showFullscreen && (
+                        <button class="icon" data-toggle="fullscreen">
+                            <i class="fullscreen-icon" data-lucide="maximize" title="Full Screen"></i>
+                            <i class="fullscreen-icon-exit" data-lucide="minimize" title="Full Screen"></i>
+                        </button>
+                    )
+                }
+            </div>
+        </div>
+        <slot />
+    </div>
+</div>

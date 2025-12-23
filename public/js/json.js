@@ -1,1 +1,95 @@
-!function(){"use strict";function t(t){try{return JSON.parse(t),"Valid"}catch(t){return t.message}}function e(t){return JSON.stringify(JSON.parse(t))}function a(t,e,a){var n=JSON.stringify(JSON.parse(t),null,a);return"tab"===e&&(n=n.replace(/^\s+/gm,function(t){return t.replace(/ /g,"\t")})),n}function n(t){r||(r=document.createElement("andypf-json-viewer"),r.id="json",r.expanded=!0,r.indent=2,r.showDataTypes=!1,r.showToolbar=!0,r.showSize=!0,r.showCopy=!0,r.expandIconType="square",$("#output").html(r)),r.setAttribute("theme","1"===localStorage.getItem("DARK")?"monokai":"default-light");try{r.data=JSON.parse(t)}catch(t){r.data=t.message}}var r;$(".theme").click(function(){r&&r.setAttribute("theme","1"===localStorage.getItem("DARK")?"monokai":"default-light")}),window.json={validate:t,minify:e,format:a,view:n}}();
+/**
+ * JSON Utilities
+ * Provides JSON validation, formatting, and visualization
+ */
+(function () {
+  'use strict';
+
+  let jsonViewer;
+
+  /**
+   * Validates a JSON string
+   * @param {string} jsonString - The JSON string to validate
+   * @returns {string} "Valid" or error message
+   */
+  function validate(jsonString) {
+    try {
+      JSON.parse(jsonString);
+      return 'Valid';
+    } catch (error) {
+      return error.message;
+    }
+  }
+
+  /**
+   * Minifies a JSON string
+   * @param {string} jsonString - The JSON string to minify
+   * @returns {string} Minified JSON string
+   */
+  function minify(jsonString) {
+    return JSON.stringify(JSON.parse(jsonString));
+  }
+
+  /**
+   * Formats a JSON string with indentation
+   * @param {string} jsonString - The JSON string to format
+   * @param {string} indentType - "space" or "tab"
+   * @param {number} indentSize - Number of spaces/tabs for indentation
+   * @returns {string} Formatted JSON string
+   */
+  function format(jsonString, indentType, indentSize) {
+    let formatted = JSON.stringify(JSON.parse(jsonString), null, indentSize);
+
+    if (indentType === 'tab') {
+      formatted = formatted.replace(/^\s+/gm, function (match) {
+        return match.replace(/ /g, '\t');
+      });
+    }
+
+    return formatted;
+  }
+
+  /**
+   * Displays JSON in an interactive viewer
+   * @param {string} jsonString - The JSON string to visualize
+   */
+  function view(jsonString) {
+    if (!jsonViewer) {
+      jsonViewer = document.createElement('andypf-json-viewer');
+      jsonViewer.id = 'json';
+      jsonViewer.expanded = true;
+      jsonViewer.indent = 2;
+      jsonViewer.showDataTypes = false;
+      jsonViewer.showToolbar = true;
+      jsonViewer.showSize = true;
+      jsonViewer.showCopy = true;
+      jsonViewer.expandIconType = 'square';
+      $('#output').html(jsonViewer);
+    }
+
+    // Apply theme based on dark mode setting
+    const theme = localStorage.getItem('DARK') === '1' ? 'monokai' : 'default-light';
+    jsonViewer.setAttribute('theme', theme);
+
+    try {
+      jsonViewer.data = JSON.parse(jsonString);
+    } catch (error) {
+      jsonViewer.data = error.message;
+    }
+  }
+
+  // Update theme when theme toggle is clicked
+  $('.theme').click(function () {
+    if (jsonViewer) {
+      const theme = localStorage.getItem('DARK') === '1' ? 'monokai' : 'default-light';
+      jsonViewer.setAttribute('theme', theme);
+    }
+  });
+
+  window.json = {
+    validate: validate,
+    minify: minify,
+    format: format,
+    view: view
+  };
+})();

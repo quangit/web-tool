@@ -1,1 +1,103 @@
-!function(){"use strict";function r(r){return"Comment"!==r.type}function t(r){if(!i)return"Sorry, your browser does not support this tool.";var t=i.parseFromString(r,"application/xml"),e=t.querySelector("parsererror div");return e&&t.documentElement.outerHTML!==r?e.innerText:"Valid"}function e(r){if(i){var e=t(r);if("Valid"!==e)throw new Error(e)}}function n(t,n){return e(t),xmlFormatter.minify(t,{strictMode:!0,collapseContent:!0,filter:n&&r})}function o(r,t,n){e(r);for(var o="space"===t?" ":"\t",i="",a=0;a<n;++a)i+=o;return xmlFormatter(r,{strictMode:!0,collapseContent:!0,indentation:i})}var i;window.DOMParser&&(i=new DOMParser),window.xml={validate:t,minify:n,format:o}}();
+/**
+ * XML Utilities
+ * Provides XML validation, formatting, and minification
+ */
+(function () {
+  'use strict';
+
+  let domParser;
+
+  // Initialize DOMParser if available
+  if (window.DOMParser) {
+    domParser = new DOMParser();
+  }
+
+  /**
+   * Filter function to remove comments
+   * @param {Object} node - XML node
+   * @returns {boolean} True if node is not a comment
+   */
+  function removeComments(node) {
+    return node.type !== 'Comment';
+  }
+
+  /**
+   * Validates an XML string
+   * @param {string} xmlString - The XML string to validate
+   * @returns {string} "Valid" or error message
+   */
+  function validate(xmlString) {
+    if (!domParser) {
+      return 'Sorry, your browser does not support this tool.';
+    }
+
+    const doc = domParser.parseFromString(xmlString, 'application/xml');
+    const errorNode = doc.querySelector('parsererror div');
+
+    if (errorNode && doc.documentElement.outerHTML !== xmlString) {
+      return errorNode.innerText;
+    }
+
+    return 'Valid';
+  }
+
+  /**
+   * Ensures XML is valid before processing
+   * @param {string} xmlString - The XML string to check
+   * @throws {Error} If XML is invalid
+   */
+  function ensureValid(xmlString) {
+    if (domParser) {
+      const validationResult = validate(xmlString);
+      if (validationResult !== 'Valid') {
+        throw new Error(validationResult);
+      }
+    }
+  }
+
+  /**
+   * Minifies an XML string
+   * @param {string} xmlString - The XML string to minify
+   * @param {boolean} removeCommentsFlag - Whether to remove comments
+   * @returns {string} Minified XML string
+   */
+  function minify(xmlString, removeCommentsFlag) {
+    ensureValid(xmlString);
+
+    return xmlFormatter.minify(xmlString, {
+      strictMode: true,
+      collapseContent: true,
+      filter: removeCommentsFlag ? removeComments : undefined
+    });
+  }
+
+  /**
+   * Formats an XML string with indentation
+   * @param {string} xmlString - The XML string to format
+   * @param {string} indentType - "space" or "tab"
+   * @param {number} indentSize - Number of spaces/tabs for indentation
+   * @returns {string} Formatted XML string
+   */
+  function format(xmlString, indentType, indentSize) {
+    ensureValid(xmlString);
+
+    const indentChar = indentType === 'space' ? ' ' : '\t';
+    let indentation = '';
+    
+    for (let i = 0; i < indentSize; i++) {
+      indentation += indentChar;
+    }
+
+    return xmlFormatter(xmlString, {
+      strictMode: true,
+      collapseContent: true,
+      indentation: indentation
+    });
+  }
+
+  window.xml = {
+    validate: validate,
+    minify: minify,
+    format: format
+  };
+})();

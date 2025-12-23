@@ -14,6 +14,8 @@ export const es = {
   // Common
   'input': 'Entrada',
   'output': 'Salida',
+  'text': 'Texto',
+  'binary': 'Binario',
   'settings': 'Configuración',
   'auto_update': 'Actualización automática',
   'remember_input': 'Recordar entrada',
@@ -101,6 +103,22 @@ export const es = {
   'function_name': 'Nombre de la función',
   'hex_lower': 'Hex (Minúsculas)',
   'hex_upper': 'Hex (Mayúsculas)',
+  'reset': 'Restablecer',
+  'upload': 'Subir',
+  'signature_algorithm': 'Algoritmo de firma',
+  'share_link_copied': 'Enlace de compartir copiado',
+  'output_here': 'Salida aquí...',
+  'output_copied': 'Salida copiada',
+  'public_key_here': 'Clave pública aquí...',
+  'public_key_copied': 'Clave pública copiada',
+  'private_key_here': 'Clave privada aquí...',
+  'private_key_copied': 'Clave privada copiada',
+  'download_file_name': 'Nombre del archivo de descarga',
+  'encoded_file': 'Archivo codificado',
+  'encoded_text': 'Texto codificado',
+  'file_drop_text': 'Arrastra y suelta el archivo aquí o haz clic para seleccionar un archivo',
+  'url': 'URL',
+  'file': 'Archivo',
 
   // Syntax Highlight
   'syntax_highlight.title': 'Resaltado de sintaxis',
@@ -377,6 +395,16 @@ export const es = {
   'base32_encode_file.description': 'Esta herramienta de codificación Base32 en línea le ayuda a codificar un archivo local o URL a Base32 sin subir el archivo.',
   'base32_decode_file.title': 'Decodificar archivo Base32',
   'base32_decode_file.description': 'Esta herramienta de decodificación Base32 en línea le ayuda a decodificar Base32 de local o URL a archivo sin subir el archivo.',
+
+  // Base58
+  'base58_encode.title': 'Codificación Base58',
+  'base58_encode.description': 'Esta herramienta de codificación Base58 en línea le ayuda a codificar texto o datos binarios a Base58.',
+  'base58_decode.title': 'Decodificación Base58',
+  'base58_decode.description': 'Esta herramienta de decodificación Base58 en línea le ayuda a decodificar Base58 a texto o datos binarios.',
+  'base58_encode_file.title': 'Codificar archivo a Base58',
+  'base58_encode_file.description': 'Esta herramienta de codificación Base58 en línea le ayuda a codificar un archivo local o URL a Base58 sin subir el archivo.',
+  'base58_decode_file.title': 'Decodificar archivo Base58',
+  'base58_decode_file.description': 'Esta herramienta de decodificación Base58 en línea le ayuda a decodificar Base58 de local o URL a archivo sin subir el archivo.',
 
   // Hex
   'hex_encode.title': 'Codificación Hex',

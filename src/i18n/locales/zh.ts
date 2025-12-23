@@ -14,6 +14,8 @@ export const zh = {
   // Common
   'input': '输入',
   'output': '输出',
+  'text': '文本',
+  'binary': '二进制',
   'settings': '设置',
   'auto_update': '自动更新',
   'remember_input': '记住输入',
@@ -102,6 +104,20 @@ export const zh = {
   'function_name': '函数名称',
   'reset': '重置',
   'upload': '上传',
+  'signature_algorithm': '签名算法',
+  'share_link_copied': '已复制共享链接',
+  'output_here': '输出在这里...',
+  'output_copied': '已复制输出',
+  'public_key_here': '公钥在这里...',
+  'public_key_copied': '已复制公钥',
+  'private_key_here': '私钥在这里...',
+  'private_key_copied': '已复制私钥',
+  'download_file_name': '下载文件名',
+  'encoded_file': '编码文件',
+  'encoded_text': '编码文本',
+  'file_drop_text': '将文件拖放到此处或单击选择文件',
+  'url': 'URL',
+  'file': '文件',
 
   // Syntax Highlight
   'syntax_highlight.title': '语法高亮',
@@ -388,6 +404,16 @@ export const zh = {
   'base32_encode_file.description': '此在线 Base32 编码工具可帮助您将本地或 URL 中的文件编码为 Base32，而无需上传文件。',
   'base32_decode_file.title': '解码 Base32 文件',
   'base32_decode_file.description': '此在线 Base32 解码工具可帮助您将本地或 URL 中的 Base32 解码为文件，而无需上传文件。',
+
+  // Base58
+  'base58_encode.title': 'Base58 编码',
+  'base58_encode.description': '此在线 Base58 编码工具可帮助您将文本或二进制数据编码为 Base58。',
+  'base58_decode.title': 'Base58 解码',
+  'base58_decode.description': '此在线 Base58 解码工具可帮助您将 Base58 解码为文本或二进制数据。',
+  'base58_encode_file.title': '将文件编码为 Base58',
+  'base58_encode_file.description': '此在线 Base58 编码工具可帮助您将本地或 URL 中的文件编码为 Base58，而无需上传文件。',
+  'base58_decode_file.title': '解码 Base58 文件',
+  'base58_decode_file.description': '此在线 Base58 解码工具可帮助您将本地或 URL 中的 Base58 解码为文件，而无需上传文件。',
 
   // Hex
   'hex_encode.title': 'Hex 编码',

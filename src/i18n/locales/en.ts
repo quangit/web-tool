@@ -14,6 +14,8 @@ export const en = {
   // Common
   'input': 'Input',
   'output': 'Output',
+  'text': 'Text',
+  'binary': 'Binary',
   'settings': 'Settings',
   'auto_update': 'Auto Update',
   'remember_input': 'Remember Input',
@@ -104,6 +106,20 @@ export const en = {
   'hex_upper': 'Hex (Upper Case)',
   'reset': 'Reset',
   'upload': 'Upload',
+  'signature_algorithm': 'Signature Algorithm',
+  'share_link_copied': 'Share link copied',
+  'output_here': 'Output here...',
+  'output_copied': 'Output copied',
+  'public_key_here': 'Public key here...',
+  'public_key_copied': 'Public key copied',
+  'private_key_here': 'Private key here...',
+  'private_key_copied': 'Private key copied',
+  'download_file_name': 'Download File Name',
+  'encoded_file': 'Encoded File',
+  'encoded_text': 'Encoded Text',
+  'file_drop_text': 'Drag and drop the file here or click to select a file',
+  'url': 'URL',
+  'file': 'File',
 
   // Syntax Highlight
   'syntax_highlight.title': 'Syntax Highlight',
@@ -165,6 +181,8 @@ export const en = {
   'sha384.description': 'This SHA384 online tool helps you calculate hashes from strings. You can input UTF-8, UTF-16, Hex, Base64, or other encodings. It also supports HMAC.',
   'sha3_384_file_hash.title': 'SHA384 File Hash',
   'sha3_384_file_hash.description': 'This SHA384 online tool helps you calculate the hash of a file from local or URL using SHA384 without uploading the file. It also supports HMAC.',
+  'sha384_file_hash.title': 'SHA384 File Hash',
+  'sha384_file_hash.description': 'This SHA384 online tool helps you calculate the hash of a file from local or URL using SHA384 without uploading the file. It also supports HMAC.',
 
   // SHA512
   'sha512.title': 'SHA512',
@@ -391,6 +409,16 @@ export const en = {
   'base32_encode_file.description': 'This online Base32 encoding tool helps you encode a file from local or URL to Base32 without uploading the file.',
   'base32_decode_file.title': 'Decode Base32 File',
   'base32_decode_file.description': 'This online Base32 decoding tool helps you decode Base32 from local or URL to file without uploading the file.',
+
+  // Base58
+  'base58_encode.title': 'Base58 Encode',
+  'base58_encode.description': 'This online Base58 encoding tool helps you encode text or binary to Base58.',
+  'base58_decode.title': 'Base58 Decode',
+  'base58_decode.description': 'This online Base58 decoding tool helps you decode Base58 to text or binary.',
+  'base58_encode_file.title': 'Encode File to Base58',
+  'base58_encode_file.description': 'This online Base58 encoding tool helps you encode a file from local or URL to Base58 without uploading the file.',
+  'base58_decode_file.title': 'Decode Base58 File',
+  'base58_decode_file.description': 'This online Base58 decoding tool helps you decode Base58 from local or URL to file without uploading the file.',
 
   // Hex
   'hex_encode.title': 'Hex Encode',

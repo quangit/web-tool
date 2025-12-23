@@ -8,7 +8,7 @@ const { activePage } = Astro.props;
 
 // Helper function to check if a page matches an item URL
 function isActiveItem(itemUrl: string, currentPage: string | undefined): boolean {
-  if (!currentPage) return false;
+  if (!currentPage) {return false;}
   // Remove leading/trailing slashes for comparison
   const normalizedUrl = itemUrl.replace(/^\/|\/$/g, "");
   const normalizedPage = currentPage.replace(/^\/|\/$/g, "");
@@ -17,7 +17,7 @@ function isActiveItem(itemUrl: string, currentPage: string | undefined): boolean
 
 // Helper function to check if block should be open/active
 function isBlockActive(items: any[], currentPage: string | undefined): boolean {
-  if (!currentPage) return false;
+  if (!currentPage) {return false;}
   return items.some((item) => isActiveItem(item.url, currentPage));
 }
 

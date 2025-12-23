@@ -1,0 +1,9 @@
+dist
+node_modules
+.astro
+pnpm-lock.yaml
+package-lock.json
+*.min.js
+*.min.css
+public/js/**
+public/css/**/*.min.css

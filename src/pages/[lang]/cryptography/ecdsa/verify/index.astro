@@ -1,7 +1,6 @@
 ---
-import BaseLayout from "../../../../../layouts/BaseLayout.astro";
-import Sidebar from "../../../../../components/Sidebar.astro";
-import PageHeader from "../../../../../components/PageHeader.astro";
+import BasePage from "../../../../../components/BasePage.astro";
+import BaseSettingBlock from "../../../../../components/BaseSettingBlock.astro";
 import { languages } from '../../../../../i18n/ui';
 import { useTranslations } from '../../../../../i18n/utils';
 
@@ -19,20 +18,7 @@ const description = t('ecdsa_verify.description');
 const activePage = "cryptography/ecdsa/verify";
 ---
 
-<BaseLayout
-  title={title}
-  description={description}
->
-  <div id="app">
-    <Sidebar activePage={activePage} />
-    <div id="content">
-      <div class="top-nav">
-        <button id="sidebar-toggler" aria-controls="sidebar" aria-expanded="false" aria-label="Menu"
-          ><i data-lucide="menu" width="24" height="24" alt="Menu"></i></button
-        >
-      </div>
-      <PageHeader title={title} description={description} />
-      <main>
+<BasePage title={title} description={description} activePage={activePage}>
         <div class="layout">
           <div class="layout-block">
             <div class="input">
@@ -96,10 +82,7 @@ const activePage = "cryptography/ecdsa/verify";
               </details>
             </div>
           </div>
-          <div class="settings">
-            <div class="block block-fill">
-              <div class="block-title">{t('settings')}</div>
-              <div class="container">
+          <BaseSettingBlock title={t('settings')}>
                 <div class="setting"><a class="btn" id="execute">{t('verify')}</a></div>
                 <div class="setting">
                   <label class="switcher"
@@ -313,8 +296,5 @@ const activePage = "cryptography/ecdsa/verify";
             },
           });
         </script>
-      </main>
-    </div>
-    <div id="message"></div>
-  </div>
-</BaseLayout>
+  </BaseSettingBlock>
+</BasePage>

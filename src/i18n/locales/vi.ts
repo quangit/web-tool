@@ -14,6 +14,8 @@ export const vi = {
   // Common
   'input': 'Đầu vào',
   'output': 'Đầu ra',
+  'text': 'Văn bản',
+  'binary': 'Nhị phân',
   'settings': 'Cài đặt',
   'auto_update': 'Tự động cập nhật',
   'remember_input': 'Ghi nhớ đầu vào',
@@ -104,6 +106,20 @@ export const vi = {
   'hex_upper': 'Hex (Chữ hoa)',
   'reset': 'Đặt lại',
   'upload': 'Tải lên',
+  'signature_algorithm': 'Thuật toán chữ ký',
+  'share_link_copied': 'Đã sao chép liên kết chia sẻ',
+  'output_here': 'Đầu ra tại đây...',
+  'output_copied': 'Đã sao chép đầu ra',
+  'public_key_here': 'Khóa công khai tại đây...',
+  'public_key_copied': 'Đã sao chép khóa công khai',
+  'private_key_here': 'Khóa bí mật tại đây...',
+  'private_key_copied': 'Đã sao chép khóa bí mật',
+  'download_file_name': 'Tên tệp tải xuống',
+  'encoded_file': 'Tệp đã mã hóa',
+  'encoded_text': 'Văn bản đã mã hóa',
+  'file_drop_text': 'Kéo và thả tệp vào đây hoặc nhấp để chọn tệp',
+  'url': 'URL',
+  'file': 'Tệp',
 
   // Syntax Highlight
   'syntax_highlight.title': 'Tô màu cú pháp',
@@ -390,6 +406,16 @@ export const vi = {
   'base32_encode_file.description': 'Công cụ mã hóa Base32 trực tuyến này giúp bạn mã hóa một tệp từ máy cục bộ hoặc URL sang Base32 mà không cần tải tệp lên.',
   'base32_decode_file.title': 'Giải mã tệp Base32',
   'base32_decode_file.description': 'Công cụ giải mã Base32 trực tuyến này giúp bạn giải mã Base32 từ máy cục bộ hoặc URL sang tệp mà không cần tải tệp lên.',
+
+  // Base58
+  'base58_encode.title': 'Mã hóa Base58',
+  'base58_encode.description': 'Công cụ mã hóa Base58 trực tuyến này giúp bạn mã hóa văn bản hoặc dữ liệu nhị phân sang Base58.',
+  'base58_decode.title': 'Giải mã Base58',
+  'base58_decode.description': 'Công cụ giải mã Base58 trực tuyến này giúp bạn giải mã Base58 sang văn bản hoặc dữ liệu nhị phân.',
+  'base58_encode_file.title': 'Mã hóa tệp sang Base58',
+  'base58_encode_file.description': 'Công cụ mã hóa Base58 trực tuyến này giúp bạn mã hóa một tệp từ máy cục bộ hoặc URL sang Base58 mà không cần tải tệp lên.',
+  'base58_decode_file.title': 'Giải mã tệp Base58',
+  'base58_decode_file.description': 'Công cụ giải mã Base58 trực tuyến này giúp bạn giải mã Base58 từ máy cục bộ hoặc URL sang tệp mà không cần tải tệp lên.',
 
   // Hex
   'hex_encode.title': 'Mã hóa Hex',

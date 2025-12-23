@@ -23,12 +23,12 @@ const {
 
 // Build data attributes object
 const dataAttrs: Record<string, any> = {};
-if (dataRemember) dataAttrs["data-remember"] = dataRemember;
-if (dataShare) dataAttrs["data-share"] = dataShare;
-if (dataEncodingFrom) dataAttrs["data-encoding-from"] = dataEncodingFrom;
-if (dataAutoUpdate) dataAttrs["data-auto-update"] = true;
-if (dataToggleMonaco) dataAttrs["data-toggle"] = "monacoEditor";
-if (dataLanguage) dataAttrs["data-language"] = dataLanguage;
+if (dataRemember) {dataAttrs["data-remember"] = dataRemember;}
+if (dataShare) {dataAttrs["data-share"] = dataShare;}
+if (dataEncodingFrom) {dataAttrs["data-encoding-from"] = dataEncodingFrom;}
+if (dataAutoUpdate) {dataAttrs["data-auto-update"] = true;}
+if (dataToggleMonaco) {dataAttrs["data-toggle"] = "monacoEditor";}
+if (dataLanguage) {dataAttrs["data-language"] = dataLanguage;}
 
 const { lang = 'en' } = Astro.params;
 const t = useTranslations(lang as any);
@@ -61,7 +61,7 @@ const t = useTranslations(lang as any);
             <div class="droppable-zone container" id="droppable-zone" style="display:none;">
                 <input class="droppable-file" type="file" id={fileId} data-auto-update />
                 <div class="droppable-zone-wrapper">
-                    <i class="droppable-zone-icon" data-lucide="file-up" alt="File"></i>
+                    <i class="droppable-zone-icon" data-lucide="file-up"></i>
                     <div class="droppable-zone-text">{t('drag_drop')}</div>
                 </div>
             </div>

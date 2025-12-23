@@ -1,0 +1,12 @@
+# robots.txt for webtool.center
+User-agent: *
+Allow: /
+
+# Sitemap
+Sitemap: https://webtool.center/sitemap.xml
+
+# Disallow administrative paths (if any in future)
+# Disallow: /admin/
+
+# Crawl-delay (optional, adjust if needed)
+# Crawl-delay: 1

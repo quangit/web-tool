@@ -14,6 +14,8 @@ export const ja = {
   // Common
   'input': '入力',
   'output': '出力',
+  'text': 'テキスト',
+  'binary': 'バイナリ',
   'settings': '設定',
   'auto_update': '自動更新',
   'remember_input': '入力を記憶',
@@ -99,6 +101,24 @@ export const ja = {
   'curve': '曲線',
   'customization': 'カスタマイズ',
   'function_name': '関数名',
+  'hex_lower': 'Hex（小文字）',
+  'hex_upper': 'Hex（大文字）',
+  'reset': 'リセット',
+  'upload': 'アップロード',
+  'signature_algorithm': '署名アルゴリズム',
+  'share_link_copied': '共有リンクがコピーされました',
+  'output_here': '出力はこちら...',
+  'output_copied': '出力がコピーされました',
+  'public_key_here': '公開鍵はこちら...',
+  'public_key_copied': '公開鍵がコピーされました',
+  'private_key_here': '秘密鍵はこちら...',
+  'private_key_copied': '秘密鍵がコピーされました',
+  'download_file_name': 'ダウンロードファイル名',
+  'encoded_file': 'エンコードされたファイル',
+  'encoded_text': 'エンコードされたテキスト',
+  'file_drop_text': 'ファイルをここにドラッグアンドドロップするか、クリックして選択してください',
+  'url': 'URL',
+  'file': 'ファイル',
 
   // Syntax Highlight
   'syntax_highlight.title': 'シンタックスハイライト',
@@ -376,6 +396,16 @@ export const ja = {
   'base32_decode_file.title': 'Base32 ファイルをデコード',
   'base32_decode_file.description': 'このオンライン Base32 デコード ツールは、ファイルをアップロードすることなく、ローカルまたは URL から Base32 をファイルにデコードするのに役立ちます。',
 
+  // Base58
+  'base58_encode.title': 'Base58 エンコード',
+  'base58_encode.description': 'このオンライン Base58 エンコード ツールは、テキストまたはバイナリを Base58 にエンコードするのに役立ちます。',
+  'base58_decode.title': 'Base58 デコード',
+  'base58_decode.description': 'このオンライン Base58 デコード ツールは、Base58 をテキストまたはバイナリにデコードするのに役立ちます。',
+  'base58_encode_file.title': 'ファイルを Base58 にエンコード',
+  'base58_encode_file.description': 'このオンライン Base58 エンコード ツールは、ファイルをアップロードすることなく、ローカルまたは URL からファイルを Base58 にエンコードするのに役立ちます。',
+  'base58_decode_file.title': 'Base58 ファイルをデコード',
+  'base58_decode_file.description': 'このオンライン Base58 デコード ツールは、ファイルをアップロードすることなく、ローカルまたは URL から Base58 をファイルにデコードするのに役立ちます。',
+
   // Hex
   'hex_encode.title': 'Hex エンコード',
   'hex_encode.description': 'このオンライン Hex エンコード ツールは、テキストまたはバイナリを Hex にエンコードするのに役立ちます。',
@@ -445,6 +475,4 @@ export const ja = {
   'ecdsa_verify.description': 'このオンライン ツールは、ECDSA 署名を検証するのに役立ちます。',
   'ecdsa_key_generator.title': 'ECDSA 鍵生成器',
   'ecdsa_key_generator.description': 'このオンライン ツールは、ECDSA 鍵のペアを生成するのに役立ちます。PEM、HEX、Base64 形式、およびさまざまな曲線をサポートしています。PEM 形式は PKCS#1、PKCS#5、および PKCS#8 をサポートしています。',
-  'hex_lower': '16進数（小文字）',
-  'hex_upper': '16進数（大文字）',
 };

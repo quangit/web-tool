@@ -5,7 +5,6 @@ const {
   fileId = "file",
   title = "Input",
   urlPlaceholder = "Enter the URL here, and it will attempt to download. If it cannot be downloaded programmatically, you may need to download it manually.",
-  dropText = "Drag and drop the file here or click to select a file. It will process locally and won't be uploaded.",
   showFullscreen = true,
   // Data attributes for textarea
   dataRemember = null,
@@ -47,7 +46,7 @@ const t = useTranslations(lang as any);
         data-auto-update={dataAutoUpdate ? true : undefined}
       >
       <div class="droppable-zone-wrapper">
-        <i class="droppable-zone-icon" data-lucide="file-up" alt="File"></i>
+        <i class="droppable-zone-icon" data-lucide="file-up"></i>
         <div class="droppable-zone-text">{t('drag_drop')}</div>
       </div>
     </div>

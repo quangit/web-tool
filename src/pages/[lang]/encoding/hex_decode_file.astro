@@ -1,7 +1,5 @@
 ---
-import BaseLayout from '../../../layouts/BaseLayout.astro';
-import Sidebar from '../../../components/Sidebar.astro';
-import PageHeader from '../../../components/PageHeader.astro';
+import BasePage from '../../../components/BasePage.astro';
 import InputFileBlock from '../../../components/InputFileBlock.astro';
 import OutputBlock from '../../../components/OutputBlock.astro';
 import SettingBlock from '../../../components/SettingBlock.astro';
@@ -24,59 +22,43 @@ const jsFile = "hex.js?v=3";
 const activePage = "encoding/hex_decode_file";
 ---
 
-<BaseLayout title={title} description={description}>
-    <div id="app">
-        <Sidebar activePage={activePage} />
+<BasePage title={title} description={description} activePage={activePage}>
+    <div class="layout">
+        <div class="layout-block">
+            <InputFileBlock
+                title={t('input')}
+                urlPlaceholder={t('enter_here')}
+                dropText={t('drag_drop')}
+                dataRemember="input"
+                dataShare="input"
+                dataAutoUpdate={true}
+            />
+            
+            <OutputBlock 
+                title={t('output')}
+                placeholder={t('output_placeholder')}
+                dataEncodingFrom="#output-type"
+                isReadonly={true}
+                showDownload={true}
+                showCopy={false}
+                showShareLink={false}
+            />
+        </div>
         
-        <div id="content">
-            <div class="top-nav">
-                <button id="sidebar-toggler" aria-controls="sidebar" aria-expanded="false" aria-label={t('sidebar.toggle_menu')}>
-                    <i data-lucide="menu" width="24" height="24" alt={t('sidebar.toggle_menu')}></i>
-                </button>
+        <SettingBlock executeLabel={toolName}>
+            <div class="setting">
+                <label for="file-type">{t('input_type')}</label>
+                <select id="file-type" data-remember="file-type" data-auto-update>
+                    <option value="text">Encoded Text</option>
+                    <option value="file">Encoded File</option>
+                </select>
             </div>
             
-            <PageHeader title={title} description={description} />
-            
-            <main>
-                <div class="layout">
-                    <div class="layout-block">
-                        <InputFileBlock
-                            title={t('input')}
-                            urlPlaceholder={t('enter_here')}
-                            dropText={t('drag_drop')}
-                            dataRemember="input"
-                            dataShare="input"
-                            dataAutoUpdate={true}
-                        />
-                        
-                        <OutputBlock 
-                            title={t('output')}
-                            placeholder={t('output_placeholder')}
-                            dataEncodingFrom="#output-type"
-                            isReadonly={true}
-                            showDownload={true}
-                            showCopy={false}
-                            showShareLink={false}
-                        />
-                    </div>
-                    
-                    <SettingBlock executeLabel={toolName}>
-                        <div class="setting">
-                            <label for="file-type">{t('input_type')}</label>
-                            <select id="file-type" data-remember="file-type" data-auto-update>
-                                <option value="text">Encoded Text</option>
-                                <option value="file">Encoded File</option>
-                            </select>
-                        </div>
-                        
-                        <div class="setting">
-                            <label for="download-file-name">{t('file_name')}</label>
-                            <input type="text" id="download-file-name" data-remember="download-file-name" value="download.txt" placeholder={t('file_name')}>
-                        </div>
-                    </SettingBlock>
-                </div>
-            </main>
-        </div>
+            <div class="setting">
+                <label for="download-file-name">{t('file_name')}</label>
+                <input type="text" id="download-file-name" data-remember="download-file-name" value="download.txt" placeholder={t('file_name')}>
+            </div>
+        </SettingBlock>
     </div>
     
     <script is:inline set:html={`
@@ -118,4 +100,4 @@ const activePage = "encoding/hex_decode_file";
         });
         window.PROCESSING_MESSAGE = 'decoding...';
     `}></script>
-</BaseLayout>
+</BasePage>

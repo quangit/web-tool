@@ -14,6 +14,8 @@ export const pt = {
   // Common
   'input': 'Entrada',
   'output': 'Saída',
+  'text': 'Texto',
+  'binary': 'Binário',
   'settings': 'Configurações',
   'auto_update': 'Atualização automática',
   'remember_input': 'Lembrar entrada',
@@ -99,6 +101,24 @@ export const pt = {
   'curve': 'Curva',
   'customization': 'Customização',
   'function_name': 'Nome da função',
+  'hex_lower': 'Hex (Minúsculas)',
+  'hex_upper': 'Hex (Maiúsculas)',
+  'reset': 'Redefinir',
+  'upload': 'Carregar',
+  'signature_algorithm': 'Algoritmo de assinatura',
+  'share_link_copied': 'Link de compartilhamento copiado',
+  'output_here': 'Saída aqui...',
+  'output_copied': 'Saída copiada',
+  'public_key_here': 'Chave pública aqui...',
+  'public_key_copied': 'Chave pública copiada',
+  'private_key_here': 'Chave privada aqui...',
+  'private_key_copied': 'Chave privada copiada',
+  'download_file_name': 'Nome do arquivo de download',
+  'encoded_file': 'Arquivo codificado',
+  'encoded_text': 'Texto codificado',
+  'file_drop_text': 'Arraste e solte o arquivo aqui ou clique para selecionar um arquivo',
+  'url': 'URL',
+  'file': 'Arquivo',
 
   // Syntax Highlight
   'syntax_highlight.title': 'Realce de sintaxe',
@@ -376,6 +396,16 @@ export const pt = {
   'base32_decode_file.title': 'Decodificar arquivo Base32',
   'base32_decode_file.description': 'Esta ferramenta de decodificação Base32 online ajuda você a decodificar Base32 de local ou URL para arquivo sem carregar o arquivo.',
 
+  // Base58
+  'base58_encode.title': 'Codificação Base58',
+  'base58_encode.description': 'Esta ferramenta de codificação Base58 online ajuda você a codificar texto ou dados binários para Base58.',
+  'base58_decode.title': 'Decodificação Base58',
+  'base58_decode.description': 'Esta ferramenta de decodificação Base58 online ajuda você a decodificar Base58 para texto ou dados binários.',
+  'base58_encode_file.title': 'Codificar arquivo para Base58',
+  'base58_encode_file.description': 'Esta ferramenta de codificação Base58 online ajuda você a codificar um arquivo local ou URL para Base58 sem carregar o arquivo.',
+  'base58_decode_file.title': 'Decodificar arquivo Base58',
+  'base58_decode_file.description': 'Esta ferramenta de decodificação Base58 online ajuda você a decodificar Base58 de local ou URL para arquivo sem carregar o arquivo.',
+
   // Hex
   'hex_encode.title': 'Codificação Hex',
   'hex_encode.description': 'Esta ferramenta de codificação Hex online ajuda você a codificar texto ou dados binários para Hex.',
@@ -445,6 +475,4 @@ export const pt = {
   'ecdsa_verify.description': 'Esta ferramenta online ajuda você a verificar assinaturas ECDSA.',
   'ecdsa_key_generator.title': 'Gerador de chaves ECDSA',
   'ecdsa_key_generator.description': 'Esta ferramenta online ajuda você a gerar um par de chaves ECDSA. Ele suporta formatos PEM, HEX e Base64, bem como várias curvas. O formato PEM suporta PKCS#1, PKCS#5 e PKCS#8.',
-  'hex_lower': 'Hexadecimal (minúsculas)',
-  'hex_upper': 'Hexadecimal (maiúsculas)',
 };

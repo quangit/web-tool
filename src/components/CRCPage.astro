@@ -12,7 +12,7 @@ interface Props {
     activePage: string;
 }
 
-const { title, description, toolName, jsFile, activePage } = Astro.props;
+const { title, description, toolName, activePage } = Astro.props;
 const { lang = 'en' } = Astro.params;
 const t = useTranslations(lang as any);
 ---
@@ -24,7 +24,7 @@ const t = useTranslations(lang as any);
         <div id="content">
             <div class="top-nav">
                 <button id="sidebar-toggler" aria-controls="sidebar" aria-expanded="false" aria-label={t('sidebar.toggle_menu')}>
-                    <i data-lucide="menu" width="24" height="24" alt={t('sidebar.toggle_menu')}></i>
+                    <i data-lucide="menu"></i>
                 </button>
             </div>
             
@@ -49,7 +49,7 @@ const t = useTranslations(lang as any);
                                 <div class="droppable-zone container" id="droppable-zone" style="display:none;">
                                     <input class="droppable-file" type="file" id="file" data-auto-update>
                                     <div class="droppable-zone-wrapper">
-                                        <i class="droppable-zone-icon" data-lucide="file-up" alt="File"></i>
+                                        <i class="droppable-zone-icon" data-lucide="file-up"></i>
                                         <div class="droppable-zone-text">{t('drag_drop')}</div>
                                     </div>
                                 </div>

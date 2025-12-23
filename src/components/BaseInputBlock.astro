@@ -1,0 +1,43 @@
+---
+interface Props {
+    title: string;
+    showFullscreen?: boolean;
+    showCopy?: boolean;
+    copyTarget?: string;
+    copyMessage?: string;
+}
+
+const { 
+    title,
+    showFullscreen = true,
+    showCopy = false,
+    copyTarget,
+    copyMessage = "Copied"
+} = Astro.props;
+---
+
+<div class="input">
+    <div class="block block-fill">
+        <div class="block-title">
+            {title}
+            <div class="toolbar">
+                {
+                    showCopy && copyTarget && (
+                        <button class="icon" data-toggle="copy" data-clipboard-target={copyTarget} data-message={copyMessage}>
+                            <i data-lucide="copy" title="Copy"></i>
+                        </button>
+                    )
+                }
+                {
+                    showFullscreen && (
+                        <button class="icon" data-toggle="fullscreen">
+                            <i class="fullscreen-icon" data-lucide="maximize" title="Full Screen"></i>
+                            <i class="fullscreen-icon-exit" data-lucide="minimize" title="Full Screen"></i>
+                        </button>
+                    )
+                }
+            </div>
+        </div>
+        <slot />
+    </div>
+</div>

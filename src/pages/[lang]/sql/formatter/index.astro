@@ -1,7 +1,8 @@
 ---
-import BaseLayout from '../../../../layouts/BaseLayout.astro';
-import Sidebar from '../../../../components/Sidebar.astro';
-import PageHeader from '../../../../components/PageHeader.astro';
+import BasePage from '../../../../components/BasePage.astro';
+import BaseInputBlock from '../../../../components/BaseInputBlock.astro';
+import BaseOutputBlock from '../../../../components/BaseOutputBlock.astro';
+import BaseSettingBlock from '../../../../components/BaseSettingBlock.astro';
 import { languages } from '../../../../i18n/ui';
 import { useTranslations } from '../../../../i18n/utils';
 
@@ -19,106 +20,67 @@ const description = t('sql_formatter.description');
 const activePage = "sql/formatter/";
 ---
 
-<BaseLayout title={title} description={description}>
-    <div id="app">
-        <Sidebar activePage={activePage} />
+<BasePage title={title} description={description} activePage={activePage}>
+    <div class="layout">
+        <div class="layout-block">
+            <BaseInputBlock title={t('input')} >
+                <textarea class="container" id="input" spellcheck="false" placeholder={t('sql_formatter.enter_query')} 
+                    data-remember="input" data-share="input" data-auto-update 
+                    data-toggle="monacoEditor" data-language="mysql"></textarea>
+            </BaseInputBlock>
+            
+            <BaseOutputBlock title={t('output')} showCopy={true}>
+                <div class="toolbar" slot="toolbar">
+                    <button class="icon" data-toggle="copy" data-clipboard-target="#output" data-message="Output copied">
+                        <i data-lucide="copy" title="Copy"></i>
+                    </button>
+                </div>
+                <pre class="container syntax-highlight" id="output"><code class="sql"></code></pre>
+            </BaseOutputBlock>
+        </div>
         
-        <div id="content">
-            <div class="top-nav">
-                <button id="sidebar-toggler" aria-controls="sidebar" aria-expanded="false" aria-label={t('sidebar.toggle_menu')}>
-                    <i data-lucide="menu" width="24" height="24" alt={t('sidebar.toggle_menu')}></i>
-                </button>
+        <BaseSettingBlock title={t('settings')}>
+            <div class="setting">
+                <a class="btn" id="execute">{t('format')}</a>
             </div>
             
-            <PageHeader title={title} description={description} />
+            <div class="setting">
+                <label class="switcher">
+                    <input type="checkbox" value="1" id="auto-update" checked>
+                    <div class="toggle"></div>
+                    <span>{t('auto_update')}</span>
+                </label>
+            </div>
             
-            <main>
-                <div class="layout">
-                    <div class="layout-block">
-                        <div class="input">
-                            <div class="block block-fill">
-                                <div class="block-title">{t('input')}
-                                    <div class="toolbar">
-                                        <button class="icon" data-toggle="fullscreen">
-                                            <i class="fullscreen-icon" data-lucide="maximize" title="Full Screen"></i>
-                                            <i class="fullscreen-icon-exit" data-lucide="minimize" title="Full Screen"></i>
-                                        </button>
-                                    </div>
-                                </div>
-                                <textarea class="container" id="input" spellcheck="false" placeholder={t('sql_formatter.enter_query')} 
-                                    data-remember="input" data-share="input" data-auto-update 
-                                    data-toggle="monacoEditor" data-language="mysql"></textarea>
-                            </div>
-                        </div>
-                        
-                        <div class="output">
-                            <div class="block block-fill">
-                                <div class="block-title">{t('output')}
-                                    <div class="toolbar">
-                                        <button class="icon" data-toggle="copy" data-clipboard-target="#output" data-message="Output copied">
-                                            <i data-lucide="copy" title="Copy"></i>
-                                        </button>
-                                        <button class="icon" data-toggle="fullscreen">
-                                            <i class="fullscreen-icon" data-lucide="maximize" title="Full Screen"></i>
-                                            <i class="fullscreen-icon-exit" data-lucide="minimize" title="Full Screen"></i>
-                                        </button>
-                                    </div>
-                                </div>
-                                <pre class="container syntax-highlight" id="output"><code class="sql"></code></pre>
-                            </div>
-                        </div>
-                    </div>
-                    
-                    <div class="settings">
-                        <div class="block block-fill">
-                            <div class="block-title">{t('settings')}</div>
-                            <div class="container">
-                                <div class="setting">
-                                    <a class="btn" id="execute">{t('format')}</a>
-                                </div>
-                                
-                                <div class="setting">
-                                    <label class="switcher">
-                                        <input type="checkbox" value="1" id="auto-update" checked>
-                                        <div class="toggle"></div>
-                                        <span>{t('auto_update')}</span>
-                                    </label>
-                                </div>
-                                
-                                <div class="setting">
-                                    <label class="switcher">
-                                        <input type="checkbox" value="1" id="remember-input">
-                                        <div class="toggle"></div>
-                                        <span>{t('remember_input')}</span>
-                                    </label>
-                                </div>
-                                
-                                <div class="setting">
-                                    <label class="switcher">
-                                        <input type="checkbox" value="1" id="uppercase-keywords" checked data-remember="uppercase-keywords">
-                                        <div class="toggle"></div>
-                                        <span>{t('sql_formatter.uppercase_keywords')}</span>
-                                    </label>
-                                </div>
-                                
-                                <div class="setting">
-                                    <label for="indent-type">{t('sql_formatter.indent_type')}</label>
-                                    <select id="indent-type" data-remember="indent-type">
-                                        <option value="space" selected>Space</option>
-                                        <option value="tab">Tab</option>
-                                    </select>
-                                </div>
-                                
-                                <div class="setting">
-                                    <label for="indent">{t('sql_formatter.indent')}</label>
-                                    <input id="indent" type="number" value="2" step="1" min="1" max="10" data-remember="indent">
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-            </main>
-        </div>
+            <div class="setting">
+                <label class="switcher">
+                    <input type="checkbox" value="1" id="remember-input">
+                    <div class="toggle"></div>
+                    <span>{t('remember_input')}</span>
+                </label>
+            </div>
+            
+            <div class="setting">
+                <label class="switcher">
+                    <input type="checkbox" value="1" id="uppercase-keywords" checked data-remember="uppercase-keywords">
+                    <div class="toggle"></div>
+                    <span>{t('sql_formatter.uppercase_keywords')}</span>
+                </label>
+            </div>
+            
+            <div class="setting">
+                <label for="indent-type">{t('sql_formatter.indent_type')}</label>
+                <select id="indent-type" data-remember="indent-type">
+                    <option value="space" selected>Space</option>
+                    <option value="tab">Tab</option>
+                </select>
+            </div>
+            
+            <div class="setting">
+                <label for="indent">{t('sql_formatter.indent')}</label>
+                <input id="indent" type="number" value="2" step="1" min="1" max="10" data-remember="indent">
+            </div>
+        </BaseSettingBlock>
     </div>
     
     <script is:inline>
@@ -199,4 +161,4 @@ const activePage = "sql/formatter/";
             }
         });
     </script>
-</BaseLayout>
+</BasePage>

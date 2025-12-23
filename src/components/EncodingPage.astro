@@ -14,7 +14,7 @@ interface Props {
     title: string;
     description: string;
     toolName: string;
-    jsFile: string;
+    jsFile?: string;
     activePage: string;
     reverseLink: string;
     hasInputSettings?: boolean;
@@ -71,7 +71,7 @@ const t = useTranslations(lang as any);
         <div id="content">
             <div class="top-nav">
                 <button id="sidebar-toggler" aria-controls="sidebar" aria-expanded="false" aria-label={t('sidebar.toggle_menu')}>
-                    <i data-lucide="menu" width="24" height="24" alt={t('sidebar.toggle_menu')}></i>
+                    <i data-lucide="menu"></i>
                 </button>
             </div>
             
@@ -117,7 +117,7 @@ const t = useTranslations(lang as any);
                         >
                             {!hasFileInput && (
                                 <button slot="toolbar" class="icon" id="swap" onclick={`swap('${reverseLink}', [['#output', '#input'], ['#input-type', '#output-type']])`}>
-                                    <i data-lucide="arrow-left-right" alt="Swap" title="Swap"></i>
+                                    <i data-lucide="arrow-left-right" title="Swap"></i>
                                 </button>
                             )}
                             <slot name="before-output-textarea" slot="before-textarea" />

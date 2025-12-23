@@ -14,6 +14,8 @@ export const hi = {
   // Common
   'input': 'इनपुट',
   'output': 'आउटपुट',
+  'text': 'टेक्स्ट',
+  'binary': 'बाइनरी',
   'settings': 'सेटिंग्स',
   'auto_update': 'स्वतः अद्यतन',
   'remember_input': 'इनपुट याद रखें',
@@ -99,6 +101,24 @@ export const hi = {
   'curve': 'वक्र',
   'customization': 'अनुकूलन',
   'function_name': 'फ़ंक्शन का नाम',
+  'hex_lower': 'Hex (छोटे अक्षर)',
+  'hex_upper': 'Hex (बड़े अक्षर)',
+  'reset': 'रीसेट करें',
+  'upload': 'अपलोड करें',
+  'signature_algorithm': 'हस्ताक्षर एल्गोरिदम',
+  'share_link_copied': 'साझा लिंक कॉपी किया गया',
+  'output_here': 'यहां आउटपुट...',
+  'output_copied': 'आउटपुट कॉपी किया गया',
+  'public_key_here': 'यहां सार्वजनिक कुंजी...',
+  'public_key_copied': 'सार्वजनिक कुंजी कॉपी की गई',
+  'private_key_here': 'यहां निजी कुंजी...',
+  'private_key_copied': 'निजी कुंजी कॉपी की गई',
+  'download_file_name': 'डाउनलोड फ़ाइल का नाम',
+  'encoded_file': 'एन्कोडेड फ़ाइल',
+  'encoded_text': 'एन्कोडेड टेक्स्ट',
+  'file_drop_text': 'फ़ाइल को यहां खींचें और छोड़ें या चुनने के लिए क्लिक करें',
+  'url': 'URL',
+  'file': 'फ़ाइल',
 
   // Syntax Highlight
   'syntax_highlight.title': 'सिंटैक्स हाइलाइट',
@@ -376,6 +396,16 @@ export const hi = {
   'base32_decode_file.title': 'Base32 फ़ाइल डिकोड करें',
   'base32_decode_file.description': 'यह online Base32 decoding tool आपको स्थानीय या URL से Base32 को बिना फ़ाइल अपलोड किए फ़ाइल में डिकोड करने में मदद करता है।',
 
+  // Base58
+  'base58_encode.title': 'Base58 एन्कोड',
+  'base58_encode.description': 'यह online Base58 encoding tool आपको टेक्स्ट या बाइनरी को Base58 में एन्कोड करने में मदद करता है।',
+  'base58_decode.title': 'Base58 डिकोड',
+  'base58_decode.description': 'यह online Base58 decoding tool आपको Base58 को टेक्स्ट या बाइनरी में डिकोड करने में मदद करता है।',
+  'base58_encode_file.title': 'फ़ाइल को Base58 में एन्कोड करें',
+  'base58_encode_file.description': 'यह online Base58 encoding tool आपको स्थानीय या URL से किसी फ़ाइल को बिना फ़ाइल अपलोड किए Base58 में एन्कोड करने में मदद करता है।',
+  'base58_decode_file.title': 'Base58 फ़ाइल डिकोड करें',
+  'base58_decode_file.description': 'यह online Base58 decoding tool आपको स्थानीय या URL से Base58 को बिना फ़ाइल अपलोड किए फ़ाइल में डिकोड करने में मदद करता है।',
+
   // Hex
   'hex_encode.title': 'Hex एन्कोड',
   'hex_encode.description': 'यह online Hex encoding tool आपको टेक्स्ट या बाइनरी को Hex में एन्कोड करने में मदद करता है।',
@@ -445,6 +475,4 @@ export const hi = {
   'ecdsa_verify.description': 'यह online tool आपको ECDSA हस्ताक्षरों को सत्यापित करने में मदद करता है।',
   'ecdsa_key_generator.title': 'ECDSA कुंजी जनरेटर',
   'ecdsa_key_generator.description': 'यह online tool आपको ECDSA कुंजियों की एक जोड़ी उत्पन्न करने में मदद करता है। यह PEM, HEX और Base64 प्रारूपों के साथ-साथ विभिन्न वक्रों का समर्थन करता है। PEM प्रारूप PKCS#1, PKCS#5 और PKCS#8 का समर्थन करता है।',
-  'hex_lower': 'हेक्स (लोअर केस)',
-  'hex_upper': 'हेक्स (अपर केस)',
 };
