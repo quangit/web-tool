@@ -21,9 +21,9 @@ const {
 
 // Build data attributes object
 const dataAttrs: Record<string, any> = {};
-if (dataEncodingFrom) dataAttrs["data-encoding-from"] = dataEncodingFrom;
-if (dataToggleMonaco) dataAttrs["data-toggle"] = "monacoEditor";
-if (dataLanguage) dataAttrs["data-language"] = dataLanguage;
+if (dataEncodingFrom) {dataAttrs["data-encoding-from"] = dataEncodingFrom;}
+if (dataToggleMonaco) {dataAttrs["data-toggle"] = "monacoEditor";}
+if (dataLanguage) {dataAttrs["data-language"] = dataLanguage;}
 
 const { lang = 'en' } = Astro.params;
 const t = useTranslations(lang as any);

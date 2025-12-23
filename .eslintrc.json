@@ -51,6 +51,7 @@
     "dist",
     "node_modules",
     ".astro",
-    "public/js/**"
+    "public/js/**",
+    "src/pages/**/cryptography/**"
   ]
 }

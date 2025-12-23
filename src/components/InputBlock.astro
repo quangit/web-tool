@@ -23,12 +23,12 @@ const {
 
 // Build data attributes object
 const dataAttrs: Record<string, any> = {};
-if (dataRemember) dataAttrs["data-remember"] = dataRemember;
-if (dataShare) dataAttrs["data-share"] = dataShare;
-if (dataEncodingFrom) dataAttrs["data-encoding-from"] = dataEncodingFrom;
-if (dataAutoUpdate) dataAttrs["data-auto-update"] = true;
-if (dataToggleMonaco) dataAttrs["data-toggle"] = "monacoEditor";
-if (dataLanguage) dataAttrs["data-language"] = dataLanguage;
+if (dataRemember) {dataAttrs["data-remember"] = dataRemember;}
+if (dataShare) {dataAttrs["data-share"] = dataShare;}
+if (dataEncodingFrom) {dataAttrs["data-encoding-from"] = dataEncodingFrom;}
+if (dataAutoUpdate) {dataAttrs["data-auto-update"] = true;}
+if (dataToggleMonaco) {dataAttrs["data-toggle"] = "monacoEditor";}
+if (dataLanguage) {dataAttrs["data-language"] = dataLanguage;}
 
 const { lang = 'en' } = Astro.params;
 const t = useTranslations(lang as any);
