@@ -5,13 +5,26 @@ export default defineConfig({
   site: 'https://webtool.center',
   output: 'static',
   build: {
-    format: 'file'
+    format: 'file',
+    inlineStylesheets: 'auto',
+  },
+  vite: {
+    build: {
+      cssMinify: true,
+      minify: 'terser',
+      rollupOptions: {
+        output: {
+          manualChunks: undefined,
+        },
+      },
+    },
   },
   i18n: {
-    defaultLocale: "en",
-    locales: ["en", "vi", "zh", "hi", "es", "fr", "pt", "ja"],
+    defaultLocale: 'en',
+    locales: ['en', 'vi', 'zh', 'hi', 'es', 'fr', 'pt', 'ja'],
     routing: {
-      prefixDefaultLocale: false
-    }
-  }
+      prefixDefaultLocale: false,
+    },
+  },
+  compressHTML: true,
 });

@@ -36,12 +36,18 @@ const { title, description } = Astro.props;
   <link rel="alternate" hreflang="ja" href="https://webtool.center/ja/">
   <link rel="alternate" hreflang="x-default" href="https://webtool.center/">
   <link rel="icon" href="/images/logo.png">
+  
+  <!-- Preconnect to external domains for better performance -->
+  <link rel="preconnect" href="https://www.googletagmanager.com" crossorigin>
+  <link rel="preconnect" href="https://unpkg.com" crossorigin>
+  <link rel="dns-prefetch" href="https://code.jquery.com">
+  
   <script is:inline>
     var delayScripts = [];
     var waitLoadCount = 0;
     window.dataLayer = window.dataLayer || [];
     function gtag() { dataLayer.push(arguments); }
-    if (location.hostname != 'localhost') {
+    if (location.hostname !== 'localhost') {
       gtag('js', new Date());
       gtag('config', 'G-5FCSDZEKE9');
 
@@ -49,7 +55,7 @@ const { title, description } = Astro.props;
         var gaUrl = 'https://www.googletagmanager.com/gtag/js?id=G-5FCSDZEKE9';
 
         function initGTMOnEvent(e) {
-          document.removeEventListener(event.type, initGTMOnEvent);
+          document.removeEventListener(e.type, initGTMOnEvent);
           initGTM();
         }
 
@@ -68,9 +74,9 @@ const { title, description } = Astro.props;
           document.addEventListener('DOMContentLoaded', function () {
             setTimeout(initGTM, 3500);
           });
-          document.addEventListener('scroll', initGTMOnEvent);
-          document.addEventListener('mousemove', initGTMOnEvent);
-          document.addEventListener('touchstart', initGTMOnEvent);
+          document.addEventListener('scroll', initGTMOnEvent, { once: true, passive: true });
+          document.addEventListener('mousemove', initGTMOnEvent, { once: true, passive: true });
+          document.addEventListener('touchstart', initGTMOnEvent, { once: true, passive: true });
         } else {
           delayScripts.push({
             src: gaUrl
@@ -79,8 +85,13 @@ const { title, description } = Astro.props;
       })();
     }
 
-    if (localStorage.getItem('DARK') === '1') {
-      document.documentElement.classList.add('dark-theme')
+    // Apply dark theme before render to prevent flash
+    try {
+      if (localStorage.getItem('DARK') === '1') {
+        document.documentElement.classList.add('dark-theme');
+      }
+    } catch (e) {
+      // Handle localStorage errors silently
     }
   </script>
   <link rel="stylesheet" href="/css/style.css?v=27">

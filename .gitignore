@@ -5,3 +5,35 @@ dist/
 *.log
 .DS_Store
 .idea/
+
+# Editor directories
+.fleet/
+.nova/
+
+# Build outputs
+build/
+out/
+
+# Environment variables
+.env
+.env.local
+.env.production
+.env.development
+
+# Testing
+coverage/
+.nyc_output/
+
+# Temporary files
+*.tmp
+*.temp
+.cache/
+
+# OS files
+Thumbs.db
+desktop.ini
+
+# Package manager files
+package-lock.json
+yarn.lock
+pnpm-debug.log*

@@ -5,11 +5,22 @@
   "scripts": {
     "dev": "astro dev",
     "start": "astro dev",
-    "build": "astro build",
+    "build": "astro check && astro build",
     "preview": "astro preview",
-    "astro": "astro"
+    "astro": "astro",
+    "lint": "eslint . --ext .js,.astro,.ts",
+    "lint:fix": "eslint . --ext .js,.astro,.ts --fix",
+    "format": "prettier --write .",
+    "format:check": "prettier --check ."
   },
   "dependencies": {
     "astro": "^4.0.0"
+  },
+  "devDependencies": {
+    "@typescript-eslint/parser": "^6.0.0",
+    "astro-eslint-parser": "^0.16.0",
+    "eslint": "^8.0.0",
+    "prettier": "^3.0.0",
+    "prettier-plugin-astro": "^0.12.0"
   }
 }
