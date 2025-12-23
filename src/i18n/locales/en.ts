@@ -31,6 +31,7 @@ export const en = {
   'tool_name': 'Calculate',
   'model': 'Model',
   'width': 'Width',
+  'height': 'Height',
   'poly': 'Poly (Hex)',
   'init': 'Init (Hex)',
   'xorout': 'XorOut (Hex)',
@@ -101,14 +102,27 @@ export const en = {
   'function_name': 'Function Name',
   'hex_lower': 'Hex (Lower Case)',
   'hex_upper': 'Hex (Upper Case)',
+  'reset': 'Reset',
+  'upload': 'Upload',
 
   // Syntax Highlight
   'syntax_highlight.title': 'Syntax Highlight',
   'syntax_highlight.description': 'This syntax highlight online tool helps you highlight your code. Supports many languages such as JavaScript, C++, C#, Java... and so on.',
 
+  // Image Resize
+  'image_resize.title': 'Resize Image',
+  'image_resize.description': 'Resize your images to specific dimensions or by percentage. Free online image resizer tool.',
+  'image_resize.resize_mode': 'Resize Mode',
+  'image_resize.dimensions': 'Dimensions (px)',
+  'image_resize.percentage': 'Percentage (%)',
+  'image_resize.maintain_aspect_ratio': 'Maintain Aspect Ratio',
+  'image_resize.scale_percentage': 'Scale Percentage',
+  'image_resize.quality': 'Quality',
+
   // CRC
   'crc.title': 'CRC Calculator',
   'crc.description': 'Calculate CRC checksums. Free online CRC calculator tool.',
+  'crc.tool_name': 'Calculate',
 
   // MD5
   'md5.title': 'MD5',
@@ -149,8 +163,8 @@ export const en = {
   // SHA384
   'sha384.title': 'SHA384',
   'sha384.description': 'This SHA384 online tool helps you calculate hashes from strings. You can input UTF-8, UTF-16, Hex, Base64, or other encodings. It also supports HMAC.',
-  'sha384_file_hash.title': 'SHA384 File Hash',
-  'sha384_file_hash.description': 'This SHA384 online tool helps you calculate the hash of a file from local or URL using SHA384 without uploading the file. It also supports HMAC.',
+  'sha3_384_file_hash.title': 'SHA384 File Hash',
+  'sha3_384_file_hash.description': 'This SHA384 online tool helps you calculate the hash of a file from local or URL using SHA384 without uploading the file. It also supports HMAC.',
 
   // SHA512
   'sha512.title': 'SHA512',

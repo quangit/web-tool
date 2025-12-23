@@ -25,6 +25,14 @@ export const toolSections: ToolSection[] = [
           { url: "syntax-highlight", name: "Syntax Highlight", icon: "code-2" },
         ],
       },
+      {
+        title: "Images",
+        items: [
+          { url: "image/resize", name: "Resize Image", icon: "scale" },
+          { url: "image/optimize", name: "Optimize Image", icon: "zap" },
+          { url: "image/crop-rotate", name: "Crop & Rotate Image", icon: "crop" },
+        ],
+      },
     ],
   },
   {

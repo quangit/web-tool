@@ -1,0 +1,429 @@
+---
+import BasePage from "../../../components/BasePage.astro";
+import { languages } from '../../../i18n/ui';
+import { useTranslations } from '../../../i18n/utils';
+
+export function getStaticPaths() {
+  return Object.keys(languages).map((lang) => {
+      return { params: { lang } };
+  });
+}
+
+const { lang = 'en' } = Astro.params;
+const t = useTranslations(lang as any);
+
+const title = t('image_resize.title');
+const description = t('image_resize.description');
+const activePage = "image/resize";
+---
+
+<BasePage title={title} description={description} activePage={activePage}>
+  <div class="layout">
+    <div class="layout-block">
+      <div class="output">
+        <div class="block block-fill">
+          <div class="block-title">
+            {t('output')}
+            <div class="toolbar">
+              <button class="icon" id="download-btn" style="display: none;">
+                <i data-lucide="download" title="Download"></i>
+              </button>
+              <button class="icon" data-toggle="fullscreen">
+                <i class="fullscreen-icon" data-lucide="maximize" title="Full Screen"></i>
+                <i class="fullscreen-icon-exit" data-lucide="minimize" title="Full Screen"></i>
+              </button>
+            </div>
+          </div>
+          <div class="container preview-container" id="drop-zone">
+            <div class="drop-zone-content" id="drop-zone-content">
+              <i data-lucide="upload-cloud" class="upload-icon"></i>
+              <p>{t('drag_drop')}</p>
+            </div>
+            <img id="preview-image" src="" alt="Preview" style="display: none;" />
+            <div class="image-info" id="image-info" style="display: none;">
+              <span id="original-dimensions"></span>
+              <span id="file-size"></span>
+            </div>
+            <input type="file" id="file-input" accept="image/*" hidden />
+          </div>
+        </div>
+      </div>
+    </div>
+    <div class="settings">
+      <div class="block block-fill">
+        <div class="block-title">{t('settings')}</div>
+        <div class="container">
+          <div class="setting">
+            <a class="btn" id="upload-btn">{t('upload')}</a>
+          </div>
+          <div class="setting">
+            <a class="btn" id="reset-btn">{t('reset')}</a>
+          </div>
+          
+          <details class="setting-group" open>
+            <summary>{t('image_resize.resize_mode')}</summary>
+            <div class="setting">
+              <select id="resize-mode">
+                <option value="dimensions" selected>{t('image_resize.dimensions')}</option>
+                <option value="percentage">{t('image_resize.percentage')}</option>
+              </select>
+            </div>
+          </details>
+
+          <details class="setting-group" id="dimensions-controls" open>
+            <summary>{t('image_resize.dimensions')}</summary>
+            <div class="setting">
+              <label for="width-input">{t('width')}</label>
+              <input type="number" id="width-input" min="1" />
+            </div>
+            <div class="setting">
+              <label for="height-input">{t('height')}</label>
+              <input type="number" id="height-input" min="1" />
+            </div>
+            <div class="setting">
+              <label class="switcher">
+                <input type="checkbox" id="maintain-aspect-ratio" checked />
+                <div class="toggle"></div>
+                <span>{t('image_resize.maintain_aspect_ratio')}</span>
+              </label>
+            </div>
+          </details>
+
+          <details class="setting-group" id="percentage-controls" style="display: none;" open>
+            <summary>{t('image_resize.percentage')}</summary>
+            <div class="setting">
+              <label for="percentage-input">{t('image_resize.scale_percentage')}</label>
+              <div class="range-wrapper">
+                <input type="range" id="percentage-slider" min="1" max="200" value="100" />
+                <input type="number" id="percentage-input" min="1" max="200" value="100" />
+                <span>%</span>
+              </div>
+            </div>
+          </details>
+
+          <details class="setting-group" open>
+            <summary>{t('image_resize.quality')}</summary>
+            <div class="setting">
+              <label for="quality-input">{t('image_resize.quality')}</label>
+              <div class="range-wrapper">
+                <input type="range" id="quality-slider" min="1" max="100" value="90" />
+                <input type="number" id="quality-input" min="1" max="100" value="90" />
+                <span>%</span>
+              </div>
+            </div>
+          </details>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <script>
+    // Image Resize Logic
+    document.addEventListener('DOMContentLoaded', () => {
+      const dropZone = document.getElementById('drop-zone');
+      const dropZoneContent = document.getElementById('drop-zone-content');
+      const fileInput = document.getElementById('file-input');
+      const previewImage = document.getElementById('preview-image') as HTMLImageElement;
+      const originalDimensions = document.getElementById('original-dimensions');
+      const fileSize = document.getElementById('file-size');
+      const imageInfo = document.getElementById('image-info');
+      
+      const widthInput = document.getElementById('width-input') as HTMLInputElement;
+      const heightInput = document.getElementById('height-input') as HTMLInputElement;
+      const maintainAspectRatio = document.getElementById('maintain-aspect-ratio') as HTMLInputElement;
+      
+      const percentageControls = document.getElementById('percentage-controls');
+      const dimensionsControls = document.getElementById('dimensions-controls');
+      const resizeModeSelect = document.getElementById('resize-mode') as HTMLSelectElement;
+      
+      const percentageSlider = document.getElementById('percentage-slider') as HTMLInputElement;
+      const percentageInput = document.getElementById('percentage-input') as HTMLInputElement;
+      
+      const qualitySlider = document.getElementById('quality-slider') as HTMLInputElement;
+      const qualityInput = document.getElementById('quality-input') as HTMLInputElement;
+      
+      const resetBtn = document.getElementById('reset-btn');
+      const uploadBtn = document.getElementById('upload-btn');
+      const downloadBtn = document.getElementById('download-btn');
+
+      let originalImage: HTMLImageElement | null = null;
+      let originalFile: File | null = null;
+      let aspectRatio = 1;
+
+      // Drag and Drop handlers
+      dropZone?.addEventListener('click', (e) => {
+        // Only trigger file input if clicking on the drop zone background or content, not the image itself
+        if (e.target === dropZone || dropZoneContent?.contains(e.target as Node)) {
+             fileInput?.click();
+        }
+      });
+      
+      dropZone?.addEventListener('dragover', (e) => {
+        e.preventDefault();
+        dropZone.classList.add('drag-over');
+      });
+
+      dropZone?.addEventListener('dragleave', () => {
+        dropZone.classList.remove('drag-over');
+      });
+
+      dropZone?.addEventListener('drop', (e) => {
+        e.preventDefault();
+        dropZone.classList.remove('drag-over');
+        if (e.dataTransfer?.files.length) {
+          handleFile(e.dataTransfer.files[0]);
+        }
+      });
+
+      fileInput?.addEventListener('change', (e: any) => {
+        if (e.target.files.length) {
+          handleFile(e.target.files[0]);
+        }
+      });
+
+      uploadBtn?.addEventListener('click', () => {
+        fileInput?.click();
+      });
+
+      function handleFile(file: File) {
+        if (!file.type.startsWith('image/')) {
+          alert('Please upload an image file');
+          return;
+        }
+
+        originalFile = file;
+        const reader = new FileReader();
+        reader.onload = (e) => {
+          originalImage = new Image();
+          originalImage.onload = () => {
+            if (previewImage && originalDimensions && fileSize && widthInput && heightInput && imageInfo && downloadBtn && dropZoneContent) {
+              previewImage.src = originalImage!.src;
+              previewImage.style.display = 'block';
+              dropZoneContent.style.display = 'none';
+              
+              originalDimensions.textContent = `${originalImage!.width} x ${originalImage!.height} px`;
+              fileSize.textContent = formatFileSize(file.size);
+              imageInfo.style.display = 'flex';
+              
+              aspectRatio = originalImage!.width / originalImage!.height;
+              widthInput.value = originalImage!.width.toString();
+              heightInput.value = originalImage!.height.toString();
+              
+              downloadBtn.style.display = 'inline-flex';
+            }
+          };
+          originalImage.src = e.target?.result as string;
+        };
+        reader.readAsDataURL(file);
+      }
+
+      function formatFileSize(bytes: number) {
+        if (bytes === 0) return '0 Bytes';
+        const k = 1024;
+        const sizes = ['Bytes', 'KB', 'MB', 'GB'];
+        const i = Math.floor(Math.log(bytes) / Math.log(k));
+        return parseFloat((bytes / Math.pow(k, i)).toFixed(2)) + ' ' + sizes[i];
+      }
+
+      // Resize Mode Toggle
+      resizeModeSelect?.addEventListener('change', (e: any) => {
+        if (e.target.value === 'percentage') {
+          percentageControls!.style.display = 'block';
+          dimensionsControls!.style.display = 'none';
+          updateDimensionsFromPercentage();
+        } else {
+          percentageControls!.style.display = 'none';
+          dimensionsControls!.style.display = 'block';
+        }
+      });
+
+      // Dimension Inputs
+      widthInput?.addEventListener('input', () => {
+        if (maintainAspectRatio.checked && heightInput) {
+          heightInput.value = Math.round(parseInt(widthInput.value) / aspectRatio).toString();
+        }
+      });
+
+      heightInput?.addEventListener('input', () => {
+        if (maintainAspectRatio.checked && widthInput) {
+          widthInput.value = Math.round(parseInt(heightInput.value) * aspectRatio).toString();
+        }
+      });
+
+      // Percentage Inputs
+      function updateDimensionsFromPercentage() {
+        if (!originalImage || !widthInput || !heightInput) return;
+        const percent = parseInt(percentageInput.value) / 100;
+        widthInput.value = Math.round(originalImage.width * percent).toString();
+        heightInput.value = Math.round(originalImage.height * percent).toString();
+      }
+
+      percentageSlider?.addEventListener('input', (e: any) => {
+        percentageInput.value = e.target.value;
+        updateDimensionsFromPercentage();
+      });
+
+      percentageInput?.addEventListener('input', (e: any) => {
+        percentageSlider.value = e.target.value;
+        updateDimensionsFromPercentage();
+      });
+
+      // Quality Inputs
+      qualitySlider?.addEventListener('input', (e: any) => {
+        qualityInput.value = e.target.value;
+      });
+
+      qualityInput?.addEventListener('input', (e: any) => {
+        qualitySlider.value = e.target.value;
+      });
+
+      // Reset
+      resetBtn?.addEventListener('click', () => {
+        if (originalImage && widthInput && heightInput && percentageInput && percentageSlider && previewImage && dropZoneContent && imageInfo && downloadBtn && resizeModeSelect) {
+          // Clear image
+          originalImage = null;
+          originalFile = null;
+          previewImage.src = "";
+          previewImage.style.display = 'none';
+          dropZoneContent.style.display = 'flex';
+          imageInfo.style.display = 'none';
+          downloadBtn.style.display = 'none';
+
+          // Reset inputs
+          widthInput.value = "";
+          heightInput.value = "";
+          percentageInput.value = "100";
+          percentageSlider.value = "100";
+          
+          // Reset to dimensions mode
+          resizeModeSelect.value = 'dimensions';
+          percentageControls!.style.display = 'none';
+          dimensionsControls!.style.display = 'block';
+        }
+      });
+
+      // Download
+      downloadBtn?.addEventListener('click', () => {
+        if (!originalImage || !widthInput || !heightInput) return;
+
+        const canvas = document.createElement('canvas');
+        const ctx = canvas.getContext('2d');
+        const width = parseInt(widthInput.value);
+        const height = parseInt(heightInput.value);
+        const quality = parseInt(qualityInput.value) / 100;
+
+        canvas.width = width;
+        canvas.height = height;
+
+        // Better image smoothing
+        if (ctx) {
+            ctx.imageSmoothingEnabled = true;
+            ctx.imageSmoothingQuality = 'high';
+            ctx.drawImage(originalImage, 0, 0, width, height);
+        }
+
+        const link = document.createElement('a');
+        link.download = `resized_${originalFile?.name}`;
+        link.href = canvas.toDataURL(originalFile?.type, quality);
+        link.click();
+      });
+    });
+  </script>
+
+  <style>
+    .layout {
+      display: flex;
+      gap: 2px;
+      flex-wrap: wrap;
+    }
+
+    .layout-block {
+      flex: 1;
+      min-width: 360px;
+      display: flex;
+      flex-direction: column;
+      gap: 2px;
+    }
+
+    .settings {
+      flex: 0 0 360px;
+    }
+
+    .preview-container {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      min-height: 400px;
+      background: var(--bg-secondary);
+      padding: 20px;
+      border: 2px dashed transparent;
+      transition: all 0.2s;
+      position: relative;
+    }
+
+    .preview-container.drag-over {
+      border-color: var(--primary-color);
+      background: var(--bg-hover);
+    }
+
+    .drop-zone-content {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      gap: 12px;
+      color: var(--text-secondary);
+      cursor: pointer;
+    }
+
+    .upload-icon {
+      width: 48px;
+      height: 48px;
+      color: var(--primary-color);
+    }
+
+    #preview-image {
+      max-width: 100%;
+      max-height: 500px;
+      object-fit: contain;
+      border-radius: 4px;
+      box-shadow: 0 2px 8px rgba(0,0,0,0.1);
+    }
+
+    .image-info {
+      margin-top: 12px;
+      display: flex;
+      gap: 16px;
+      color: var(--text-secondary);
+      font-size: 0.9rem;
+    }
+
+    .range-wrapper {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+    }
+
+    .range-wrapper input[type="range"] {
+      flex: 1;
+    }
+
+    .range-wrapper input[type="number"] {
+      width: 60px;
+      padding: 4px;
+      border: 1px solid var(--border-color);
+      border-radius: 4px;
+    }
+
+    @media (max-width: 768px) {
+      .layout {
+        flex-direction: column;
+      }
+      
+      .settings {
+        flex: auto;
+        order: -1;
+      }
+    }
+  </style>
+</BasePage>

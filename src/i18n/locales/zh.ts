@@ -31,6 +31,7 @@ export const zh = {
   'tool_name': '计算',
   'model': '模型',
   'width': '宽度',
+  'height': '高度',
   'poly': 'Poly (Hex)',
   'init': 'Init (Hex)',
   'xorout': 'XorOut (Hex)',
@@ -99,10 +100,22 @@ export const zh = {
   'curve': '曲线',
   'customization': '自定义',
   'function_name': '函数名称',
+  'reset': '重置',
+  'upload': '上传',
 
   // Syntax Highlight
   'syntax_highlight.title': '语法高亮',
   'syntax_highlight.description': '此在线语法高亮工具可帮助您高亮显示代码。支持多种语言，如 JavaScript、C++、C#、Java 等。',
+
+  // Image Resize
+  'image_resize.title': '调整图像大小',
+  'image_resize.description': '将图像调整为特定尺寸或按百分比调整。免费在线图像调整工具。',
+  'image_resize.resize_mode': '调整模式',
+  'image_resize.dimensions': '尺寸 (px)',
+  'image_resize.percentage': '百分比 (%)',
+  'image_resize.maintain_aspect_ratio': '保持纵横比',
+  'image_resize.scale_percentage': '缩放百分比',
+  'image_resize.quality': '质量',
 
   // CRC
   'crc.title': 'CRC 计算器',

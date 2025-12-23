@@ -31,6 +31,7 @@ export const vi = {
   'tool_name': 'Tính toán',
   'model': 'Mô hình',
   'width': 'Độ rộng',
+  'height': 'Chiều cao',
   'poly': 'Poly (Hex)',
   'init': 'Init (Hex)',
   'xorout': 'XorOut (Hex)',
@@ -101,10 +102,22 @@ export const vi = {
   'function_name': 'Tên hàm',
   'hex_lower': 'Hex (Chữ thường)',
   'hex_upper': 'Hex (Chữ hoa)',
+  'reset': 'Đặt lại',
+  'upload': 'Tải lên',
 
   // Syntax Highlight
   'syntax_highlight.title': 'Tô màu cú pháp',
   'syntax_highlight.description': 'Công cụ tô màu cú pháp trực tuyến này giúp bạn làm nổi bật mã của mình. Hỗ trợ nhiều ngôn ngữ như JavaScript, C++, C#, Java... và nhiều hơn nữa.',
+
+  // Image Resize
+  'image_resize.title': 'Thay đổi kích thước ảnh',
+  'image_resize.description': 'Thay đổi kích thước ảnh của bạn theo kích thước cụ thể hoặc theo tỷ lệ phần trăm. Công cụ thay đổi kích thước ảnh trực tuyến miễn phí.',
+  'image_resize.resize_mode': 'Chế độ thay đổi kích thước',
+  'image_resize.dimensions': 'Kích thước (px)',
+  'image_resize.percentage': 'Phần trăm (%)',
+  'image_resize.maintain_aspect_ratio': 'Giữ nguyên tỷ lệ khung hình',
+  'image_resize.scale_percentage': 'Tỷ lệ phần trăm',
+  'image_resize.quality': 'Chất lượng',
 
   // CRC
   'crc.title': 'Tính toán CRC',
