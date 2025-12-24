@@ -626,6 +626,17 @@ export const fr = {
   's_notes.new_note': 'Nouvelle note',
   's_notes.new_folder': 'Nouveau dossier',
   's_notes.search_placeholder': 'Rechercher des notes...',
+  'jwt.libraries.search_placeholder': 'Rechercher des bibliothèques...',
+  'jwt.libraries.no_results': 'Aucune bibliothèque trouvée',
+  'jwt.libraries.showing_results': 'Affichage de {0} sur {1} bibliothèques',
+  'jwt.libraries.title': 'Bibliothèques JWT',
+  'jwt.libraries.description':
+    'Liste complète des bibliothèques JWT (JSON Web Token) dans plusieurs langages de programmation incluant .NET, Python, Java, Node.js, PHP, Ruby, Go et plus encore. Comparez les algorithmes pris en charge (HS256, RS256, ES256), les opérations sur les tokens et les fonctionnalités de validation des claims. Recherchez et filtrez les bibliothèques par langage, auteur ou fonctionnalités.',
+  'jwt.libraries.token_operations': 'Opérations de Token',
+  'jwt.libraries.claims_validation': 'Validation des Claims',
+  'jwt.libraries.algorithms': 'Algorithmes',
+  'jwt.libraries.installation': 'Installation',
+  'jwt.libraries.view_repo': 'Voir le dépôt',
   's_notes.all_notes': 'Toutes les notes',
   's_notes.folders': 'Dossiers',
   's_notes.tags': 'Tags',
@@ -691,4 +702,13 @@ export const fr = {
   'jwt_encoder.secret_placeholder': 'Entrez votre clé secrète...',
   'jwt_encoder.encoding_format': "Format d'Encodage",
   'jwt_encoder.json_web_token': 'JSON Web Token',
+
+  // JWT Libraries
+  'jwt_libraries.title': 'Bibliothèques JWT',
+  'jwt_libraries.description':
+    'Une liste complète de bibliothèques JWT populaires dans différents langages de programmation. Ces bibliothèques vous aident à travailler avec des JSON Web Tokens dans vos applications.',
+  'jwt_libraries.disclaimer':
+    'Ces bibliothèques sont activement maintenues et largement utilisées par la communauté. Vérifiez toujours la documentation et les avis de sécurité avant de les utiliser en production.',
+  'jwt_libraries.algorithms': 'Algorithmes Supportés',
+  'jwt_libraries.back_to_decoder': 'Retour au décodeur JWT',
 };

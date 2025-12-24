@@ -626,6 +626,17 @@ export const hi = {
   's_notes.new_note': 'नया नोट',
   's_notes.new_folder': 'नया फ़ोल्डर',
   's_notes.search_placeholder': 'नोट्स खोजें...',
+  'jwt.libraries.search_placeholder': 'लाइब्रेरी खोजें...',
+  'jwt.libraries.no_results': 'कोई लाइब्रेरी नहीं मिली',
+  'jwt.libraries.showing_results': '{1} में से {0} लाइब्रेरी दिखा रहे हैं',
+  'jwt.libraries.title': 'JWT लाइब्रेरी',
+  'jwt.libraries.description':
+    '.NET, Python, Java, Node.js, PHP, Ruby, Go और अधिक सहित कई प्रोग्रामिंग भाषाओं में JWT (JSON Web Token) लाइब्रेरी की व्यापक सूची। समर्थित एल्गोरिदम (HS256, RS256, ES256), टोकन संचालन और दावों की सत्यापन सुविधाओं की तुलना करें। भाषा, लेखक या सुविधाओं द्वारा लाइब्रेरी खोजें और फ़िल्टर करें।',
+  'jwt.libraries.token_operations': 'टोकन संचालन',
+  'jwt.libraries.claims_validation': 'दावों की पुष्टि',
+  'jwt.libraries.algorithms': 'एल्गोरिदम',
+  'jwt.libraries.installation': 'इंस्टॉलेशन',
+  'jwt.libraries.view_repo': 'रिपॉजिटरी देखें',
   's_notes.all_notes': 'सभी नोट्स',
   's_notes.folders': 'फ़ोल्डर्स',
   's_notes.tags': 'टैग्स',
@@ -692,4 +703,13 @@ export const hi = {
   'jwt_encoder.secret_placeholder': 'अपनी सीक्रेट की दर्ज करें...',
   'jwt_encoder.encoding_format': 'एन्कोडिंग फॉर्मेट',
   'jwt_encoder.json_web_token': 'JSON Web Token',
+
+  // JWT Libraries
+  'jwt_libraries.title': 'JWT लाइब्रेरीज़',
+  'jwt_libraries.description':
+    'विभिन्न प्रोग्रामिंग भाषाओं में लोकप्रिय JWT लाइब्रेरीज़ की एक व्यापक सूची। ये लाइब्रेरीज़ आपके एप्लिकेशन में JSON Web Tokens के साथ काम करने में मदद करती हैं।',
+  'jwt_libraries.disclaimer':
+    'ये लाइब्रेरीज़ सक्रिय रूप से बनाए रखी जाती हैं और समुदाय द्वारा व्यापक रूप से उपयोग की जाती हैं। उत्पादन में उपयोग करने से पहले हमेशा दस्तावेज़ीकरण और सुरक्षा सलाह की जाँच करें।',
+  'jwt_libraries.algorithms': 'समर्थित एल्गोरिदम',
+  'jwt_libraries.back_to_decoder': 'JWT डिकोडर पर वापस जाएं',
 };
