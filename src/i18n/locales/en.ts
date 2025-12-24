@@ -158,6 +158,8 @@ export const en = {
   'image_crop_rotate.apply_crop': 'Apply Crop',
   'image_crop_rotate.reset_crop': 'Reset Crop',
   'image_crop_rotate.quality': 'Quality',
+  'image_crop_rotate.error_invalid_file': 'Please upload an image file',
+  'image_crop_rotate.error_no_crop_area': 'Please select a crop area first',
 
   // Image Optimize
   'image_optimize.title': 'Optimize Image',

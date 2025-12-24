@@ -152,6 +152,8 @@ export const zh = {
   'image_crop_rotate.apply_crop': '应用裁剪',
   'image_crop_rotate.reset_crop': '重置裁剪',
   'image_crop_rotate.quality': '质量',
+  'image_crop_rotate.error_invalid_file': '请上传图像文件',
+  'image_crop_rotate.error_no_crop_area': '请先选择裁剪区域',
 
   // Image Optimize
   'image_optimize.title': '优化图像',

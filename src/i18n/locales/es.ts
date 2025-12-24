@@ -147,6 +147,8 @@ export const es = {
   'image_crop_rotate.apply_crop': 'Aplicar Recorte',
   'image_crop_rotate.reset_crop': 'Restablecer Recorte',
   'image_crop_rotate.quality': 'Calidad',
+  'image_crop_rotate.error_invalid_file': 'Por favor, sube un archivo de imagen',
+  'image_crop_rotate.error_no_crop_area': 'Por favor, selecciona un área de recorte primero',
 
   // Image Optimize
   'image_optimize.title': 'Optimizar Imagen',

@@ -147,6 +147,8 @@ export const ja = {
   'image_crop_rotate.apply_crop': '切り抜きを適用',
   'image_crop_rotate.reset_crop': '切り抜きをリセット',
   'image_crop_rotate.quality': '品質',
+  'image_crop_rotate.error_invalid_file': '画像ファイルをアップロードしてください',
+  'image_crop_rotate.error_no_crop_area': 'まず切り抜き領域を選択してください',
 
   // Image Optimize
   'image_optimize.title': '画像最適化',

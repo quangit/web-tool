@@ -147,6 +147,8 @@ export const hi = {
   'image_crop_rotate.apply_crop': 'क्रॉप लागू करें',
   'image_crop_rotate.reset_crop': 'क्रॉप रीसेट करें',
   'image_crop_rotate.quality': 'गुणवत्ता',
+  'image_crop_rotate.error_invalid_file': 'कृपया एक छवि फ़ाइल अपलोड करें',
+  'image_crop_rotate.error_no_crop_area': 'कृपया पहले एक क्रॉप क्षेत्र चुनें',
 
   // Image Optimize
   'image_optimize.title': 'इमेज ऑप्टिमाइज़ करें',

@@ -159,6 +159,8 @@ export const vi = {
   'image_crop_rotate.apply_crop': 'Áp Dụng Cắt',
   'image_crop_rotate.reset_crop': 'Đặt Lại Cắt',
   'image_crop_rotate.quality': 'Chất lượng',
+  'image_crop_rotate.error_invalid_file': 'Vui lòng tải lên một tệp hình ảnh',
+  'image_crop_rotate.error_no_crop_area': 'Vui lòng chọn vùng cắt trước',
 
   // Image Optimize
   'image_optimize.title': 'Tối ưu hóa ảnh',

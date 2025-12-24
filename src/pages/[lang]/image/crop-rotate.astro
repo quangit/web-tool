@@ -18,7 +18,11 @@ const activePage = 'image/crop-rotate';
 ---
 
 <BasePage title={title} description={description} activePage={activePage}>
-  <div class="layout">
+  <div
+    class="layout"
+    data-error-invalid-file={t('image_crop_rotate.error_invalid_file')}
+    data-error-no-crop-area={t('image_crop_rotate.error_no_crop_area')}
+  >
     <div class="layout-block">
       <div class="output">
         <div class="block block-fill">
@@ -132,6 +136,10 @@ const activePage = 'image/crop-rotate';
   <script>
     // Image Crop & Rotate Logic
     document.addEventListener('DOMContentLoaded', () => {
+      const layout = document.querySelector('.layout') as HTMLElement;
+      const errorInvalidFile = layout?.getAttribute('data-error-invalid-file') || 'Please upload an image file';
+      const errorNoCropArea = layout?.getAttribute('data-error-no-crop-area') || 'Please select a crop area first';
+
       const dropZone = document.getElementById('drop-zone');
       const dropZoneContent = document.getElementById('drop-zone-content');
       const fileInput = document.getElementById('file-input');
@@ -163,6 +171,7 @@ const activePage = 'image/crop-rotate';
       let flipVertical = false;
       let cropArea: { x: number; y: number; width: number; height: number } | null = null;
       let isDragging = false;
+      let originalAspectRatio = 1;
 
       // Drag and Drop handlers
       dropZone?.addEventListener('click', (e) => {
@@ -200,7 +209,7 @@ const activePage = 'image/crop-rotate';
 
       function handleFile(file: File) {
         if (!file.type.startsWith('image/')) {
-          alert('Please upload an image file');
+          alert(errorInvalidFile);
           return;
         }
 
@@ -215,6 +224,9 @@ const activePage = 'image/crop-rotate';
               flipHorizontal = false;
               flipVertical = false;
               cropArea = null;
+              
+              // Store original aspect ratio
+              originalAspectRatio = originalImage!.width / originalImage!.height;
 
               // Show canvas and update info
               previewCanvas.style.display = 'block';
@@ -293,11 +305,18 @@ const activePage = 'image/crop-rotate';
           ctx.strokeStyle = '#3b82f6';
           ctx.lineWidth = 2;
           ctx.setLineDash([5, 5]);
+          
+          // Normalize crop area for drawing (handle negative dimensions)
+          const normalizedX = cropArea.width >= 0 ? cropArea.x : cropArea.x + cropArea.width;
+          const normalizedY = cropArea.height >= 0 ? cropArea.y : cropArea.y + cropArea.height;
+          const normalizedWidth = Math.abs(cropArea.width);
+          const normalizedHeight = Math.abs(cropArea.height);
+          
           ctx.strokeRect(
-            cropArea.x * scale,
-            cropArea.y * scale,
-            cropArea.width * scale,
-            cropArea.height * scale
+            normalizedX * scale,
+            normalizedY * scale,
+            normalizedWidth * scale,
+            normalizedHeight * scale
           );
           ctx.setLineDash([]);
         }
@@ -328,7 +347,7 @@ const activePage = 'image/crop-rotate';
       // Crop handlers
       applyCropBtn?.addEventListener('click', () => {
         if (!originalImage || !previewCanvas || !cropArea) {
-          alert('Please select a crop area first');
+          alert(errorNoCropArea);
           return;
         }
 
@@ -336,19 +355,25 @@ const activePage = 'image/crop-rotate';
         const tempCtx = tempCanvas.getContext('2d');
         if (!tempCtx) return;
 
-        tempCanvas.width = cropArea.width;
-        tempCanvas.height = cropArea.height;
+        // Normalize crop area (handle negative dimensions)
+        const normalizedX = cropArea.width >= 0 ? cropArea.x : cropArea.x + cropArea.width;
+        const normalizedY = cropArea.height >= 0 ? cropArea.y : cropArea.y + cropArea.height;
+        const normalizedWidth = Math.abs(cropArea.width);
+        const normalizedHeight = Math.abs(cropArea.height);
+
+        tempCanvas.width = normalizedWidth;
+        tempCanvas.height = normalizedHeight;
 
         tempCtx.drawImage(
           previewCanvas,
-          cropArea.x,
-          cropArea.y,
-          cropArea.width,
-          cropArea.height,
+          normalizedX,
+          normalizedY,
+          normalizedWidth,
+          normalizedHeight,
           0,
           0,
-          cropArea.width,
-          cropArea.height
+          normalizedWidth,
+          normalizedHeight
         );
 
         // Update original image with cropped version
@@ -399,10 +424,15 @@ const activePage = 'image/crop-rotate';
 
           // Apply aspect ratio if selected
           const aspectRatio = aspectRatioSelect.value;
-          if (aspectRatio !== 'free' && aspectRatio !== 'original') {
+          if (aspectRatio === 'original') {
+            // Use the original image's aspect ratio
+            const absWidth = Math.abs(cropArea.width);
+            cropArea.height = (cropArea.width >= 0 ? absWidth : -absWidth) / originalAspectRatio;
+          } else if (aspectRatio !== 'free') {
             const [w, h] = aspectRatio.split(':').map(Number);
             const ratio = w / h;
-            cropArea.height = cropArea.width / ratio;
+            const absWidth = Math.abs(cropArea.width);
+            cropArea.height = (cropArea.width >= 0 ? absWidth : -absWidth) / ratio;
           }
 
           renderImage();

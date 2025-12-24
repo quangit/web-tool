@@ -147,6 +147,8 @@ export const fr = {
   'image_crop_rotate.apply_crop': 'Appliquer Recadrage',
   'image_crop_rotate.reset_crop': 'Réinitialiser Recadrage',
   'image_crop_rotate.quality': 'Qualité',
+  'image_crop_rotate.error_invalid_file': 'Veuillez télécharger un fichier image',
+  'image_crop_rotate.error_no_crop_area': 'Veuillez d\'abord sélectionner une zone de recadrage',
 
   // Image Optimize
   'image_optimize.title': 'Optimiser Image',
