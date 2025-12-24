@@ -615,6 +615,17 @@ export const zh = {
   's_notes.new_note': '新建笔记',
   's_notes.new_folder': '新建文件夹',
   's_notes.search_placeholder': '搜索笔记...',
+  'jwt.libraries.search_placeholder': '搜索库...',
+  'jwt.libraries.no_results': '未找到库',
+  'jwt.libraries.showing_results': '显示 {0} / {1} 个库',
+  'jwt.libraries.title': 'JWT 库',
+  'jwt.libraries.description':
+    '跨多种编程语言的 JWT（JSON Web Token）库综合列表，包括 .NET、Python、Java、Node.js、PHP、Ruby、Go 等。比较支持的算法（HS256、RS256、ES256）、令牌操作和声明验证功能。按语言、作者或功能搜索和过滤库。',
+  'jwt.libraries.token_operations': '令牌操作',
+  'jwt.libraries.claims_validation': '声明验证',
+  'jwt.libraries.algorithms': '算法',
+  'jwt.libraries.installation': '安装',
+  'jwt.libraries.view_repo': '查看仓库',
   's_notes.all_notes': '所有笔记',
   's_notes.folders': '文件夹',
   's_notes.tags': '标签',
@@ -678,4 +689,13 @@ export const zh = {
   'jwt_encoder.secret_placeholder': '输入您的密钥...',
   'jwt_encoder.encoding_format': '编码格式',
   'jwt_encoder.json_web_token': 'JSON Web Token',
+
+  // JWT Libraries
+  'jwt_libraries.title': 'JWT 库',
+  'jwt_libraries.description':
+    '不同编程语言中流行的 JWT 库的完整列表。这些库可帮助您在应用程序中使用 JSON Web Tokens。',
+  'jwt_libraries.disclaimer':
+    '这些库都是积极维护并被社区广泛使用的。在生产环境中使用之前,请务必查看文档和安全建议。',
+  'jwt_libraries.algorithms': '支持的算法',
+  'jwt_libraries.back_to_decoder': '返回 JWT 解码器',
 };

@@ -1,181 +1,321 @@
 ---
 import BasePage from '../../../../../components/BasePage.astro';
 import { languages } from '../../../../../i18n/ui';
+import { useTranslations } from '../../../../../i18n/utils';
+import { jwtLibraries } from '../../../../../data/jwtLibraries';
 
 export function getStaticPaths() {
   return Object.keys(languages).map((lang) => ({ params: { lang } }));
 }
+
+const { lang } = Astro.params;
+const t = useTranslations(lang as any);
+const libraries = jwtLibraries;
 ---
 
 <BasePage
-  title="JWT Libraries"
-  description="List of JWT libraries"
+  title={t('jwt.libraries.title')}
+  description={t('jwt.libraries.description')}
   activePage="cryptography/jwt-libraries"
 >
-  <div id="index">
+  <div id="index" style="margin-top: 20px;">
+    <div class="search-container">
+      <div class="search-box">
+        <input
+          type="text"
+          id="library-search"
+          placeholder={t('jwt.libraries.search_placeholder')}
+          autocomplete="off"
+        />
+        <button id="clear-search" class="clear-btn" style="display: none;">
+          <i data-lucide="x"></i>
+        </button>
+      </div>
+      <div id="search-stats" class="search-stats"></div>
+    </div>
     <div class="section">
-      <div class="blocks">
-        <div class="block">
-          <h3>AzureAD/azure-activedirectory-identitymodel-extensions-for-dotnet</h3>
+      <div class="blocks" id="libraries-container">
+        {
+          libraries.map((library) => (
+            <div
+              class="block library-card"
+              data-name={library.name.toLowerCase()}
+              data-category={library.category.toLowerCase()}
+              data-author={library.author.toLowerCase()}
+              data-features={[
+                ...library.tokenOperations.map((f) => f.name),
+                ...library.claimsValidation.map((f) => f.name),
+                ...library.algorithms.map((f) => f.name),
+              ]
+                .join(',')
+                .toLowerCase()}
+            >
+              <h3>{library.name}</h3>
 
-          <div class="library-features">
-            <div class="feature-group">
-              <h4 class="feature-group-title">
-                <i data-lucide="shield-check"></i>
-                <span>Token Operations</span>
-              </h4>
-              <div class="feature-list algorithms">
-                <div class="feature-item supported">
-                  <i data-lucide="check-circle-2"  color="#2678fc"></i>
-                  <span>Sign</span>
+              <div class="library-features">
+                <div class="feature-group">
+                  <h4 class="feature-group-title">
+                    <i data-lucide="shield-check" />
+                    <span>{t('jwt.libraries.token_operations')}</span>
+                  </h4>
+                  <div class="feature-list algorithms">
+                    {library.tokenOperations.map((feature) => (
+                      <div
+                        class={`feature-item ${feature.supported === true ? 'supported' : feature.supported === false ? 'unsupported' : 'unknown'}`}
+                      >
+                        <i
+                          data-lucide={
+                            feature.supported === true
+                              ? 'check-circle-2'
+                              : feature.supported === false
+                                ? 'x-circle'
+                                : 'help-circle'
+                          }
+                          color={feature.supported === true ? '#2678fc' : undefined}
+                        />
+                        <span>{feature.name}</span>
+                      </div>
+                    ))}
+                  </div>
                 </div>
-                <div class="feature-item supported">
-                  <i data-lucide="check-circle-2"  color="#2678fc"></i>
-                  <span>Verify</span>
+
+                <div class="feature-group">
+                  <h4 class="feature-group-title">
+                    <i data-lucide="list-checks" />
+                    <span>{t('jwt.libraries.claims_validation')}</span>
+                  </h4>
+                  <div class="feature-list algorithms">
+                    {library.claimsValidation.map((feature) => (
+                      <div
+                        class={`feature-item ${feature.supported === true ? 'supported' : feature.supported === false ? 'unsupported' : 'unknown'}`}
+                      >
+                        <i
+                          data-lucide={
+                            feature.supported === true
+                              ? 'check-circle-2'
+                              : feature.supported === false
+                                ? 'x-circle'
+                                : 'help-circle'
+                          }
+                          color={feature.supported === true ? '#2678fc' : undefined}
+                        />
+                        <span>{feature.name}</span>
+                      </div>
+                    ))}
+                  </div>
+                </div>
+
+                <div class="feature-group">
+                  <h4 class="feature-group-title">
+                    <i data-lucide="key-round" />
+                    <span>{t('jwt.libraries.algorithms')}</span>
+                  </h4>
+                  <div class="feature-list algorithms">
+                    {library.algorithms.map((feature) => (
+                      <div
+                        class={`feature-item ${feature.supported === true ? 'supported' : feature.supported === false ? 'unsupported' : 'unknown'}`}
+                      >
+                        <i
+                          data-lucide={
+                            feature.supported === true
+                              ? 'check-circle-2'
+                              : feature.supported === false
+                                ? 'x-circle'
+                                : 'help-circle'
+                          }
+                          color={
+                            feature.supported === true
+                              ? '#2678fc'
+                              : feature.supported === false
+                                ? '#ff5c21'
+                                : undefined
+                          }
+                        />
+                        <span>{feature.name}</span>
+                      </div>
+                    ))}
+                  </div>
+                </div>
+              </div>
+
+              <div class="library-footer">
+                <div class="library-meta">
+                  <span class="author">
+                    <i data-lucide="building-2" />
+                    <span>{library.author}</span>
+                  </span>
+                  <span class="stars">
+                    <i data-lucide="star" />
+                    <span>{library.stars.toLocaleString()}</span>
+                  </span>
+                  <a href={library.repoUrl} target="_blank" class="repo-link">
+                    <i data-lucide="github" />
+                    {t('jwt.libraries.view_repo')}
+                  </a>
+                </div>
+                <div class="install-command">
+                  <div class="command-header">
+                    <i data-lucide="terminal" />
+                    <span>{t('jwt.libraries.installation')}</span>
+                    <span style="margin-left:auto;">{library.category}</span>
+                  </div>
+                  <code>{library.installCommand}</code>
                 </div>
               </div>
             </div>
-
-            <div class="feature-group">
-              <h4 class="feature-group-title">
-                <i data-lucide="list-checks"></i>
-                <span>Claims Validation</span>
-              </h4>
-              <div class="feature-list algorithms">
-                <div class="feature-item supported">
-                  <i data-lucide="check-circle-2"  color="#2678fc"></i>
-                  <span>iss check</span>
-                </div>
-                <div class="feature-item supported">
-                  <i data-lucide="check-circle-2"  color="#2678fc"></i>
-                  <span>sub check</span>
-                </div>
-                <div class="feature-item supported">
-                  <i data-lucide="check-circle-2"  color="#2678fc"></i>
-                  <span>aud check</span>
-                </div>
-                <div class="feature-item supported">
-                  <i data-lucide="check-circle-2"  color="#2678fc"></i>
-                  <span>exp check</span>
-                </div>
-                <div class="feature-item supported">
-                  <i data-lucide="check-circle-2"  color="#2678fc"></i>
-                  <span>nbf check</span>
-                </div>
-                <div class="feature-item supported">
-                  <i data-lucide="check-circle-2"  color="#2678fc"></i>
-                  <span>iat check</span>
-                </div>
-                <div class="feature-item supported">
-                  <i data-lucide="check-circle-2"  color="#2678fc"></i>
-                  <span>jti check</span>
-                </div>
-                <div class="feature-item unknown">
-                  <i data-lucide="help-circle"></i>
-                  <span>typ check</span>
-                </div>
-              </div>
-            </div>
-
-            <div class="feature-group">
-              <h4 class="feature-group-title">
-                <i data-lucide="key-round"></i>
-                <span>Algorithms</span>
-              </h4>
-              <div class="feature-list algorithms">
-                <div class="feature-item supported">
-                  <i data-lucide="check-circle-2"  color="#2678fc"></i>
-                  <span>HS256</span>
-                </div>
-                <div class="feature-item supported">
-                  <i data-lucide="check-circle-2"  color="#2678fc"></i>
-                  <span>HS384</span>
-                </div>
-                <div class="feature-item supported">
-                  <i data-lucide="check-circle-2"  color="#2678fc"></i>
-                  <span>HS512</span>
-                </div>
-                <div class="feature-item supported">
-                  <i data-lucide="check-circle-2"  color="#2678fc"></i>
-                  <span>RS256</span>
-                </div>
-                <div class="feature-item supported">
-                  <i data-lucide="check-circle-2"  color="#2678fc"></i>
-                  <span>RS384</span>
-                </div>
-                <div class="feature-item supported">
-                  <i data-lucide="check-circle-2"  color="#2678fc"></i>
-                  <span>RS512</span>
-                </div>
-                <div class="feature-item supported">
-                  <i data-lucide="check-circle-2"  color="#2678fc"></i>
-                  <span>ES256</span>
-                </div>
-                <div class="feature-item unknown">
-                  <i data-lucide="help-circle"></i>
-                  <span>ES256K</span>
-                </div>
-                <div class="feature-item supported">
-                  <i data-lucide="check-circle-2"  color="#2678fc"></i>
-                  <span>ES384</span>
-                </div>
-                <div class="feature-item supported">
-                  <i data-lucide="check-circle-2"  color="#2678fc"></i>
-                  <span>ES512</span>
-                </div>
-                <div class="feature-item supported">
-                  <i data-lucide="check-circle-2"  color="#2678fc"></i>
-                  <span>PS256</span>
-                </div>
-                <div class="feature-item supported">
-                  <i data-lucide="check-circle-2"  color="#2678fc"></i>
-                  <span>PS384</span>
-                </div>
-                <div class="feature-item supported">
-                  <i data-lucide="check-circle-2"  color="#2678fc"></i>
-                  <span>PS512</span>
-                </div>
-                <div class="feature-item unknown">
-                  <i data-lucide="help-circle"></i>
-                  <span>EdDSA</span>
-                </div>
-              </div>
-            </div>
-          </div>
-
-          <div class="library-footer">
-            <div class="library-meta">
-              <span class="author">
-                <i data-lucide="building-2"></i>
-                <span>Microsoft</span>
-              </span>
-              <span class="stars">
-                <i data-lucide="star"></i>
-                <span>1,021</span>
-              </span>
-              <a
-                href="https://github.com/AzureAD/azure-activedirectory-identitymodel-extensions-for-dotnet"
-                target="_blank"
-                class="repo-link"
-              >
-                <i data-lucide="github"></i>View repo
-              </a>
-            </div>
-            <div class="install-command">
-              <div class="command-header">
-                <i data-lucide="terminal"></i>
-                <span>Installation</span>
-              </div>
-              <code>Install-Package System.IdentityModel.Tokens.Jwt</code>
-            </div>
-          </div>
-        </div>
+          ))
+        }
       </div>
     </div>
   </div>
+
+  <script is:inline>
+    document.addEventListener('DOMContentLoaded', () => {
+      const searchInput = document.getElementById('library-search');
+      const clearBtn = document.getElementById('clear-search');
+      const searchStats = document.getElementById('search-stats');
+      const libraryCards = Array.from(document.querySelectorAll('.library-card'));
+
+      const totalLibraries = libraryCards.length;
+
+      function filterLibraries() {
+        const searchTerm = searchInput.value.toLowerCase().trim();
+
+        if (searchTerm === '') {
+          libraryCards.forEach((card) => card.classList.remove('hidden'));
+          clearBtn.style.display = 'none';
+          searchStats.textContent = '';
+          return;
+        }
+
+        clearBtn.style.display = 'flex';
+        let visibleCount = 0;
+
+        libraryCards.forEach((card) => {
+          const name = card.dataset.name || '';
+          const category = card.dataset.category || '';
+          const author = card.dataset.author || '';
+          const features = card.dataset.features || '';
+
+          const matches =
+            name.includes(searchTerm) ||
+            category.includes(searchTerm) ||
+            author.includes(searchTerm) ||
+            features.includes(searchTerm);
+
+          if (matches) {
+            card.classList.remove('hidden');
+            visibleCount++;
+          } else {
+            card.classList.add('hidden');
+          }
+        });
+
+        if (visibleCount === 0) {
+          searchStats.textContent = 'No libraries found';
+        } else if (visibleCount === totalLibraries) {
+          searchStats.textContent = '';
+        } else {
+          searchStats.textContent = `Showing ${visibleCount} of ${totalLibraries} libraries`;
+        }
+      }
+
+      searchInput.addEventListener('input', filterLibraries);
+
+      clearBtn.addEventListener('click', () => {
+        searchInput.value = '';
+        filterLibraries();
+        searchInput.focus();
+      });
+
+      searchInput.addEventListener('keydown', (e) => {
+        if (e.key === 'Escape') {
+          searchInput.value = '';
+          filterLibraries();
+        }
+      });
+    });
+  </script>
 </BasePage>
 
 <style>
+  .search-container {
+    margin-bottom: 2rem;
+    display: flex;
+    flex-direction: column;
+    gap: 1rem;
+  }
+
+  .search-box {
+    position: relative;
+    display: flex;
+    align-items: center;
+    background: var(--bg-card);
+    border: 2px solid var(--var-border-color);
+    border-radius: 12px;
+    padding: 0.75rem 1rem;
+    transition: all 0.3s ease;
+  }
+
+  .search-box:focus-within {
+    border-color: var(--var-primary);
+    box-shadow: 0 0 0 3px rgba(38, 120, 252, 0.1);
+  }
+
+  .search-box i:first-child {
+    width: 20px;
+    height: 20px;
+    color: var(--text-secondary);
+    margin-right: 0.75rem;
+    flex-shrink: 0;
+  }
+
+  .search-box input {
+    flex: 1;
+    border: none;
+    background: transparent;
+    font-size: 1rem;
+    color: var(--text-primary);
+    outline: none;
+  }
+
+  .search-box input::placeholder {
+    color: var(--text-secondary);
+    opacity: 0.6;
+  }
+
+  .clear-btn {
+    background: transparent;
+    border: none;
+    cursor: pointer;
+    padding: 0.25rem;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    border-radius: 50%;
+    transition: all 0.2s ease;
+  }
+
+  .clear-btn:hover {
+    background: var(--bg-main);
+  }
+
+  .clear-btn i {
+    width: 18px;
+    height: 18px;
+    color: var(--text-secondary);
+  }
+
+  .search-stats {
+    font-size: 0.875rem;
+    color: var(--text-secondary);
+    padding: 0 0.5rem;
+  }
+
+  .library-card.hidden {
+    display: none;
+  }
+
   .section-header {
     display: flex;
     align-items: center;
@@ -194,24 +334,6 @@ export function getStaticPaths() {
     font-size: 1.5rem;
     font-weight: 700;
     color: var(--text-primary);
-  }
-
-  .library-card {
-    background: var(--bg-card);
-    border: 1px solid var(--var-border-color);
-    border-radius: 12px;
-    padding: 2rem;
-    display: flex;
-    flex-direction: column;
-    gap: 2rem;
-    height: auto;
-    transition: all 0.3s ease;
-    box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
-  }
-
-  .library-card:hover {
-    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
-    border-color: var(--var-primary);
   }
 
   .library-header {
@@ -320,6 +442,16 @@ export function getStaticPaths() {
     stroke-width: 2.5;
   }
 
+  .feature-item.unsupported {
+    color: var(--text-secondary);
+    opacity: 0.8;
+  }
+
+  .feature-item.unsupported i {
+    color: #ef4444;
+    stroke-width: 2.5;
+  }
+
   .feature-item.unknown {
     color: var(--text-secondary);
     opacity: 0.7;
@@ -395,9 +527,9 @@ export function getStaticPaths() {
   .command-header {
     display: flex;
     align-items: center;
-    gap: 0.5rem;
+    gap: 0.3rem;
     margin-bottom: 0.5rem;
-    font-size: 0.875rem;
+    font-size: 0.8rem;
     font-weight: 600;
     color: var(--text-secondary);
     text-transform: uppercase;

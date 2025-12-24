@@ -635,6 +635,17 @@ export const en = {
   's_notes.new_note': 'New Note',
   's_notes.new_folder': 'New Folder',
   's_notes.search_placeholder': 'Search notes...',
+  'jwt.libraries.search_placeholder': 'Search libraries...',
+  'jwt.libraries.no_results': 'No libraries found',
+  'jwt.libraries.showing_results': 'Showing {0} of {1} libraries',
+  'jwt.libraries.title': 'JWT Libraries',
+  'jwt.libraries.description':
+    'Comprehensive list of JWT (JSON Web Token) libraries across multiple programming languages including .NET, Python, Java, Node.js, PHP, Ruby, Go, and more. Compare supported algorithms (HS256, RS256, ES256), token operations, and claims validation features. Search and filter libraries by language, author, or features.',
+  'jwt.libraries.token_operations': 'Token Operations',
+  'jwt.libraries.claims_validation': 'Claims Validation',
+  'jwt.libraries.algorithms': 'Algorithms',
+  'jwt.libraries.installation': 'Installation',
+  'jwt.libraries.view_repo': 'View repo',
   's_notes.all_notes': 'All Notes',
   's_notes.folders': 'Folders',
   's_notes.tags': 'Tags',
@@ -700,4 +711,13 @@ export const en = {
   'jwt_encoder.secret_placeholder': 'Enter your secret key...',
   'jwt_encoder.encoding_format': 'Encoding Format',
   'jwt_encoder.json_web_token': 'JSON Web Token',
+
+  // JWT Libraries
+  'jwt_libraries.title': 'JWT Libraries',
+  'jwt_libraries.description':
+    'A comprehensive list of popular JWT libraries across different programming languages. These libraries help you work with JSON Web Tokens in your applications.',
+  'jwt_libraries.disclaimer':
+    'These libraries are actively maintained and widely used by the community. Always check the documentation and security advisories before using in production.',
+  'jwt_libraries.algorithms': 'Supported Algorithms',
+  'jwt_libraries.back_to_decoder': 'Back to JWT Decoder',
 };

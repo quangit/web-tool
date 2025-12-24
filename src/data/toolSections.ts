@@ -214,6 +214,7 @@ export const toolSections: ToolSection[] = [
         items: [
           { url: 'cryptography/jwt/decoder', name: 'JWT Decoder', icon: 'scan-search' },
           { url: 'cryptography/jwt/encoder', name: 'JWT Encoder', icon: 'file-key' },
+          { url: 'cryptography/jwt/libraries', name: 'JWT Libraries', icon: 'book-open' },
         ],
       },
     ],

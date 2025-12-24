@@ -627,6 +627,17 @@ export const pt = {
   's_notes.new_note': 'Nova nota',
   's_notes.new_folder': 'Nova pasta',
   's_notes.search_placeholder': 'Pesquisar notas...',
+  'jwt.libraries.search_placeholder': 'Pesquisar bibliotecas...',
+  'jwt.libraries.no_results': 'Nenhuma biblioteca encontrada',
+  'jwt.libraries.showing_results': 'Mostrando {0} de {1} bibliotecas',
+  'jwt.libraries.title': 'Bibliotecas JWT',
+  'jwt.libraries.description':
+    'Lista abrangente de bibliotecas JWT (JSON Web Token) em várias linguagens de programação, incluindo .NET, Python, Java, Node.js, PHP, Ruby, Go e muito mais. Compare algoritmos suportados (HS256, RS256, ES256), operações de token e recursos de validação de claims. Pesquise e filtre bibliotecas por linguagem, autor ou recursos.',
+  'jwt.libraries.token_operations': 'Operações de Token',
+  'jwt.libraries.claims_validation': 'Validação de Claims',
+  'jwt.libraries.algorithms': 'Algoritmos',
+  'jwt.libraries.installation': 'Instalação',
+  'jwt.libraries.view_repo': 'Ver repositório',
   's_notes.all_notes': 'Todas as notas',
   's_notes.folders': 'Pastas',
   's_notes.tags': 'Tags',
@@ -692,4 +703,13 @@ export const pt = {
   'jwt_encoder.secret_placeholder': 'Digite sua chave secreta...',
   'jwt_encoder.encoding_format': 'Formato de Codificação',
   'jwt_encoder.json_web_token': 'JSON Web Token',
+
+  // JWT Libraries
+  'jwt_libraries.title': 'Bibliotecas JWT',
+  'jwt_libraries.description':
+    'Uma lista abrangente de bibliotecas JWT populares em diferentes linguagens de programação. Essas bibliotecas ajudam você a trabalhar com JSON Web Tokens em suas aplicações.',
+  'jwt_libraries.disclaimer':
+    'Essas bibliotecas são ativamente mantidas e amplamente usadas pela comunidade. Sempre verifique a documentação e avisos de segurança antes de usar em produção.',
+  'jwt_libraries.algorithms': 'Algoritmos Suportados',
+  'jwt_libraries.back_to_decoder': 'Voltar para JWT Decoder',
 };
