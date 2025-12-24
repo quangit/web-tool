@@ -633,7 +633,8 @@ export const fr = {
   's_notes.no_results': 'Aucune note correspondante trouvée',
   's_notes.untitled': 'Sans titre',
   's_notes.delete_confirm': 'Êtes-vous sûr de vouloir supprimer cette note ?',
-  's_notes.delete_folder_confirm': 'Êtes-vous sûr de vouloir supprimer ce dossier et tout son contenu ?',
+  's_notes.delete_folder_confirm':
+    'Êtes-vous sûr de vouloir supprimer ce dossier et tout son contenu ?',
   's_notes.export': 'Exporter',
   's_notes.import': 'Importer',
   's_notes.settings': 'Paramètres',
@@ -656,7 +657,8 @@ export const fr = {
   'jwt_decoder.title': 'Décodeur JWT',
   'jwt_decoder.description':
     'Cet outil en ligne de décodage JWT vous aide à décoder, valider et vérifier les JSON Web Tokens. Collez un JWT ci-dessous pour décoder son en-tête et sa charge utile. Vérifiez optionnellement la signature avec une clé secrète.',
-  'jwt_decoder.paste_instruction': 'Collez ci-dessous un JWT que vous souhaitez décoder, valider et vérifier.',
+  'jwt_decoder.paste_instruction':
+    'Collez ci-dessous un JWT que vous souhaitez décoder, valider et vérifier.',
   'jwt_decoder.generate_example': 'Générer un exemple',
   'jwt_decoder.encoded_value': 'Valeur Encodée',
   'jwt_decoder.json_web_token': 'JSON Web Token (JWT)',
@@ -672,12 +674,12 @@ export const fr = {
   'jwt_decoder.secret_instruction': 'Entrez le secret utilisé pour signer le JWT ci-dessous:',
   'jwt_decoder.secret': 'Secret',
   'jwt_decoder.secret_placeholder': 'Entrez la clé secrète...',
-  'jwt_decoder.encoding_format': 'Format d\'Encodage',
+  'jwt_decoder.encoding_format': "Format d'Encodage",
 
   // JWT Encoder
   'jwt_encoder.title': 'Encodeur JWT',
   'jwt_encoder.description':
-    'Cet outil en ligne d\'encodage JWT vous aide à créer et signer des JSON Web Tokens. Remplissez l\'en-tête, la charge utile et le secret pour générer un JWT signé.',
+    "Cet outil en ligne d'encodage JWT vous aide à créer et signer des JSON Web Tokens. Remplissez l'en-tête, la charge utile et le secret pour générer un JWT signé.",
   'jwt_encoder.fill_instruction': 'Remplissez les champs ci-dessous pour générer un JWT signé.',
   'jwt_encoder.generate_example': 'Générer un exemple',
   'jwt_encoder.header': 'En-tête',
@@ -687,6 +689,6 @@ export const fr = {
   'jwt_encoder.sign_jwt': 'Signer JWT',
   'jwt_encoder.secret': 'Secret',
   'jwt_encoder.secret_placeholder': 'Entrez votre clé secrète...',
-  'jwt_encoder.encoding_format': 'Format d\'Encodage',
+  'jwt_encoder.encoding_format': "Format d'Encodage",
   'jwt_encoder.json_web_token': 'JSON Web Token',
 };

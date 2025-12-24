@@ -633,7 +633,8 @@ export const hi = {
   's_notes.no_results': 'कोई मेल खाने वाले नोट नहीं मिले',
   's_notes.untitled': 'बिना शीर्षक',
   's_notes.delete_confirm': 'क्या आप वाकई इस नोट को हटाना चाहते हैं?',
-  's_notes.delete_folder_confirm': 'क्या आप वाकई इस फ़ोल्डर और इसकी सभी सामग्री को हटाना चाहते हैं?',
+  's_notes.delete_folder_confirm':
+    'क्या आप वाकई इस फ़ोल्डर और इसकी सभी सामग्री को हटाना चाहते हैं?',
   's_notes.export': 'निर्यात',
   's_notes.import': 'आयात',
   's_notes.settings': 'सेटिंग्स',
@@ -656,7 +657,8 @@ export const hi = {
   'jwt_decoder.title': 'JWT डिकोडर',
   'jwt_decoder.description':
     'यह ऑनलाइन JWT डिकोड टूल आपको JSON Web Token को डिकोड, मान्य और सत्यापित करने में मदद करता है। इसके हेडर और पेलोड को डिकोड करने के लिए नीचे एक JWT पेस्ट करें। वैकल्पिक रूप से एक सीक्रेट की के साथ सिग्नेचर सत्यापित करें।',
-  'jwt_decoder.paste_instruction': 'नीचे एक JWT पेस्ट करें जिसे आप डिकोड, मान्य और सत्यापित करना चाहते हैं।',
+  'jwt_decoder.paste_instruction':
+    'नीचे एक JWT पेस्ट करें जिसे आप डिकोड, मान्य और सत्यापित करना चाहते हैं।',
   'jwt_decoder.generate_example': 'उदाहरण बनाएं',
   'jwt_decoder.encoded_value': 'एन्कोडेड मान',
   'jwt_decoder.json_web_token': 'JSON Web Token (JWT)',
@@ -669,7 +671,8 @@ export const hi = {
   'jwt_decoder.value': 'मान',
   'jwt_decoder.signature_verification': 'JWT सिग्नेचर सत्यापन',
   'jwt_decoder.optional': 'वैकल्पिक',
-  'jwt_decoder.secret_instruction': 'नीचे JWT पर हस्ताक्षर करने के लिए उपयोग की जाने वाली सीक्रेट की दर्ज करें:',
+  'jwt_decoder.secret_instruction':
+    'नीचे JWT पर हस्ताक्षर करने के लिए उपयोग की जाने वाली सीक्रेट की दर्ज करें:',
   'jwt_decoder.secret': 'सीक्रेट',
   'jwt_decoder.secret_placeholder': 'सीक्रेट की दर्ज करें...',
   'jwt_decoder.encoding_format': 'एन्कोडिंग फॉर्मेट',

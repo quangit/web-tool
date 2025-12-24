@@ -13,11 +13,7 @@ const { lang } = Astro.params;
 const t = useTranslations(lang as any);
 ---
 
-<BasePage
-  title={t('s_notes.title')}
-  description={t('s_notes.description')}
-  activePage="s-notes"
->
+<BasePage title={t('s_notes.title')} description={t('s_notes.description')} activePage="s-notes">
   <Fragment slot="head-css">
     <link rel="stylesheet" href="/css/s-notes.css" />
   </Fragment>
@@ -28,11 +24,7 @@ const t = useTranslations(lang as any);
       <div class="s-notes-sidebar-header">
         <div class="s-notes-search">
           <i data-lucide="search"></i>
-          <input
-            type="text"
-            id="s-notes-search"
-            placeholder={t('s_notes.search_placeholder')}
-          />
+          <input type="text" id="s-notes-search" placeholder={t('s_notes.search_placeholder')} />
         </div>
         <div class="s-notes-actions">
           <button id="new-note-btn" class="btn btn-primary" title={t('s_notes.new_note')}>
@@ -119,7 +111,13 @@ const t = useTranslations(lang as any);
         </div>
       </div>
       <div class="s-notes-editor-content">
-        <div id="editor" class="s-notes-block-editor" contenteditable="true" data-placeholder={t('s_notes.editor_placeholder')}></div>
+        <div
+          id="editor"
+          class="s-notes-block-editor"
+          contenteditable="true"
+          data-placeholder={t('s_notes.editor_placeholder')}
+        >
+        </div>
       </div>
       <div class="s-notes-editor-footer">
         <div class="s-notes-preview" id="preview"></div>
@@ -153,7 +151,9 @@ const t = useTranslations(lang as any);
       </label>
       <div class="s-notes-dialog-actions">
         <button type="button" class="btn" id="folder-cancel">{t('s_notes.cancel')}</button>
-        <button type="submit" class="btn btn-primary" id="folder-submit">{t('s_notes.create')}</button>
+        <button type="submit" class="btn btn-primary" id="folder-submit"
+          >{t('s_notes.create')}</button
+        >
       </div>
     </form>
   </dialog>
@@ -168,7 +168,7 @@ const t = useTranslations(lang as any);
       delete_folder_confirm: "{t('s_notes.delete_folder_confirm')}",
       all_notes: "{t('s_notes.all_notes')}",
       last_modified: "{t('s_notes.last_modified')}",
-      created: "{t('s_notes.created')}"
+      created: "{t('s_notes.created')}",
     };
   </script>
 
@@ -176,9 +176,9 @@ const t = useTranslations(lang as any);
     ++waitLoadCount;
     delayScripts.push({
       src: 'https://cdn.jsdelivr.net/npm/markdown-it@14.1.0/dist/markdown-it.min.js',
-      onload: function() {
+      onload: function () {
         methodLoad();
-      }
+      },
     });
   </script>
 
@@ -186,9 +186,9 @@ const t = useTranslations(lang as any);
     ++waitLoadCount;
     delayScripts.push({
       src: 'https://cdn.jsdelivr.net/npm/highlight.js@11.9.0/lib/common.min.js',
-      onload: function() {
+      onload: function () {
         methodLoad();
-      }
+      },
     });
   </script>
 
@@ -196,9 +196,9 @@ const t = useTranslations(lang as any);
     ++waitLoadCount;
     delayScripts.push({
       src: 'https://cdn.jsdelivr.net/npm/sql.js@1.10.2/dist/sql-wasm.js',
-      onload: function() {
+      onload: function () {
         methodLoad();
-      }
+      },
     });
   </script>
 
@@ -206,54 +206,54 @@ const t = useTranslations(lang as any);
     ++waitLoadCount;
     delayScripts.push({
       src: 'https://cdn.jsdelivr.net/npm/@editorjs/editorjs@2.30.7/dist/editorjs.umd.min.js',
-      onload: function() {
+      onload: function () {
         methodLoad();
-      }
+      },
     });
   </script>
   <script is:inline>
     ++waitLoadCount;
     delayScripts.push({
       src: 'https://cdn.jsdelivr.net/npm/@editorjs/header@2.8.1/dist/header.umd.min.js',
-      onload: function() {
+      onload: function () {
         methodLoad();
-      }
+      },
     });
   </script>
   <script is:inline>
     ++waitLoadCount;
     delayScripts.push({
       src: 'https://cdn.jsdelivr.net/npm/@editorjs/list@1.9.0/dist/list.umd.min.js',
-      onload: function() {
+      onload: function () {
         methodLoad();
-      }
+      },
     });
   </script>
   <script is:inline>
     ++waitLoadCount;
     delayScripts.push({
       src: 'https://cdn.jsdelivr.net/npm/@editorjs/checklist@1.6.0/dist/checklist.umd.min.js',
-      onload: function() {
+      onload: function () {
         methodLoad();
-      }
+      },
     });
   </script>
   <script is:inline>
     ++waitLoadCount;
     delayScripts.push({
       src: 'https://cdn.jsdelivr.net/npm/@editorjs/code@2.8.0/dist/code.umd.min.js',
-      onload: function() {
+      onload: function () {
         methodLoad();
-      }
+      },
     });
   </script>
   <script is:inline>
     ++waitLoadCount;
     delayScripts.push({
       src: 'https://cdn.jsdelivr.net/npm/@editorjs/image@2.9.0/dist/image.umd.min.js',
-      onload: function() {
+      onload: function () {
         methodLoad();
-      }
+      },
     });
   </script>
 
@@ -261,13 +261,13 @@ const t = useTranslations(lang as any);
     ++waitLoadCount;
     delayScripts.push({
       src: '/js/s-notes.js?v=2',
-      onload: function() {
-        window.method = function() {}; // S Notes doesn't use the standard method pattern
+      onload: function () {
+        window.method = function () {}; // S Notes doesn't use the standard method pattern
         if (window.SNotesApp) {
           window.sNotesApp = new SNotesApp();
         }
         methodLoad();
-      }
+      },
     });
   </script>
 </BasePage>

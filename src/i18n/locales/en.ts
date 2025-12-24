@@ -642,7 +642,8 @@ export const en = {
   's_notes.no_results': 'No matching notes found',
   's_notes.untitled': 'Untitled',
   's_notes.delete_confirm': 'Are you sure you want to delete this note?',
-  's_notes.delete_folder_confirm': 'Are you sure you want to delete this folder and all its contents?',
+  's_notes.delete_folder_confirm':
+    'Are you sure you want to delete this folder and all its contents?',
   's_notes.export': 'Export',
   's_notes.import': 'Import',
   's_notes.settings': 'Settings',
@@ -665,7 +666,8 @@ export const en = {
   'jwt_decoder.title': 'JWT Decoder',
   'jwt_decoder.description':
     'This online JWT decoder tool helps you decode, validate, and verify JSON Web Tokens. Paste a JWT below to decode its header and payload. Optionally verify the signature with a secret key.',
-  'jwt_decoder.paste_instruction': 'Paste a JWT below that you would like to decode, validate, and verify.',
+  'jwt_decoder.paste_instruction':
+    'Paste a JWT below that you would like to decode, validate, and verify.',
   'jwt_decoder.generate_example': 'Generate example',
   'jwt_decoder.encoded_value': 'Encoded Value',
   'jwt_decoder.json_web_token': 'JSON Web Token (JWT)',

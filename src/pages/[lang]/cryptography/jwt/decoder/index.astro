@@ -32,7 +32,6 @@ const t = useTranslations(lang as any);
             </div>
           </div>
           <div class="container" style="padding: 10px;">
-            
             <div class="setting">
               <label for="secret-encoding">{t('jwt_decoder.encoding_format')}</label>
               <select
@@ -87,7 +86,9 @@ const t = useTranslations(lang as any);
             <div class="toolbar">
               <div class="jwt-tabs">
                 <button class="jwt-tab active" data-tab="header-json">JSON</button>
-                <button class="jwt-tab" data-tab="header-claims">{t('jwt_decoder.claims_table')}</button>
+                <button class="jwt-tab" data-tab="header-claims"
+                  >{t('jwt_decoder.claims_table')}</button
+                >
               </div>
               <button
                 class="icon"
@@ -100,7 +101,8 @@ const t = useTranslations(lang as any);
             </div>
           </div>
           <div class="jwt-tab-content active" id="header-json-content">
-            <pre class="container jwt-json-display" id="header-json" style="min-height: 100px;"></pre>
+            <pre class="container jwt-json-display" id="header-json" style="min-height: 100px;">
+            </pre>
             <textarea id="header-json-text" style="display: none;"></textarea>
           </div>
           <div class="jwt-tab-content" id="header-claims-content">
@@ -123,7 +125,9 @@ const t = useTranslations(lang as any);
             <div class="toolbar">
               <div class="jwt-tabs">
                 <button class="jwt-tab active" data-tab="payload-json">JSON</button>
-                <button class="jwt-tab" data-tab="payload-claims">{t('jwt_decoder.claims_table')}</button>
+                <button class="jwt-tab" data-tab="payload-claims"
+                  >{t('jwt_decoder.claims_table')}</button
+                >
               </div>
               <button
                 class="icon"
@@ -136,7 +140,8 @@ const t = useTranslations(lang as any);
             </div>
           </div>
           <div class="jwt-tab-content active" id="payload-json-content">
-            <pre class="container jwt-json-display" id="payload-json" style="min-height: 120px;"></pre>
+            <pre class="container jwt-json-display" id="payload-json" style="min-height: 120px;">
+            </pre>
             <textarea id="payload-json-text" style="display: none;"></textarea>
           </div>
           <div class="jwt-tab-content" id="payload-claims-content">
@@ -161,29 +166,29 @@ const t = useTranslations(lang as any);
     ++waitLoadCount;
     delayScripts.push({
       src: '/js/jwt.js?v=1',
-      onload: function() {
+      onload: function () {
         initJwtDecoder();
         methodLoad();
-      }
+      },
     });
     delayScripts.push({
       src: '/js/clipboard.min.js',
       onload: function () {
         new ClipboardJS('[data-toggle="copy"]', {
-          text: function(trigger) {
+          text: function (trigger) {
             const targetId = trigger.getAttribute('data-clipboard-target');
             if (targetId) {
               const target = document.querySelector(targetId);
               return target ? target.value : '';
             }
             return '';
-          }
+          },
         }).on('success', function (e) {
           showMessage(e.trigger.getAttribute('data-message') || 'Copied');
           gtag('event', 'copy');
         });
       },
-      delay: 100
+      delay: 100,
     });
 
     function initJwtDecoder() {
@@ -201,7 +206,7 @@ const t = useTranslations(lang as any);
       // Set default example if empty
       if (!jwtInput.value.trim()) {
         const example = generateJwtExample();
-        jwtEncode(example.header, example.payload, example.secret, 'utf-8').then(result => {
+        jwtEncode(example.header, example.payload, example.secret, 'utf-8').then((result) => {
           if (result.success) {
             jwtInput.value = result.token;
             jwtSecret.value = example.secret;
@@ -211,18 +216,18 @@ const t = useTranslations(lang as any);
       }
 
       // Tab switching
-      document.querySelectorAll('.jwt-tab').forEach(tab => {
-        tab.addEventListener('click', function() {
+      document.querySelectorAll('.jwt-tab').forEach((tab) => {
+        tab.addEventListener('click', function () {
           const tabGroup = this.closest('.jwt-tabs');
           const parent = this.closest('.block');
           const tabId = this.getAttribute('data-tab');
-          
+
           // Update active tab
-          tabGroup.querySelectorAll('.jwt-tab').forEach(t => t.classList.remove('active'));
+          tabGroup.querySelectorAll('.jwt-tab').forEach((t) => t.classList.remove('active'));
           this.classList.add('active');
-          
+
           // Update active content
-          parent.querySelectorAll('.jwt-tab-content').forEach(content => {
+          parent.querySelectorAll('.jwt-tab-content').forEach((content) => {
             content.classList.remove('active');
             if (content.id === tabId + '-content') {
               content.classList.add('active');
@@ -234,7 +239,7 @@ const t = useTranslations(lang as any);
       // Decode JWT on input
       function decodeAndDisplay() {
         const token = jwtInput.value.trim();
-        
+
         if (!token) {
           jwtStatus.style.display = 'none';
           headerJson.textContent = '';
@@ -248,28 +253,28 @@ const t = useTranslations(lang as any);
         }
 
         const decoded = jwtDecode(token);
-        
+
         if (decoded.valid) {
           jwtStatus.textContent = 'Valid JWT';
           jwtStatus.className = 'jwt-status valid';
           jwtStatus.style.display = 'block';
-          
+
           const headerFormatted = formatJson(decoded.header);
           const payloadFormatted = formatJson(decoded.payload);
-          
+
           headerJson.textContent = headerFormatted;
           payloadJson.textContent = payloadFormatted;
           headerJsonText.value = headerFormatted;
           payloadJsonText.value = payloadFormatted;
-          
+
           // Syntax highlight
           highlightJson(headerJson);
           highlightJson(payloadJson);
-          
+
           // Update claims tables
           updateClaimsTable('header-claims-table', parseClaimsToTable(decoded.header));
           updateClaimsTable('payload-claims-table', parseClaimsToTable(decoded.payload));
-          
+
           // Verify signature if secret is provided
           verifySignature();
         } else {
@@ -301,7 +306,7 @@ const t = useTranslations(lang as any);
         }
 
         const result = await jwtVerify(token, secret, encoding);
-        
+
         if (result.verified) {
           secretStatus.textContent = 'Valid secret';
           secretStatus.className = 'jwt-status valid';
@@ -333,8 +338,8 @@ const t = useTranslations(lang as any);
         const table = document.getElementById(tableId);
         const tbody = table.querySelector('tbody');
         tbody.innerHTML = '';
-        
-        claims.forEach(claim => {
+
+        claims.forEach((claim) => {
           const row = document.createElement('tr');
           row.innerHTML = `<td>${claim.claim}</td><td>${claim.value}</td>`;
           tbody.appendChild(row);
@@ -342,10 +347,10 @@ const t = useTranslations(lang as any);
       }
 
       // Generate example
-      generateExampleBtn.addEventListener('click', async function() {
+      generateExampleBtn.addEventListener('click', async function () {
         const example = generateJwtExample();
         const result = await jwtEncode(example.header, example.payload, example.secret, 'utf-8');
-        
+
         if (result.success) {
           jwtInput.value = result.token;
           jwtSecret.value = example.secret;

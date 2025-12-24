@@ -634,7 +634,8 @@ export const es = {
   's_notes.no_results': 'No se encontraron notas coincidentes',
   's_notes.untitled': 'Sin título',
   's_notes.delete_confirm': '¿Estás seguro de que quieres eliminar esta nota?',
-  's_notes.delete_folder_confirm': '¿Estás seguro de que quieres eliminar esta carpeta y todo su contenido?',
+  's_notes.delete_folder_confirm':
+    '¿Estás seguro de que quieres eliminar esta carpeta y todo su contenido?',
   's_notes.export': 'Exportar',
   's_notes.import': 'Importar',
   's_notes.settings': 'Configuración',

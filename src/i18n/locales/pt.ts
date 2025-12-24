@@ -634,7 +634,8 @@ export const pt = {
   's_notes.no_results': 'Nenhuma nota correspondente encontrada',
   's_notes.untitled': 'Sem título',
   's_notes.delete_confirm': 'Tem certeza de que deseja excluir esta nota?',
-  's_notes.delete_folder_confirm': 'Tem certeza de que deseja excluir esta pasta e todo o seu conteúdo?',
+  's_notes.delete_folder_confirm':
+    'Tem certeza de que deseja excluir esta pasta e todo o seu conteúdo?',
   's_notes.export': 'Exportar',
   's_notes.import': 'Importar',
   's_notes.settings': 'Configurações',
@@ -657,7 +658,8 @@ export const pt = {
   'jwt_decoder.title': 'Decodificador JWT',
   'jwt_decoder.description':
     'Esta ferramenta online de decodificação JWT ajuda você a decodificar, validar e verificar JSON Web Tokens. Cole um JWT abaixo para decodificar seu cabeçalho e payload. Opcionalmente, verifique a assinatura com uma chave secreta.',
-  'jwt_decoder.paste_instruction': 'Cole abaixo um JWT que você gostaria de decodificar, validar e verificar.',
+  'jwt_decoder.paste_instruction':
+    'Cole abaixo um JWT que você gostaria de decodificar, validar e verificar.',
   'jwt_decoder.generate_example': 'Gerar exemplo',
   'jwt_decoder.encoded_value': 'Valor Codificado',
   'jwt_decoder.json_web_token': 'JSON Web Token (JWT)',

@@ -8,7 +8,9 @@
   border-radius: 12px;
   overflow: hidden;
   border: 1px solid var(--var-border-color);
-  box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1), 0 2px 4px -1px rgba(0, 0, 0, 0.06);
+  box-shadow:
+    0 4px 6px -1px rgba(0, 0, 0, 0.1),
+    0 2px 4px -1px rgba(0, 0, 0, 0.06);
 }
 
 /* Sidebar */
@@ -168,7 +170,9 @@
   color: var(--var-gray-500);
   border-radius: 4px;
   opacity: 0;
-  transition: opacity 0.15s, background 0.15s;
+  transition:
+    opacity 0.15s,
+    background 0.15s;
 }
 
 .s-notes-nav-group > summary:hover .s-notes-nav-action {
@@ -654,7 +658,7 @@
   margin: 4px 0;
 }
 
-.s-notes-block-editor .todo-item input[type="checkbox"] {
+.s-notes-block-editor .todo-item input[type='checkbox'] {
   margin-top: 4px;
 }
 
@@ -687,7 +691,9 @@
   border: 1px solid var(--var-border-color);
   border-radius: 16px;
   background: var(--var-main-bg-color);
-  box-shadow: 0 20px 25px -5px rgba(0, 0, 0, 0.1), 0 10px 10px -5px rgba(0, 0, 0, 0.04);
+  box-shadow:
+    0 20px 25px -5px rgba(0, 0, 0, 0.1),
+    0 10px 10px -5px rgba(0, 0, 0, 0.04);
   max-width: 420px;
   width: 100%;
 }
@@ -709,7 +715,7 @@
   letter-spacing: -0.01em;
 }
 
-.s-notes-dialog input[type="text"] {
+.s-notes-dialog input[type='text'] {
   width: 100%;
   padding: 12px 14px;
   border: 1.5px solid var(--var-border-color);
@@ -723,7 +729,7 @@
   transition: all 0.2s ease;
 }
 
-.s-notes-dialog input[type="text"]:focus {
+.s-notes-dialog input[type='text']:focus {
   border-color: var(--var-primary);
   box-shadow: 0 0 0 3px rgba(59, 130, 246, 0.1);
 }
