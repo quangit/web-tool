@@ -637,6 +637,17 @@ export const vi = {
   's_notes.new_note': 'Ghi chú mới',
   's_notes.new_folder': 'Thư mục mới',
   's_notes.search_placeholder': 'Tìm kiếm ghi chú...',
+  'jwt.libraries.search_placeholder': 'Tìm kiếm thư viện...',
+  'jwt.libraries.no_results': 'Không tìm thấy thư viện nào',
+  'jwt.libraries.showing_results': 'Hiển thị {0} trong {1} thư viện',
+  'jwt.libraries.title': 'Thư viện JWT',
+  'jwt.libraries.description':
+    'Danh sách toàn diện các thư viện JWT (JSON Web Token) trên nhiều ngôn ngữ lập trình bao gồm .NET, Python, Java, Node.js, PHP, Ruby, Go và nhiều hơn nữa. So sánh các thuật toán được hỗ trợ (HS256, RS256, ES256), các thao tác token và tính năng xác thực claims. Tìm kiếm và lọc thư viện theo ngôn ngữ, tác giả hoặc tính năng.',
+  'jwt.libraries.token_operations': 'Thao tác Token',
+  'jwt.libraries.claims_validation': 'Xác thực Claims',
+  'jwt.libraries.algorithms': 'Thuật toán',
+  'jwt.libraries.installation': 'Cài đặt',
+  'jwt.libraries.view_repo': 'Xem repo',
   's_notes.all_notes': 'Tất cả ghi chú',
   's_notes.folders': 'Thư mục',
   's_notes.tags': 'Nhãn',
@@ -700,4 +711,13 @@ export const vi = {
   'jwt_encoder.secret_placeholder': 'Nhập khóa bí mật của bạn...',
   'jwt_encoder.encoding_format': 'Định dạng mã hóa',
   'jwt_encoder.json_web_token': 'JSON Web Token',
+
+  // JWT Libraries
+  'jwt_libraries.title': 'Thư viện JWT',
+  'jwt_libraries.description':
+    'Danh sách đầy đủ các thư viện JWT phổ biến trên nhiều ngôn ngữ lập trình khác nhau. Các thư viện này giúp bạn làm việc với JSON Web Tokens trong ứng dụng của mình.',
+  'jwt_libraries.disclaimer':
+    'Các thư viện này được duy trì tích cực và được sử dụng rộng rãi bởi cộng đồng. Luôn kiểm tra tài liệu và cảnh báo bảo mật trước khi sử dụng trong sản xuất.',
+  'jwt_libraries.algorithms': 'Thuật toán hỗ trợ',
+  'jwt_libraries.back_to_decoder': 'Quay lại JWT Decoder',
 };

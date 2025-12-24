@@ -625,6 +625,17 @@ export const ja = {
   's_notes.new_note': '新しいメモ',
   's_notes.new_folder': '新しいフォルダー',
   's_notes.search_placeholder': 'メモを検索...',
+  'jwt.libraries.search_placeholder': 'ライブラリを検索...',
+  'jwt.libraries.no_results': 'ライブラリが見つかりませんでした',
+  'jwt.libraries.showing_results': '{1}個中{0}個のライブラリを表示',
+  'jwt.libraries.title': 'JWTライブラリ',
+  'jwt.libraries.description':
+    '.NET、Python、Java、Node.js、PHP、Ruby、Goなど、複数のプログラミング言語にわたるJWT（JSON Web Token）ライブラリの包括的なリスト。サポートされているアルゴリズム（HS256、RS256、ES256）、トークン操作、クレーム検証機能を比較できます。言語、作成者、機能でライブラリを検索およびフィルタリングします。',
+  'jwt.libraries.token_operations': 'トークン操作',
+  'jwt.libraries.claims_validation': 'クレーム検証',
+  'jwt.libraries.algorithms': 'アルゴリズム',
+  'jwt.libraries.installation': 'インストール',
+  'jwt.libraries.view_repo': 'リポジトリを表示',
   's_notes.all_notes': 'すべてのメモ',
   's_notes.folders': 'フォルダー',
   's_notes.tags': 'タグ',
@@ -688,4 +699,13 @@ export const ja = {
   'jwt_encoder.secret_placeholder': '秘密鍵を入力...',
   'jwt_encoder.encoding_format': 'エンコード形式',
   'jwt_encoder.json_web_token': 'JSON Web Token',
+
+  // JWT Libraries
+  'jwt_libraries.title': 'JWTライブラリ',
+  'jwt_libraries.description':
+    '異なるプログラミング言語における人気のJWTライブラリの包括的なリスト。これらのライブラリは、アプリケーションでJSON Web Tokensを扱うのに役立ちます。',
+  'jwt_libraries.disclaimer':
+    'これらのライブラリは積極的にメンテナンスされており、コミュニティで広く使用されています。本番環境で使用する前に、必ずドキュメントとセキュリティ勧告を確認してください。',
+  'jwt_libraries.algorithms': 'サポートされているアルゴリズム',
+  'jwt_libraries.back_to_decoder': 'JWTデコーダーに戻る',
 };
