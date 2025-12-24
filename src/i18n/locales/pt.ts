@@ -619,4 +619,30 @@ export const pt = {
   'ecdsa_key_generator.title': 'Gerador de chaves ECDSA',
   'ecdsa_key_generator.description':
     'Esta ferramenta online ajuda você a gerar um par de chaves ECDSA. Ele suporta formatos PEM, HEX e Base64, bem como várias curvas. O formato PEM suporta PKCS#1, PKCS#5 e PKCS#8.',
+
+  // S Notes
+  's_notes.title': 'S Notes',
+  's_notes.description':
+    'Um aplicativo de anotações de alto desempenho, local-first com edição baseada em blocos, suporte a Markdown, pastas aninhadas, tags e pesquisa de texto completo instantânea. Todos os dados são armazenados localmente no seu navegador.',
+  's_notes.new_note': 'Nova nota',
+  's_notes.new_folder': 'Nova pasta',
+  's_notes.search_placeholder': 'Pesquisar notas...',
+  's_notes.all_notes': 'Todas as notas',
+  's_notes.folders': 'Pastas',
+  's_notes.tags': 'Tags',
+  's_notes.no_notes': 'Ainda não há notas. Crie sua primeira nota!',
+  's_notes.no_results': 'Nenhuma nota correspondente encontrada',
+  's_notes.untitled': 'Sem título',
+  's_notes.delete_confirm': 'Tem certeza de que deseja excluir esta nota?',
+  's_notes.delete_folder_confirm': 'Tem certeza de que deseja excluir esta pasta e todo o seu conteúdo?',
+  's_notes.export': 'Exportar',
+  's_notes.import': 'Importar',
+  's_notes.settings': 'Configurações',
+  's_notes.add_tag': 'Adicionar tag',
+  's_notes.remove_tag': 'Remover tag',
+  's_notes.move_to': 'Mover para',
+  's_notes.detach': 'Abrir em nova janela',
+  's_notes.editor_placeholder': 'Comece a digitar ou use / para comandos...',
+  's_notes.last_modified': 'Última modificação',
+  's_notes.created': 'Criado',
 };

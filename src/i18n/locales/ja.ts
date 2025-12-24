@@ -617,4 +617,30 @@ export const ja = {
   'ecdsa_key_generator.title': 'ECDSA 鍵生成器',
   'ecdsa_key_generator.description':
     'このオンライン ツールは、ECDSA 鍵のペアを生成するのに役立ちます。PEM、HEX、Base64 形式、およびさまざまな曲線をサポートしています。PEM 形式は PKCS#1、PKCS#5、および PKCS#8 をサポートしています。',
+
+  // S Notes
+  's_notes.title': 'S Notes',
+  's_notes.description':
+    'ブロックベースの編集、Markdownサポート、ネストされたフォルダー、タグ、即時全文検索を備えた高性能なローカルファーストのメモアプリ。すべてのデータはブラウザにローカルに保存されます。',
+  's_notes.new_note': '新しいメモ',
+  's_notes.new_folder': '新しいフォルダー',
+  's_notes.search_placeholder': 'メモを検索...',
+  's_notes.all_notes': 'すべてのメモ',
+  's_notes.folders': 'フォルダー',
+  's_notes.tags': 'タグ',
+  's_notes.no_notes': 'まだメモがありません。最初のメモを作成してください！',
+  's_notes.no_results': '一致するメモが見つかりません',
+  's_notes.untitled': '無題',
+  's_notes.delete_confirm': 'このメモを削除してもよろしいですか？',
+  's_notes.delete_folder_confirm': 'このフォルダーとそのすべての内容を削除してもよろしいですか？',
+  's_notes.export': 'エクスポート',
+  's_notes.import': 'インポート',
+  's_notes.settings': '設定',
+  's_notes.add_tag': 'タグを追加',
+  's_notes.remove_tag': 'タグを削除',
+  's_notes.move_to': '移動先',
+  's_notes.detach': '新しいウィンドウで開く',
+  's_notes.editor_placeholder': '入力を開始するか、/ を使用してコマンドを表示...',
+  's_notes.last_modified': '最終更新',
+  's_notes.created': '作成日',
 };

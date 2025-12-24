@@ -23,6 +23,7 @@ export const toolSections: ToolSection[] = [
         items: [
           { url: 'qr-code/generator', name: 'QR Code Generator', icon: 'qr-code' },
           { url: 'syntax-highlight', name: 'Syntax Highlight', icon: 'code-2' },
+          { url: 's-notes', name: 'S Notes', icon: 'notebook-pen' },
         ],
       },
       {

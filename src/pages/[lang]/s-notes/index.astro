@@ -1,0 +1,198 @@
+---
+import BasePage from '../../../components/BasePage.astro';
+import { languages } from '../../../i18n/ui';
+import { useTranslations } from '../../../i18n/utils';
+
+export function getStaticPaths() {
+  return Object.keys(languages).map((lang) => {
+    return { params: { lang } };
+  });
+}
+
+const { lang } = Astro.params;
+const t = useTranslations(lang as any);
+---
+
+<BasePage
+  title={t('s_notes.title')}
+  description={t('s_notes.description')}
+  activePage="s-notes"
+>
+  <Fragment slot="head-css">
+    <link rel="stylesheet" href="/css/s-notes.css" />
+  </Fragment>
+
+  <div class="s-notes-app">
+    <!-- Sidebar -->
+    <aside class="s-notes-sidebar">
+      <div class="s-notes-sidebar-header">
+        <div class="s-notes-search">
+          <i data-lucide="search"></i>
+          <input
+            type="text"
+            id="s-notes-search"
+            placeholder={t('s_notes.search_placeholder')}
+          />
+        </div>
+        <div class="s-notes-actions">
+          <button id="new-note-btn" class="btn btn-primary" title={t('s_notes.new_note')}>
+            <i data-lucide="plus"></i>
+            <span>{t('s_notes.new_note')}</span>
+          </button>
+        </div>
+      </div>
+
+      <nav class="s-notes-nav">
+        <div class="s-notes-nav-item active" data-view="all">
+          <i data-lucide="file-text"></i>
+          <span>{t('s_notes.all_notes')}</span>
+        </div>
+        <details class="s-notes-nav-group" open>
+          <summary>
+            <i data-lucide="folder"></i>
+            <span>{t('s_notes.folders')}</span>
+            <button class="s-notes-nav-action" id="new-folder-btn" title={t('s_notes.new_folder')}>
+              <i data-lucide="folder-plus"></i>
+            </button>
+          </summary>
+          <div class="s-notes-folder-tree" id="folder-tree"></div>
+        </details>
+        <details class="s-notes-nav-group" open>
+          <summary>
+            <i data-lucide="tags"></i>
+            <span>{t('s_notes.tags')}</span>
+          </summary>
+          <div class="s-notes-tag-list" id="tag-list"></div>
+        </details>
+      </nav>
+    </aside>
+
+    <!-- Note List -->
+    <div class="s-notes-list">
+      <div class="s-notes-list-header">
+        <span class="s-notes-list-title" id="list-title">{t('s_notes.all_notes')}</span>
+        <div class="s-notes-list-actions">
+          <button id="import-btn" class="btn btn-icon" title={t('s_notes.import')}>
+            <i data-lucide="upload"></i>
+          </button>
+          <button id="export-btn" class="btn btn-icon" title={t('s_notes.export')}>
+            <i data-lucide="download"></i>
+          </button>
+        </div>
+      </div>
+      <div class="s-notes-items" id="note-list">
+        <div class="s-notes-empty">
+          <i data-lucide="notebook-pen"></i>
+          <p>{t('s_notes.no_notes')}</p>
+        </div>
+      </div>
+    </div>
+
+    <!-- Editor -->
+    <div class="s-notes-editor">
+      <div class="s-notes-editor-header">
+        <input
+          type="text"
+          id="note-title"
+          class="s-notes-title-input"
+          placeholder={t('s_notes.untitled')}
+        />
+        <div class="s-notes-editor-actions">
+          <button id="detach-btn" class="btn btn-icon" title={t('s_notes.detach')}>
+            <i data-lucide="external-link"></i>
+          </button>
+          <button id="delete-note-btn" class="btn btn-icon btn-danger" title="Delete">
+            <i data-lucide="trash-2"></i>
+          </button>
+        </div>
+      </div>
+      <div class="s-notes-meta">
+        <div class="s-notes-tags" id="note-tags">
+          <button id="add-tag-btn" class="s-notes-add-tag">
+            <i data-lucide="plus"></i>
+            <span>{t('s_notes.add_tag')}</span>
+          </button>
+        </div>
+        <div class="s-notes-folder-select">
+          <i data-lucide="folder"></i>
+          <select id="note-folder"></select>
+        </div>
+      </div>
+      <div class="s-notes-editor-content">
+        <div id="editor" class="s-notes-block-editor" contenteditable="true" data-placeholder={t('s_notes.editor_placeholder')}></div>
+      </div>
+      <div class="s-notes-editor-footer">
+        <div class="s-notes-preview" id="preview"></div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Hidden file input for import -->
+  <input type="file" id="import-file" accept=".json" style="display: none;" />
+
+  <!-- Tag input dialog -->
+  <dialog id="tag-dialog" class="s-notes-dialog">
+    <form method="dialog">
+      <h3>{t('s_notes.add_tag')}</h3>
+      <input type="text" id="tag-input" placeholder="Tag name" />
+      <div class="s-notes-dialog-actions">
+        <button type="button" class="btn" id="tag-cancel">Cancel</button>
+        <button type="submit" class="btn btn-primary" id="tag-submit">Add</button>
+      </div>
+    </form>
+  </dialog>
+
+  <!-- Folder dialog -->
+  <dialog id="folder-dialog" class="s-notes-dialog">
+    <form method="dialog">
+      <h3>{t('s_notes.new_folder')}</h3>
+      <input type="text" id="folder-input" placeholder="Folder name" />
+      <label>
+        <span>Parent folder:</span>
+        <select id="parent-folder-select"></select>
+      </label>
+      <div class="s-notes-dialog-actions">
+        <button type="button" class="btn" id="folder-cancel">Cancel</button>
+        <button type="submit" class="btn btn-primary" id="folder-submit">Create</button>
+      </div>
+    </form>
+  </dialog>
+
+  <script is:inline>
+    // S Notes translations for JavaScript
+    window.sNotesI18n = {
+      no_notes: "{t('s_notes.no_notes')}",
+      no_results: "{t('s_notes.no_results')}",
+      untitled: "{t('s_notes.untitled')}",
+      delete_confirm: "{t('s_notes.delete_confirm')}",
+      delete_folder_confirm: "{t('s_notes.delete_folder_confirm')}",
+      all_notes: "{t('s_notes.all_notes')}",
+      last_modified: "{t('s_notes.last_modified')}",
+      created: "{t('s_notes.created')}"
+    };
+  </script>
+
+  <script is:inline>
+    ++waitLoadCount;
+    delayScripts.push({
+      src: 'https://cdn.jsdelivr.net/npm/markdown-it@14.1.0/dist/markdown-it.min.js',
+      onload: function() {
+        methodLoad();
+      }
+    });
+  </script>
+
+  <script is:inline>
+    ++waitLoadCount;
+    delayScripts.push({
+      src: '/js/s-notes.js?v=1',
+      onload: function() {
+        window.method = function() {}; // S Notes doesn't use the standard method pattern
+        if (window.SNotesApp) {
+          window.sNotesApp = new SNotesApp();
+        }
+        methodLoad();
+      }
+    });
+  </script>
+</BasePage>

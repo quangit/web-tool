@@ -629,4 +629,30 @@ export const vi = {
   'ecdsa_key_generator.title': 'Tạo khóa ECDSA',
   'ecdsa_key_generator.description':
     'Công cụ trực tuyến này giúp bạn tạo cặp khóa ECDSA. Nó hỗ trợ các định dạng PEM, HEX và Base64, cũng như các đường cong khác nhau. Định dạng PEM hỗ trợ PKCS#1, PKCS#5 và PKCS#8.',
+
+  // S Notes
+  's_notes.title': 'S Notes',
+  's_notes.description':
+    'Ứng dụng ghi chú hiệu suất cao, lưu trữ cục bộ với trình soạn thảo dựa trên khối, hỗ trợ Markdown, thư mục lồng nhau, nhãn và tìm kiếm toàn văn tức thì. Tất cả dữ liệu được lưu trữ cục bộ trên trình duyệt.',
+  's_notes.new_note': 'Ghi chú mới',
+  's_notes.new_folder': 'Thư mục mới',
+  's_notes.search_placeholder': 'Tìm kiếm ghi chú...',
+  's_notes.all_notes': 'Tất cả ghi chú',
+  's_notes.folders': 'Thư mục',
+  's_notes.tags': 'Nhãn',
+  's_notes.no_notes': 'Chưa có ghi chú. Tạo ghi chú đầu tiên!',
+  's_notes.no_results': 'Không tìm thấy ghi chú phù hợp',
+  's_notes.untitled': 'Không có tiêu đề',
+  's_notes.delete_confirm': 'Bạn có chắc muốn xóa ghi chú này?',
+  's_notes.delete_folder_confirm': 'Bạn có chắc muốn xóa thư mục này và tất cả nội dung bên trong?',
+  's_notes.export': 'Xuất',
+  's_notes.import': 'Nhập',
+  's_notes.settings': 'Cài đặt',
+  's_notes.add_tag': 'Thêm nhãn',
+  's_notes.remove_tag': 'Xóa nhãn',
+  's_notes.move_to': 'Di chuyển đến',
+  's_notes.detach': 'Mở trong cửa sổ mới',
+  's_notes.editor_placeholder': 'Bắt đầu gõ hoặc sử dụng / để xem lệnh...',
+  's_notes.last_modified': 'Sửa đổi lần cuối',
+  's_notes.created': 'Ngày tạo',
 };

@@ -627,4 +627,30 @@ export const en = {
   'ecdsa_key_generator.title': 'ECDSA Key Generator',
   'ecdsa_key_generator.description':
     'This online tool helps you generate a pair of ECDSA keys. It supports PEM, HEX, and Base64 formats, as well as various curves. The PEM format supports PKCS#1, PKCS#5, and PKCS#8.',
+
+  // S Notes
+  's_notes.title': 'S Notes',
+  's_notes.description':
+    'A high-performance, local-first note-taking app with block-based editing, Markdown support, nested folders, tags, and instant full-text search. All data is stored locally in your browser.',
+  's_notes.new_note': 'New Note',
+  's_notes.new_folder': 'New Folder',
+  's_notes.search_placeholder': 'Search notes...',
+  's_notes.all_notes': 'All Notes',
+  's_notes.folders': 'Folders',
+  's_notes.tags': 'Tags',
+  's_notes.no_notes': 'No notes yet. Create your first note!',
+  's_notes.no_results': 'No matching notes found',
+  's_notes.untitled': 'Untitled',
+  's_notes.delete_confirm': 'Are you sure you want to delete this note?',
+  's_notes.delete_folder_confirm': 'Are you sure you want to delete this folder and all its contents?',
+  's_notes.export': 'Export',
+  's_notes.import': 'Import',
+  's_notes.settings': 'Settings',
+  's_notes.add_tag': 'Add tag',
+  's_notes.remove_tag': 'Remove tag',
+  's_notes.move_to': 'Move to',
+  's_notes.detach': 'Open in new window',
+  's_notes.editor_placeholder': 'Start typing or use / for commands...',
+  's_notes.last_modified': 'Last modified',
+  's_notes.created': 'Created',
 };

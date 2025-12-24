@@ -618,4 +618,30 @@ export const fr = {
   'ecdsa_key_generator.title': 'Générateur de clés ECDSA',
   'ecdsa_key_generator.description':
     'Cet outil en ligne vous aide à générer une paire de clés ECDSA. Il prend en charge les formats PEM, HEX et Base64, ainsi que diverses courbes. Le format PEM prend en charge PKCS#1, PKCS#5 et PKCS#8.',
+
+  // S Notes
+  's_notes.title': 'S Notes',
+  's_notes.description':
+    "Une application de prise de notes haute performance, locale d'abord, avec édition par blocs, support Markdown, dossiers imbriqués, tags et recherche plein texte instantanée. Toutes les données sont stockées localement dans votre navigateur.",
+  's_notes.new_note': 'Nouvelle note',
+  's_notes.new_folder': 'Nouveau dossier',
+  's_notes.search_placeholder': 'Rechercher des notes...',
+  's_notes.all_notes': 'Toutes les notes',
+  's_notes.folders': 'Dossiers',
+  's_notes.tags': 'Tags',
+  's_notes.no_notes': 'Pas encore de notes. Créez votre première note !',
+  's_notes.no_results': 'Aucune note correspondante trouvée',
+  's_notes.untitled': 'Sans titre',
+  's_notes.delete_confirm': 'Êtes-vous sûr de vouloir supprimer cette note ?',
+  's_notes.delete_folder_confirm': 'Êtes-vous sûr de vouloir supprimer ce dossier et tout son contenu ?',
+  's_notes.export': 'Exporter',
+  's_notes.import': 'Importer',
+  's_notes.settings': 'Paramètres',
+  's_notes.add_tag': 'Ajouter un tag',
+  's_notes.remove_tag': 'Supprimer le tag',
+  's_notes.move_to': 'Déplacer vers',
+  's_notes.detach': 'Ouvrir dans une nouvelle fenêtre',
+  's_notes.editor_placeholder': 'Commencez à taper ou utilisez / pour les commandes...',
+  's_notes.last_modified': 'Dernière modification',
+  's_notes.created': 'Créé',
 };
