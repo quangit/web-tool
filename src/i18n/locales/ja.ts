@@ -129,6 +129,15 @@ export const ja = {
   'syntax_highlight.description':
     'このオンラインシンタックスハイライトツールは、コードをハイライトするのに役立ちます。JavaScript、C++、C#、Javaなどの多くの言語をサポートしています。',
 
+  // Image Optimize
+  'image_optimize.title': '画像最適化',
+  'image_optimize.description':
+    '品質を維持しながらファイルサイズを削減するために画像を圧縮および最適化します。無料のオンライン画像最適化ツール。',
+  'image_optimize.quality': '品質',
+  'image_optimize.original_size': '元のサイズ',
+  'image_optimize.optimized_size': '最適化されたサイズ',
+  'image_optimize.compression_ratio': '圧縮率',
+
   // CRC
   'crc.title': 'CRC 計算機',
   'crc.description': 'CRC チェックサムを計算します。無料のオンライン CRC 計算ツール。',

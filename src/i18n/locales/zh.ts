@@ -135,6 +135,14 @@ export const zh = {
   'image_resize.scale_percentage': '缩放百分比',
   'image_resize.quality': '质量',
 
+  // Image Optimize
+  'image_optimize.title': '优化图像',
+  'image_optimize.description': '压缩和优化图像以减小文件大小，同时保持质量。免费在线图像优化工具。',
+  'image_optimize.quality': '质量',
+  'image_optimize.original_size': '原始大小',
+  'image_optimize.optimized_size': '优化大小',
+  'image_optimize.compression_ratio': '压缩比',
+
   // CRC
   'crc.title': 'CRC 计算器',
   'crc.description': '计算 CRC 校验和。免费在线 CRC 计算器工具。',

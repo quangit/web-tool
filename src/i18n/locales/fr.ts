@@ -129,6 +129,15 @@ export const fr = {
   'syntax_highlight.description':
     'Cet outil en ligne de coloration syntaxique vous aide à mettre en évidence votre code. Prend en charge de nombreux langages tels que JavaScript, C++, C#, Java... et ainsi de suite.',
 
+  // Image Optimize
+  'image_optimize.title': 'Optimiser Image',
+  'image_optimize.description':
+    'Compressez et optimisez vos images pour réduire la taille du fichier tout en maintenant la qualité. Outil gratuit d\'optimisation d\'images en ligne.',
+  'image_optimize.quality': 'Qualité',
+  'image_optimize.original_size': 'Taille Originale',
+  'image_optimize.optimized_size': 'Taille Optimisée',
+  'image_optimize.compression_ratio': 'Taux de Compression',
+
   // CRC
   'crc.title': 'Calculateur CRC',
   'crc.description': 'Calculer les sommes de contrôle CRC. Outil de calcul CRC en ligne gratuit.',

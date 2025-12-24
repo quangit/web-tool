@@ -141,6 +141,15 @@ export const vi = {
   'image_resize.scale_percentage': 'Tỷ lệ phần trăm',
   'image_resize.quality': 'Chất lượng',
 
+  // Image Optimize
+  'image_optimize.title': 'Tối ưu hóa ảnh',
+  'image_optimize.description':
+    'Nén và tối ưu hóa ảnh của bạn để giảm kích thước tệp trong khi vẫn duy trì chất lượng. Công cụ tối ưu hóa ảnh trực tuyến miễn phí.',
+  'image_optimize.quality': 'Chất lượng',
+  'image_optimize.original_size': 'Kích thước gốc',
+  'image_optimize.optimized_size': 'Kích thước đã tối ưu',
+  'image_optimize.compression_ratio': 'Tỷ lệ nén',
+
   // CRC
   'crc.title': 'Tính toán CRC',
   'crc.description': 'Tính toán tổng kiểm CRC. Công cụ tính toán CRC trực tuyến miễn phí.',

@@ -129,6 +129,15 @@ export const es = {
   'syntax_highlight.description':
     'Esta herramienta en línea de resaltado de sintaxis le ayuda a resaltar su código. Admite muchos lenguajes como JavaScript, C++, C#, Java... y así sucesivamente.',
 
+  // Image Optimize
+  'image_optimize.title': 'Optimizar Imagen',
+  'image_optimize.description':
+    'Comprime y optimiza tus imágenes para reducir el tamaño del archivo manteniendo la calidad. Herramienta gratuita de optimización de imágenes en línea.',
+  'image_optimize.quality': 'Calidad',
+  'image_optimize.original_size': 'Tamaño Original',
+  'image_optimize.optimized_size': 'Tamaño Optimizado',
+  'image_optimize.compression_ratio': 'Ratio de Compresión',
+
   // CRC
   'crc.title': 'Calculadora CRC',
   'crc.description':

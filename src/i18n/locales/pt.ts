@@ -129,6 +129,15 @@ export const pt = {
   'syntax_highlight.description':
     'Esta ferramenta online de realce de sintaxe ajuda você a realçar seu código. Suporta muitas linguagens como JavaScript, C++, C#, Java... e assim por diante.',
 
+  // Image Optimize
+  'image_optimize.title': 'Otimizar Imagem',
+  'image_optimize.description':
+    'Comprima e otimize suas imagens para reduzir o tamanho do arquivo mantendo a qualidade. Ferramenta gratuita de otimização de imagens online.',
+  'image_optimize.quality': 'Qualidade',
+  'image_optimize.original_size': 'Tamanho Original',
+  'image_optimize.optimized_size': 'Tamanho Otimizado',
+  'image_optimize.compression_ratio': 'Taxa de Compressão',
+
   // CRC
   'crc.title': 'Calculadora CRC',
   'crc.description':

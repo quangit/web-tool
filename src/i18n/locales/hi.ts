@@ -129,6 +129,15 @@ export const hi = {
   'syntax_highlight.description':
     'यह सिंटैक्स हाइलाइट ऑनलाइन टूल आपको अपने कोड को हाइलाइट करने में मदद करता है। जावास्क्रिप्ट, सी++, सी#, जावा... आदि जैसी कई भाषाओं का समर्थन करता है।',
 
+  // Image Optimize
+  'image_optimize.title': 'इमेज ऑप्टिमाइज़ करें',
+  'image_optimize.description':
+    'गुणवत्ता बनाए रखते हुए फ़ाइल का आकार कम करने के लिए अपनी छवियों को संपीड़ित और अनुकूलित करें। मुफ्त ऑनलाइन इमेज ऑप्टिमाइज़र टूल।',
+  'image_optimize.quality': 'गुणवत्ता',
+  'image_optimize.original_size': 'मूल आकार',
+  'image_optimize.optimized_size': 'अनुकूलित आकार',
+  'image_optimize.compression_ratio': 'संपीड़न अनुपात',
+
   // CRC
   'crc.title': 'CRC कैलकुलेटर',
   'crc.description': 'CRC चेकसम की गणना करें। मुफ्त ऑनलाइन CRC कैलकुलेटर टूल।',

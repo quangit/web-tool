@@ -140,6 +140,15 @@ export const en = {
   'image_resize.scale_percentage': 'Scale Percentage',
   'image_resize.quality': 'Quality',
 
+  // Image Optimize
+  'image_optimize.title': 'Optimize Image',
+  'image_optimize.description':
+    'Compress and optimize your images to reduce file size while maintaining quality. Free online image optimizer tool.',
+  'image_optimize.quality': 'Quality',
+  'image_optimize.original_size': 'Original Size',
+  'image_optimize.optimized_size': 'Optimized Size',
+  'image_optimize.compression_ratio': 'Compression Ratio',
+
   // CRC
   'crc.title': 'CRC Calculator',
   'crc.description': 'Calculate CRC checksums. Free online CRC calculator tool.',
