@@ -117,7 +117,7 @@
 }
 
 .s-notes-nav-item.active {
-  background: linear-gradient(135deg, var(--var-primary) 0%, #2563eb 100%);
+  background: linear-gradient(135deg, var(--var-primary) 0%, var(--var-primary-dark) 100%);
   color: white;
   box-shadow: 0 4px 12px rgba(59, 130, 246, 0.3);
 }
@@ -248,7 +248,7 @@
 }
 
 .s-notes-tag.active {
-  background: linear-gradient(135deg, var(--var-primary) 0%, #2563eb 100%);
+  background: linear-gradient(135deg, var(--var-primary) 0%, var(--var-primary-dark) 100%);
   color: white;
   border-color: var(--var-primary);
   box-shadow: 0 4px 12px rgba(59, 130, 246, 0.3);
@@ -901,11 +901,6 @@
 }
 
 /* Focus states */
-.s-notes-search:focus-within {
-  border-color: var(--var-primary);
-  box-shadow: 0 0 0 3px rgba(59, 130, 246, 0.1);
-}
-
 .s-notes-folder-select select:focus,
 .s-notes-dialog label select:focus {
   border-color: var(--var-primary);
