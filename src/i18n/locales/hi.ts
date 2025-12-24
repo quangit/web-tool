@@ -129,6 +129,25 @@ export const hi = {
   'syntax_highlight.description':
     'यह सिंटैक्स हाइलाइट ऑनलाइन टूल आपको अपने कोड को हाइलाइट करने में मदद करता है। जावास्क्रिप्ट, सी++, सी#, जावा... आदि जैसी कई भाषाओं का समर्थन करता है।',
 
+  // Image Crop & Rotate
+  'image_crop_rotate.title': 'इमेज क्रॉप और रोटेट करें',
+  'image_crop_rotate.description':
+    'अपनी छवियों को आसानी से क्रॉप और घुमाएं। मुफ्त ऑनलाइन इमेज क्रॉप और रोटेट टूल।',
+  'image_crop_rotate.crop': 'क्रॉप',
+  'image_crop_rotate.rotate': 'रोटेट',
+  'image_crop_rotate.flip': 'फ्लिप',
+  'image_crop_rotate.flip_horizontal': 'क्षैतिज फ्लिप',
+  'image_crop_rotate.flip_vertical': 'लंबवत फ्लिप',
+  'image_crop_rotate.rotate_left': 'बाएं 90° घुमाएं',
+  'image_crop_rotate.rotate_right': 'दाएं 90° घुमाएं',
+  'image_crop_rotate.free_crop': 'मुक्त क्रॉप',
+  'image_crop_rotate.aspect_ratio': 'आस्पेक्ट रेशियो',
+  'image_crop_rotate.original': 'मूल',
+  'image_crop_rotate.square': 'वर्ग (1:1)',
+  'image_crop_rotate.apply_crop': 'क्रॉप लागू करें',
+  'image_crop_rotate.reset_crop': 'क्रॉप रीसेट करें',
+  'image_crop_rotate.quality': 'गुणवत्ता',
+
   // Image Optimize
   'image_optimize.title': 'इमेज ऑप्टिमाइज़ करें',
   'image_optimize.description':

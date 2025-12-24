@@ -1,0 +1,562 @@
+---
+import BasePage from '../../../components/BasePage.astro';
+import { languages } from '../../../i18n/ui';
+import { useTranslations } from '../../../i18n/utils';
+
+export function getStaticPaths() {
+  return Object.keys(languages).map((lang) => {
+    return { params: { lang } };
+  });
+}
+
+const { lang = 'en' } = Astro.params;
+const t = useTranslations(lang as any);
+
+const title = t('image_crop_rotate.title');
+const description = t('image_crop_rotate.description');
+const activePage = 'image/crop-rotate';
+---
+
+<BasePage title={title} description={description} activePage={activePage}>
+  <div class="layout">
+    <div class="layout-block">
+      <div class="output">
+        <div class="block block-fill">
+          <div class="block-title">
+            {t('output')}
+            <div class="toolbar">
+              <button class="icon" id="download-btn" style="display: none;">
+                <i data-lucide="download" title="Download"></i>
+              </button>
+              <button class="icon" data-toggle="fullscreen">
+                <i class="fullscreen-icon" data-lucide="maximize" title="Full Screen"></i>
+                <i class="fullscreen-icon-exit" data-lucide="minimize" title="Full Screen"></i>
+              </button>
+            </div>
+          </div>
+          <div class="container preview-container" id="drop-zone">
+            <div class="drop-zone-content" id="drop-zone-content">
+              <i data-lucide="upload-cloud" class="upload-icon"></i>
+              <p>{t('drag_drop')}</p>
+            </div>
+            <canvas id="preview-canvas" style="display: none;"></canvas>
+            <div class="image-info" id="image-info" style="display: none;">
+              <span id="original-dimensions"></span>
+              <span id="file-size"></span>
+            </div>
+            <input type="file" id="file-input" accept="image/*" hidden />
+          </div>
+        </div>
+      </div>
+    </div>
+    <div class="settings">
+      <div class="block block-fill">
+        <div class="block-title">{t('settings')}</div>
+        <div class="container">
+          <div class="setting">
+            <a class="btn" id="upload-btn">{t('upload')}</a>
+          </div>
+          <div class="setting">
+            <a class="btn" id="reset-btn">{t('reset')}</a>
+          </div>
+
+          <details class="setting-group" open>
+            <summary>{t('image_crop_rotate.rotate')}</summary>
+            <div class="setting">
+              <a class="btn" id="rotate-left-btn">
+                <i data-lucide="rotate-ccw"></i>
+                {t('image_crop_rotate.rotate_left')}
+              </a>
+            </div>
+            <div class="setting">
+              <a class="btn" id="rotate-right-btn">
+                <i data-lucide="rotate-cw"></i>
+                {t('image_crop_rotate.rotate_right')}
+              </a>
+            </div>
+          </details>
+
+          <details class="setting-group" open>
+            <summary>{t('image_crop_rotate.flip')}</summary>
+            <div class="setting">
+              <a class="btn" id="flip-horizontal-btn">
+                <i data-lucide="flip-horizontal"></i>
+                {t('image_crop_rotate.flip_horizontal')}
+              </a>
+            </div>
+            <div class="setting">
+              <a class="btn" id="flip-vertical-btn">
+                <i data-lucide="flip-vertical"></i>
+                {t('image_crop_rotate.flip_vertical')}
+              </a>
+            </div>
+          </details>
+
+          <details class="setting-group" open>
+            <summary>{t('image_crop_rotate.crop')}</summary>
+            <div class="setting">
+              <label for="aspect-ratio">{t('image_crop_rotate.aspect_ratio')}</label>
+              <select id="aspect-ratio">
+                <option value="free" selected>{t('image_crop_rotate.free_crop')}</option>
+                <option value="original">{t('image_crop_rotate.original')}</option>
+                <option value="1:1">{t('image_crop_rotate.square')}</option>
+                <option value="4:3">4:3</option>
+                <option value="16:9">16:9</option>
+                <option value="3:2">3:2</option>
+              </select>
+            </div>
+            <div class="setting">
+              <a class="btn" id="apply-crop-btn">{t('image_crop_rotate.apply_crop')}</a>
+            </div>
+            <div class="setting">
+              <a class="btn" id="reset-crop-btn">{t('image_crop_rotate.reset_crop')}</a>
+            </div>
+          </details>
+
+          <details class="setting-group" open>
+            <summary>{t('image_crop_rotate.quality')}</summary>
+            <div class="setting">
+              <label for="quality-input">{t('image_crop_rotate.quality')}</label>
+              <div class="range-wrapper">
+                <input type="range" id="quality-slider" min="1" max="100" value="90" />
+                <input type="number" id="quality-input" min="1" max="100" value="90" />
+                <span>%</span>
+              </div>
+            </div>
+          </details>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <script>
+    // Image Crop & Rotate Logic
+    document.addEventListener('DOMContentLoaded', () => {
+      const dropZone = document.getElementById('drop-zone');
+      const dropZoneContent = document.getElementById('drop-zone-content');
+      const fileInput = document.getElementById('file-input');
+      const previewCanvas = document.getElementById('preview-canvas') as HTMLCanvasElement;
+      const originalDimensions = document.getElementById('original-dimensions');
+      const fileSize = document.getElementById('file-size');
+      const imageInfo = document.getElementById('image-info');
+
+      const uploadBtn = document.getElementById('upload-btn');
+      const resetBtn = document.getElementById('reset-btn');
+      const downloadBtn = document.getElementById('download-btn');
+
+      const rotateLeftBtn = document.getElementById('rotate-left-btn');
+      const rotateRightBtn = document.getElementById('rotate-right-btn');
+      const flipHorizontalBtn = document.getElementById('flip-horizontal-btn');
+      const flipVerticalBtn = document.getElementById('flip-vertical-btn');
+
+      const aspectRatioSelect = document.getElementById('aspect-ratio') as HTMLSelectElement;
+      const applyCropBtn = document.getElementById('apply-crop-btn');
+      const resetCropBtn = document.getElementById('reset-crop-btn');
+
+      const qualitySlider = document.getElementById('quality-slider') as HTMLInputElement;
+      const qualityInput = document.getElementById('quality-input') as HTMLInputElement;
+
+      let originalImage: HTMLImageElement | null = null;
+      let originalFile: File | null = null;
+      let currentRotation = 0;
+      let flipHorizontal = false;
+      let flipVertical = false;
+      let cropArea: { x: number; y: number; width: number; height: number } | null = null;
+      let isDragging = false;
+      let isResizing = false;
+      let dragStart = { x: 0, y: 0 };
+      let resizeHandle: string | null = null;
+
+      // Drag and Drop handlers
+      dropZone?.addEventListener('click', (e) => {
+        if (e.target === dropZone || dropZoneContent?.contains(e.target as Node)) {
+          fileInput?.click();
+        }
+      });
+
+      dropZone?.addEventListener('dragover', (e) => {
+        e.preventDefault();
+        dropZone.classList.add('drag-over');
+      });
+
+      dropZone?.addEventListener('dragleave', () => {
+        dropZone.classList.remove('drag-over');
+      });
+
+      dropZone?.addEventListener('drop', (e) => {
+        e.preventDefault();
+        dropZone.classList.remove('drag-over');
+        if (e.dataTransfer?.files.length) {
+          handleFile(e.dataTransfer.files[0]);
+        }
+      });
+
+      fileInput?.addEventListener('change', (e: any) => {
+        if (e.target.files.length) {
+          handleFile(e.target.files[0]);
+        }
+      });
+
+      uploadBtn?.addEventListener('click', () => {
+        fileInput?.click();
+      });
+
+      function handleFile(file: File) {
+        if (!file.type.startsWith('image/')) {
+          alert('Please upload an image file');
+          return;
+        }
+
+        originalFile = file;
+        const reader = new FileReader();
+        reader.onload = (e) => {
+          originalImage = new Image();
+          originalImage.onload = () => {
+            if (previewCanvas && originalDimensions && fileSize && imageInfo && downloadBtn) {
+              // Reset transformations
+              currentRotation = 0;
+              flipHorizontal = false;
+              flipVertical = false;
+              cropArea = null;
+
+              // Show canvas and update info
+              previewCanvas.style.display = 'block';
+              dropZoneContent!.style.display = 'none';
+
+              originalDimensions.textContent = `${originalImage!.width} x ${originalImage!.height} px`;
+              fileSize.textContent = formatFileSize(file.size);
+              imageInfo.style.display = 'flex';
+
+              downloadBtn.style.display = 'inline-flex';
+
+              // Draw image
+              renderImage();
+            }
+          };
+          originalImage.src = e.target?.result as string;
+        };
+        reader.readAsDataURL(file);
+      }
+
+      function formatFileSize(bytes: number) {
+        if (bytes === 0) return '0 Bytes';
+        const k = 1024;
+        const sizes = ['Bytes', 'KB', 'MB', 'GB'];
+        const i = Math.floor(Math.log(bytes) / Math.log(k));
+        return parseFloat((bytes / Math.pow(k, i)).toFixed(2)) + ' ' + sizes[i];
+      }
+
+      function renderImage() {
+        if (!originalImage || !previewCanvas) return;
+
+        const ctx = previewCanvas.getContext('2d');
+        if (!ctx) return;
+
+        // Calculate dimensions based on rotation
+        let width = originalImage.width;
+        let height = originalImage.height;
+
+        if (currentRotation === 90 || currentRotation === 270) {
+          [width, height] = [height, width];
+        }
+
+        // Set canvas size
+        const maxWidth = 800;
+        const maxHeight = 600;
+        const scale = Math.min(1, maxWidth / width, maxHeight / height);
+
+        previewCanvas.width = width * scale;
+        previewCanvas.height = height * scale;
+
+        // Clear canvas
+        ctx.clearRect(0, 0, previewCanvas.width, previewCanvas.height);
+
+        // Save context
+        ctx.save();
+
+        // Move to center
+        ctx.translate(previewCanvas.width / 2, previewCanvas.height / 2);
+
+        // Apply rotation
+        ctx.rotate((currentRotation * Math.PI) / 180);
+
+        // Apply flip
+        ctx.scale(flipHorizontal ? -1 : 1, flipVertical ? -1 : 1);
+
+        // Draw image centered
+        const drawWidth = originalImage.width * scale;
+        const drawHeight = originalImage.height * scale;
+        ctx.drawImage(originalImage, -drawWidth / 2, -drawHeight / 2, drawWidth, drawHeight);
+
+        // Restore context
+        ctx.restore();
+
+        // Draw crop area if exists
+        if (cropArea) {
+          ctx.strokeStyle = '#3b82f6';
+          ctx.lineWidth = 2;
+          ctx.setLineDash([5, 5]);
+          ctx.strokeRect(
+            cropArea.x * scale,
+            cropArea.y * scale,
+            cropArea.width * scale,
+            cropArea.height * scale
+          );
+          ctx.setLineDash([]);
+        }
+      }
+
+      // Rotation handlers
+      rotateLeftBtn?.addEventListener('click', () => {
+        currentRotation = (currentRotation - 90 + 360) % 360;
+        renderImage();
+      });
+
+      rotateRightBtn?.addEventListener('click', () => {
+        currentRotation = (currentRotation + 90) % 360;
+        renderImage();
+      });
+
+      // Flip handlers
+      flipHorizontalBtn?.addEventListener('click', () => {
+        flipHorizontal = !flipHorizontal;
+        renderImage();
+      });
+
+      flipVerticalBtn?.addEventListener('click', () => {
+        flipVertical = !flipVertical;
+        renderImage();
+      });
+
+      // Crop handlers
+      applyCropBtn?.addEventListener('click', () => {
+        if (!originalImage || !previewCanvas || !cropArea) {
+          alert('Please select a crop area first');
+          return;
+        }
+
+        const tempCanvas = document.createElement('canvas');
+        const tempCtx = tempCanvas.getContext('2d');
+        if (!tempCtx) return;
+
+        tempCanvas.width = cropArea.width;
+        tempCanvas.height = cropArea.height;
+
+        tempCtx.drawImage(
+          previewCanvas,
+          cropArea.x,
+          cropArea.y,
+          cropArea.width,
+          cropArea.height,
+          0,
+          0,
+          cropArea.width,
+          cropArea.height
+        );
+
+        // Update original image with cropped version
+        const croppedImage = new Image();
+        croppedImage.onload = () => {
+          originalImage = croppedImage;
+          cropArea = null;
+          renderImage();
+        };
+        croppedImage.src = tempCanvas.toDataURL();
+      });
+
+      resetCropBtn?.addEventListener('click', () => {
+        cropArea = null;
+        renderImage();
+      });
+
+      // Quality Inputs
+      qualitySlider?.addEventListener('input', (e: any) => {
+        qualityInput.value = e.target.value;
+      });
+
+      qualityInput?.addEventListener('input', (e: any) => {
+        qualitySlider.value = e.target.value;
+      });
+
+      // Canvas interaction for cropping
+      previewCanvas?.addEventListener('mousedown', (e) => {
+        const rect = previewCanvas.getBoundingClientRect();
+        const x = e.clientX - rect.left;
+        const y = e.clientY - rect.top;
+
+        if (!cropArea) {
+          // Start new crop area
+          cropArea = { x, y, width: 0, height: 0 };
+          isDragging = true;
+          dragStart = { x, y };
+        }
+      });
+
+      previewCanvas?.addEventListener('mousemove', (e) => {
+        if (isDragging && cropArea) {
+          const rect = previewCanvas.getBoundingClientRect();
+          const x = e.clientX - rect.left;
+          const y = e.clientY - rect.top;
+
+          cropArea.width = x - cropArea.x;
+          cropArea.height = y - cropArea.y;
+
+          // Apply aspect ratio if selected
+          const aspectRatio = aspectRatioSelect.value;
+          if (aspectRatio !== 'free' && aspectRatio !== 'original') {
+            const [w, h] = aspectRatio.split(':').map(Number);
+            const ratio = w / h;
+            cropArea.height = cropArea.width / ratio;
+          }
+
+          renderImage();
+        }
+      });
+
+      previewCanvas?.addEventListener('mouseup', () => {
+        isDragging = false;
+      });
+
+      previewCanvas?.addEventListener('mouseleave', () => {
+        isDragging = false;
+      });
+
+      // Reset
+      resetBtn?.addEventListener('click', () => {
+        if (previewCanvas && dropZoneContent && imageInfo && downloadBtn) {
+          // Clear image
+          originalImage = null;
+          originalFile = null;
+          currentRotation = 0;
+          flipHorizontal = false;
+          flipVertical = false;
+          cropArea = null;
+
+          previewCanvas.style.display = 'none';
+          dropZoneContent.style.display = 'flex';
+          imageInfo.style.display = 'none';
+          downloadBtn.style.display = 'none';
+
+          const ctx = previewCanvas.getContext('2d');
+          if (ctx) {
+            ctx.clearRect(0, 0, previewCanvas.width, previewCanvas.height);
+          }
+        }
+      });
+
+      // Download
+      downloadBtn?.addEventListener('click', () => {
+        if (!previewCanvas || !originalFile) return;
+
+        const quality = parseInt(qualityInput.value) / 100;
+        const link = document.createElement('a');
+        link.download = `crop_rotate_${originalFile.name}`;
+        link.href = previewCanvas.toDataURL(originalFile.type, quality);
+        link.click();
+      });
+    });
+  </script>
+
+  <style>
+    .layout {
+      display: flex;
+      gap: 2px;
+      flex-wrap: wrap;
+    }
+
+    .layout-block {
+      flex: 1;
+      min-width: 360px;
+      display: flex;
+      flex-direction: column;
+      gap: 2px;
+    }
+
+    .settings {
+      flex: 0 0 360px;
+    }
+
+    .preview-container {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      min-height: 400px;
+      background: var(--bg-secondary);
+      padding: 20px;
+      border: 2px dashed transparent;
+      transition: all 0.2s;
+      position: relative;
+    }
+
+    .preview-container.drag-over {
+      border-color: var(--primary-color);
+      background: var(--bg-hover);
+    }
+
+    .drop-zone-content {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      gap: 12px;
+      color: var(--text-secondary);
+      cursor: pointer;
+    }
+
+    .upload-icon {
+      width: 48px;
+      height: 48px;
+      color: var(--primary-color);
+    }
+
+    #preview-canvas {
+      max-width: 100%;
+      max-height: 600px;
+      border-radius: 4px;
+      box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+      cursor: crosshair;
+    }
+
+    .image-info {
+      margin-top: 12px;
+      display: flex;
+      gap: 16px;
+      color: var(--text-secondary);
+      font-size: 0.9rem;
+    }
+
+    .range-wrapper {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+    }
+
+    .range-wrapper input[type='range'] {
+      flex: 1;
+    }
+
+    .range-wrapper input[type='number'] {
+      width: 60px;
+      padding: 4px;
+      border: 1px solid var(--border-color);
+      border-radius: 4px;
+    }
+
+    .btn i {
+      margin-right: 4px;
+      width: 16px;
+      height: 16px;
+    }
+
+    @media (max-width: 768px) {
+      .layout {
+        flex-direction: column;
+      }
+
+      .settings {
+        flex: auto;
+        order: -1;
+      }
+    }
+  </style>
+</BasePage>

@@ -140,6 +140,25 @@ export const en = {
   'image_resize.scale_percentage': 'Scale Percentage',
   'image_resize.quality': 'Quality',
 
+  // Image Crop & Rotate
+  'image_crop_rotate.title': 'Crop & Rotate Image',
+  'image_crop_rotate.description':
+    'Crop and rotate your images with ease. Free online image crop and rotate tool.',
+  'image_crop_rotate.crop': 'Crop',
+  'image_crop_rotate.rotate': 'Rotate',
+  'image_crop_rotate.flip': 'Flip',
+  'image_crop_rotate.flip_horizontal': 'Flip Horizontal',
+  'image_crop_rotate.flip_vertical': 'Flip Vertical',
+  'image_crop_rotate.rotate_left': 'Rotate Left 90°',
+  'image_crop_rotate.rotate_right': 'Rotate Right 90°',
+  'image_crop_rotate.free_crop': 'Free Crop',
+  'image_crop_rotate.aspect_ratio': 'Aspect Ratio',
+  'image_crop_rotate.original': 'Original',
+  'image_crop_rotate.square': 'Square (1:1)',
+  'image_crop_rotate.apply_crop': 'Apply Crop',
+  'image_crop_rotate.reset_crop': 'Reset Crop',
+  'image_crop_rotate.quality': 'Quality',
+
   // Image Optimize
   'image_optimize.title': 'Optimize Image',
   'image_optimize.description':

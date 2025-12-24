@@ -129,6 +129,25 @@ export const fr = {
   'syntax_highlight.description':
     'Cet outil en ligne de coloration syntaxique vous aide à mettre en évidence votre code. Prend en charge de nombreux langages tels que JavaScript, C++, C#, Java... et ainsi de suite.',
 
+  // Image Crop & Rotate
+  'image_crop_rotate.title': 'Recadrer et Pivoter Image',
+  'image_crop_rotate.description':
+    'Recadrez et pivotez vos images facilement. Outil gratuit de recadrage et rotation d\'images en ligne.',
+  'image_crop_rotate.crop': 'Recadrer',
+  'image_crop_rotate.rotate': 'Pivoter',
+  'image_crop_rotate.flip': 'Retourner',
+  'image_crop_rotate.flip_horizontal': 'Retourner Horizontalement',
+  'image_crop_rotate.flip_vertical': 'Retourner Verticalement',
+  'image_crop_rotate.rotate_left': 'Pivoter Gauche 90°',
+  'image_crop_rotate.rotate_right': 'Pivoter Droite 90°',
+  'image_crop_rotate.free_crop': 'Recadrage Libre',
+  'image_crop_rotate.aspect_ratio': 'Ratio d\'Aspect',
+  'image_crop_rotate.original': 'Original',
+  'image_crop_rotate.square': 'Carré (1:1)',
+  'image_crop_rotate.apply_crop': 'Appliquer Recadrage',
+  'image_crop_rotate.reset_crop': 'Réinitialiser Recadrage',
+  'image_crop_rotate.quality': 'Qualité',
+
   // Image Optimize
   'image_optimize.title': 'Optimiser Image',
   'image_optimize.description':

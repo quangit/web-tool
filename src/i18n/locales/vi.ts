@@ -141,6 +141,25 @@ export const vi = {
   'image_resize.scale_percentage': 'Tỷ lệ phần trăm',
   'image_resize.quality': 'Chất lượng',
 
+  // Image Crop & Rotate
+  'image_crop_rotate.title': 'Cắt và Xoay Ảnh',
+  'image_crop_rotate.description':
+    'Cắt và xoay ảnh của bạn một cách dễ dàng. Công cụ cắt và xoay ảnh trực tuyến miễn phí.',
+  'image_crop_rotate.crop': 'Cắt',
+  'image_crop_rotate.rotate': 'Xoay',
+  'image_crop_rotate.flip': 'Lật',
+  'image_crop_rotate.flip_horizontal': 'Lật Ngang',
+  'image_crop_rotate.flip_vertical': 'Lật Dọc',
+  'image_crop_rotate.rotate_left': 'Xoay Trái 90°',
+  'image_crop_rotate.rotate_right': 'Xoay Phải 90°',
+  'image_crop_rotate.free_crop': 'Cắt Tự Do',
+  'image_crop_rotate.aspect_ratio': 'Tỷ Lệ Khung Hình',
+  'image_crop_rotate.original': 'Gốc',
+  'image_crop_rotate.square': 'Vuông (1:1)',
+  'image_crop_rotate.apply_crop': 'Áp Dụng Cắt',
+  'image_crop_rotate.reset_crop': 'Đặt Lại Cắt',
+  'image_crop_rotate.quality': 'Chất lượng',
+
   // Image Optimize
   'image_optimize.title': 'Tối ưu hóa ảnh',
   'image_optimize.description':

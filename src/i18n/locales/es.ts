@@ -129,6 +129,25 @@ export const es = {
   'syntax_highlight.description':
     'Esta herramienta en línea de resaltado de sintaxis le ayuda a resaltar su código. Admite muchos lenguajes como JavaScript, C++, C#, Java... y así sucesivamente.',
 
+  // Image Crop & Rotate
+  'image_crop_rotate.title': 'Recortar y Rotar Imagen',
+  'image_crop_rotate.description':
+    'Recorta y rota tus imágenes con facilidad. Herramienta gratuita de recorte y rotación de imágenes en línea.',
+  'image_crop_rotate.crop': 'Recortar',
+  'image_crop_rotate.rotate': 'Rotar',
+  'image_crop_rotate.flip': 'Voltear',
+  'image_crop_rotate.flip_horizontal': 'Voltear Horizontal',
+  'image_crop_rotate.flip_vertical': 'Voltear Vertical',
+  'image_crop_rotate.rotate_left': 'Rotar Izquierda 90°',
+  'image_crop_rotate.rotate_right': 'Rotar Derecha 90°',
+  'image_crop_rotate.free_crop': 'Recorte Libre',
+  'image_crop_rotate.aspect_ratio': 'Relación de Aspecto',
+  'image_crop_rotate.original': 'Original',
+  'image_crop_rotate.square': 'Cuadrado (1:1)',
+  'image_crop_rotate.apply_crop': 'Aplicar Recorte',
+  'image_crop_rotate.reset_crop': 'Restablecer Recorte',
+  'image_crop_rotate.quality': 'Calidad',
+
   // Image Optimize
   'image_optimize.title': 'Optimizar Imagen',
   'image_optimize.description':

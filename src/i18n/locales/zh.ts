@@ -135,6 +135,24 @@ export const zh = {
   'image_resize.scale_percentage': '缩放百分比',
   'image_resize.quality': '质量',
 
+  // Image Crop & Rotate
+  'image_crop_rotate.title': '裁剪和旋转图像',
+  'image_crop_rotate.description': '轻松裁剪和旋转您的图像。免费在线图像裁剪和旋转工具。',
+  'image_crop_rotate.crop': '裁剪',
+  'image_crop_rotate.rotate': '旋转',
+  'image_crop_rotate.flip': '翻转',
+  'image_crop_rotate.flip_horizontal': '水平翻转',
+  'image_crop_rotate.flip_vertical': '垂直翻转',
+  'image_crop_rotate.rotate_left': '向左旋转 90°',
+  'image_crop_rotate.rotate_right': '向右旋转 90°',
+  'image_crop_rotate.free_crop': '自由裁剪',
+  'image_crop_rotate.aspect_ratio': '宽高比',
+  'image_crop_rotate.original': '原始',
+  'image_crop_rotate.square': '正方形 (1:1)',
+  'image_crop_rotate.apply_crop': '应用裁剪',
+  'image_crop_rotate.reset_crop': '重置裁剪',
+  'image_crop_rotate.quality': '质量',
+
   // Image Optimize
   'image_optimize.title': '优化图像',
   'image_optimize.description': '压缩和优化图像以减小文件大小，同时保持质量。免费在线图像优化工具。',

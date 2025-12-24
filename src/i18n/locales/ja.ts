@@ -129,6 +129,25 @@ export const ja = {
   'syntax_highlight.description':
     'このオンラインシンタックスハイライトツールは、コードをハイライトするのに役立ちます。JavaScript、C++、C#、Javaなどの多くの言語をサポートしています。',
 
+  // Image Crop & Rotate
+  'image_crop_rotate.title': '画像の切り抜きと回転',
+  'image_crop_rotate.description':
+    '画像を簡単に切り抜いて回転できます。無料のオンライン画像切り抜き・回転ツール。',
+  'image_crop_rotate.crop': '切り抜き',
+  'image_crop_rotate.rotate': '回転',
+  'image_crop_rotate.flip': '反転',
+  'image_crop_rotate.flip_horizontal': '水平反転',
+  'image_crop_rotate.flip_vertical': '垂直反転',
+  'image_crop_rotate.rotate_left': '左に90°回転',
+  'image_crop_rotate.rotate_right': '右に90°回転',
+  'image_crop_rotate.free_crop': '自由切り抜き',
+  'image_crop_rotate.aspect_ratio': 'アスペクト比',
+  'image_crop_rotate.original': 'オリジナル',
+  'image_crop_rotate.square': '正方形 (1:1)',
+  'image_crop_rotate.apply_crop': '切り抜きを適用',
+  'image_crop_rotate.reset_crop': '切り抜きをリセット',
+  'image_crop_rotate.quality': '品質',
+
   // Image Optimize
   'image_optimize.title': '画像最適化',
   'image_optimize.description':
