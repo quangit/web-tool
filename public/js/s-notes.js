@@ -1,1007 +1,726 @@
-/**
- * S Notes - Smart Notes v2
- * Hybrid storage: SQLite WASM (content + FTS), IndexedDB (metadata/settings), OPFS (attachments).
- * Block-based editor (Editor.js), Markdown preview (markdown-it + highlight.js), combined folder+tag filters.
- */
-
-(function() {
+// S-Notes - Advanced Note Taking App with Toast UI Editor
+// Storage: IndexedDB for metadata + OPFS for attachments
+(function () {
   'use strict';
 
-  // IndexedDB stores (metadata + SQLite persistence)
-  var IDB_NAME = 's-notes-db';
-  var IDB_VERSION = 2;
-  var STORE_SQLITE = 'sqlite';
-  var STORE_META = 'meta';
-  var STORE_SETTINGS = 'settings';
-  var STORE_FOLDERS_META = 'folders_meta';
-  var STORE_TAGS_META = 'tags_meta';
+  // ============================================
+  // DATABASE & STORAGE LAYER
+  // ============================================
+  
+  const DB_NAME = 'snotes-db';
+  const DB_VERSION = 1;
+  const NOTES_STORE = 'notes';
+  const ATTACHMENTS_STORE = 'attachments';
+  const OPFS_DIR = 'snotes-files';
 
-  // App state
-  var SQL = null;
-  var sqliteDb = null;
-  var editor = null;
-  var md = null;
-  var opfsRoot = null;
-  var attachmentUrlCache = {};
-  var saveTimeout = null;
-  var persistTimeout = null;
+  let db = null;
+  let opfsRoot = null;
+  let opfsDir = null;
 
-  var state = {
-    notes: [],
-    folders: [],
-    tags: [],
-    currentNoteId: null,
-    currentFolderId: null,
-    currentTagId: null,
-    search: ''
-  };
+  // Initialize IndexedDB
+  async function initDatabase() {
+    return new Promise((resolve, reject) => {
+      const request = indexedDB.open(DB_NAME, DB_VERSION);
 
-  // DOM cache
-  var elements = {};
-
-  function SNotesApp() {
-    init().catch(function(err) {
-      console.error('Failed to boot S Notes', err);
-    });
-  }
-
-  async function init() {
-    cacheElements();
-    bindStaticEvents();
-
-    if (window.markdownit) {
-      md = window.markdownit({ html: true, linkify: true, typographer: true, breaks: true });
-    }
-
-    await initIdb();
-    await initSqlite();
-    ensureSchema();
-    await hydrateFromDb();
-    await initEditor();
-    refreshLists();
-
-    if (state.notes.length) {
-      selectNote(state.notes[0].id);
-    }
-
-    if (window.lucide) {
-      window.lucide.createIcons();
-    }
-  }
-
-  /**
-   * Cache DOM elements
-   */
-  function cacheElements() {
-    elements = {
-      searchInput: document.getElementById('s-notes-search'),
-      newNoteBtn: document.getElementById('new-note-btn'),
-      newFolderBtn: document.getElementById('new-folder-btn'),
-      folderTree: document.getElementById('folder-tree'),
-      tagList: document.getElementById('tag-list'),
-      noteList: document.getElementById('note-list'),
-      listTitle: document.getElementById('list-title'),
-      editor: document.getElementById('editor'),
-      noteTitle: document.getElementById('note-title'),
-      noteTags: document.getElementById('note-tags'),
-      noteFolder: document.getElementById('note-folder'),
-      addTagBtn: document.getElementById('add-tag-btn'),
-      deleteNoteBtn: document.getElementById('delete-note-btn'),
-      detachBtn: document.getElementById('detach-btn'),
-      importBtn: document.getElementById('import-btn'),
-      exportBtn: document.getElementById('export-btn'),
-      importFile: document.getElementById('import-file'),
-      preview: document.getElementById('preview'),
-      tagDialog: document.getElementById('tag-dialog'),
-      tagInput: document.getElementById('tag-input'),
-      tagCancel: document.getElementById('tag-cancel'),
-      tagSubmit: document.getElementById('tag-submit'),
-      folderDialog: document.getElementById('folder-dialog'),
-      folderInput: document.getElementById('folder-input'),
-      parentFolderSelect: document.getElementById('parent-folder-select'),
-      folderCancel: document.getElementById('folder-cancel'),
-      folderSubmit: document.getElementById('folder-submit'),
-      navItems: document.querySelectorAll('.s-notes-nav-item')
-    };
-  }
-
-  /**
-   * IDB helpers
-   */
-  function initIdb() {
-    return new Promise(function(resolve, reject) {
-      var request = indexedDB.open(IDB_NAME, IDB_VERSION);
-
-      request.onerror = function(event) {
-        reject(event.target.error);
+      request.onerror = () => reject(request.error);
+      request.onsuccess = () => {
+        db = request.result;
+        resolve(db);
       };
 
-      request.onsuccess = function(event) {
-        resolve(event.target.result);
-      };
+      request.onupgradeneeded = (event) => {
+        const database = event.target.result;
 
-      request.onupgradeneeded = function(event) {
-        var db = event.target.result;
-        if (!db.objectStoreNames.contains(STORE_SQLITE)) db.createObjectStore(STORE_SQLITE);
-        if (!db.objectStoreNames.contains(STORE_META)) db.createObjectStore(STORE_META, { keyPath: 'id' });
-        if (!db.objectStoreNames.contains(STORE_SETTINGS)) db.createObjectStore(STORE_SETTINGS, { keyPath: 'key' });
-        if (!db.objectStoreNames.contains(STORE_FOLDERS_META)) db.createObjectStore(STORE_FOLDERS_META, { keyPath: 'id' });
-        if (!db.objectStoreNames.contains(STORE_TAGS_META)) db.createObjectStore(STORE_TAGS_META, { keyPath: 'id' });
-      };
-    }).then(function(db) {
-      window.sNotesIdb = db;
-    });
-  }
-
-  function idbGet(store, key) {
-    return new Promise(function(resolve, reject) {
-      var tx = window.sNotesIdb.transaction([store], 'readonly');
-      var req = tx.objectStore(store).get(key);
-      req.onsuccess = function() { resolve(req.result); };
-      req.onerror = function() { reject(req.error); };
-    });
-  }
-
-  function idbPut(store, value, key) {
-    return new Promise(function(resolve, reject) {
-      var tx = window.sNotesIdb.transaction([store], 'readwrite');
-      var req = typeof key === 'undefined' ? tx.objectStore(store).put(value) : tx.objectStore(store).put(value, key);
-      req.onsuccess = function() { resolve(req.result); };
-      req.onerror = function() { reject(req.error); };
-    });
-  }
-
-  function idbGetAll(store) {
-    return new Promise(function(resolve, reject) {
-      var tx = window.sNotesIdb.transaction([store], 'readonly');
-      var req = tx.objectStore(store).getAll();
-      req.onsuccess = function() { resolve(req.result || []); };
-      req.onerror = function() { reject(req.error); };
-    });
-  }
-
-  /**
-   * SQLite setup (sql.js)
-   */
-  async function initSqlite() {
-    if (!window.initSqlJs) {
-      throw new Error('sql.js is not loaded');
-    }
-
-    SQL = await window.initSqlJs({ locateFile: function(file) {
-      return 'https://cdn.jsdelivr.net/npm/sql.js@1.10.2/dist/' + file;
-    } });
-
-    var persisted = await idbGet(STORE_SQLITE, 'db');
-    if (persisted && persisted instanceof ArrayBuffer) {
-      sqliteDb = new SQL.Database(new Uint8Array(persisted));
-    } else {
-      sqliteDb = new SQL.Database();
-    }
-  }
-
-  function ensureSchema() {
-    var ddl = [
-      'CREATE TABLE IF NOT EXISTS folders (id TEXT PRIMARY KEY, name TEXT NOT NULL, parent_id TEXT, created_at TEXT)',
-      'CREATE TABLE IF NOT EXISTS tags (id TEXT PRIMARY KEY, name TEXT NOT NULL, color TEXT NOT NULL)',
-      'CREATE TABLE IF NOT EXISTS notes (id TEXT PRIMARY KEY, title TEXT, content_json TEXT NOT NULL, content_text TEXT NOT NULL, folder_id TEXT, created_at TEXT, updated_at TEXT)',
-      'CREATE TABLE IF NOT EXISTS note_tags (note_id TEXT, tag_id TEXT, PRIMARY KEY(note_id, tag_id))',
-      'CREATE TABLE IF NOT EXISTS attachments (id TEXT PRIMARY KEY, note_id TEXT, file_name TEXT, mime_type TEXT, opfs_path TEXT, created_at TEXT)',
-      'CREATE VIRTUAL TABLE IF NOT EXISTS notes_fts USING fts5(title, content_text, content_json, content=\'notes\', content_rowid=\'rowid\')',
-      'CREATE TRIGGER IF NOT EXISTS notes_ai AFTER INSERT ON notes BEGIN INSERT INTO notes_fts(rowid, title, content_text, content_json) VALUES (new.rowid, new.title, new.content_text, new.content_json); END;',
-      'CREATE TRIGGER IF NOT EXISTS notes_au AFTER UPDATE ON notes BEGIN UPDATE notes_fts SET title=new.title, content_text=new.content_text, content_json=new.content_json WHERE rowid=old.rowid; END;',
-      'CREATE TRIGGER IF NOT EXISTS notes_ad AFTER DELETE ON notes BEGIN DELETE FROM notes_fts WHERE rowid=old.rowid; END;'
-    ];
-
-    ddl.forEach(function(sql) {
-      sqliteDb.run(sql);
-    });
-    persistDbSoon();
-  }
-
-  async function hydrateFromDb() {
-    state.folders = queryAll('SELECT id, name, parent_id AS parentId, created_at AS createdAt FROM folders');
-    state.tags = queryAll('SELECT id, name, color FROM tags');
-    state.notes = loadNotesFromSql();
-  }
-
-  function queryAll(sql, params) {
-    var stmt = sqliteDb.prepare(sql, params || []);
-    var rows = [];
-    while (stmt.step()) {
-      rows.push(stmt.getAsObject());
-    }
-    stmt.free();
-    return rows;
-  }
-
-  function loadNotesFromSql() {
-    var stmt = sqliteDb.prepare('SELECT n.id, n.title, n.folder_id AS folderId, n.created_at AS createdAt, n.updated_at AS updatedAt, n.content_json AS contentJson, n.content_text AS contentText, GROUP_CONCAT(nt.tag_id) AS tags FROM notes n LEFT JOIN note_tags nt ON nt.note_id = n.id GROUP BY n.id ORDER BY n.updated_at DESC');
-    var rows = [];
-    while (stmt.step()) {
-      var row = stmt.getAsObject();
-      row.tags = row.tags ? row.tags.split(',') : [];
-      rows.push(row);
-    }
-    stmt.free();
-    return rows;
-  }
-
-  function persistDbSoon() {
-    // Slight debounce to batch writes
-    clearTimeout(persistTimeout);
-    persistTimeout = setTimeout(persistDb, 200);
-  }
-
-  function persistDb() {
-    if (!sqliteDb) return;
-    var data = sqliteDb.export();
-    return idbPut(STORE_SQLITE, data.buffer || data, 'db').catch(function(err) {
-      console.error('Persist DB failed', err);
-    });
-  }
-
-  /**
-   * Editor setup
-   */
-  async function initEditor() {
-    if (!window.EditorJS) {
-      throw new Error('Editor.js not loaded');
-    }
-
-    editor = new window.EditorJS({
-      holder: elements.editor,
-      autofocus: true,
-      placeholder: elements.editor.dataset ? elements.editor.dataset.placeholder || '' : '',
-      onChange: function() {
-        scheduleSave();
-      },
-      tools: {
-        header: window.Header,
-        list: { class: window.List, inlineToolbar: true },
-        checklist: { class: window.Checklist, inlineToolbar: true },
-        code: window.CodeTool,
-        image: {
-          class: window.ImageTool,
-          config: {
-            uploader: {
-              uploadByFile: uploadAttachment
-            }
-          }
+        // Notes store with indexes for fast querying
+        if (!database.objectStoreNames.contains(NOTES_STORE)) {
+          const notesStore = database.createObjectStore(NOTES_STORE, { keyPath: 'id' });
+          notesStore.createIndex('title', 'title', { unique: false });
+          notesStore.createIndex('createdAt', 'createdAt', { unique: false });
+          notesStore.createIndex('updatedAt', 'updatedAt', { unique: false });
+          notesStore.createIndex('tags', 'tags', { unique: false, multiEntry: true });
         }
-      }
-    });
-  }
 
-  /**
-   * Static event bindings (UI level)
-   */
-  function bindStaticEvents() {
-    // Search with debounce and SQLite FTS
-    var debounceTimer = null;
-    elements.searchInput.addEventListener('input', function() {
-      clearTimeout(debounceTimer);
-      debounceTimer = setTimeout(function() {
-        state.search = elements.searchInput.value.trim();
-        renderNoteList();
-      }, 120);
-    });
-
-    elements.newNoteBtn.addEventListener('click', function() {
-      createNote();
-    });
-
-    elements.newFolderBtn.addEventListener('click', function(e) {
-      e.stopPropagation();
-      showFolderDialog();
-    });
-
-    elements.noteTitle.addEventListener('input', function() {
-      if (!state.currentNoteId) return;
-      scheduleSave();
-    });
-
-    elements.noteFolder.addEventListener('change', function() {
-      if (!state.currentNoteId) return;
-      scheduleSave();
-    });
-
-    elements.deleteNoteBtn.addEventListener('click', function() {
-      if (state.currentNoteId) deleteNote(state.currentNoteId);
-    });
-
-    elements.detachBtn.addEventListener('click', function() {
-      detachNote();
-    });
-
-    elements.importBtn.addEventListener('click', function() {
-      elements.importFile.click();
-    });
-
-    elements.importFile.addEventListener('change', function() {
-      if (this.files && this.files[0]) {
-        importNotes(this.files[0]);
-        this.value = '';
-      }
-    });
-
-    elements.exportBtn.addEventListener('click', function() {
-      exportNotes();
-    });
-
-    elements.tagCancel.addEventListener('click', function() {
-      elements.tagDialog.close();
-    });
-
-    elements.tagDialog.querySelector('form').addEventListener('submit', function(e) {
-      e.preventDefault();
-      var tagName = elements.tagInput.value.trim();
-      if (tagName) {
-        createTag(tagName).then(function(tag) {
-          addTagToCurrent(tag.id);
-          elements.tagDialog.close();
-        });
-      }
-    });
-
-    elements.folderCancel.addEventListener('click', function() {
-      elements.folderDialog.close();
-    });
-
-    elements.folderDialog.querySelector('form').addEventListener('submit', function(e) {
-      e.preventDefault();
-      var name = elements.folderInput.value.trim();
-      var parent = elements.parentFolderSelect.value || null;
-      if (name) {
-        createFolder(name, parent).then(function() {
-          elements.folderDialog.close();
-        });
-      }
-    });
-
-    elements.addTagBtn.addEventListener('click', function() {
-      showTagDialog();
-    });
-  }
-
-  /**
-   * Note CRUD
-   */
-  async function createNote() {
-    var id = generateId();
-    var now = new Date().toISOString();
-    var emptyDoc = { time: Date.now(), blocks: [], version: '2.30.7' };
-
-    sqliteDb.run('INSERT INTO notes (id, title, content_json, content_text, folder_id, created_at, updated_at) VALUES (?, ?, ?, ?, ?, ?, ?)', [
-      id,
-      '',
-      JSON.stringify(emptyDoc),
-      '',
-      state.currentFolderId,
-      now,
-      now
-    ]);
-
-    state.notes = loadNotesFromSql();
-    persistDbSoon();
-    await idbPut(STORE_META, { id: id, title: '', content_text: '', folder_id: state.currentFolderId, updated_at: now });
-    await selectNote(id);
-    renderNoteList();
-    if (elements.noteTitle) elements.noteTitle.focus();
-  }
-
-  async function deleteNote(noteId) {
-    var i18n = window.sNotesI18n || {};
-    if (!confirm(i18n.delete_confirm || 'Delete this note?')) return;
-
-    sqliteDb.run('DELETE FROM note_tags WHERE note_id = ?', [noteId]);
-    sqliteDb.run('DELETE FROM attachments WHERE note_id = ?', [noteId]);
-    sqliteDb.run('DELETE FROM notes WHERE id = ?', [noteId]);
-    persistDbSoon();
-    state.notes = state.notes.filter(function(n) { return n.id !== noteId; });
-    if (state.currentNoteId === noteId) {
-      state.currentNoteId = null;
-      elements.noteTitle.value = '';
-      elements.preview.innerHTML = '';
-      if (editor) {
-        editor.isReady.then(function(){ editor.blocks.clear(); });
-      }
-    }
-    renderNoteList();
-  }
-
-  async function selectNote(noteId) {
-    var note = state.notes.find(function(n) { return n.id === noteId; });
-    if (!note) return;
-    state.currentNoteId = noteId;
-    elements.noteTitle.value = note.title || '';
-    elements.noteFolder.value = note.folderId || '';
-    renderNoteTags(note.tags);
-    highlightActiveNote(noteId);
-
-    var parsed = safeParse(note.contentJson) || { blocks: [] };
-    if (parsed.blocks) {
-      await hydrateBlocksAssets(parsed.blocks);
-    }
-
-    if (editor) {
-      await editor.isReady;
-      await editor.render(parsed);
-      updatePreview();
-    }
-  }
-
-  async function hydrateBlocksAssets(blocks) {
-    var tasks = (blocks || []).map(async function(block) {
-      if (block.type === 'image') {
-        var path = (block.data && block.data.file && block.data.file.path) || (block.data && block.data.path);
-        if (path) {
-          var url = await attachmentUrlFromPath(path);
-          block.data.file = { url: url, path: path };
+        // Attachments metadata store (file stored in OPFS)
+        if (!database.objectStoreNames.contains(ATTACHMENTS_STORE)) {
+          const attachStore = database.createObjectStore(ATTACHMENTS_STORE, { keyPath: 'id' });
+          attachStore.createIndex('noteId', 'noteId', { unique: false });
+          attachStore.createIndex('type', 'type', { unique: false });
         }
-      }
-    });
-    await Promise.all(tasks);
-  }
-
-  function renderNoteTags(tagIds) {
-    var html = (tagIds || []).map(function(tagId) {
-      var tag = state.tags.find(function(t) { return t.id === tagId; });
-      if (!tag) return '';
-      return '<span class="s-notes-note-tag">' + escapeHtml(tag.name) + '<button data-tag-id="' + tag.id + '"><i data-lucide="x"></i></button></span>';
-    }).join('');
-    html += '<button id="add-tag-btn" class="s-notes-add-tag"><i data-lucide="plus"></i><span>Add tag</span></button>';
-    elements.noteTags.innerHTML = html;
-
-    elements.noteTags.querySelectorAll('[data-tag-id]').forEach(function(btn) {
-      btn.addEventListener('click', function(e) {
-        e.stopPropagation();
-        removeTagFromCurrent(btn.dataset.tagId);
-      });
-    });
-
-    var addBtn = elements.noteTags.querySelector('#add-tag-btn');
-    if (addBtn) addBtn.addEventListener('click', showTagDialog);
-    if (window.lucide) window.lucide.createIcons();
-  }
-
-  function highlightActiveNote(noteId) {
-    elements.noteList.querySelectorAll('.s-notes-item').forEach(function(item) {
-      item.classList.toggle('active', item.dataset.id === noteId);
+      };
     });
   }
 
-  function showTagDialog() {
-    elements.tagInput.value = '';
-    elements.tagDialog.showModal();
-    elements.tagInput.focus();
-  }
-
-  function showFolderDialog() {
-    elements.folderInput.value = '';
-    updateFolderSelect();
-    elements.folderDialog.showModal();
-    elements.folderInput.focus();
-  }
-
-  /**
-   * Folder CRUD
-   */
-  async function createFolder(name, parentId) {
-    var now = new Date().toISOString();
-    var id = generateId();
-    sqliteDb.run('INSERT INTO folders (id, name, parent_id, created_at) VALUES (?, ?, ?, ?)', [id, name, parentId || null, now]);
-    state.folders = queryAll('SELECT id, name, parent_id AS parentId, created_at AS createdAt FROM folders');
-    persistDbSoon();
-    await idbPut(STORE_FOLDERS_META, { id: id, name: name, parentId: parentId || null, createdAt: now });
-    renderFolderTree();
-    updateFolderSelect();
-  }
-
-  /**
-   * Tag CRUD
-   */
-  async function createTag(name) {
-    var existing = state.tags.find(function(t) { return t.name.toLowerCase() === name.toLowerCase(); });
-    if (existing) return existing;
-    var id = generateId();
-    var color = getRandomColor();
-    sqliteDb.run('INSERT INTO tags (id, name, color) VALUES (?, ?, ?)', [id, name, color]);
-    state.tags.push({ id: id, name: name, color: color });
-    persistDbSoon();
-    await idbPut(STORE_TAGS_META, { id: id, name: name, color: color });
-    renderTagList();
-    return { id: id, name: name, color: color };
-  }
-
-  function addTagToCurrent(tagId) {
-    if (!state.currentNoteId) return;
-    sqliteDb.run('INSERT OR IGNORE INTO note_tags (note_id, tag_id) VALUES (?, ?)', [state.currentNoteId, tagId]);
-    state.notes = loadNotesFromSql();
-    renderNoteTags(getNoteTags(state.currentNoteId));
-    renderNoteList();
-    persistDbSoon();
-  }
-
-  function removeTagFromCurrent(tagId) {
-    if (!state.currentNoteId) return;
-    sqliteDb.run('DELETE FROM note_tags WHERE note_id = ? AND tag_id = ?', [state.currentNoteId, tagId]);
-    state.notes = loadNotesFromSql();
-    renderNoteTags(getNoteTags(state.currentNoteId));
-    renderNoteList();
-    persistDbSoon();
-  }
-
-  function getNoteTags(noteId) {
-    var note = state.notes.find(function(n) { return n.id === noteId; });
-    return note ? note.tags : [];
-  }
-
-  /**
-   * Rendering helpers
-   */
-  function renderFolderTree() {
-    var html = buildFolderTree(null);
-    elements.folderTree.innerHTML = html || '<div class="s-notes-folder-empty">No folders</div>';
-    elements.folderTree.querySelectorAll('.s-notes-folder-item').forEach(function(item) {
-      item.addEventListener('click', function(e) {
-        e.stopPropagation();
-        state.currentFolderId = this.dataset.id;
-        renderListTitle();
-        renderNoteList();
-        renderFolderTree();
-      });
-    });
-    if (window.lucide) window.lucide.createIcons();
-  }
-
-  function buildFolderTree(parentId) {
-    var children = state.folders.filter(function(f) { return (f.parentId || null) === (parentId || null); });
-    if (!children.length) return '';
-    return children.map(function(folder) {
-      var active = state.currentFolderId === folder.id ? ' active' : '';
-      var childHtml = buildFolderTree(folder.id);
-      return '<div class="s-notes-folder-item' + active + '" data-id="' + folder.id + '"><i data-lucide="folder"></i><span>' + escapeHtml(folder.name) + '</span></div>' + (childHtml ? '<div class="s-notes-folder-children">' + childHtml + '</div>' : '');
-    }).join('');
-  }
-
-  function renderTagList() {
-    if (!state.tags.length) {
-      elements.tagList.innerHTML = '<div class="s-notes-tag-empty">No tags</div>';
-      return;
-    }
-    elements.tagList.innerHTML = state.tags.map(function(tag) {
-      var active = state.currentTagId === tag.id ? ' active' : '';
-      return '<span class="s-notes-tag' + active + '" data-id="' + tag.id + '"><span class="s-notes-tag-dot" style="background:' + tag.color + '"></span>' + escapeHtml(tag.name) + '</span>';
-    }).join('');
-
-    elements.tagList.querySelectorAll('.s-notes-tag').forEach(function(item) {
-      item.addEventListener('click', function() {
-        state.currentTagId = this.dataset.id;
-        renderListTitle();
-        renderNoteList();
-        renderTagList();
-      });
-    });
-  }
-
-  function renderListTitle() {
-    var i18n = window.sNotesI18n || {};
-    var folder = state.folders.find(function(f) { return f.id === state.currentFolderId; });
-    var tag = state.tags.find(function(t) { return t.id === state.currentTagId; });
-    var label = i18n.all_notes || 'All Notes';
-    if (folder && tag) label = folder.name + ' + #' + tag.name;
-    else if (folder) label = folder.name;
-    else if (tag) label = '#' + tag.name;
-    elements.listTitle.textContent = label;
-  }
-
-  function refreshLists() {
-    renderFolderTree();
-    renderTagList();
-    renderListTitle();
-    renderNoteList();
-    updateFolderSelect();
-  }
-
-  function setView(view) {
-    if (view === 'all') {
-      state.currentFolderId = null;
-      state.currentTagId = null;
-    }
-    renderListTitle();
-    renderFolderTree();
-    renderTagList();
-    renderNoteList();
-  }
-
-  function renderNoteList() {
-    var i18n = window.sNotesI18n || {};
-    var filtered = getFilteredNotes();
-    if (!filtered.length) {
-      var message = state.search ? (i18n.no_results || 'No matching notes') : (i18n.no_notes || 'No notes yet. Create your first note!');
-      elements.noteList.innerHTML = '<div class="s-notes-empty"><i data-lucide="notebook-pen"></i><p>' + message + '</p></div>';
-      if (window.lucide) window.lucide.createIcons();
-      return;
-    }
-
-    elements.noteList.innerHTML = filtered.map(function(note) {
-      var active = state.currentNoteId === note.id ? ' active' : '';
-      var preview = (note.contentText || '').slice(0, 120);
-      var tagBadges = (note.tags || []).map(function(tagId) {
-        var tag = state.tags.find(function(t) { return t.id === tagId; });
-        return tag ? '<span class="s-notes-item-tag">' + escapeHtml(tag.name) + '</span>' : '';
-      }).join('');
-      return '<div class="s-notes-item' + active + '" data-id="' + note.id + '">' +
-        '<div class="s-notes-item-title">' + escapeHtml(note.title || (i18n.untitled || 'Untitled')) + '</div>' +
-        '<div class="s-notes-item-preview">' + escapeHtml(preview) + '</div>' +
-        '<div class="s-notes-item-meta"><span>' + formatDate(note.updatedAt) + '</span>' + (tagBadges ? '<div class="s-notes-item-tags">' + tagBadges + '</div>' : '') + '</div>' +
-      '</div>';
-    }).join('');
-
-    elements.noteList.querySelectorAll('.s-notes-item').forEach(function(item) {
-      item.addEventListener('click', function() {
-        selectNote(this.dataset.id);
-      });
-    });
-
-    if (window.lucide) window.lucide.createIcons();
-  }
-
-  function updateFolderSelect() {
-    var html = '<option value="">No folder</option>';
-    function walk(parentId, prefix) {
-      state.folders.filter(function(f) { return (f.parentId || null) === (parentId || null); }).forEach(function(folder) {
-        html += '<option value="' + folder.id + '">' + prefix + escapeHtml(folder.name) + '</option>';
-        walk(folder.id, prefix + '— ');
-      });
-    }
-    walk(null, '');
-    elements.noteFolder.innerHTML = html;
-    elements.parentFolderSelect.innerHTML = html;
-    if (state.currentNoteId) {
-      var note = state.notes.find(function(n) { return n.id === state.currentNoteId; });
-      if (note) elements.noteFolder.value = note.folderId || '';
-    }
-  }
-
-  /**
-   * Filtering and search (SQLite FTS)
-   */
-  function getFilteredNotes() {
-    var notes = state.notes;
-
-    if (state.search) {
-      try {
-        var stmt = sqliteDb.prepare('SELECT n.id FROM notes_fts f JOIN notes n ON n.rowid = f.rowid WHERE notes_fts MATCH ? ORDER BY rank', [state.search + '*']);
-        var ids = [];
-        while (stmt.step()) ids.push(stmt.getAsObject().id);
-        stmt.free();
-        notes = state.notes.filter(function(n) { return ids.indexOf(n.id) !== -1; });
-      } catch (err) {
-        console.warn('FTS search failed, fallback to in-memory', err);
-        var q = state.search.toLowerCase();
-        notes = notes.filter(function(n) {
-          return (n.title || '').toLowerCase().indexOf(q) > -1 || (n.contentText || '').toLowerCase().indexOf(q) > -1;
-        });
-      }
-    }
-
-    if (state.currentFolderId) {
-      notes = notes.filter(function(n) { return (n.folderId || null) === state.currentFolderId; });
-    }
-
-    if (state.currentTagId) {
-      notes = notes.filter(function(n) { return (n.tags || []).indexOf(state.currentTagId) !== -1; });
-    }
-
-    return notes;
-  }
-
-  /**
-   * Saving
-   */
-  function scheduleSave() {
-    clearTimeout(saveTimeout);
-    saveTimeout = setTimeout(saveCurrentNote, 300);
-  }
-
-  async function saveCurrentNote() {
-    if (!state.currentNoteId || !editor) return;
-
-    var data = await editor.save();
-    var contentText = blocksToPlainText(data.blocks);
-    var now = new Date().toISOString();
-    var folderId = elements.noteFolder.value || null;
-    var title = elements.noteTitle.value || '';
-
-    sqliteDb.run('INSERT INTO notes (id, title, content_json, content_text, folder_id, created_at, updated_at) VALUES (?, ?, ?, ?, ?, COALESCE((SELECT created_at FROM notes WHERE id = ?), ?), ?) ON CONFLICT(id) DO UPDATE SET title=excluded.title, content_json=excluded.content_json, content_text=excluded.content_text, folder_id=excluded.folder_id, updated_at=excluded.updated_at', [
-      state.currentNoteId,
-      title,
-      JSON.stringify(data),
-      contentText,
-      folderId,
-      state.currentNoteId,
-      now,
-      now
-    ]);
-
-    // Sync tags already handled via add/remove
-    state.notes = loadNotesFromSql();
-    persistDbSoon();
-    await idbPut(STORE_META, { id: state.currentNoteId, title: title, content_text: contentText, folder_id: folderId, updated_at: now });
-    renderNoteList();
-    updatePreviewFromBlocks(data.blocks);
-  }
-
-  /**
-   * Attachments via OPFS
-   */
-  async function uploadAttachment(file) {
-    if (!state.currentNoteId) {
-      await createNote();
-    }
-    var path = await saveFileToOpfs(file, state.currentNoteId);
-    var url = await attachmentUrlFromPath(path);
-    var id = generateId();
-    sqliteDb.run('INSERT INTO attachments (id, note_id, file_name, mime_type, opfs_path, created_at) VALUES (?, ?, ?, ?, ?, ?)', [id, state.currentNoteId, file.name, file.type, path, new Date().toISOString()]);
-    persistDbSoon();
-    return { success: 1, file: { url: url, path: path }, meta: { path: path, name: file.name, mime: file.type } };
-  }
-
-  async function saveFileToOpfs(file, noteId) {
-    if (!navigator.storage || !navigator.storage.getDirectory) {
-      // Fallback to data URL when OPFS is unavailable
-      return await fileToDataUrl(file);
-    }
-    if (!opfsRoot) {
+  // Initialize OPFS for file storage
+  async function initOPFS() {
+    try {
       opfsRoot = await navigator.storage.getDirectory();
+      opfsDir = await opfsRoot.getDirectoryHandle(OPFS_DIR, { create: true });
+      return true;
+    } catch (e) {
+      console.warn('OPFS not available, falling back to IndexedDB for attachments:', e);
+      return false;
     }
-    var appDir = await opfsRoot.getDirectoryHandle('s-notes', { create: true });
-    var noteDir = await appDir.getDirectoryHandle(noteId, { create: true });
-    var sanitized = sanitizeFileName(file.name);
-    var handle = await noteDir.getFileHandle(Date.now() + '-' + sanitized, { create: true });
-    var writable = await handle.createWritable();
-    await writable.write(file);
-    await writable.close();
-    return ['s-notes', noteId, handle.name].join('/');
   }
 
-  async function attachmentUrlFromPath(path) {
-    if (attachmentUrlCache[path]) return attachmentUrlCache[path];
-    var url = await readOpfsFile(path);
-    attachmentUrlCache[path] = url;
-    return url;
-  }
+  // ============================================
+  // NOTE OPERATIONS
+  // ============================================
 
-  async function readOpfsFile(path) {
-    if (!path) return '';
-    if (path.startsWith('data:')) return path;
-    if (!navigator.storage || !navigator.storage.getDirectory) return '';
-
-    var parts = path.split('/');
-    var dir = await navigator.storage.getDirectory();
-    var handle = dir;
-    for (var i = 0; i < parts.length; i++) {
-      if (i === parts.length - 1) {
-        var fileHandle = await handle.getFileHandle(parts[i]);
-        var file = await fileHandle.getFile();
-        return URL.createObjectURL(file);
-      }
-      handle = await handle.getDirectoryHandle(parts[i]);
-    }
-    return '';
-  }
-
-  /**
-   * Preview rendering
-   */
-  async function updatePreview() {
-    if (!editor) return;
-    var data = await editor.save();
-    updatePreviewFromBlocks(data.blocks);
-  }
-
-  async function updatePreviewFromBlocks(blocks) {
-    if (!md) return;
-    var markdown = await blocksToMarkdown(blocks);
-    var html = md.render(markdown);
-    if (window.hljs) {
-      html = html.replace(/<pre><code class="language-([^"]*)">([\s\S]*?)<\/code><\/pre>/g, function(_, lang, code) {
-        var decoded = decodeHtml(code);
-        var highlighted = window.hljs.highlight(decoded, { language: lang || 'plaintext', ignoreIllegals: true }).value;
-        return '<pre><code class="language-' + lang + '">' + highlighted + '</code></pre>';
-      });
-    }
-    elements.preview.innerHTML = html;
-  }
-
-  function blocksToPlainText(blocks) {
-    return (blocks || []).map(function(block) {
-      if (block.type === 'header') return block.data.text;
-      if (block.type === 'list') return (block.data.items || []).join('\n');
-      if (block.type === 'checklist') return (block.data.items || []).map(function(i){ return (i.checked ? '[x] ' : '[ ] ') + i.text; }).join('\n');
-      if (block.type === 'code') return block.data.code || '';
-      if (block.type === 'image') return block.data.caption || block.data.file && block.data.file.url || '';
-      return block.data && block.data.text ? block.data.text : '';
-    }).join('\n');
-  }
-
-  async function blocksToMarkdown(blocks) {
-    var lines = [];
-    for (var i = 0; i < (blocks || []).length; i++) {
-      var block = blocks[i];
-      if (block.type === 'header') {
-        var level = Math.min(block.data.level || 1, 6);
-        lines.push(Array(level + 1).join('#') + ' ' + block.data.text);
-      } else if (block.type === 'list') {
-        var style = block.data.style === 'ordered';
-        (block.data.items || []).forEach(function(item, idx) {
-          lines.push((style ? (idx + 1) + '. ' : '- ') + item);
-        });
-      } else if (block.type === 'checklist') {
-        (block.data.items || []).forEach(function(item) {
-          lines.push('- [' + (item.checked ? 'x' : ' ') + '] ' + item.text);
-        });
-      } else if (block.type === 'code') {
-        lines.push('```' + (block.data.language || '')); lines.push(block.data.code || ''); lines.push('```');
-      } else if (block.type === 'image') {
-        var url = block.data.file && block.data.file.url;
-        var path = (block.data.file && block.data.file.path) || block.data.path;
-        if (!url && path) {
-          url = await attachmentUrlFromPath(path);
+  async function getAllNotes() {
+    return new Promise((resolve, reject) => {
+      const transaction = db.transaction([NOTES_STORE], 'readonly');
+      const store = transaction.objectStore(NOTES_STORE);
+      const index = store.index('updatedAt');
+      const request = index.openCursor(null, 'prev'); // Sort by updatedAt DESC
+      
+      const notes = [];
+      request.onsuccess = (event) => {
+        const cursor = event.target.result;
+        if (cursor) {
+          notes.push(cursor.value);
+          cursor.continue();
+        } else {
+          resolve(notes);
         }
-        lines.push('![' + (block.data.caption || 'image') + '](' + (url || '') + ')');
-      } else {
-        lines.push(block.data && block.data.text ? block.data.text : '');
-      }
-    }
-    return lines.join('\n\n');
+      };
+      request.onerror = () => reject(request.error);
+    });
   }
 
-  /**
-   * Import / Export
-   */
-  function exportNotes() {
-    var data = {
-      version: 2,
-      exportedAt: new Date().toISOString(),
-      notes: queryAll('SELECT * FROM notes'),
-      folders: state.folders,
-      tags: state.tags,
-      noteTags: queryAll('SELECT * FROM note_tags'),
-      attachments: queryAll('SELECT * FROM attachments')
-    };
-    var blob = new Blob([JSON.stringify(data, null, 2)], { type: 'application/json' });
-    var url = URL.createObjectURL(blob);
-    var a = document.createElement('a');
-    a.href = url;
-    a.download = 's-notes-export-' + new Date().toISOString().split('T')[0] + '.json';
-    a.click();
-    URL.revokeObjectURL(url);
+  async function getNote(id) {
+    return new Promise((resolve, reject) => {
+      const transaction = db.transaction([NOTES_STORE], 'readonly');
+      const store = transaction.objectStore(NOTES_STORE);
+      const request = store.get(id);
+      
+      request.onsuccess = () => resolve(request.result);
+      request.onerror = () => reject(request.error);
+    });
   }
 
-  function importNotes(file) {
-    var reader = new FileReader();
-    reader.onload = function(e) {
-      try {
-        var data = JSON.parse(e.target.result);
-        if (!data.notes || !Array.isArray(data.notes)) throw new Error('Invalid export');
-        sqliteDb.run('DELETE FROM note_tags');
-        sqliteDb.run('DELETE FROM notes');
-        sqliteDb.run('DELETE FROM folders');
-        sqliteDb.run('DELETE FROM tags');
-        sqliteDb.run('DELETE FROM attachments');
-
-        data.folders && data.folders.forEach(function(f) {
-          sqliteDb.run('INSERT INTO folders (id, name, parent_id, created_at) VALUES (?, ?, ?, ?)', [f.id || generateId(), f.name, f.parent_id || f.parentId || null, f.created_at || f.createdAt || new Date().toISOString()]);
-        });
-        data.tags && data.tags.forEach(function(t) {
-          sqliteDb.run('INSERT INTO tags (id, name, color) VALUES (?, ?, ?)', [t.id || generateId(), t.name, t.color || '#3b82f6']);
-        });
-        data.notes.forEach(function(n) {
-          sqliteDb.run('INSERT INTO notes (id, title, content_json, content_text, folder_id, created_at, updated_at) VALUES (?, ?, ?, ?, ?, ?, ?)', [n.id || generateId(), n.title || '', n.content_json || n.contentJson || '{}', n.content_text || n.contentText || '', n.folder_id || n.folderId || null, n.created_at || n.createdAt || new Date().toISOString(), n.updated_at || n.updatedAt || new Date().toISOString()]);
-        });
-        data.noteTags && data.noteTags.forEach(function(nt) {
-          sqliteDb.run('INSERT INTO note_tags (note_id, tag_id) VALUES (?, ?)', [nt.note_id || nt.noteId, nt.tag_id || nt.tagId]);
-        });
-        data.attachments && data.attachments.forEach(function(a) {
-          sqliteDb.run('INSERT INTO attachments (id, note_id, file_name, mime_type, opfs_path, created_at) VALUES (?, ?, ?, ?, ?, ?)', [a.id || generateId(), a.note_id || a.noteId, a.file_name || a.fileName, a.mime_type || a.mimeType, a.opfs_path || a.opfsPath, a.created_at || a.createdAt || new Date().toISOString()]);
-        });
-
-        persistDbSoon();
-        hydrateFromDb().then(function() {
-          refreshLists();
-        });
-        if (window.showMessage) window.showMessage('Import successful');
-      } catch (err) {
-        console.error('Import failed', err);
-        if (window.showMessage) window.showMessage('Import failed: ' + err.message, true);
-      }
-    };
-    reader.readAsText(file);
+  async function saveNote(note) {
+    return new Promise((resolve, reject) => {
+      const transaction = db.transaction([NOTES_STORE], 'readwrite');
+      const store = transaction.objectStore(NOTES_STORE);
+      const request = store.put(note);
+      
+      request.onsuccess = () => resolve(note);
+      request.onerror = () => reject(request.error);
+    });
   }
 
-  /**
-   * Detach / PiP
-   */
-  async function detachNote() {
-    if (!state.currentNoteId) return;
-    var data = await editor.save();
-    var html = md ? md.render(await blocksToMarkdown(data.blocks)) : '<pre>' + escapeHtml(blocksToPlainText(data.blocks)) + '</pre>';
-    var title = elements.noteTitle.value || 'S Notes';
-
-    if (document.pictureInPictureEnabled && window.documentPictureInPicture) {
-      try {
-        var pipWindow = await window.documentPictureInPicture.requestWindow({ width: 600, height: 800 });
-        pipWindow.document.write('<!DOCTYPE html><html><head><meta charset="utf-8"><title>' + escapeHtml(title) + '</title><style>body{font-family:Arial,Helvetica,sans-serif;padding:24px;line-height:1.6;} pre{background:#0f172a;color:#e2e8f0;padding:12px;border-radius:8px;overflow:auto;}</style></head><body><h1>' + escapeHtml(title) + '</h1>' + html + '</body></html>');
-        pipWindow.document.close();
-        return;
-      } catch (err) {
-        console.warn('PiP failed, fallback to new window', err);
-      }
+  async function deleteNote(id) {
+    // First delete all attachments for this note
+    const attachments = await getAttachmentsForNote(id);
+    for (const attachment of attachments) {
+      await deleteAttachment(attachment.id);
     }
 
-    var doc = '<!DOCTYPE html><html><head><meta charset="utf-8"><title>' + escapeHtml(title) + '</title><style>body{font-family:Arial,Helvetica,sans-serif;padding:32px;max-width:900px;margin:0 auto;line-height:1.7;} pre{background:#0f172a;color:#e2e8f0;padding:12px;border-radius:8px;overflow:auto;}</style></head><body><h1>' + escapeHtml(title) + '</h1>' + html + '</body></html>';
-    var blob = new Blob([doc], { type: 'text/html' });
-    var url = URL.createObjectURL(blob);
-    window.open(url, '_blank', 'width=900,height=900');
+    return new Promise((resolve, reject) => {
+      const transaction = db.transaction([NOTES_STORE], 'readwrite');
+      const store = transaction.objectStore(NOTES_STORE);
+      const request = store.delete(id);
+      
+      request.onsuccess = () => resolve();
+      request.onerror = () => reject(request.error);
+    });
   }
 
-  /**
-   * Utilities
-   */
+  async function searchNotes(query) {
+    const allNotes = await getAllNotes();
+    const lowerQuery = query.toLowerCase();
+    
+    return allNotes.filter(note => 
+      note.title.toLowerCase().includes(lowerQuery) ||
+      note.content.toLowerCase().includes(lowerQuery) ||
+      (note.tags && note.tags.some(tag => tag.toLowerCase().includes(lowerQuery)))
+    );
+  }
+
+  // ============================================
+  // ATTACHMENT OPERATIONS (OPFS + IndexedDB)
+  // ============================================
+
+  async function saveAttachment(noteId, file) {
+    const id = generateId();
+    const fileName = `${id}_${file.name}`;
+    
+    let filePath = null;
+    let blobData = null;
+
+    // Try to save to OPFS first
+    if (opfsDir) {
+      try {
+        const fileHandle = await opfsDir.getFileHandle(fileName, { create: true });
+        const writable = await fileHandle.createWritable();
+        await writable.write(file);
+        await writable.close();
+        filePath = fileName;
+      } catch (e) {
+        console.warn('OPFS write failed, storing in IndexedDB:', e);
+        blobData = await fileToArrayBuffer(file);
+      }
+    } else {
+      blobData = await fileToArrayBuffer(file);
+    }
+
+    const attachmentMeta = {
+      id,
+      noteId,
+      fileName: file.name,
+      type: file.type,
+      size: file.size,
+      filePath, // OPFS path
+      blobData, // Fallback: ArrayBuffer in IndexedDB
+      createdAt: Date.now()
+    };
+
+    return new Promise((resolve, reject) => {
+      const transaction = db.transaction([ATTACHMENTS_STORE], 'readwrite');
+      const store = transaction.objectStore(ATTACHMENTS_STORE);
+      const request = store.put(attachmentMeta);
+      
+      request.onsuccess = () => resolve(attachmentMeta);
+      request.onerror = () => reject(request.error);
+    });
+  }
+
+  async function getAttachment(id) {
+    return new Promise((resolve, reject) => {
+      const transaction = db.transaction([ATTACHMENTS_STORE], 'readonly');
+      const store = transaction.objectStore(ATTACHMENTS_STORE);
+      const request = store.get(id);
+      
+      request.onsuccess = () => resolve(request.result);
+      request.onerror = () => reject(request.error);
+    });
+  }
+
+  async function getAttachmentBlob(attachment) {
+    if (attachment.filePath && opfsDir) {
+      try {
+        const fileHandle = await opfsDir.getFileHandle(attachment.filePath);
+        return await fileHandle.getFile();
+      } catch (e) {
+        console.warn('OPFS read failed:', e);
+      }
+    }
+    
+    if (attachment.blobData) {
+      return new Blob([attachment.blobData], { type: attachment.type });
+    }
+    
+    return null;
+  }
+
+  async function getAttachmentsForNote(noteId) {
+    return new Promise((resolve, reject) => {
+      const transaction = db.transaction([ATTACHMENTS_STORE], 'readonly');
+      const store = transaction.objectStore(ATTACHMENTS_STORE);
+      const index = store.index('noteId');
+      const request = index.getAll(noteId);
+      
+      request.onsuccess = () => resolve(request.result || []);
+      request.onerror = () => reject(request.error);
+    });
+  }
+
+  async function deleteAttachment(id) {
+    const attachment = await getAttachment(id);
+    
+    // Delete from OPFS if exists
+    if (attachment && attachment.filePath && opfsDir) {
+      try {
+        await opfsDir.removeEntry(attachment.filePath);
+      } catch (e) {
+        console.warn('OPFS delete failed:', e);
+      }
+    }
+
+    return new Promise((resolve, reject) => {
+      const transaction = db.transaction([ATTACHMENTS_STORE], 'readwrite');
+      const store = transaction.objectStore(ATTACHMENTS_STORE);
+      const request = store.delete(id);
+      
+      request.onsuccess = () => resolve();
+      request.onerror = () => reject(request.error);
+    });
+  }
+
+  // ============================================
+  // UTILITY FUNCTIONS
+  // ============================================
+
   function generateId() {
-    return Date.now().toString(36) + Math.random().toString(36).slice(2, 8);
+    return Date.now().toString(36) + Math.random().toString(36).substr(2, 9);
   }
 
-  function sanitizeFileName(name) {
-    return name.replace(/[^a-zA-Z0-9._-]/g, '_');
+  function fileToArrayBuffer(file) {
+    return new Promise((resolve, reject) => {
+      const reader = new FileReader();
+      reader.onload = () => resolve(reader.result);
+      reader.onerror = () => reject(reader.error);
+      reader.readAsArrayBuffer(file);
+    });
   }
 
-  function getRandomColor() {
-    var colors = ['#3b82f6', '#10b981', '#f59e0b', '#ef4444', '#8b5cf6', '#ec4899', '#06b6d4'];
-    return colors[Math.floor(Math.random() * colors.length)];
+  function getTitleFromContent(content) {
+    if (!content) return t.untitled;
+    // Try to get first heading or first line
+    const lines = content.split('\n');
+    for (const line of lines) {
+      const trimmed = line.trim();
+      if (trimmed) {
+        // Remove markdown heading syntax
+        return trimmed.replace(/^#+\s*/, '').substring(0, 50) || t.untitled;
+      }
+    }
+    return t.untitled;
+  }
+
+  function formatDate(timestamp) {
+    const date = new Date(timestamp);
+    const now = new Date();
+    const diff = now - date;
+    
+    if (diff < 60000) return 'Just now';
+    if (diff < 3600000) return `${Math.floor(diff / 60000)}m ago`;
+    if (diff < 86400000) return `${Math.floor(diff / 3600000)}h ago`;
+    if (diff < 604800000) return `${Math.floor(diff / 86400000)}d ago`;
+    
+    return date.toLocaleDateString();
   }
 
   function escapeHtml(text) {
-    if (!text) return '';
-    var div = document.createElement('div');
+    const div = document.createElement('div');
     div.textContent = text;
     return div.innerHTML;
   }
 
-  function decodeHtml(html) {
-    var txt = document.createElement('textarea');
-    txt.innerHTML = html;
-    return txt.value;
+  // ============================================
+  // UI & EDITOR
+  // ============================================
+
+  let notes = [];
+  let activeNoteId = null;
+  let editor = null;
+  let saveTimeout = null;
+
+  // DOM Elements
+  const notesList = document.getElementById('notes-list');
+  const newNoteBtn = document.getElementById('new-note-btn');
+  const searchInput = document.getElementById('search-notes');
+  const noteEditor = document.getElementById('note-editor');
+  const emptyState = document.getElementById('empty-state');
+  const editorContainer = document.getElementById('editor-container');
+  const storageStatus = document.getElementById('storage-status');
+
+  // Translations
+  const t = window.notesTranslations || {
+    untitled: 'Untitled Note',
+    category: 'Notes',
+    confirmDelete: 'Are you sure you want to delete this note?',
+    noNotes: 'No notes yet. Click "New Note" to create one.',
+    loading: 'Loading...',
+    ready: 'Ready',
+    syncing: 'Syncing...',
+    error: 'Error',
+    attachments: 'Attachments',
+    deleteAttachment: 'Delete attachment?'
+  };
+
+  function updateStatus(status, text) {
+    if (storageStatus) {
+      storageStatus.className = 'storage-status ' + status;
+      const statusText = storageStatus.querySelector('.status-text');
+      if (statusText) statusText.textContent = text || t[status] || status;
+    }
   }
 
-  function formatDate(dateStr) {
-    var date = new Date(dateStr);
-    if (Number.isNaN(date.getTime())) return '';
-    var now = new Date();
-    var diff = now - date;
-    var day = 86400000;
-    if (diff < day) return date.toLocaleTimeString(undefined, { hour: '2-digit', minute: '2-digit' });
-    if (diff < 7 * day) return date.toLocaleDateString(undefined, { weekday: 'short' });
-    return date.toLocaleDateString(undefined, { month: 'short', day: 'numeric' });
+  // Initialize Toast UI Editor
+  function initEditor() {
+    const isDark = document.documentElement.getAttribute('data-theme') === 'dark';
+    
+    editor = new toastui.Editor({
+      el: editorContainer,
+      height: '450px',
+      initialEditType: 'wysiwyg',
+      previewStyle: 'vertical',
+      theme: isDark ? 'dark' : 'light',
+      placeholder: 'Start writing your note...',
+      usageStatistics: false,
+      toolbarItems: [
+        ['heading', 'bold', 'italic', 'strike'],
+        ['hr', 'quote'],
+        ['ul', 'ol', 'task', 'indent', 'outdent'],
+        ['table', 'image', 'link'],
+        ['code', 'codeblock'],
+        ['scrollSync']
+      ],
+      hooks: {
+        addImageBlobHook: async (blob, callback) => {
+          if (!activeNoteId) {
+            alert('Please create or select a note first');
+            return;
+          }
+          
+          updateStatus('syncing', t.syncing);
+          
+          try {
+            const attachment = await saveAttachment(activeNoteId, blob);
+            const attachmentBlob = await getAttachmentBlob(attachment);
+            const url = URL.createObjectURL(attachmentBlob);
+            
+            // Store the attachment ID in the URL for reference
+            callback(url, attachment.fileName);
+            
+            // Update note's attachment list
+            await updateNoteAttachments();
+            updateStatus('ready', t.ready);
+          } catch (e) {
+            console.error('Failed to save attachment:', e);
+            updateStatus('error', t.error);
+          }
+        }
+      },
+      events: {
+        change: () => {
+          if (activeNoteId) {
+            debouncedSave();
+          }
+        }
+      }
+    });
+
+    // Watch for theme changes
+    const observer = new MutationObserver((mutations) => {
+      mutations.forEach((mutation) => {
+        if (mutation.attributeName === 'data-theme') {
+          const isDark = document.documentElement.getAttribute('data-theme') === 'dark';
+          // Toast UI doesn't have dynamic theme switch, so we need to handle via CSS
+        }
+      });
+    });
+    observer.observe(document.documentElement, { attributes: true });
   }
 
-  function safeParse(str) {
-    try { return JSON.parse(str || '{}'); } catch (e) { return null; }
+  // Debounced save
+  function debouncedSave() {
+    clearTimeout(saveTimeout);
+    updateStatus('syncing', t.syncing);
+    
+    saveTimeout = setTimeout(async () => {
+      await saveCurrentNote();
+      updateStatus('ready', t.ready);
+    }, 500);
   }
 
-  async function fileToDataUrl(file) {
-    return new Promise(function(resolve, reject) {
-      var reader = new FileReader();
-      reader.onload = function() { resolve(reader.result); };
-      reader.onerror = reject;
-      reader.readAsDataURL(file);
+  // Save current note
+  async function saveCurrentNote() {
+    if (!activeNoteId || !editor) return;
+
+    const note = await getNote(activeNoteId);
+    if (!note) return;
+
+    const content = editor.getMarkdown();
+    note.content = content;
+    note.title = getTitleFromContent(content);
+    note.updatedAt = Date.now();
+
+    await saveNote(note);
+    
+    // Update list without losing scroll position
+    renderNotesList(searchInput.value);
+  }
+
+  async function updateNoteAttachments() {
+    if (!activeNoteId) return;
+    
+    const note = await getNote(activeNoteId);
+    if (!note) return;
+    
+    const attachments = await getAttachmentsForNote(activeNoteId);
+    note.attachmentCount = attachments.length;
+    await saveNote(note);
+  }
+
+  // Render notes list
+  async function renderNotesList(filter = '') {
+    let displayNotes = filter ? await searchNotes(filter) : notes;
+
+    notesList.innerHTML = '';
+
+    displayNotes.forEach(note => {
+      const noteItem = document.createElement('div');
+      noteItem.className = 'note-item';
+      if (note.id === activeNoteId) {
+        noteItem.classList.add('active');
+      }
+
+      const attachmentBadge = note.attachmentCount 
+        ? `<span class="note-item-attachments">${note.attachmentCount}</span>` 
+        : '';
+
+      noteItem.innerHTML = `
+        <div class="note-item-title">${escapeHtml(note.title)}</div>
+        <div class="note-item-meta">
+          <span class="note-item-date">${formatDate(note.updatedAt)}</span>
+          ${attachmentBadge}
+          <span class="note-item-category">${t.category}</span>
+        </div>
+      `;
+
+      noteItem.addEventListener('click', () => selectNote(note.id));
+      
+      // Right click to delete
+      noteItem.addEventListener('contextmenu', async (e) => {
+        e.preventDefault();
+        if (confirm(t.confirmDelete)) {
+          await deleteNoteById(note.id);
+        }
+      });
+
+      notesList.appendChild(noteItem);
     });
   }
 
-  // Export
-  window.SNotesApp = SNotesApp;
+  // Select note
+  async function selectNote(id) {
+    // Save current note before switching
+    if (activeNoteId && editor) {
+      await saveCurrentNote();
+    }
 
+    const note = await getNote(id);
+    if (!note) return;
+
+    activeNoteId = id;
+    localStorage.setItem('snotes-active', id);
+
+    if (editor) {
+      editor.setMarkdown(note.content || '');
+    }
+
+    hideEmptyState();
+    renderNotesList(searchInput.value);
+  }
+
+  // Create new note
+  async function createNewNote() {
+    const newNote = {
+      id: generateId(),
+      title: t.untitled,
+      content: '',
+      tags: [],
+      attachmentCount: 0,
+      createdAt: Date.now(),
+      updatedAt: Date.now()
+    };
+
+    await saveNote(newNote);
+    notes.unshift(newNote);
+    renderNotesList(searchInput.value);
+    selectNote(newNote.id);
+    
+    if (editor) {
+      editor.focus();
+    }
+  }
+
+  // Delete note
+  async function deleteNoteById(id) {
+    updateStatus('syncing', t.syncing);
+    
+    await deleteNote(id);
+    notes = notes.filter(n => n.id !== id);
+
+    if (id === activeNoteId) {
+      if (notes.length > 0) {
+        selectNote(notes[0].id);
+      } else {
+        activeNoteId = null;
+        localStorage.removeItem('snotes-active');
+        showEmptyState();
+      }
+    }
+
+    renderNotesList(searchInput.value);
+    updateStatus('ready', t.ready);
+  }
+
+  // Show/hide empty state
+  function showEmptyState() {
+    noteEditor.classList.add('hidden');
+    emptyState.classList.remove('hidden');
+  }
+
+  function hideEmptyState() {
+    noteEditor.classList.remove('hidden');
+    emptyState.classList.add('hidden');
+  }
+
+  // Attach event listeners
+  function attachEventListeners() {
+    newNoteBtn.addEventListener('click', createNewNote);
+
+    searchInput.addEventListener('input', (e) => {
+      renderNotesList(e.target.value);
+    });
+
+    // Keyboard shortcuts
+    document.addEventListener('keydown', (e) => {
+      // Ctrl/Cmd + N: New note
+      if ((e.ctrlKey || e.metaKey) && e.key === 'n') {
+        e.preventDefault();
+        createNewNote();
+      }
+      
+      // Ctrl/Cmd + F: Focus search
+      if ((e.ctrlKey || e.metaKey) && e.key === 'f' && !e.shiftKey) {
+        // Only if not inside editor
+        if (!editorContainer.contains(document.activeElement)) {
+          e.preventDefault();
+          searchInput.focus();
+        }
+      }
+
+      // Ctrl/Cmd + S: Force save
+      if ((e.ctrlKey || e.metaKey) && e.key === 's') {
+        e.preventDefault();
+        saveCurrentNote();
+      }
+    });
+  }
+
+  // Migrate from localStorage (old format) to IndexedDB
+  async function migrateFromLocalStorage() {
+    const oldData = localStorage.getItem('simple-notes-data');
+    if (!oldData) return;
+
+    try {
+      const oldNotes = JSON.parse(oldData);
+      if (Array.isArray(oldNotes) && oldNotes.length > 0) {
+        for (const oldNote of oldNotes) {
+          const newNote = {
+            id: oldNote.id || generateId(),
+            title: getTitleFromContent(oldNote.content),
+            content: oldNote.content || '',
+            tags: [],
+            attachmentCount: 0,
+            createdAt: oldNote.timestamp || Date.now(),
+            updatedAt: oldNote.timestamp || Date.now()
+          };
+          await saveNote(newNote);
+        }
+        
+        // Remove old data after successful migration
+        localStorage.removeItem('simple-notes-data');
+        localStorage.removeItem('simple-notes-active');
+        console.log('Migration from localStorage completed');
+      }
+    } catch (e) {
+      console.error('Migration failed:', e);
+    }
+  }
+
+  // Initialize
+  async function init() {
+    updateStatus('loading', t.loading);
+
+    try {
+      // Initialize storage
+      await initDatabase();
+      await initOPFS();
+
+      // Migrate old data
+      await migrateFromLocalStorage();
+
+      // Load notes
+      notes = await getAllNotes();
+
+      // Create welcome note if empty
+      if (notes.length === 0) {
+        const welcomeNote = {
+          id: generateId(),
+          title: 'Welcome to S-Notes!',
+          content: `# Welcome to S-Notes! 🎉
+
+This is a **powerful note-taking app** with full Markdown support.
+
+## Features
+- ✅ Rich text editing with Markdown
+- ✅ Image attachments stored locally
+- ✅ Fast search across all notes
+- ✅ All data stays private in your browser
+- ✅ Auto-save as you type
+
+## Markdown Examples
+
+### Text Formatting
+- **Bold text**
+- *Italic text*
+- ~~Strikethrough~~
+- \`Inline code\`
+
+### Code Block
+\`\`\`javascript
+function hello() {
+  console.log('Hello, World!');
+}
+\`\`\`
+
+### Task List
+- [x] Create a note
+- [ ] Add an image
+- [ ] Share with friends
+
+### Table
+| Feature | Status |
+|---------|--------|
+| Markdown | ✅ |
+| Images | ✅ |
+| Search | ✅ |
+
+---
+*Right-click on a note to delete it*`,
+          tags: ['welcome'],
+          attachmentCount: 0,
+          createdAt: Date.now(),
+          updatedAt: Date.now()
+        };
+        
+        await saveNote(welcomeNote);
+        notes = [welcomeNote];
+      }
+
+      // Initialize editor
+      initEditor();
+
+      // Render UI
+      renderNotesList();
+      attachEventListeners();
+
+      // Load active note or first note
+      const savedActiveId = localStorage.getItem('snotes-active');
+      if (savedActiveId && notes.find(n => n.id === savedActiveId)) {
+        selectNote(savedActiveId);
+      } else if (notes.length > 0) {
+        selectNote(notes[0].id);
+      } else {
+        showEmptyState();
+      }
+
+      updateStatus('ready', t.ready);
+    } catch (e) {
+      console.error('Initialization failed:', e);
+      updateStatus('error', t.error);
+    }
+  }
+
+  // Start initialization
+  if (document.readyState === 'loading') {
+    document.addEventListener('DOMContentLoaded', init);
+  } else {
+    init();
+  }
 })();

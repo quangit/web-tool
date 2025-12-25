@@ -711,4 +711,20 @@ export const fr = {
     'Ces bibliothèques sont activement maintenues et largement utilisées par la communauté. Vérifiez toujours la documentation et les avis de sécurité avant de les utiliser en production.',
   'jwt_libraries.algorithms': 'Algorithmes Supportés',
   'jwt_libraries.back_to_decoder': 'Retour au décodeur JWT',
+
+  // S-Notes
+  's_notes.title': 'Notes simples',
+  's_notes.description':
+    'Un outil de prise de notes simple pour organiser vos pensées. Toutes les notes sont stockées localement dans votre navigateur.',
+  's_notes.search_notes': 'Rechercher des notes',
+  's_notes.new_note': 'Nouvelle note',
+  's_notes.delete_note': 'Supprimer la note',
+  's_notes.note_title': 'Titre de la note',
+  's_notes.note_content': 'Contenu de la note',
+  's_notes.no_notes': 'Aucune note pour le moment. Cliquez sur "Nouvelle note" pour en créer une.',
+  's_notes.untitled': 'Note sans titre',
+  's_notes.category': 'Notes',
+  's_notes.confirm_delete': 'Êtes-vous sûr de vouloir supprimer cette note ?',
+  's_notes.title_placeholder': 'Entrez le titre de la note...',
+  's_notes.content_placeholder': 'Commencez à taper votre note ici...',
 };

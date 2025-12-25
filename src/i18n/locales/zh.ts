@@ -698,4 +698,19 @@ export const zh = {
     '这些库都是积极维护并被社区广泛使用的。在生产环境中使用之前,请务必查看文档和安全建议。',
   'jwt_libraries.algorithms': '支持的算法',
   'jwt_libraries.back_to_decoder': '返回 JWT 解码器',
+
+  // S-Notes
+  's_notes.title': '简单笔记',
+  's_notes.description': '简单的笔记工具来整理您的想法。所有笔记都存储在浏览器本地。',
+  's_notes.search_notes': '搜索笔记',
+  's_notes.new_note': '新笔记',
+  's_notes.delete_note': '删除笔记',
+  's_notes.note_title': '笔记标题',
+  's_notes.note_content': '笔记内容',
+  's_notes.no_notes': '还没有笔记。点击"新笔记"创建一个。',
+  's_notes.untitled': '无标题笔记',
+  's_notes.category': '笔记',
+  's_notes.confirm_delete': '您确定要删除此笔记吗？',
+  's_notes.title_placeholder': '输入笔记标题...',
+  's_notes.content_placeholder': '在这里开始输入您的笔记...',
 };

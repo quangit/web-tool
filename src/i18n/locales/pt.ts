@@ -712,4 +712,20 @@ export const pt = {
     'Essas bibliotecas são ativamente mantidas e amplamente usadas pela comunidade. Sempre verifique a documentação e avisos de segurança antes de usar em produção.',
   'jwt_libraries.algorithms': 'Algoritmos Suportados',
   'jwt_libraries.back_to_decoder': 'Voltar para JWT Decoder',
+
+  // S-Notes
+  's_notes.title': 'Notas simples',
+  's_notes.description':
+    'Uma ferramenta simples de anotações para organizar seus pensamentos. Todas as notas são armazenadas localmente em seu navegador.',
+  's_notes.search_notes': 'Pesquisar notas',
+  's_notes.new_note': 'Nova nota',
+  's_notes.delete_note': 'Excluir nota',
+  's_notes.note_title': 'Título da nota',
+  's_notes.note_content': 'Conteúdo da nota',
+  's_notes.no_notes': 'Ainda não há notas. Clique em "Nova nota" para criar uma.',
+  's_notes.untitled': 'Nota sem título',
+  's_notes.category': 'Notas',
+  's_notes.confirm_delete': 'Tem certeza de que deseja excluir esta nota?',
+  's_notes.title_placeholder': 'Digite o título da nota...',
+  's_notes.content_placeholder': 'Comece a digitar sua nota aqui...',
 };

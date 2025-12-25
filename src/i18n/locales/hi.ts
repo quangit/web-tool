@@ -712,4 +712,20 @@ export const hi = {
     'ये लाइब्रेरीज़ सक्रिय रूप से बनाए रखी जाती हैं और समुदाय द्वारा व्यापक रूप से उपयोग की जाती हैं। उत्पादन में उपयोग करने से पहले हमेशा दस्तावेज़ीकरण और सुरक्षा सलाह की जाँच करें।',
   'jwt_libraries.algorithms': 'समर्थित एल्गोरिदम',
   'jwt_libraries.back_to_decoder': 'JWT डिकोडर पर वापस जाएं',
+
+  // S-Notes
+  's_notes.title': 'सरल नोट्स',
+  's_notes.description':
+    'अपने विचारों को व्यवस्थित करने के लिए एक सरल नोट-लेखन उपकरण। सभी नोट्स आपके ब्राउज़र में स्थानीय रूप से संग्रहीत होते हैं।',
+  's_notes.search_notes': 'नोट्स खोजें',
+  's_notes.new_note': 'नया नोट',
+  's_notes.delete_note': 'नोट हटाएं',
+  's_notes.note_title': 'नोट शीर्षक',
+  's_notes.note_content': 'नोट सामग्री',
+  's_notes.no_notes': 'अभी तक कोई नोट नहीं है। एक बनाने के लिए "नया नोट" पर क्लिक करें।',
+  's_notes.untitled': 'शीर्षकहीन नोट',
+  's_notes.category': 'नोट्स',
+  's_notes.confirm_delete': 'क्या आप वाकई इस नोट को हटाना चाहते हैं?',
+  's_notes.title_placeholder': 'नोट शीर्षक दर्ज करें...',
+  's_notes.content_placeholder': 'यहां अपना नोट टाइप करना शुरू करें...',
 };

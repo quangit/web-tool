@@ -708,4 +708,20 @@ export const ja = {
     'これらのライブラリは積極的にメンテナンスされており、コミュニティで広く使用されています。本番環境で使用する前に、必ずドキュメントとセキュリティ勧告を確認してください。',
   'jwt_libraries.algorithms': 'サポートされているアルゴリズム',
   'jwt_libraries.back_to_decoder': 'JWTデコーダーに戻る',
+
+  // S-Notes
+  's_notes.title': 'シンプルメモ',
+  's_notes.description':
+    'あなたの考えを整理するためのシンプルなメモツール。すべてのメモはブラウザにローカルに保存されます。',
+  's_notes.search_notes': 'メモを検索',
+  's_notes.new_note': '新しいメモ',
+  's_notes.delete_note': 'メモを削除',
+  's_notes.note_title': 'メモのタイトル',
+  's_notes.note_content': 'メモの内容',
+  's_notes.no_notes': 'まだメモがありません。「新しいメモ」をクリックして作成してください。',
+  's_notes.untitled': '無題のメモ',
+  's_notes.category': 'メモ',
+  's_notes.confirm_delete': 'このメモを削除してもよろしいですか？',
+  's_notes.title_placeholder': 'メモのタイトルを入力...',
+  's_notes.content_placeholder': 'ここにメモを入力し始めてください...',
 };
