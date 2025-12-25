@@ -116,6 +116,22 @@ const t = useTranslations(lang as any);
           <div id="jwt-output" class="container jwt-token-display" style="min-height: 150px;"></div>
           <textarea id="jwt-output-text" data-share="output" style="display: none;"></textarea>
         </div>
+        <details class="block text-only" data-toggle="copyblock">
+          <summary class="block-title">
+            {t('share_link')}
+            <div class="toolbar">
+              <button
+                class="icon"
+                data-toggle="copy"
+                data-clipboard-target="#share-link"
+                data-message={t('share_link_copied') || 'Share link copied'}
+              >
+                <i data-lucide="copy" title="Copy"></i>
+              </button>
+            </div>
+          </summary>
+          <input id="share-link" type="text" placeholder={t('share_link')} readonly="readonly" />
+        </details>
       </div>
     </div>
   </div>
@@ -264,6 +280,40 @@ const t = useTranslations(lang as any);
       // Initial encode if values exist
       if (headerInput.value || payloadInput.value || secretInput.value) {
         encodeJwt();
+      }
+
+      // Trigger share link generation on details toggle
+      const shareDetails = document.querySelector('details[data-toggle="copyblock"]');
+      if (shareDetails) {
+        shareDetails.addEventListener('toggle', function () {
+          if (this.open) {
+            // Generate share link manually
+            setTimeout(function () {
+              const shareLinkInput = document.getElementById('share-link');
+              if (shareLinkInput) {
+                const params = [];
+                document
+                  .querySelectorAll('[data-share]:not([data-share-ignore])')
+                  .forEach(function (el) {
+                    const key = el.getAttribute('data-share');
+                    let value = '';
+                    if (el.type === 'checkbox') {
+                      value = el.checked ? '1' : '0';
+                    } else {
+                      value = el.value || '';
+                    }
+                    if (value) {
+                      params.push(key + '=' + encodeURIComponent(value));
+                    }
+                  });
+                const url = params.length
+                  ? location.origin + location.pathname + '?' + params.join('&')
+                  : '';
+                shareLinkInput.value = url;
+              }
+            }, 50);
+          }
+        });
       }
     }
   </script>

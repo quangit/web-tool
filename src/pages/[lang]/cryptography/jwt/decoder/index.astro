@@ -39,6 +39,7 @@ const t = useTranslations(lang as any);
                 data-option="secret-encoding"
                 data-remember="secret-encoding"
                 data-share="secret_encoding"
+                data-auto-update
               >
                 <option value="utf-8" selected>UTF-8</option>
                 <option value="base64">Base64</option>
@@ -54,6 +55,7 @@ const t = useTranslations(lang as any);
                   data-option="jwt-input"
                   data-remember="jwt-input"
                   data-share="jwt"
+                  data-auto-update
                   style="min-height: 120px; font-family: monospace;"></textarea>
               </div>
             </details>
@@ -67,6 +69,7 @@ const t = useTranslations(lang as any);
                   data-option="jwt-secret"
                   data-remember="jwt-secret"
                   data-share="secret"
+                  data-auto-update
                   style="min-height: 60px; height: 60px; font-family: monospace;"></textarea>
               </div>
             </details>
@@ -158,6 +161,22 @@ const t = useTranslations(lang as any);
             </div>
           </div>
         </div>
+        <details class="block text-only" data-toggle="copyblock">
+          <summary class="block-title">
+            {t('share_link')}
+            <div class="toolbar">
+              <button
+                class="icon"
+                data-toggle="copy"
+                data-clipboard-target="#share-link"
+                data-message={t('share_link_copied') || 'Share link copied'}
+              >
+                <i data-lucide="copy" title="Copy"></i>
+              </button>
+            </div>
+          </summary>
+          <input id="share-link" type="text" placeholder={t('share_link')} readonly="readonly" />
+        </details>
       </div>
     </div>
   </div>
@@ -366,6 +385,40 @@ const t = useTranslations(lang as any);
       // Initial decode if value exists
       if (jwtInput.value) {
         decodeAndDisplay();
+      }
+
+      // Trigger share link generation on details toggle
+      const shareDetails = document.querySelector('details[data-toggle="copyblock"]');
+      if (shareDetails) {
+        shareDetails.addEventListener('toggle', function () {
+          if (this.open) {
+            // Generate share link manually
+            setTimeout(function () {
+              const shareLinkInput = document.getElementById('share-link');
+              if (shareLinkInput) {
+                const params = [];
+                document
+                  .querySelectorAll('[data-share]:not([data-share-ignore])')
+                  .forEach(function (el) {
+                    const key = el.getAttribute('data-share');
+                    let value = '';
+                    if (el.type === 'checkbox') {
+                      value = el.checked ? '1' : '0';
+                    } else {
+                      value = el.value || '';
+                    }
+                    if (value) {
+                      params.push(key + '=' + encodeURIComponent(value));
+                    }
+                  });
+                const url = params.length
+                  ? location.origin + location.pathname + '?' + params.join('&')
+                  : '';
+                shareLinkInput.value = url;
+              }
+            }, 50);
+          }
+        });
       }
     }
   </script>
