@@ -386,30 +386,34 @@ const t = useTranslations(lang as any);
       if (jwtInput.value) {
         decodeAndDisplay();
       }
-      
+
       // Trigger share link generation on details toggle
       const shareDetails = document.querySelector('details[data-toggle="copyblock"]');
       if (shareDetails) {
-        shareDetails.addEventListener('toggle', function() {
+        shareDetails.addEventListener('toggle', function () {
           if (this.open) {
             // Generate share link manually
-            setTimeout(function() {
+            setTimeout(function () {
               const shareLinkInput = document.getElementById('share-link');
               if (shareLinkInput) {
                 const params = [];
-                document.querySelectorAll('[data-share]:not([data-share-ignore])').forEach(function(el) {
-                  const key = el.getAttribute('data-share');
-                  let value = '';
-                  if (el.type === 'checkbox') {
-                    value = el.checked ? '1' : '0';
-                  } else {
-                    value = el.value || '';
-                  }
-                  if (value) {
-                    params.push(key + '=' + encodeURIComponent(value));
-                  }
-                });
-                const url = params.length ? location.origin + location.pathname + '?' + params.join('&') : '';
+                document
+                  .querySelectorAll('[data-share]:not([data-share-ignore])')
+                  .forEach(function (el) {
+                    const key = el.getAttribute('data-share');
+                    let value = '';
+                    if (el.type === 'checkbox') {
+                      value = el.checked ? '1' : '0';
+                    } else {
+                      value = el.value || '';
+                    }
+                    if (value) {
+                      params.push(key + '=' + encodeURIComponent(value));
+                    }
+                  });
+                const url = params.length
+                  ? location.origin + location.pathname + '?' + params.join('&')
+                  : '';
                 shareLinkInput.value = url;
               }
             }, 50);

@@ -292,18 +292,20 @@ const t = useTranslations(lang as any);
               const shareLinkInput = document.getElementById('share-link');
               if (shareLinkInput) {
                 const params = [];
-                document.querySelectorAll('[data-share]:not([data-share-ignore])').forEach(function (el) {
-                  const key = el.getAttribute('data-share');
-                  let value = '';
-                  if (el.type === 'checkbox') {
-                    value = el.checked ? '1' : '0';
-                  } else {
-                    value = el.value || '';
-                  }
-                  if (value) {
-                    params.push(key + '=' + encodeURIComponent(value));
-                  }
-                });
+                document
+                  .querySelectorAll('[data-share]:not([data-share-ignore])')
+                  .forEach(function (el) {
+                    const key = el.getAttribute('data-share');
+                    let value = '';
+                    if (el.type === 'checkbox') {
+                      value = el.checked ? '1' : '0';
+                    } else {
+                      value = el.value || '';
+                    }
+                    if (value) {
+                      params.push(key + '=' + encodeURIComponent(value));
+                    }
+                  });
                 const url = params.length
                   ? location.origin + location.pathname + '?' + params.join('&')
                   : '';
