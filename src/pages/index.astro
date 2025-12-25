@@ -8,7 +8,18 @@ const supportedLangs = Object.keys(languages);
   <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>Redirecting...</title>
+    <meta name="description" content="Online tools for hashing, encoding, decoding, encryption, decryption, formatting, and more. Privacy-focused client-side processing." />
+    <meta name="robots" content="index, follow" />
+    <title>Web Tools - Online Cryptography & Utilities</title>
+    <link rel="canonical" href="https://webtool.center/" />
+    <link rel="icon" href="/images/logo.png" />
+    
+    <!-- Language alternates -->
+    {supportedLangs.map((lang) => (
+      <link rel="alternate" hreflang={lang} href={`https://webtool.center/${lang}`} />
+    ))}
+    <link rel="alternate" hreflang="x-default" href="https://webtool.center/en" />
+    
     <script is:inline define:vars={{ supportedLangs }}>
       const defaultLang = 'en';
       const userLang = navigator.language || navigator.userLanguage;
@@ -19,6 +30,13 @@ const supportedLangs = Object.keys(languages);
         window.location.replace(`/${defaultLang}`);
       }
     </script>
+    <noscript>
+      <meta http-equiv="refresh" content="0; url=/en" />
+    </noscript>
   </head>
-  <body> </body>
+  <body>
+    <noscript>
+      <p>Redirecting to <a href="/en">Web Tools</a>...</p>
+    </noscript>
+  </body>
 </html>
