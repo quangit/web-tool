@@ -1,0 +1,76 @@
+{
+  "name": "Web Tools - Online Cryptography & Utilities",
+  "short_name": "Web Tools",
+  "description": "Online tools for hashing, encoding, decoding, encryption, decryption, formatting, and more. Privacy-focused client-side processing.",
+  "start_url": "/",
+  "display": "standalone",
+  "background_color": "#ffffff",
+  "theme_color": "#3b82f6",
+  "orientation": "any",
+  "icons": [
+    {
+      "src": "/images/logo.png",
+      "sizes": "512x512",
+      "type": "image/png",
+      "purpose": "any maskable"
+    }
+  ],
+  "categories": [
+    "utilities",
+    "productivity",
+    "developer tools"
+  ],
+  "screenshots": [],
+  "shortcuts": [
+    {
+      "name": "MD5 Hash",
+      "short_name": "MD5",
+      "description": "Generate MD5 hash",
+      "url": "/hash/md5",
+      "icons": [
+        {
+          "src": "/images/logo.png",
+          "sizes": "192x192"
+        }
+      ]
+    },
+    {
+      "name": "SHA256 Hash",
+      "short_name": "SHA256",
+      "description": "Generate SHA256 hash",
+      "url": "/hash/sha256",
+      "icons": [
+        {
+          "src": "/images/logo.png",
+          "sizes": "192x192"
+        }
+      ]
+    },
+    {
+      "name": "Base64 Encode",
+      "short_name": "Base64",
+      "description": "Base64 encode/decode",
+      "url": "/encode-decode/base64",
+      "icons": [
+        {
+          "src": "/images/logo.png",
+          "sizes": "192x192"
+        }
+      ]
+    },
+    {
+      "name": "QR Code Generator",
+      "short_name": "QR Code",
+      "description": "Generate QR codes",
+      "url": "/qr-code/generator",
+      "icons": [
+        {
+          "src": "/images/logo.png",
+          "sizes": "192x192"
+        }
+      ]
+    }
+  ],
+  "lang": "en",
+  "dir": "ltr"
+}
