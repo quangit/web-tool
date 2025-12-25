@@ -26,7 +26,7 @@
       "name": "MD5 Hash",
       "short_name": "MD5",
       "description": "Generate MD5 hash",
-      "url": "/hash/md5",
+      "url": "/en/hash/md5",
       "icons": [
         {
           "src": "/images/logo.png",
@@ -38,7 +38,7 @@
       "name": "SHA256 Hash",
       "short_name": "SHA256",
       "description": "Generate SHA256 hash",
-      "url": "/hash/sha256",
+      "url": "/en/hash/sha256",
       "icons": [
         {
           "src": "/images/logo.png",
@@ -50,7 +50,7 @@
       "name": "Base64 Encode",
       "short_name": "Base64",
       "description": "Base64 encode/decode",
-      "url": "/encode-decode/base64",
+      "url": "/en/encoding/base64_encode",
       "icons": [
         {
           "src": "/images/logo.png",
@@ -62,7 +62,7 @@
       "name": "QR Code Generator",
       "short_name": "QR Code",
       "description": "Generate QR codes",
-      "url": "/qr-code/generator",
+      "url": "/en/qr-code/generator",
       "icons": [
         {
           "src": "/images/logo.png",
