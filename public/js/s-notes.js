@@ -959,6 +959,13 @@
     note.updatedAt = Date.now();
 
     await saveNote(note);
+    
+    // Update local notes array to reflect changes in UI immediately
+    const noteIndex = notes.findIndex(n => n.id === activeNoteId);
+    if (noteIndex !== -1) {
+      notes[noteIndex] = note;
+    }
+
     await updateNoteAttachments();
     
     // Update list without losing scroll position
@@ -978,6 +985,12 @@
     const attachments = await getAttachmentsForNote(targetNoteId);
     note.attachmentCount = attachments.length;
     await saveNote(note);
+
+    // Update local notes array
+    const noteIndex = notes.findIndex(n => n.id === targetNoteId);
+    if (noteIndex !== -1) {
+      notes[noteIndex] = note;
+    }
   }
 
   // Render notes list
