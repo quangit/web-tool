@@ -67,23 +67,39 @@ Whether you need to hash a file, encrypt sensitive data, process images, compare
 - File encoding/decoding for Base32, Base58, Base64, Hex
 - Drag-and-drop file support
 
-## 🚀 Project Structure
+## 🏗️ Architecture & Development
+
+### Directory Structure
+
+- `src/components/` – Astro components with hierarchical base classes
+- `src/pages/[lang]/` – Localized pages using dynamic routing (8 languages)
+- `src/i18n/locales/` – Translation files (en.ts is the source of truth)
+- `src/data/toolSections.ts` – Sidebar navigation and tool registry
+- `public/js/` – Client-side JS libraries (excluded from linting)
+- `public/css/` – Stylesheets
+
+### Component Hierarchy
 
 ```
-/
-├── public/
-│   ├── css/
-│   ├── js/
-│   └── images/
-├── src/
-│   ├── layouts/
-│   │   └── BaseLayout.astro
-│   └── pages/
-│       └── index.astro
-├── astro.config.mjs
-├── package.json
-└── tsconfig.json
+BaseLayout → BasePage → BaseInputBlock + BaseOutputBlock + BaseSettingBlock
+           → HashPage/EncodingPage/CRCPage (specialized wrappers for common tools)
 ```
+
+### Key Patterns
+
+- **i18n**: All user-facing text uses `t('key')` from `useTranslations()`. Route format: `/{lang}/{category}/{tool}`.
+- **Client-Side Processing**: `main.js` orchestrates input reading, auto-update, localStorage. Processing logic is set via `window.method`.
+- **Specialized Components**:
+  - `HashPage.astro` – Text hash with HMAC support
+  - `FileHashPage.astro` – File hash calculation
+  - `EncodingPage.astro` – Encode/decode tools
+
+### Adding a New Tool Page
+
+1. Create page in `src/pages/[lang]/<category>/<tool>.astro` (or `index.astro` for category root)
+2. Add translations to ALL 8 locale files in `src/i18n/locales/`
+3. Register in `src/data/toolSections.ts` with URL, name, and icon
+4. Create JS logic in `public/js/` and set `window.method`
 
 ## 🧞 Commands
 
