@@ -13,9 +13,48 @@ interface Props {
 const { title, description, activePage } = Astro.props;
 const { lang = 'en' } = Astro.params;
 const t = useTranslations(lang as any);
+
+// Generate breadcrumb structured data
+const pathParts = activePage.split('/').filter(Boolean);
+const breadcrumbItems = [
+  {
+    '@type': 'ListItem',
+    position: 1,
+    name: 'Home',
+    item: `https://webtool.center/${lang}`,
+  },
+];
+
+// Build breadcrumb trail
+let currentPath = `/${lang}`;
+pathParts.forEach((part, index) => {
+  currentPath += `/${part}`;
+  breadcrumbItems.push({
+    '@type': 'ListItem',
+    position: index + 2,
+    name: part
+      .split('-')
+      .map((word) => word.charAt(0).toUpperCase() + word.slice(1))
+      .join(' '),
+    item: `https://webtool.center${currentPath}`,
+  });
+});
+
+const breadcrumbStructuredData = {
+  '@context': 'https://schema.org',
+  '@type': 'BreadcrumbList',
+  itemListElement: breadcrumbItems,
+};
 ---
 
 <BaseLayout title={`${title} - Web Tools`} description={description}>
+  <!-- Breadcrumb Structured Data -->
+  <script
+    type="application/ld+json"
+    set:html={JSON.stringify(breadcrumbStructuredData)}
+    slot="head-extra"
+  />
+
   <div id="app">
     <Sidebar activePage={activePage} />
     <div id="content">

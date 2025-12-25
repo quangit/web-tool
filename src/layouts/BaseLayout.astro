@@ -1,60 +1,148 @@
 ---
 const { title, description } = Astro.props;
+
+// Get current URL and language from Astro
+const canonicalURL = new URL(Astro.url.pathname, Astro.site).href;
+const pathSegments = Astro.url.pathname.split('/').filter(Boolean);
+const currentLang = pathSegments[0] || 'en';
+
+// Supported languages
+const languages = ['en', 'vi', 'zh', 'hi', 'es', 'fr', 'pt', 'ja'];
+const langNames = {
+  en: 'en_US',
+  vi: 'vi_VN',
+  zh: 'zh_CN',
+  hi: 'hi_IN',
+  es: 'es_ES',
+  fr: 'fr_FR',
+  pt: 'pt_BR',
+  ja: 'ja_JP',
+};
+
+// Get language-specific locale for og:locale
+const ogLocale = langNames[currentLang as keyof typeof langNames] || 'en_US';
+
+// Generate alternate language URLs
+const alternateUrls = languages.map((lang) => {
+  const path = Astro.url.pathname.replace(/^\/(en|vi|zh|hi|es|fr|pt|ja)/, `/${lang}`);
+  return {
+    lang,
+    url: new URL(path, Astro.site).href,
+  };
+});
+
+// Default description
+const defaultDescription =
+  'Online tools offer many functions for hashing, encoding, decoding, encryption, decryption, formatting, generating and so on. Examples include MD5, SHA-256, SHA-512, SHA-3, Keccak, Base64, Base32, JSON, XML, and QR code related tools.';
+
+const pageTitle = title || 'Web Tools';
+const pageDescription = description || defaultDescription;
 ---
 
 <!doctype html>
-<html lang="en">
+<html lang={currentLang}>
   <head>
     <meta charset="UTF-8" />
-    <meta http-equiv="content-language" content="en" />
+    <meta http-equiv="content-language" content={currentLang} />
     <meta http-equiv="X-UA-Compatible" content="IE=edge" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>{title || 'Web Tools'}</title>
+    <meta name="theme-color" content="#3b82f6" />
+    <title>{pageTitle}</title>
     <meta
       name="keywords"
-      content="online,md5,sha1,sha256,sha,sha512,sha3,keccak,shake,base64,base32,syntax highlight,crc-32,crc-16,md2,md4,htmlencode,htmldecode,urlencode,urldecode,json,xml.qr code,free"
+      content="online,md5,sha1,sha256,sha,sha512,sha3,keccak,shake,base64,base32,syntax highlight,crc-32,crc-16,md2,md4,htmlencode,htmldecode,urlencode,urldecode,json,xml,qr code,free,privacy,client-side,cryptography,hash,encode,decode,encryption"
     />
     <meta name="author" content="webtool" />
     <meta name="copyright" content="webtool" />
+    <meta name="description" content={pageDescription} />
     <meta
-      name="description"
-      content={description ||
-        'Online tools offer many functions for hashing, encoding, decoding, encryption, decryption, formatting, generating and so on. Examples include MD5, SHA-256, SHA-512, SHA-3, Keccak, Base64, Base32, JSON, XML, and QR code related tools.'}
+      name="robots"
+      content="index, follow, max-image-preview:large, max-snippet:-1, max-video-preview:-1"
     />
+
+    <!-- Open Graph / Facebook -->
     <meta property="og:type" content="website" />
-    <meta property="og:title" content={title || 'Web Tools'} />
-    <meta property="og:url" content="https://webtool.center/" />
+    <meta property="og:title" content={pageTitle} />
+    <meta property="og:url" content={canonicalURL} />
     <meta property="og:site_name" content="Web Tools" />
-    <meta
-      property="og:description"
-      content={description ||
-        'Online tools offer many functions for hashing, encoding, decoding, encryption, decryption, formatting, generating and so on. Examples include MD5, SHA-256, SHA-512, SHA-3, Keccak, Base64, Base32, JSON, XML, and QR code related tools.'}
-    />
-    <meta property="og:locale" content="en" />
+    <meta property="og:description" content={pageDescription} />
+    <meta property="og:locale" content={ogLocale} />
+    {
+      languages
+        .filter((lang) => lang !== currentLang)
+        .map((lang) => (
+          <meta
+            property="og:locale:alternate"
+            content={langNames[lang as keyof typeof langNames]}
+          />
+        ))
+    }
     <meta property="og:image" content="https://webtool.center/images/logo.png" />
+    <meta property="og:image:width" content="512" />
+    <meta property="og:image:height" content="512" />
+    <meta property="og:image:type" content="image/png" />
     <meta property="article:author" content="webtool" />
-    <meta
-      property="article:tag"
-      content="online,md5,sha1,sha256,sha,sha512,sha3,keccak,shake,base64,base32,syntax highlight,crc-32,crc-16,md2,md4,htmlencode,htmldecode,urlencode,urldecode,json,xml.qr code,free"
-    />
-    <meta property="twitter:card" content="summary" />
-    <meta property="twitter:image" content="https://webtool.center/images/logo.png" />
-    <link rel="canonical" href="https://webtool.center/" />
-    <link rel="alternate" hreflang="en" href="https://webtool.center/" />
-    <link rel="alternate" hreflang="vi" href="https://webtool.center/vi/" />
-    <link rel="alternate" hreflang="zh" href="https://webtool.center/zh/" />
-    <link rel="alternate" hreflang="hi" href="https://webtool.center/hi/" />
-    <link rel="alternate" hreflang="es" href="https://webtool.center/es/" />
-    <link rel="alternate" hreflang="fr" href="https://webtool.center/fr/" />
-    <link rel="alternate" hreflang="pt" href="https://webtool.center/pt/" />
-    <link rel="alternate" hreflang="ja" href="https://webtool.center/ja/" />
-    <link rel="alternate" hreflang="x-default" href="https://webtool.center/" />
+
+    <!-- Twitter -->
+    <meta name="twitter:card" content="summary" />
+    <meta name="twitter:title" content={pageTitle} />
+    <meta name="twitter:description" content={pageDescription} />
+    <meta name="twitter:image" content="https://webtool.center/images/logo.png" />
+
+    <!-- Canonical URL -->
+    <link rel="canonical" href={canonicalURL} />
+
+    <!-- Alternate language versions -->
+    {alternateUrls.map(({ lang, url }) => <link rel="alternate" hreflang={lang} href={url} />)}
+    <link rel="alternate" hreflang="x-default" href={alternateUrls[0].url} />
+
+    <!-- PWA Manifest -->
+    <link rel="manifest" href="/manifest.json" />
+
+    <!-- Favicon -->
     <link rel="icon" href="/images/logo.png" />
+    <link rel="apple-touch-icon" href="/images/logo.png" />
 
     <!-- Preconnect to external domains for better performance -->
     <link rel="preconnect" href="https://www.googletagmanager.com" crossorigin />
     <link rel="preconnect" href="https://unpkg.com" crossorigin />
     <link rel="dns-prefetch" href="https://code.jquery.com" />
+
+    <!-- Preload critical resources (version must match actual resource links below) -->
+    <link rel="preload" href="/css/style.css?v=27" as="style" />
+    <link rel="preload" href="https://unpkg.com/lucide@latest" as="script" crossorigin />
+
+    <!-- Structured Data (JSON-LD) -->
+    <script
+      type="application/ld+json"
+      set:html={JSON.stringify({
+        '@context': 'https://schema.org',
+        '@type': 'WebSite',
+        name: 'Web Tools',
+        description: pageDescription,
+        url: 'https://webtool.center',
+        potentialAction: {
+          '@type': 'SearchAction',
+          target: {
+            '@type': 'EntryPoint',
+            urlTemplate: 'https://webtool.center/?search={search_term_string}',
+          },
+          'query-input': 'required name=search_term_string',
+        },
+        inLanguage: languages,
+        publisher: {
+          '@type': 'Organization',
+          name: 'Web Tools',
+          logo: {
+            '@type': 'ImageObject',
+            url: 'https://webtool.center/images/logo.png',
+          },
+        },
+      })}
+    />
+
+    <!-- Additional head content from child components -->
+    <slot name="head-extra" />
 
     <script is:inline>
       var delayScripts = [];

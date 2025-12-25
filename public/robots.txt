@@ -2,11 +2,21 @@
 User-agent: *
 Allow: /
 
-# Sitemap
-Sitemap: https://webtool.center/sitemap.xml
+# Sitemap location
+Sitemap: https://webtool.center/sitemap-index.xml
 
 # Disallow administrative paths (if any in future)
 # Disallow: /admin/
 
-# Crawl-delay (optional, adjust if needed)
+# Popular search engine bots
+User-agent: Googlebot
+Allow: /
+
+User-agent: Bingbot
+Allow: /
+
+User-agent: Slurp
+Allow: /
+
+# Crawl-delay for general bots (optional)
 # Crawl-delay: 1

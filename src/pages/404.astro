@@ -6,6 +6,9 @@ const description = 'The page you are looking for does not exist.';
 ---
 
 <BaseLayout title={title} description={description}>
+  <!-- Prevent indexing of 404 page -->
+  <meta name="robots" content="noindex, nofollow" slot="head-extra" />
+
   <div class="error-page">
     <div class="content">
       <h1 class="error-code">404</h1>
