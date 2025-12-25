@@ -648,6 +648,7 @@ export const vi = {
   's_notes.error': 'Lỗi',
   's_notes.attachments': 'Tệp đính kèm',
   's_notes.delete_attachment': 'Xóa tệp đính kèm này?',
+  's_notes.open_in_new_window': 'Mở trong cửa sổ mới',
   'jwt.libraries.search_placeholder': 'Tìm kiếm thư viện...',
   'jwt.libraries.no_results': 'Không tìm thấy thư viện nào',
   'jwt.libraries.showing_results': 'Hiển thị {0} trong {1} thư viện',

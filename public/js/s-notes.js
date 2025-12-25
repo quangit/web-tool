@@ -110,6 +110,9 @@
   }
 
   async function deleteNote(id) {
+    // Clear caches before deleting
+    cleanupNote();
+    
     // First delete all attachments for this note
     const attachments = await getAttachmentsForNote(id);
     for (const attachment of attachments) {
@@ -137,9 +140,278 @@
     );
   }
 
+  // ============================================  // GARBAGE COLLECTION & AUTO CLEANUP
   // ============================================
-  // ATTACHMENT OPERATIONS (OPFS + IndexedDB)
+
+  // Find all image references in markdown content
+  function findImageReferencesInContent(content) {
+    if (!content) return new Set();
+    
+    const references = new Set();
+    const imagePattern = /!\[([^\]]*)\]\(([^)]+)\)/g;
+    let match;
+    
+    while ((match = imagePattern.exec(content)) !== null) {
+      const [, altText, url] = match;
+      
+      // Extract filename from alt text or URL
+      if (altText) references.add(altText);
+      
+      // Extract filename from blob URL or direct filename
+      if (url.includes('blob:')) {
+        // For blob URLs, we'll rely on alt text
+        continue;
+      } else {
+        // Direct filename reference
+        const filename = url.split('/').pop();
+        if (filename) references.add(filename);
+      }
+    }
+    
+    return references;
+  }
+
+  // Scan all notes and find orphaned attachments
+  async function findOrphanedAttachments() {
+    try {
+      const allNotes = await getAllNotes();
+      const allAttachments = [];
+      
+      // Collect all attachments from all notes
+      for (const note of allNotes) {
+        const noteAttachments = await getAttachmentsForNote(note.id);
+        allAttachments.push(...noteAttachments.map(att => ({...att, noteId: note.id})));
+      }
+      
+      if (allAttachments.length === 0) return [];
+      
+      // Find all image references across all note contents
+      const usedFilenames = new Set();
+      const usedAttachmentIds = new Set();
+      
+      for (const note of allNotes) {
+        const references = findImageReferencesInContent(note.content);
+        references.forEach(ref => usedFilenames.add(ref));
+        
+        // Also check for attachment ID references in content
+        allAttachments.forEach(att => {
+          if (note.content && (
+            note.content.includes(att.id) || 
+            note.content.includes(att.fileName)
+          )) {
+            usedAttachmentIds.add(att.id);
+          }
+        });
+      }
+      
+      // Find orphaned attachments
+      const orphaned = allAttachments.filter(attachment => {
+        return !usedFilenames.has(attachment.fileName) && 
+               !usedAttachmentIds.has(attachment.id);
+      });
+      
+      console.log(`Garbage Collection: Found ${orphaned.length} orphaned attachments out of ${allAttachments.length} total`);
+      return orphaned;
+      
+    } catch (e) {
+      console.error('Error finding orphaned attachments:', e);
+      return [];
+    }
+  }
+
+  // Delete orphaned attachments
+  async function cleanupOrphanedAttachments() {
+    try {
+      const orphaned = await findOrphanedAttachments();
+      
+      if (orphaned.length === 0) {
+        console.log('Garbage Collection: No orphaned attachments found');
+        return { deleted: 0, errors: 0 };
+      }
+      
+      let deleted = 0;
+      let errors = 0;
+      
+      for (const attachment of orphaned) {
+        try {
+          await deleteAttachment(attachment.id);
+          deleted++;
+          console.log(`Deleted orphaned attachment: ${attachment.fileName}`);
+        } catch (e) {
+          console.error(`Failed to delete orphaned attachment ${attachment.id}:`, e);
+          errors++;
+        }
+      }
+      
+      // Update attachment counts for affected notes
+      const affectedNoteIds = new Set(orphaned.map(att => att.noteId));
+      for (const noteId of affectedNoteIds) {
+        try {
+          await updateNoteAttachments(noteId);
+        } catch (e) {
+          console.warn(`Failed to update attachment count for note ${noteId}:`, e);
+        }
+      }
+      
+      console.log(`Garbage Collection Complete: Deleted ${deleted} orphaned attachments, ${errors} errors`);
+      return { deleted, errors };
+      
+    } catch (e) {
+      console.error('Error during cleanup:', e);
+      return { deleted: 0, errors: 1 };
+    }
+  }
+
+  // Schedule garbage collection
+  let gcTimeout = null;
+  function scheduleGarbageCollection(delay = 30000) { // 30 seconds default
+    if (gcTimeout) {
+      clearTimeout(gcTimeout);
+    }
+    
+    gcTimeout = setTimeout(async () => {
+      console.log('Running scheduled garbage collection...');
+      await cleanupOrphanedAttachments();
+      
+      // Schedule next cleanup (every 5 minutes)
+      scheduleGarbageCollection(300000);
+    }, delay);
+  }
+
+  // Manual garbage collection trigger
+  async function runManualGarbageCollection() {
+    updateStatus('syncing', t.syncing || 'Cleaning up...');
+    
+    try {
+      const result = await cleanupOrphanedAttachments();
+      
+      if (result.deleted > 0) {
+        // Refresh UI if attachments were deleted
+        await renderNotesList(searchInput?.value || '');
+      }
+      
+      updateStatus('ready', t.ready);
+      
+      // Show result to user (could be enhanced with a toast notification)
+      console.log(`Cleanup completed: ${result.deleted} files deleted`);
+      
+      return result;
+    } catch (e) {
+      console.error('Manual garbage collection failed:', e);
+      updateStatus('error', t.error);
+      throw e;
+    }
+  }
+
+  // ============================================  // ATTACHMENT OPERATIONS (OPFS + IndexedDB)
   // ============================================
+
+  // Cache for blob URLs to avoid recreation
+  const imageUrlCache = new Map(); // attachmentId -> blob URL
+  
+  // Cache for attachment blobs
+  const attachmentBlobCache = new Map(); // attachmentId -> blob
+
+  // Clear caches when needed
+  function clearImageCaches() {
+    // Revoke old blob URLs
+    imageUrlCache.forEach(url => {
+      try { URL.revokeObjectURL(url); } catch (e) {}
+    });
+    imageUrlCache.clear();
+    attachmentBlobCache.clear();
+  }
+
+  // Optimized restore image URLs with caching
+  async function restoreImageUrls(noteId, content) {
+    if (!content || !content.includes('![')) return content;
+    
+    const attachments = await getAttachmentsForNote(noteId);
+    if (attachments.length === 0) return content;
+    
+    // Filter only image attachments upfront
+    const imageAttachments = attachments.filter(att => 
+      att.type && att.type.startsWith('image/')
+    );
+    
+    if (imageAttachments.length === 0) return content;
+    
+    // Pre-load all image blobs in parallel for better performance
+    const blobPromises = imageAttachments.map(async (attachment) => {
+      if (attachmentBlobCache.has(attachment.id)) {
+        return { attachment, blob: attachmentBlobCache.get(attachment.id) };
+      }
+      
+      try {
+        const blob = await getAttachmentBlob(attachment);
+        if (blob) {
+          attachmentBlobCache.set(attachment.id, blob);
+          return { attachment, blob };
+        }
+      } catch (e) {
+        console.warn('Failed to load blob for attachment:', attachment.id, e);
+      }
+      return null;
+    });
+    
+    const loadedBlobs = (await Promise.all(blobPromises)).filter(Boolean);
+    
+    if (loadedBlobs.length === 0) return content;
+    
+    let updatedContent = content;
+    
+    // Simple and fast regex for image patterns
+    const imagePattern = /!\[([^\]]*)\]\(([^)]+)\)/g;
+    
+    // Replace images efficiently
+    updatedContent = updatedContent.replace(imagePattern, (match, altText, currentUrl) => {
+      // Skip if it's already a valid blob URL that's cached
+      if (currentUrl.startsWith('blob:') && 
+          Array.from(imageUrlCache.values()).includes(currentUrl)) {
+        return match;
+      }
+      
+      // Find matching attachment - simple string matching first
+      let matchedBlob = null;
+      
+      // Priority 1: Exact filename match in alt text
+      matchedBlob = loadedBlobs.find(({ attachment }) => 
+        altText === attachment.fileName
+      );
+      
+      // Priority 2: Filename substring match
+      if (!matchedBlob) {
+        matchedBlob = loadedBlobs.find(({ attachment }) => 
+          altText.includes(attachment.fileName) || 
+          currentUrl.includes(attachment.fileName) ||
+          currentUrl.includes(attachment.id)
+        );
+      }
+      
+      // Priority 3: Use first available image (fallback)
+      if (!matchedBlob && loadedBlobs.length > 0) {
+        matchedBlob = loadedBlobs[0];
+        loadedBlobs.shift(); // Remove from array to avoid reuse
+      }
+      
+      if (matchedBlob) {
+        const { attachment, blob } = matchedBlob;
+        
+        // Use cached URL or create new one
+        let blobUrl = imageUrlCache.get(attachment.id);
+        if (!blobUrl) {
+          blobUrl = URL.createObjectURL(blob);
+          imageUrlCache.set(attachment.id, blobUrl);
+        }
+        
+        return `![${attachment.fileName}](${blobUrl})`;
+      }
+      
+      return match; // No changes if no match found
+    });
+    
+    return updatedContent;
+  }
 
   async function saveAttachment(noteId, file) {
     const id = generateId();
@@ -337,6 +609,255 @@
     }
   }
 
+  // ============================================
+  // EDITOR & UI HELPERS
+  // ============================================
+
+  // Create custom delete button for Toast UI Editor
+  function createDeleteButton() {
+    const button = document.createElement('button');
+    button.className = 'toastui-editor-toolbar-icons delete-note-btn';
+    button.type = 'button';
+    button.innerHTML = '<svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-message-square-x-icon lucide-message-square-x"><path d="M22 17a2 2 0 0 1-2 2H6.828a2 2 0 0 0-1.414.586l-2.202 2.202A.71.71 0 0 1 2 21.286V5a2 2 0 0 1 2-2h16a2 2 0 0 1 2 2z"/><path d="m14.5 8.5-5 5"/><path d="m9.5 8.5 5 5"/></svg>';
+    button.title = 'Delete current note (Ctrl+Shift+D)';
+    button.style.cssText = `
+      font-size: 16px;
+      border: none;
+      background: none;
+      cursor: pointer;
+      padding: 4px 4px;
+      border-radius: 4px;
+      margin: 0;
+    `;
+    
+    // Hover effects
+    button.addEventListener('mouseenter', () => {
+      button.style.background = 'rgba(220, 53, 69, 0.1)';
+    });
+    
+    button.addEventListener('mouseleave', () => {
+      button.style.background = 'none';
+    });
+    
+    button.addEventListener('click', async (e) => {
+      e.preventDefault();
+      await handleDeleteCurrentNote();
+    });
+    
+    return button;
+  }
+
+  // Create open in new window button
+  function createOpenWindowButton() {
+    const button = document.createElement('button');
+    button.className = 'toastui-editor-toolbar-icons open-window-btn';
+    button.type = 'button';
+    button.innerHTML = '<svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-external-link-icon lucide-external-link"><path d="M15 3h6v6"/><path d="M10 14 21 3"/><path d="M18 13v6a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h6"/></svg>';
+    button.title = t.openInNewWindow || 'Open in new window';
+    button.style.cssText = `
+      font-size: 16px;
+      border: none;
+      background: none;
+      cursor: pointer;
+      padding: 4px 4px;
+      border-radius: 4px;
+      margin: 0;
+    `;
+    
+    // Hover effects
+    button.addEventListener('mouseenter', () => {
+      button.style.background = 'rgba(59, 130, 246, 0.1)';
+    });
+    
+    button.addEventListener('mouseleave', () => {
+      button.style.background = 'none';
+    });
+    
+    button.addEventListener('click', async (e) => {
+      e.preventDefault();
+      await handleOpenInNewWindow();
+    });
+    
+    return button;
+  }
+
+  // Handle delete current note
+  async function handleDeleteCurrentNote() {
+    if (!activeNoteId) {
+      alert(t.noNotes || 'No note selected');
+      return;
+    }
+
+    const note = await getNote(activeNoteId);
+    if (!note) return;
+
+    const confirmMsg = `${t.confirmDelete || 'Are you sure you want to delete this note?'}\n\n"${note.title}"`;
+    
+    if (confirm(confirmMsg)) {
+      const deletedId = activeNoteId;
+      
+      // Find next note to select
+      let nextNote = null;
+      const currentIndex = notes.findIndex(n => n.id === deletedId);
+      
+      if (notes.length > 1) {
+        // Try next note, if not available then previous
+        nextNote = notes[currentIndex + 1] || notes[currentIndex - 1];
+      }
+      
+      try {
+        updateStatus('syncing', t.syncing || 'Deleting...');
+        
+        // Delete the note
+        await deleteNote(deletedId);
+        
+        // Remove from notes array
+        const noteIndex = notes.findIndex(n => n.id === deletedId);
+        if (noteIndex !== -1) {
+          notes.splice(noteIndex, 1);
+        }
+        
+        // Clear active note
+        activeNoteId = null;
+        localStorage.removeItem('snotes-active');
+        
+        // Select next note or show empty state
+        if (nextNote) {
+          await selectNote(nextNote.id);
+        } else {
+          // No notes left
+          editor.setMarkdown('');
+          showEmptyState();
+          renderNotesList();
+        }
+        
+        updateStatus('ready', t.ready);
+        
+        console.log(`Deleted note: ${note.title}`);
+      } catch (e) {
+        console.error('Failed to delete note:', e);
+        updateStatus('error', t.error);
+        alert('Failed to delete note. Please try again.');
+      }
+    }
+  }
+
+  // Handle open in new window
+  async function handleOpenInNewWindow() {
+    if (!activeNoteId) {
+      alert(t.noNotes || 'No note selected');
+      return;
+    }
+
+    const note = await getNote(activeNoteId);
+    if (!note) return;
+
+    try {
+      // Create a new window with the note content
+      const newWindow = window.open('', '_blank', 'width=1000,height=700,scrollbars=yes,resizable=yes');
+      
+      if (!newWindow) {
+        alert('Pop-up blocked. Please allow pop-ups for this site.');
+        return;
+      }
+
+      // Get the current note content from editor
+      const currentContent = editor ? editor.getMarkdown() : note.content;
+      
+      // Create the HTML content for the new window
+      const htmlContent = `
+        <!DOCTYPE html>
+        <html>
+        <head>
+          <meta charset="UTF-8">
+          <title>${note.title || t.untitled}</title>
+          <link rel="stylesheet" href="https://uicdn.toast.com/editor/latest/toastui-editor.min.css">
+          <link rel="stylesheet" href="https://uicdn.toast.com/editor/latest/theme/toastui-editor-dark.min.css">
+          <style>
+            body {
+              font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+              margin: 0;
+              padding: 20px;
+              background: #fff;
+            }
+            .note-header {
+              margin-bottom: 20px;
+              padding-bottom: 10px;
+              border-bottom: 1px solid #eee;
+            }
+            .note-title {
+              font-size: 24px;
+              font-weight: bold;
+              margin: 0 0 10px 0;
+              color: #333;
+            }
+            .note-meta {
+              font-size: 14px;
+              color: #666;
+            }
+            #viewer {
+              min-height: 400px;
+            }
+            @media (prefers-color-scheme: dark) {
+              body {
+                background: #1a1a1a;
+                color: #e0e0e0;
+              }
+              .note-title {
+                color: #fff;
+              }
+              .note-meta {
+                color: #aaa;
+              }
+              .note-header {
+                border-bottom-color: #333;
+              }
+            }
+          </style>
+        </head>
+        <body>
+          <div class="note-header">
+            <h1 class="note-title">${note.title || t.untitled}</h1>
+            <div class="note-meta">
+              Created: ${new Date(note.createdAt).toLocaleDateString()} | 
+              Modified: ${new Date(note.updatedAt).toLocaleDateString()}
+            </div>
+          </div>
+          <div id="viewer"></div>
+          
+          <script src="https://uicdn.toast.com/editor/latest/toastui-editor-all.min.js"></script>
+          <script>
+            const isDark = window.matchMedia && window.matchMedia('(prefers-color-scheme: dark)').matches;
+            const viewer = new toastui.Editor.factory({
+              el: document.getElementById('viewer'),
+              viewer: true,
+              initialValue: \`${currentContent.replace(/`/g, '\\`').replace(/\$/g, '\\$')}\`,
+              theme: isDark ? 'dark' : 'light'
+            });
+            
+            // Auto-adjust theme
+            if (window.matchMedia) {
+              window.matchMedia('(prefers-color-scheme: dark)').addEventListener('change', function(e) {
+                // Toast UI doesn't support dynamic theme switching, so we reload
+                location.reload();
+              });
+            }
+          </script>
+        </body>
+        </html>
+      `;
+
+      // Write content to new window
+      newWindow.document.write(htmlContent);
+      newWindow.document.close();
+      newWindow.focus();
+
+    } catch (e) {
+      console.error('Failed to open in new window:', e);
+      alert('Failed to open note in new window');
+    }
+  }
+
   // Initialize Toast UI Editor
   function initEditor() {
     const isDark = document.documentElement.getAttribute('data-theme') === 'dark';
@@ -355,7 +876,17 @@
         ['ul', 'ol', 'task', 'indent', 'outdent'],
         ['table', 'image', 'link'],
         ['code', 'codeblock'],
-        ['scrollSync']
+        ['scrollSync'],
+        [{
+          el: createOpenWindowButton(),
+          name: 'openWindow',
+          tooltip: 'Open in new window'
+        }],
+        [{
+          el: createDeleteButton(),
+          name: 'deleteNote',
+          tooltip: 'Delete current note'
+        }]
       ],
       hooks: {
         addImageBlobHook: async (blob, callback) => {
@@ -371,7 +902,7 @@
             const attachmentBlob = await getAttachmentBlob(attachment);
             const url = URL.createObjectURL(attachmentBlob);
             
-            // Store the attachment ID in the URL for reference
+            // Add attachment ID as comment in the URL for easier restoration
             callback(url, attachment.fileName);
             
             // Update note's attachment list
@@ -428,18 +959,23 @@
     note.updatedAt = Date.now();
 
     await saveNote(note);
+    await updateNoteAttachments();
     
     // Update list without losing scroll position
     renderNotesList(searchInput.value);
+    
+    // Auto cleanup after content changes (with delay to avoid frequent runs)
+    scheduleGarbageCollection(60000); // 1 minute delay
   }
 
-  async function updateNoteAttachments() {
-    if (!activeNoteId) return;
+  async function updateNoteAttachments(noteId = null) {
+    const targetNoteId = noteId || activeNoteId;
+    if (!targetNoteId) return;
     
-    const note = await getNote(activeNoteId);
+    const note = await getNote(targetNoteId);
     if (!note) return;
     
-    const attachments = await getAttachmentsForNote(activeNoteId);
+    const attachments = await getAttachmentsForNote(targetNoteId);
     note.attachmentCount = attachments.length;
     await saveNote(note);
   }
@@ -498,11 +1034,19 @@
     localStorage.setItem('snotes-active', id);
 
     if (editor) {
-      editor.setMarkdown(note.content || '');
+      // Restore image URLs before setting content
+      const contentWithRestoredImages = await restoreImageUrls(id, note.content || '');
+      editor.setMarkdown(contentWithRestoredImages);
     }
 
     hideEmptyState();
     renderNotesList(searchInput.value);
+  }
+
+  // Clean up when switching notes or deleting
+  function cleanupNote() {
+    // Clear caches to free memory
+    clearImageCaches();
   }
 
   // Create new note
@@ -588,6 +1132,19 @@
       if ((e.ctrlKey || e.metaKey) && e.key === 's') {
         e.preventDefault();
         saveCurrentNote();
+      }
+      
+      // Ctrl/Cmd + Shift + D: Delete current note
+      if ((e.ctrlKey || e.metaKey) && e.shiftKey && e.key === 'D') {
+        e.preventDefault();
+        handleDeleteCurrentNote();
+      }
+      
+      // Ctrl/Cmd + Shift + Delete: Manual garbage collection
+      if ((e.ctrlKey || e.metaKey) && e.shiftKey && e.key === 'Delete') {
+        e.preventDefault();
+        console.log('Manual garbage collection triggered by user');
+        runManualGarbageCollection();
       }
     });
   }
@@ -711,6 +1268,11 @@ function hello() {
       }
 
       updateStatus('ready', t.ready);
+      
+      // Start garbage collection schedule after successful initialization  
+      console.log('Starting garbage collection scheduler...');
+      scheduleGarbageCollection(30000); // Initial run after 30 seconds
+      
     } catch (e) {
       console.error('Initialization failed:', e);
       updateStatus('error', t.error);
@@ -723,4 +1285,27 @@ function hello() {
   } else {
     init();
   }
+
+  // Cleanup blob URLs when page unloads
+  window.addEventListener('beforeunload', () => {
+    // Clear timeout to prevent running GC during unload
+    if (gcTimeout) {
+      clearTimeout(gcTimeout);
+    }
+    
+    clearImageCaches();
+    if (window.snotesImageUrls) {
+      window.snotesImageUrls.forEach(url => {
+        try { URL.revokeObjectURL(url); } catch (e) {}
+      });
+    }
+  });
+
+  // Expose garbage collection functions for debugging
+  window.snotesGC = {
+    findOrphaned: findOrphanedAttachments,
+    cleanup: cleanupOrphanedAttachments,
+    runManual: runManualGarbageCollection,
+    schedule: scheduleGarbageCollection
+  };
 })();

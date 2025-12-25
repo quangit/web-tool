@@ -1,7 +1,5 @@
 ---
 import BasePage from '../../../components/BasePage.astro';
-import BaseInputBlock from '../../../components/BaseInputBlock.astro';
-import BaseSettingBlock from '../../../components/BaseSettingBlock.astro';
 import { languages } from '../../../i18n/ui';
 import { useTranslations } from '../../../i18n/utils';
 
@@ -16,43 +14,50 @@ const t = useTranslations(lang as any);
 <BasePage title={t('s_notes.title')} description={t('s_notes.description')} activePage="s-notes">
   <div class="layout">
     <div class="layout-block">
-      <BaseInputBlock title={t('s_notes.note_content')}>
-        <div class="notes-content-wrapper">
-          <div id="note-editor" class="note-editor">
-            <div id="editor-container"></div>
+      <div class="input">
+        <div class="block block-fill">
+          <div class="notes-content-wrapper">
+            <div id="note-editor" class="note-editor">
+              <div id="editor-container"></div>
+            </div>
+            <div id="empty-state" class="empty-state">
+              <p>{t('s_notes.no_notes')}</p>
+            </div>
           </div>
-          <div id="empty-state" class="empty-state">
-            <p>{t('s_notes.no_notes')}</p>
-          </div>
-        </div>
-      </BaseInputBlock>
-    </div>
-    <BaseSettingBlock title={t('s_notes.category')}>
-      <div class="notes-sidebar-wrapper">
-        <div class="notes-header">
-          <div class="setting">
-            <input
-              type="text"
-              id="search-notes"
-              class="search-input"
-              placeholder={t('s_notes.search_notes')}
-            />
-          </div>
-          <div class="setting">
-            <button id="new-note-btn" class="btn">{t('s_notes.new_note')}</button>
-          </div>
-          <div class="setting storage-info">
-            <span id="storage-status" class="storage-status">
-              <span class="status-dot"></span>
-              <span class="status-text">{t('s_notes.loading')}</span>
-            </span>
-          </div>
-        </div>
-        <div id="notes-list" class="notes-list">
-          <!-- Notes will be dynamically inserted here -->
         </div>
       </div>
-    </BaseSettingBlock>
+    </div>
+    <div class="settings">
+      <div class="block block-fill">
+        <div class="block-title">
+          <span>{t('s_notes.category')}</span>
+          <button id="new-note-btn" class="btn">{t('s_notes.new_note')}</button>
+        </div>
+        <div class="container">
+          <div class="notes-sidebar-wrapper">
+            <div class="notes-header">
+              <div class="setting">
+                <input
+                  type="text"
+                  id="search-notes"
+                  class="search-input"
+                  placeholder={t('s_notes.search_notes')}
+                />
+              </div>
+              <div class="setting storage-info">
+                <span id="storage-status" class="storage-status">
+                  <span class="status-dot"></span>
+                  <span class="status-text">{t('s_notes.loading')}</span>
+                </span>
+              </div>
+            </div>
+            <div id="notes-list" class="notes-list">
+              <!-- Notes will be dynamically inserted here -->
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
   </div>
 
   <script
@@ -68,7 +73,8 @@ const t = useTranslations(lang as any);
       syncing: ${JSON.stringify(t('s_notes.syncing') || 'Syncing...')},
       error: ${JSON.stringify(t('s_notes.error') || 'Error')},
       attachments: ${JSON.stringify(t('s_notes.attachments') || 'Attachments')},
-      deleteAttachment: ${JSON.stringify(t('s_notes.delete_attachment') || 'Delete attachment?')}
+      deleteAttachment: ${JSON.stringify(t('s_notes.delete_attachment') || 'Delete attachment?')},
+      openInNewWindow: ${JSON.stringify(t('s_notes.detach') || 'Open in new window')}
     };
   `}
   />
@@ -111,6 +117,14 @@ const t = useTranslations(lang as any);
     display: flex;
     flex-direction: column;
     height: 100%;
+  }
+
+  /* Block title with button */
+  .settings .block-title {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    gap: 1rem;
   }
 
   .notes-header {
@@ -391,5 +405,62 @@ const t = useTranslations(lang as any);
 
   .notes-list::-webkit-scrollbar-thumb:hover {
     background: var(--var-gray);
+  }
+
+  /* Custom Delete Button in Toast UI Editor */
+  .delete-note-btn {
+    position: relative;
+    transition: all 0.2s ease;
+  }
+
+  .delete-note-btn:hover {
+    transform: scale(1.1);
+    background: rgba(220, 53, 69, 0.1) !important;
+  }
+
+  .delete-note-btn:active {
+    transform: scale(0.95);
+  }
+
+  /* Custom Open Window Button in Toast UI Editor */
+  .open-window-btn {
+    position: relative;
+    transition: all 0.2s ease;
+  }
+
+  .open-window-btn:hover {
+    transform: scale(1.1);
+    background: rgba(59, 130, 246, 0.1) !important;
+  }
+
+  .open-window-btn:active {
+    transform: scale(0.95);
+  }
+
+  /* Add separator before custom buttons */
+  .delete-note-btn::before,
+  .open-window-btn::before {
+    content: '';
+    position: absolute;
+    left: -8px;
+    top: 50%;
+    transform: translateY(-50%);
+    width: 1px;
+    height: 16px;
+    background: var(--var-border-color);
+    opacity: 0.5;
+  }
+
+  /* Toast UI Editor toolbar styling for custom buttons */
+  .toastui-editor-toolbar .delete-note-btn,
+  .toastui-editor-toolbar .open-window-btn {
+    margin-left: 8px;
+    border-radius: 4px !important;
+    font-size: 14px !important;
+  }
+
+  [data-theme='dark'] .delete-note-btn::before,
+  [data-theme='dark'] .open-window-btn::before {
+    background: var(--var-border-color);
   }
 </style>
