@@ -72,12 +72,6 @@ class HashPageLoader {
         src: '/js/encoding.js?v=8',
         onload: () => typeof methodLoad === 'function' && methodLoad(),
         critical: true
-      },
-      {
-        src: '/js/clipboard.min.js',
-        onload: () => this.initClipboard(),
-        critical: false,
-        delay: 100
       }
     ];
 
@@ -94,23 +88,6 @@ class HashPageLoader {
     for (const script of nonCriticalScripts) {
       delayScripts.push(script);
     }
-  }
-
-  /**
-   * Initialize clipboard functionality
-   */
-  initClipboard() {
-    if (typeof ClipboardJS !== 'function') return;
-    
-    new ClipboardJS('[data-toggle="copy"]').on('success', (e) => {
-      const message = e.trigger.getAttribute('data-message');
-      if (typeof showMessage === 'function') {
-        showMessage(message);
-      }
-      if (typeof gtag === 'function') {
-        gtag('event', 'copy');
-      }
-    });
   }
 }
 

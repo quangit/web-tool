@@ -1,0 +1,18 @@
+---
+interface Props {
+  id?: string;
+  filename?: string;
+}
+
+const { id = 'download-image', filename = 'download' } = Astro.props;
+---
+
+<a
+  class="icon"
+  id={id}
+  download={filename}
+  style="display:none"
+  onclick="gtag('event', 'download');"
+>
+  <i data-lucide="download" title="Download"></i>
+</a>

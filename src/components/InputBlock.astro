@@ -1,5 +1,6 @@
 ---
 import { useTranslations } from '../i18n/utils';
+import CopyButton from './CopyButton.astro';
 const {
   id = 'input',
   title = 'Input',
@@ -51,18 +52,7 @@ const t = useTranslations(lang as any);
     <div class="block-title">
       {title}
       <div class="toolbar">
-        {
-          showCopy && (
-            <button
-              class="icon"
-              data-toggle="copy"
-              data-clipboard-target={`#${id}`}
-              data-message={copyMessage}
-            >
-              <i data-lucide="copy" title="Copy" />
-            </button>
-          )
-        }
+        {showCopy && <CopyButton target={`#${id}`} message={copyMessage} />}
         {
           showFullscreen && (
             <button class="icon" data-toggle="fullscreen">

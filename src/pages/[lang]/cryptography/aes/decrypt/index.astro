@@ -327,15 +327,6 @@ const activePage = 'cryptography/aes/decrypt';
       },
     });
 
-    // Load clipboard
-    ++waitLoadCount;
-    delayScripts.push({
-      src: '/js/clipboard.min.js',
-      onload: function () {
-        methodLoad();
-      },
-    });
-
     // Load file-loader
     ++waitLoadCount;
     delayScripts.push({

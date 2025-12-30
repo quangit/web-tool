@@ -162,18 +162,114 @@ Use conventional commits: `feat:`, `fix:`, `docs:`, `refactor:`, `chore:`
 
 ### Script Location Decision Guide
 
-| Type                              | Location       | How to Load                                        |
-| --------------------------------- | -------------- | -------------------------------------------------- |
-| **Project-owned code**            | `src/scripts/` | `<script src="../scripts/file.js">` or `import()`  |
-| **Project-owned CSS**             | `src/styles/`  | `import '../styles/file.css';` in `<script>` block |
-| **Scripts with CDN dependencies** | `public/js/`   | `delayScripts` pattern with `is:inline`            |
-| **Third-party minified libs**     | `public/js/`   | `<script is:inline src="/js/lib.js">`              |
-| **Third-party CSS**               | `public/css/`  | `<link rel="stylesheet" href="/css/file.css">`     |
-| **External CDN**                  | N/A            | `<script is:inline src="https://cdn...">`          |
+| Type                               | Location       | How to Load                                        |
+| ---------------------------------- | -------------- | -------------------------------------------------- |
+| **Project-owned code**             | `src/scripts/` | `<script src="../scripts/file.js">` or `import()`  |
+| **Project-owned CSS**              | `src/styles/`  | `import '../styles/file.css';` in `<script>` block |
+| **Small third-party libs (<50KB)** | `npm modules`  | `import Library from 'library-name'`               |
+| **Scripts with CDN dependencies**  | `public/js/`   | `delayScripts` pattern with `is:inline`            |
+| **Large third-party libs (>50KB)** | `public/js/`   | `<script is:inline src="/js/lib.js">`              |
+| **Third-party CSS**                | `public/css/`  | `<link rel="stylesheet" href="/css/file.css">`     |
+| **External CDN**                   | N/A            | `<script is:inline src="https://cdn...">`          |
+
+> **Best Practice for Third-Party Libraries:**
+>
+> - **Small libraries (<50KB)**: Use npm modules (e.g., `clipboard`, `uuid`, `date-fns`) so Astro can bundle, optimize, and tree-shake them.
+> - **Large libraries (>50KB)**: Keep in `public/js/` or use CDN to avoid bloating the bundle (e.g., `monaco-editor`, `pdf.js`).
+> - **Highly specialized**: If only used on 1-2 pages, prefer CDN with lazy loading over bundling.
 
 > **Note:** Scripts that depend on external CDN libraries (like Toast UI Editor) and use the `delayScripts` pattern should stay in `public/js/` because `is:inline` scripts are not processed by Astro's bundler.
 
 > **CSS Note:** Project-owned CSS should be placed in `src/styles/` and imported via `import` statement. This allows Astro to optimize, minify, and bundle the CSS. Third-party CSS that needs to be served as-is should stay in `public/css/`.
+
+### Common Pitfalls (Astro Inline Scripts)
+
+⚠️ **CRITICAL: `define:vars` does NOT work with `is:inline` scripts**
+
+```astro
+<!-- ❌ WRONG - Variables will NOT be passed -->
+<script is:inline define:vars={{ myVar }}>
+  console.log(myVar); // ReferenceError: myVar is not defined
+</script>
+
+<!-- ✅ CORRECT - Hardcode values directly in is:inline scripts -->
+<script is:inline>
+  var myVar = 'https://cdn.example.com/lib.js';
+</script>
+```
+
+⚠️ **`delayScripts` onload callbacks must wrap function calls**
+
+```javascript
+// ❌ WRONG - Will cause "methodLoad is not defined" error
+delayScripts.push({
+  src: 'https://cdn.example.com/lib.js',
+  onload: methodLoad, // Direct reference fails
+});
+
+// ✅ CORRECT - Wrap in anonymous function
+delayScripts.push({
+  src: 'https://cdn.example.com/lib.js',
+  onload: function () {
+    methodLoad();
+  },
+});
+```
+
+⚠️ **`++waitLoadCount` must match number of external scripts**
+
+```javascript
+// ❌ WRONG - Mismatch causes loading issues
+++waitLoadCount;
+delayScripts.push(
+  {
+    src: 'lib1.js',
+    onload: function () {
+      methodLoad();
+    },
+  },
+  {
+    src: 'lib2.js',
+    onload: function () {
+      methodLoad();
+    },
+  }
+);
+++waitLoadCount; // Extra increment - WRONG!
+
+// ✅ CORRECT - One increment per script
+++waitLoadCount;
+++waitLoadCount;
+delayScripts.push(
+  {
+    src: 'lib1.js',
+    onload: function () {
+      methodLoad();
+    },
+  },
+  {
+    src: 'lib2.js',
+    onload: function () {
+      methodLoad();
+    },
+  }
+);
+```
+
+⚠️ **Template literals with variables don't work in `is:inline` context**
+
+```astro
+---
+const CDN_URL = 'https://cdn.example.com';
+---
+
+<!-- ❌ WRONG - Variable not available in is:inline -->
+<link rel="stylesheet" href={`${CDN_URL}/style.css`} />
+<!-- This works in template, but NOT inside is:inline scripts -->
+
+<!-- ✅ CORRECT for is:inline - Hardcode the full URL -->
+<link rel="stylesheet" href="https://cdn.example.com/style.css" />
+```
 
 ### Adding a Language
 

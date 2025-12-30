@@ -1,6 +1,7 @@
 ---
 import BasePage from '../../../../../components/BasePage.astro';
 import BaseSettingBlock from '../../../../../components/BaseSettingBlock.astro';
+import CopyButton from '../../../../../components/CopyButton.astro';
 import { languages } from '../../../../../i18n/ui';
 import { useTranslations } from '../../../../../i18n/utils';
 
@@ -34,13 +35,7 @@ const activePage = 'cryptography/rsa/key-generator';
                 onclick="gtag('event', 'download');"
                 ><i data-lucide="download" title="Download"></i></a
               >
-              <button
-                class="icon"
-                data-toggle="copy"
-                data-clipboard-target="#output"
-                data-message={t('private_key_copied')}
-                ><i data-lucide="copy" title="Copy"></i></button
-              >
+              <CopyButton target="#output" message={t('private_key_copied')} />
               <button class="icon" data-toggle="fullscreen"
                 ><i class="fullscreen-icon" data-lucide="maximize" title="Full Screen"></i><i
                   class="fullscreen-icon-exit"
@@ -63,13 +58,7 @@ const activePage = 'cryptography/rsa/key-generator';
               <a class="icon" id="download-public" download="public.pem" style="display:none"
                 ><i data-lucide="download" title="Download"></i></a
               >
-              <button
-                class="icon"
-                data-toggle="copy"
-                data-clipboard-target="#public-key"
-                data-message={t('public_key_copied')}
-                ><i data-lucide="copy" title="Copy"></i></button
-              >
+              <CopyButton target="#public-key" message={t('public_key_copied')} />
               <button class="icon" data-toggle="fullscreen"
                 ><i class="fullscreen-icon" data-lucide="maximize" title="Full Screen"></i><i
                   class="fullscreen-icon-exit"
@@ -88,13 +77,7 @@ const activePage = 'cryptography/rsa/key-generator';
         <details class="block text-only" data-toggle="copyblock">
           <summary class="block-title"
             >{t('share_link')}<div class="toolbar">
-              <button
-                class="icon"
-                data-toggle="copy"
-                data-clipboard-target="#share-link"
-                data-message={t('share_link_copied')}
-                ><i data-lucide="copy" title="Copy"></i></button
-              >
+              <CopyButton target="#share-link" message={t('share_link_copied')} />
             </div></summary
           >
           <input id="share-link" type="text" placeholder={t('share_link')} readonly="readonly" />
@@ -213,17 +196,5 @@ const activePage = 'cryptography/rsa/key-generator';
       ot.setExecute(execute);
       methodLoad();
     },
-  });
-</script>
-<script is:inline>
-  delayScripts.push({
-    src: '/js/clipboard.min.js',
-    onload: function () {
-      new ClipboardJS('[data-toggle="copy"]').on('success', function (e) {
-        showMessage(e.trigger.getAttribute('data-message'));
-        gtag('event', 'copy');
-      });
-    },
-    delay: 100,
   });
 </script>

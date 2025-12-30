@@ -1,7 +1,6 @@
 ---
-import BaseLayout from '../layouts/BaseLayout.astro';
-import Sidebar from './Sidebar.astro';
-import PageHeader from './PageHeader.astro';
+import BasePage from './BasePage.astro';
+import CopyButton from './CopyButton.astro';
 import { useTranslations } from '../i18n/utils';
 
 interface Props {
@@ -17,444 +16,391 @@ const { lang = 'en' } = Astro.params;
 const t = useTranslations(lang as any);
 ---
 
-<BaseLayout title={title} description={description}>
-  <div id="app">
-    <Sidebar activePage={activePage} />
-
-    <div id="content">
-      <div class="top-nav">
-        <button
-          id="sidebar-toggler"
-          aria-controls="sidebar"
-          aria-expanded="false"
-          aria-label={t('sidebar.toggle_menu')}
-        >
-          <i data-lucide="menu"></i>
-        </button>
-      </div>
-
-      <PageHeader title={title} description={description} />
-
-      <main>
-        <div class="layout">
-          <div class="layout-block">
-            <div class="input">
-              <div class="block block-fill">
-                <div class="block-title">
-                  {t('input')}
-                  <div class="toolbar">
-                    <button class="icon" data-toggle="fullscreen">
-                      <i class="fullscreen-icon" data-lucide="maximize" title="Full Screen"></i>
-                      <i class="fullscreen-icon-exit" data-lucide="minimize" title="Full Screen"
-                      ></i>
-                    </button>
-                  </div>
-                </div>
-                <textarea
-                  class="container"
-                  id="input"
-                  spellcheck="false"
-                  placeholder={t('enter_here')}
-                  data-remember="input"
-                  data-share="input"
-                  data-encoding-from="#input-type"
-                  data-auto-update
-                  data-toggle="monacoEditor"></textarea>
-                <div class="droppable-zone container" id="droppable-zone" style="display:none;">
-                  <input class="droppable-file" type="file" id="file" data-auto-update />
-                  <div class="droppable-zone-wrapper">
-                    <i class="droppable-zone-icon" data-lucide="file-up"></i>
-                    <div class="droppable-zone-text">{t('drag_drop')}</div>
-                  </div>
-                </div>
-              </div>
-            </div>
-
-            <div class="output">
-              <div class="block block-fill">
-                <div class="block-title">
-                  {t('output')}
-                  <div class="toolbar">
-                    <button
-                      class="icon"
-                      data-toggle="copy"
-                      data-clipboard-target="#output"
-                      data-message="Output copied"
-                    >
-                      <i data-lucide="copy" title="Copy"></i>
-                    </button>
-                    <button class="icon" data-toggle="fullscreen">
-                      <i class="fullscreen-icon" data-lucide="maximize" title="Full Screen"></i>
-                      <i class="fullscreen-icon-exit" data-lucide="minimize" title="Full Screen"
-                      ></i>
-                    </button>
-                  </div>
-                </div>
-                <textarea
-                  class="container"
-                  id="output"
-                  spellcheck="false"
-                  placeholder={t('output_placeholder')}
-                  data-encoding-from="#output-type"
-                  data-toggle="monacoEditor"
-                  readonly="readonly"></textarea>
-              </div>
-
-              <details class="block text-only" data-toggle="copyblock">
-                <summary class="block-title"
-                  >{t('share_link')}
-                  <div class="toolbar">
-                    <button
-                      class="icon"
-                      data-toggle="copy"
-                      data-clipboard-target="#share-link"
-                      data-message="Share link copied"
-                    >
-                      <i data-lucide="copy" title="Copy"></i>
-                    </button>
-                  </div>
-                </summary>
-                <input
-                  id="share-link"
-                  type="text"
-                  placeholder={t('share_link')}
-                  readonly="readonly"
-                />
-              </details>
+<BasePage title={title} description={description} activePage={activePage}>
+  <div class="layout">
+    <div class="layout-block">
+      <div class="input">
+        <div class="block block-fill">
+          <div class="block-title">
+            {t('input')}
+            <div class="toolbar">
+              <button class="icon" data-toggle="fullscreen">
+                <i class="fullscreen-icon" data-lucide="maximize" title="Full Screen"></i>
+                <i class="fullscreen-icon-exit" data-lucide="minimize" title="Full Screen"></i>
+              </button>
             </div>
           </div>
-
-          <div class="settings">
-            <div class="block block-fill">
-              <div class="block-title">{t('settings')}</div>
-              <div class="container">
-                <div class="setting">
-                  <a class="btn" id="execute">{toolName}</a>
-                </div>
-
-                <div class="setting">
-                  <label class="switcher">
-                    <input type="checkbox" value="1" id="auto-update" checked />
-                    <div class="toggle"></div>
-                    <span>{t('auto_update')}</span>
-                  </label>
-                </div>
-
-                <div class="setting">
-                  <label class="switcher">
-                    <input type="checkbox" value="1" id="remember-input" />
-                    <div class="toggle"></div>
-                    <span>{t('remember_input')}</span>
-                  </label>
-                </div>
-
-                <div class="setting">
-                  <label for="file-type">{t('input_type')}</label>
-                  <select
-                    id="file-type"
-                    data-remember="source"
-                    data-share="source"
-                    data-auto-update
-                    data-url-placeholder={t('url_placeholder')}
-                  >
-                    <option value="text">Text</option>
-                    <option value="file">File</option>
-                    <option value="url">URL</option>
-                  </select>
-                </div>
-
-                <div class="setting text-only">
-                  <label for="input-type">{t('input_encoding')}</label>
-                  <select
-                    data-toggle="encoding"
-                    id="input-type"
-                    data-remember="input-type"
-                    data-share="input_type"
-                    data-auto-update
-                  >
-                    <optgroup label="Binary">
-                      <option value="hex">Hex</option>
-                      <option value="base64" data-load-encoding="base64">Base64</option>
-                    </optgroup>
-                    <optgroup label="Text">
-                      <option value="utf-8" selected>UTF-8</option>
-                      <option value="utf-16le" data-load-encoding="1">UTF-16LE</option>
-                      <option value="utf-16be" data-load-encoding="1">UTF-16BE</option>
-                    </optgroup>
-                  </select>
-                </div>
-
-                <div class="setting">
-                  <label for="output-type">{t('output_encoding')}</label>
-                  <select
-                    data-toggle="encoding"
-                    id="output-type"
-                    data-remember="output-type"
-                    data-share="output_type"
-                    data-auto-update
-                    data-type="hex"
-                  >
-                    <option value="hex">Hex (Lower Case)</option>
-                    <option value="hex_upper">Hex (Upper Case)</option>
-                    <option value="base64" data-load-encoding="base64">Base64</option>
-                  </select>
-                </div>
-
-                <div class="setting">
-                  <label for="model">{t('model')}</label>
-                  <select id="model" data-remember="model" data-option="model" data-share="model">
-                    <optgroup label="Main">
-                      <option value="custom">Custom</option>
-                      <option value="crc_7_mmc">CRC-7/MMC (CRC-7)</option>
-                      <option value="crc_8_smbus">CRC-8/SMBUS (CRC-8)</option>
-                      <option value="crc_10_atm">CRC-10/ATM (CRC-10, CRC-10/I-610)</option>
-                      <option value="crc_11_flexray">CRC-11/FLEXRAY (CRC-11)</option>
-                      <option value="crc_15_can">CRC-15/CAN (CRC-15)</option>
-                      <option value="crc_16_arc"
-                        >CRC-16/ARC (ARC, CRC-16, CRC-16/LHA, CRC-IBM)</option
-                      >
-                      <option value="crc_24_openpgp">CRC-24/OPENPGP (CRC-24)</option>
-                      <option value="crc_32_iso_hdlc" selected
-                        >CRC-32/ISO-HDLC (CRC-32, CRC-32/ADCCP, CRC-32/V-42, CRC-32/XZ, PKZIP)</option
-                      >
-                      <option value="crc_64_ecma_182">CRC-64/ECMA-182 (CRC-64)</option>
-                    </optgroup>
-                    <optgroup label="All">
-                      <option value="crc_3_gsm">CRC-3/GSM</option>
-                      <option value="crc_3_rohc">CRC-3/ROHC</option>
-                      <option value="crc_4_g_704">CRC-4/G-704 (CRC-4/ITU)</option>
-                      <option value="crc_4_interlaken">CRC-4/INTERLAKEN</option>
-                      <option value="crc_5_epc_c1g2">CRC-5/EPC-C1G2 (CRC-5/EPC)</option>
-                      <option value="crc_5_g_704">CRC-5/G-704 (CRC-5/ITU)</option>
-                      <option value="crc_5_usb">CRC-5/USB</option>
-                      <option value="crc_6_cdma2000_a">CRC-6/CDMA2000-A</option>
-                      <option value="crc_6_cdma2000_b">CRC-6/CDMA2000-B</option>
-                      <option value="crc_6_darc">CRC-6/DARC</option>
-                      <option value="crc_6_g_704">CRC-6/G-704 (CRC-6/ITU)</option>
-                      <option value="crc_6_gsm">CRC-6/GSM</option>
-                      <option value="crc_7_mmc">CRC-7/MMC (CRC-7)</option>
-                      <option value="crc_7_rohc">CRC-7/ROHC</option>
-                      <option value="crc_7_umts">CRC-7/UMTS</option>
-                      <option value="crc_8_autosar">CRC-8/AUTOSAR</option>
-                      <option value="crc_8_bluetooth">CRC-8/BLUETOOTH</option>
-                      <option value="crc_8_cdma2000">CRC-8/CDMA2000</option>
-                      <option value="crc_8_darc">CRC-8/DARC</option>
-                      <option value="crc_8_dvb_s2">CRC-8/DVB-S2</option>
-                      <option value="crc_8_gsm_a">CRC-8/GSM-A</option>
-                      <option value="crc_8_gsm_b">CRC-8/GSM-B</option>
-                      <option value="crc_8_hitag">CRC-8/HITAG</option>
-                      <option value="crc_8_i_432_1">CRC-8/I-432-1 (CRC-8/ITU)</option>
-                      <option value="crc_8_i_code">CRC-8/I-CODE</option>
-                      <option value="crc_8_lte">CRC-8/LTE</option>
-                      <option value="crc_8_maxim_dow">CRC-8/MAXIM-DOW (CRC-8/MAXIM, DOW-CRC)</option
-                      >
-                      <option value="crc_8_mifare_mad">CRC-8/MIFARE-MAD</option>
-                      <option value="crc_8_nrsc_5">CRC-8/NRSC-5</option>
-                      <option value="crc_8_opensafety">CRC-8/OPENSAFETY</option>
-                      <option value="crc_8_rohc">CRC-8/ROHC</option>
-                      <option value="crc_8_sae_j1850">CRC-8/SAE-J1850</option>
-                      <option value="crc_8_smbus">CRC-8/SMBUS (CRC-8)</option>
-                      <option value="crc_8_tech_3250">CRC-8/TECH-3250 (CRC-8/AES, CRC-8/EBU)</option
-                      >
-                      <option value="crc_8_wcdma">CRC-8/WCDMA</option>
-                      <option value="crc_10_atm">CRC-10/ATM (CRC-10, CRC-10/I-610)</option>
-                      <option value="crc_10_cdma2000">CRC-10/CDMA2000</option>
-                      <option value="crc_10_gsm">CRC-10/GSM</option>
-                      <option value="crc_11_flexray">CRC-11/FLEXRAY (CRC-11)</option>
-                      <option value="crc_11_umts">CRC-11/UMTS</option>
-                      <option value="crc_12_cdma2000">CRC-12/CDMA2000</option>
-                      <option value="crc_12_dect">CRC-12/DECT (X-CRC-12)</option>
-                      <option value="crc_12_gsm">CRC-12/GSM</option>
-                      <option value="crc_12_umts">CRC-12/UMTS (CRC-12/3GPP)</option>
-                      <option value="crc_13_bbc">CRC-13/BBC</option>
-                      <option value="crc_14_darc">CRC-14/DARC</option>
-                      <option value="crc_14_gsm">CRC-14/GSM</option>
-                      <option value="crc_15_can">CRC-15/CAN (CRC-15)</option>
-                      <option value="crc_15_mpt1327">CRC-15/MPT1327</option>
-                      <option value="crc_16_arc"
-                        >CRC-16/ARC (ARC, CRC-16, CRC-16/LHA, CRC-IBM)</option
-                      >
-                      <option value="crc_16_cdma2000">CRC-16/CDMA2000</option>
-                      <option value="crc_16_cms">CRC-16/CMS</option>
-                      <option value="crc_16_dds_110">CRC-16/DDS-110</option>
-                      <option value="crc_16_dect_r">CRC-16/DECT-R (R-CRC-16)</option>
-                      <option value="crc_16_dect_x">CRC-16/DECT-X (X-CRC-16)</option>
-                      <option value="crc_16_dnp">CRC-16/DNP</option>
-                      <option value="crc_16_en_13757">CRC-16/EN-13757</option>
-                      <option value="crc_16_genibus"
-                        >CRC-16/GENIBUS (CRC-16/DARC, CRC-16/EPC, CRC-16/EPC-C1G2, CRC-16/I-CODE)</option
-                      >
-                      <option value="crc_16_gsm">CRC-16/GSM</option>
-                      <option value="crc_16_ibm_3740"
-                        >CRC-16/IBM-3740 (CRC-16/AUTOSAR, CRC-16/CCITT-FALSE)</option
-                      >
-                      <option value="crc_16_ibm_sdlc"
-                        >CRC-16/IBM-SDLC (CRC-16/ISO-HDLC, CRC-16/ISO-IEC-14443-3-B, CRC-16/X-25,
-                        CRC-B, X-25)</option
-                      >
-                      <option value="crc_16_iso_iec_14443_3_a"
-                        >CRC-16/ISO-IEC-14443-3-A (CRC-A)</option
-                      >
-                      <option value="crc_16_kermit"
-                        >CRC-16/KERMIT (CRC-16/BLUETOOTH, CRC-16/CCITT, CRC-16/CCITT-TRUE,
-                        CRC-16/V-41-LSB, CRC-CCITT, KERMIT)</option
-                      >
-                      <option value="crc_16_lj1200">CRC-16/LJ1200</option>
-                      <option value="crc_16_m17">CRC-16/M17</option>
-                      <option value="crc_16_maxim_dow">CRC-16/MAXIM-DOW (CRC-16/MAXIM)</option>
-                      <option value="crc_16_mcrf4xx">CRC-16/MCRF4XX</option>
-                      <option value="crc_16_modbus">CRC-16/MODBUS (MODBUS)</option>
-                      <option value="crc_16_nrsc_5">CRC-16/NRSC-5</option>
-                      <option value="crc_16_opensafety_a">CRC-16/OPENSAFETY-A</option>
-                      <option value="crc_16_opensafety_b">CRC-16/OPENSAFETY-B</option>
-                      <option value="crc_16_profibus">CRC-16/PROFIBUS (CRC-16/IEC-61158-2)</option>
-                      <option value="crc_16_riello">CRC-16/RIELLO</option>
-                      <option value="crc_16_spi_fujitsu"
-                        >CRC-16/SPI-FUJITSU (CRC-16/AUG-CCITT)</option
-                      >
-                      <option value="crc_16_t10_dif">CRC-16/T10-DIF</option>
-                      <option value="crc_16_teledisk">CRC-16/TELEDISK</option>
-                      <option value="crc_16_tms37157">CRC-16/TMS37157</option>
-                      <option value="crc_16_umts"
-                        >CRC-16/UMTS (CRC-16/BUYPASS, CRC-16/VERIFONE)</option
-                      >
-                      <option value="crc_16_usb">CRC-16/USB</option>
-                      <option value="crc_16_xmodem"
-                        >CRC-16/XMODEM (CRC-16/ACORN, CRC-16/LTE, CRC-16/V-41-MSB, XMODEM, ZMODEM)</option
-                      >
-                      <option value="crc_17_can_fd">CRC-17/CAN-FD</option>
-                      <option value="crc_21_can_fd">CRC-21/CAN-FD</option>
-                      <option value="crc_24_ble">CRC-24/BLE</option>
-                      <option value="crc_24_flexray_a">CRC-24/FLEXRAY-A</option>
-                      <option value="crc_24_flexray_b">CRC-24/FLEXRAY-B</option>
-                      <option value="crc_24_interlaken">CRC-24/INTERLAKEN</option>
-                      <option value="crc_24_lte_a">CRC-24/LTE-A</option>
-                      <option value="crc_24_lte_b">CRC-24/LTE-B</option>
-                      <option value="crc_24_openpgp">CRC-24/OPENPGP (CRC-24)</option>
-                      <option value="crc_24_os_9">CRC-24/OS-9</option>
-                      <option value="crc_30_cdma">CRC-30/CDMA</option>
-                      <option value="crc_31_philips">CRC-31/PHILIPS</option>
-                      <option value="crc_32_aixm">CRC-32/AIXM (CRC-32Q)</option>
-                      <option value="crc_32_autosar">CRC-32/AUTOSAR</option>
-                      <option value="crc_32_base91_d">CRC-32/BASE91-D (CRC-32D)</option>
-                      <option value="crc_32_bzip2"
-                        >CRC-32/BZIP2 (CRC-32/AAL5, CRC-32/DECT-B, B-CRC-32)</option
-                      >
-                      <option value="crc_32_cd_rom_edc">CRC-32/CD-ROM-EDC</option>
-                      <option value="crc_32_cksum">CRC-32/CKSUM (CKSUM, CRC-32/POSIX)</option>
-                      <option value="crc_32_iscsi"
-                        >CRC-32/ISCSI (CRC-32/BASE91-C, CRC-32/CASTAGNOLI, CRC-32/INTERLAKEN,
-                        CRC-32C, CRC-32/NVME)</option
-                      >
-                      <option value="crc_32_iso_hdlc"
-                        >CRC-32/ISO-HDLC (CRC-32, CRC-32/ADCCP, CRC-32/V-42, CRC-32/XZ, PKZIP)</option
-                      >
-                      <option value="crc_32_jamcrc">CRC-32/JAMCRC (JAMCRC)</option>
-                      <option value="crc_32_mef">CRC-32/MEF</option>
-                      <option value="crc_32_mpeg_2">CRC-32/MPEG-2</option>
-                      <option value="crc_32_xfer">CRC-32/XFER (XFER)</option>
-                      <option value="crc_40_gsm">CRC-40/GSM</option>
-                      <option value="crc_64_ecma_182">CRC-64/ECMA-182 (CRC-64)</option>
-                      <option value="crc_64_go_iso">CRC-64/GO-ISO</option>
-                      <option value="crc_64_ms">CRC-64/MS</option>
-                      <option value="crc_64_nvme">CRC-64/NVME</option>
-                      <option value="crc_64_redis">CRC-64/REDIS</option>
-                      <option value="crc_64_we">CRC-64/WE</option>
-                      <option value="crc_64_xz">CRC-64/XZ (CRC-64/GO-ECMA)</option>
-                      <option value="crc_82_darc">CRC-82/DARC</option>
-                    </optgroup>
-                  </select>
-                </div>
-
-                <div class="setting" id="custom-block" style="display:none">
-                  <div class="setting">
-                    <label for="width">{t('width')}</label>
-                    <input
-                      type="number"
-                      id="width"
-                      data-option="width"
-                      data-remember="width"
-                      data-share="width"
-                      value="32"
-                      step="1"
-                      min="1"
-                    />
-                  </div>
-                  <div class="setting">
-                    <label for="poly">{t('poly')}</label>
-                    <input
-                      type="text"
-                      id="poly"
-                      data-option="poly"
-                      data-remember="poly"
-                      data-share="poly"
-                      value="04C11DB7"
-                    />
-                  </div>
-                  <div class="setting">
-                    <label for="init">{t('init')}</label>
-                    <input
-                      type="text"
-                      id="init"
-                      data-option="init"
-                      data-remember="init"
-                      data-share="init"
-                      value="FFFFFFFF"
-                    />
-                  </div>
-                  <div class="setting">
-                    <label for="xorout">{t('xorout')}</label>
-                    <input
-                      type="text"
-                      id="xorout"
-                      data-option="xorout"
-                      data-remember="xorout"
-                      data-share="xorout"
-                      value="FFFFFFFF"
-                    />
-                  </div>
-                  <div class="setting">
-                    <label class="switcher">
-                      <input
-                        type="checkbox"
-                        value="1"
-                        id="refin"
-                        data-option="refin"
-                        data-remember="refin"
-                        data-share="refin"
-                        checked
-                      />
-                      <div class="toggle"></div>
-                      <span>{t('refin')}</span>
-                    </label>
-                  </div>
-                  <div class="setting">
-                    <label class="switcher">
-                      <input
-                        type="checkbox"
-                        value="1"
-                        id="refout"
-                        data-option="refout"
-                        data-remember="refout"
-                        data-share="refout"
-                        checked
-                      />
-                      <div class="toggle"></div>
-                      <span>{t('refout')}</span>
-                    </label>
-                  </div>
-                </div>
-              </div>
+          <textarea
+            class="container"
+            id="input"
+            spellcheck="false"
+            placeholder={t('enter_here')}
+            data-remember="input"
+            data-share="input"
+            data-encoding-from="#input-type"
+            data-auto-update
+            data-toggle="monacoEditor"></textarea>
+          <div class="droppable-zone container" id="droppable-zone" style="display:none;">
+            <input class="droppable-file" type="file" id="file" data-auto-update />
+            <div class="droppable-zone-wrapper">
+              <i class="droppable-zone-icon" data-lucide="file-up"></i>
+              <div class="droppable-zone-text">{t('drag_drop')}</div>
             </div>
           </div>
         </div>
-      </main>
+      </div>
+
+      <div class="output">
+        <div class="block block-fill">
+          <div class="block-title">
+            {t('output')}
+            <div class="toolbar">
+              <CopyButton target="#output" message="Output copied" />
+              <button class="icon" data-toggle="fullscreen">
+                <i class="fullscreen-icon" data-lucide="maximize" title="Full Screen"></i>
+                <i class="fullscreen-icon-exit" data-lucide="minimize" title="Full Screen"></i>
+              </button>
+            </div>
+          </div>
+          <textarea
+            class="container"
+            id="output"
+            spellcheck="false"
+            placeholder={t('output_placeholder')}
+            data-encoding-from="#output-type"
+            data-toggle="monacoEditor"
+            readonly="readonly"></textarea>
+        </div>
+
+        <details class="block text-only" data-toggle="copyblock">
+          <summary class="block-title"
+            >{t('share_link')}
+            <div class="toolbar">
+              <CopyButton target="#share-link" message="Share link copied" />
+            </div>
+          </summary>
+          <input id="share-link" type="text" placeholder={t('share_link')} readonly="readonly" />
+        </details>
+      </div>
+    </div>
+
+    <div class="settings">
+      <div class="block block-fill">
+        <div class="block-title">{t('settings')}</div>
+        <div class="container">
+          <div class="setting">
+            <a class="btn" id="execute">{toolName}</a>
+          </div>
+
+          <div class="setting">
+            <label class="switcher">
+              <input type="checkbox" value="1" id="auto-update" checked />
+              <div class="toggle"></div>
+              <span>{t('auto_update')}</span>
+            </label>
+          </div>
+
+          <div class="setting">
+            <label class="switcher">
+              <input type="checkbox" value="1" id="remember-input" />
+              <div class="toggle"></div>
+              <span>{t('remember_input')}</span>
+            </label>
+          </div>
+
+          <div class="setting">
+            <label for="file-type">{t('input_type')}</label>
+            <select
+              id="file-type"
+              data-remember="source"
+              data-share="source"
+              data-auto-update
+              data-url-placeholder={t('url_placeholder')}
+            >
+              <option value="text">Text</option>
+              <option value="file">File</option>
+              <option value="url">URL</option>
+            </select>
+          </div>
+
+          <div class="setting text-only">
+            <label for="input-type">{t('input_encoding')}</label>
+            <select
+              data-toggle="encoding"
+              id="input-type"
+              data-remember="input-type"
+              data-share="input_type"
+              data-auto-update
+            >
+              <optgroup label="Binary">
+                <option value="hex">Hex</option>
+                <option value="base64" data-load-encoding="base64">Base64</option>
+              </optgroup>
+              <optgroup label="Text">
+                <option value="utf-8" selected>UTF-8</option>
+                <option value="utf-16le" data-load-encoding="1">UTF-16LE</option>
+                <option value="utf-16be" data-load-encoding="1">UTF-16BE</option>
+              </optgroup>
+            </select>
+          </div>
+
+          <div class="setting">
+            <label for="output-type">{t('output_encoding')}</label>
+            <select
+              data-toggle="encoding"
+              id="output-type"
+              data-remember="output-type"
+              data-share="output_type"
+              data-auto-update
+              data-type="hex"
+            >
+              <option value="hex">Hex (Lower Case)</option>
+              <option value="hex_upper">Hex (Upper Case)</option>
+              <option value="base64" data-load-encoding="base64">Base64</option>
+            </select>
+          </div>
+
+          <div class="setting">
+            <label for="model">{t('model')}</label>
+            <select id="model" data-remember="model" data-option="model" data-share="model">
+              <optgroup label="Main">
+                <option value="custom">Custom</option>
+                <option value="crc_7_mmc">CRC-7/MMC (CRC-7)</option>
+                <option value="crc_8_smbus">CRC-8/SMBUS (CRC-8)</option>
+                <option value="crc_10_atm">CRC-10/ATM (CRC-10, CRC-10/I-610)</option>
+                <option value="crc_11_flexray">CRC-11/FLEXRAY (CRC-11)</option>
+                <option value="crc_15_can">CRC-15/CAN (CRC-15)</option>
+                <option value="crc_16_arc">CRC-16/ARC (ARC, CRC-16, CRC-16/LHA, CRC-IBM)</option>
+                <option value="crc_24_openpgp">CRC-24/OPENPGP (CRC-24)</option>
+                <option value="crc_32_iso_hdlc" selected
+                  >CRC-32/ISO-HDLC (CRC-32, CRC-32/ADCCP, CRC-32/V-42, CRC-32/XZ, PKZIP)</option
+                >
+                <option value="crc_64_ecma_182">CRC-64/ECMA-182 (CRC-64)</option>
+              </optgroup>
+              <optgroup label="All">
+                <option value="crc_3_gsm">CRC-3/GSM</option>
+                <option value="crc_3_rohc">CRC-3/ROHC</option>
+                <option value="crc_4_g_704">CRC-4/G-704 (CRC-4/ITU)</option>
+                <option value="crc_4_interlaken">CRC-4/INTERLAKEN</option>
+                <option value="crc_5_epc_c1g2">CRC-5/EPC-C1G2 (CRC-5/EPC)</option>
+                <option value="crc_5_g_704">CRC-5/G-704 (CRC-5/ITU)</option>
+                <option value="crc_5_usb">CRC-5/USB</option>
+                <option value="crc_6_cdma2000_a">CRC-6/CDMA2000-A</option>
+                <option value="crc_6_cdma2000_b">CRC-6/CDMA2000-B</option>
+                <option value="crc_6_darc">CRC-6/DARC</option>
+                <option value="crc_6_g_704">CRC-6/G-704 (CRC-6/ITU)</option>
+                <option value="crc_6_gsm">CRC-6/GSM</option>
+                <option value="crc_7_mmc">CRC-7/MMC (CRC-7)</option>
+                <option value="crc_7_rohc">CRC-7/ROHC</option>
+                <option value="crc_7_umts">CRC-7/UMTS</option>
+                <option value="crc_8_autosar">CRC-8/AUTOSAR</option>
+                <option value="crc_8_bluetooth">CRC-8/BLUETOOTH</option>
+                <option value="crc_8_cdma2000">CRC-8/CDMA2000</option>
+                <option value="crc_8_darc">CRC-8/DARC</option>
+                <option value="crc_8_dvb_s2">CRC-8/DVB-S2</option>
+                <option value="crc_8_gsm_a">CRC-8/GSM-A</option>
+                <option value="crc_8_gsm_b">CRC-8/GSM-B</option>
+                <option value="crc_8_hitag">CRC-8/HITAG</option>
+                <option value="crc_8_i_432_1">CRC-8/I-432-1 (CRC-8/ITU)</option>
+                <option value="crc_8_i_code">CRC-8/I-CODE</option>
+                <option value="crc_8_lte">CRC-8/LTE</option>
+                <option value="crc_8_maxim_dow">CRC-8/MAXIM-DOW (CRC-8/MAXIM, DOW-CRC)</option>
+                <option value="crc_8_mifare_mad">CRC-8/MIFARE-MAD</option>
+                <option value="crc_8_nrsc_5">CRC-8/NRSC-5</option>
+                <option value="crc_8_opensafety">CRC-8/OPENSAFETY</option>
+                <option value="crc_8_rohc">CRC-8/ROHC</option>
+                <option value="crc_8_sae_j1850">CRC-8/SAE-J1850</option>
+                <option value="crc_8_smbus">CRC-8/SMBUS (CRC-8)</option>
+                <option value="crc_8_tech_3250">CRC-8/TECH-3250 (CRC-8/AES, CRC-8/EBU)</option>
+                <option value="crc_8_wcdma">CRC-8/WCDMA</option>
+                <option value="crc_10_atm">CRC-10/ATM (CRC-10, CRC-10/I-610)</option>
+                <option value="crc_10_cdma2000">CRC-10/CDMA2000</option>
+                <option value="crc_10_gsm">CRC-10/GSM</option>
+                <option value="crc_11_flexray">CRC-11/FLEXRAY (CRC-11)</option>
+                <option value="crc_11_umts">CRC-11/UMTS</option>
+                <option value="crc_12_cdma2000">CRC-12/CDMA2000</option>
+                <option value="crc_12_dect">CRC-12/DECT (X-CRC-12)</option>
+                <option value="crc_12_gsm">CRC-12/GSM</option>
+                <option value="crc_12_umts">CRC-12/UMTS (CRC-12/3GPP)</option>
+                <option value="crc_13_bbc">CRC-13/BBC</option>
+                <option value="crc_14_darc">CRC-14/DARC</option>
+                <option value="crc_14_gsm">CRC-14/GSM</option>
+                <option value="crc_15_can">CRC-15/CAN (CRC-15)</option>
+                <option value="crc_15_mpt1327">CRC-15/MPT1327</option>
+                <option value="crc_16_arc">CRC-16/ARC (ARC, CRC-16, CRC-16/LHA, CRC-IBM)</option>
+                <option value="crc_16_cdma2000">CRC-16/CDMA2000</option>
+                <option value="crc_16_cms">CRC-16/CMS</option>
+                <option value="crc_16_dds_110">CRC-16/DDS-110</option>
+                <option value="crc_16_dect_r">CRC-16/DECT-R (R-CRC-16)</option>
+                <option value="crc_16_dect_x">CRC-16/DECT-X (X-CRC-16)</option>
+                <option value="crc_16_dnp">CRC-16/DNP</option>
+                <option value="crc_16_en_13757">CRC-16/EN-13757</option>
+                <option value="crc_16_genibus"
+                  >CRC-16/GENIBUS (CRC-16/DARC, CRC-16/EPC, CRC-16/EPC-C1G2, CRC-16/I-CODE)</option
+                >
+                <option value="crc_16_gsm">CRC-16/GSM</option>
+                <option value="crc_16_ibm_3740"
+                  >CRC-16/IBM-3740 (CRC-16/AUTOSAR, CRC-16/CCITT-FALSE)</option
+                >
+                <option value="crc_16_ibm_sdlc"
+                  >CRC-16/IBM-SDLC (CRC-16/ISO-HDLC, CRC-16/ISO-IEC-14443-3-B, CRC-16/X-25, CRC-B,
+                  X-25)</option
+                >
+                <option value="crc_16_iso_iec_14443_3_a">CRC-16/ISO-IEC-14443-3-A (CRC-A)</option>
+                <option value="crc_16_kermit"
+                  >CRC-16/KERMIT (CRC-16/BLUETOOTH, CRC-16/CCITT, CRC-16/CCITT-TRUE,
+                  CRC-16/V-41-LSB, CRC-CCITT, KERMIT)</option
+                >
+                <option value="crc_16_lj1200">CRC-16/LJ1200</option>
+                <option value="crc_16_m17">CRC-16/M17</option>
+                <option value="crc_16_maxim_dow">CRC-16/MAXIM-DOW (CRC-16/MAXIM)</option>
+                <option value="crc_16_mcrf4xx">CRC-16/MCRF4XX</option>
+                <option value="crc_16_modbus">CRC-16/MODBUS (MODBUS)</option>
+                <option value="crc_16_nrsc_5">CRC-16/NRSC-5</option>
+                <option value="crc_16_opensafety_a">CRC-16/OPENSAFETY-A</option>
+                <option value="crc_16_opensafety_b">CRC-16/OPENSAFETY-B</option>
+                <option value="crc_16_profibus">CRC-16/PROFIBUS (CRC-16/IEC-61158-2)</option>
+                <option value="crc_16_riello">CRC-16/RIELLO</option>
+                <option value="crc_16_spi_fujitsu">CRC-16/SPI-FUJITSU (CRC-16/AUG-CCITT)</option>
+                <option value="crc_16_t10_dif">CRC-16/T10-DIF</option>
+                <option value="crc_16_teledisk">CRC-16/TELEDISK</option>
+                <option value="crc_16_tms37157">CRC-16/TMS37157</option>
+                <option value="crc_16_umts">CRC-16/UMTS (CRC-16/BUYPASS, CRC-16/VERIFONE)</option>
+                <option value="crc_16_usb">CRC-16/USB</option>
+                <option value="crc_16_xmodem"
+                  >CRC-16/XMODEM (CRC-16/ACORN, CRC-16/LTE, CRC-16/V-41-MSB, XMODEM, ZMODEM)</option
+                >
+                <option value="crc_17_can_fd">CRC-17/CAN-FD</option>
+                <option value="crc_21_can_fd">CRC-21/CAN-FD</option>
+                <option value="crc_24_ble">CRC-24/BLE</option>
+                <option value="crc_24_flexray_a">CRC-24/FLEXRAY-A</option>
+                <option value="crc_24_flexray_b">CRC-24/FLEXRAY-B</option>
+                <option value="crc_24_interlaken">CRC-24/INTERLAKEN</option>
+                <option value="crc_24_lte_a">CRC-24/LTE-A</option>
+                <option value="crc_24_lte_b">CRC-24/LTE-B</option>
+                <option value="crc_24_openpgp">CRC-24/OPENPGP (CRC-24)</option>
+                <option value="crc_24_os_9">CRC-24/OS-9</option>
+                <option value="crc_30_cdma">CRC-30/CDMA</option>
+                <option value="crc_31_philips">CRC-31/PHILIPS</option>
+                <option value="crc_32_aixm">CRC-32/AIXM (CRC-32Q)</option>
+                <option value="crc_32_autosar">CRC-32/AUTOSAR</option>
+                <option value="crc_32_base91_d">CRC-32/BASE91-D (CRC-32D)</option>
+                <option value="crc_32_bzip2"
+                  >CRC-32/BZIP2 (CRC-32/AAL5, CRC-32/DECT-B, B-CRC-32)</option
+                >
+                <option value="crc_32_cd_rom_edc">CRC-32/CD-ROM-EDC</option>
+                <option value="crc_32_cksum">CRC-32/CKSUM (CKSUM, CRC-32/POSIX)</option>
+                <option value="crc_32_iscsi"
+                  >CRC-32/ISCSI (CRC-32/BASE91-C, CRC-32/CASTAGNOLI, CRC-32/INTERLAKEN, CRC-32C,
+                  CRC-32/NVME)</option
+                >
+                <option value="crc_32_iso_hdlc"
+                  >CRC-32/ISO-HDLC (CRC-32, CRC-32/ADCCP, CRC-32/V-42, CRC-32/XZ, PKZIP)</option
+                >
+                <option value="crc_32_jamcrc">CRC-32/JAMCRC (JAMCRC)</option>
+                <option value="crc_32_mef">CRC-32/MEF</option>
+                <option value="crc_32_mpeg_2">CRC-32/MPEG-2</option>
+                <option value="crc_32_xfer">CRC-32/XFER (XFER)</option>
+                <option value="crc_40_gsm">CRC-40/GSM</option>
+                <option value="crc_64_ecma_182">CRC-64/ECMA-182 (CRC-64)</option>
+                <option value="crc_64_go_iso">CRC-64/GO-ISO</option>
+                <option value="crc_64_ms">CRC-64/MS</option>
+                <option value="crc_64_nvme">CRC-64/NVME</option>
+                <option value="crc_64_redis">CRC-64/REDIS</option>
+                <option value="crc_64_we">CRC-64/WE</option>
+                <option value="crc_64_xz">CRC-64/XZ (CRC-64/GO-ECMA)</option>
+                <option value="crc_82_darc">CRC-82/DARC</option>
+              </optgroup>
+            </select>
+          </div>
+
+          <div class="setting" id="custom-block" style="display:none">
+            <div class="setting">
+              <label for="width">{t('width')}</label>
+              <input
+                type="number"
+                id="width"
+                data-option="width"
+                data-remember="width"
+                data-share="width"
+                value="32"
+                step="1"
+                min="1"
+              />
+            </div>
+            <div class="setting">
+              <label for="poly">{t('poly')}</label>
+              <input
+                type="text"
+                id="poly"
+                data-option="poly"
+                data-remember="poly"
+                data-share="poly"
+                value="04C11DB7"
+              />
+            </div>
+            <div class="setting">
+              <label for="init">{t('init')}</label>
+              <input
+                type="text"
+                id="init"
+                data-option="init"
+                data-remember="init"
+                data-share="init"
+                value="FFFFFFFF"
+              />
+            </div>
+            <div class="setting">
+              <label for="xorout">{t('xorout')}</label>
+              <input
+                type="text"
+                id="xorout"
+                data-option="xorout"
+                data-remember="xorout"
+                data-share="xorout"
+                value="FFFFFFFF"
+              />
+            </div>
+            <div class="setting">
+              <label class="switcher">
+                <input
+                  type="checkbox"
+                  value="1"
+                  id="refin"
+                  data-option="refin"
+                  data-remember="refin"
+                  data-share="refin"
+                  checked
+                />
+                <div class="toggle"></div>
+                <span>{t('refin')}</span>
+              </label>
+            </div>
+            <div class="setting">
+              <label class="switcher">
+                <input
+                  type="checkbox"
+                  value="1"
+                  id="refout"
+                  data-option="refout"
+                  data-remember="refout"
+                  data-share="refout"
+                  checked
+                />
+                <div class="toggle"></div>
+                <span>{t('refout')}</span>
+              </label>
+            </div>
+          </div>
+        </div>
+      </div>
     </div>
   </div>
+</BasePage>
 
-  <script
-    is:inline
-    set:html={`
+<script
+  is:inline
+  set:html={`
         ++waitLoadCount;
         delayScripts.push({
             src: '/js/crc.js',
@@ -472,17 +418,6 @@ const t = useTranslations(lang as any);
             }
         });
         
-        delayScripts.push({
-            src: '/js/clipboard.min.js',
-            onload: function () {
-                new ClipboardJS('[data-toggle="copy"]').on('success', function (e) {
-                    showMessage(e.trigger.getAttribute('data-message'));
-                    gtag('event', 'copy');
-                });
-            },
-            delay: 100
-        });
-        
         ++waitLoadCount;
         delayScripts.push({
             src: '/js/file-loader.js',
@@ -491,5 +426,4 @@ const t = useTranslations(lang as any);
             }
         });
     `}
-  />
-</BaseLayout>
+/>

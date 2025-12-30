@@ -12,16 +12,16 @@ export function getStaticPaths() {
 const { lang = 'en' } = Astro.params;
 const t = useTranslations(lang as any);
 
-const title = t('triple_des_decrypt.title');
-const description = t('triple_des_decrypt.description');
-const activePage = 'cryptography/triple-des/decrypt';
+const title = t('triple_des_encrypt.title');
+const description = t('triple_des_encrypt.description');
+const activePage = 'cryptography/triple-des/encrypt';
 ---
 
 <BaseCryptoPage
   title={title}
   description={description}
   activePage={activePage}
-  executeLabel={t('decrypt')}
+  executeLabel={t('encrypt')}
 >
   <div class="setting">
     <label for="file-type">{t('input_type')}</label>
@@ -46,8 +46,15 @@ const activePage = 'cryptography/triple-des/decrypt';
       data-share="input_type"
       data-auto-update
     >
-      <option value="hex">Hex</option>
-      <option value="base64" data-load-encoding="base64">Base64</option>
+      <optgroup label="Binary">
+        <option value="hex">Hex</option>
+        <option value="base64" data-load-encoding="base64">Base64</option>
+      </optgroup>
+      <optgroup label="Text">
+        <option value="utf-8" selected>UTF-8</option>
+        <option value="utf-16le" data-load-encoding="1">UTF-16LE</option>
+        <option value="utf-16be" data-load-encoding="1">UTF-16BE</option>
+      </optgroup>
     </select>
   </div>
   <div class="setting text-only">
@@ -59,16 +66,9 @@ const activePage = 'cryptography/triple-des/decrypt';
       data-share="output_type"
       data-auto-update
     >
-      <optgroup label="Binary">
-        <option value="hex">Hex (Lower Case)</option>
-        <option value="hex_upper">Hex (Upper Case)</option>
-        <option value="base64" data-load-encoding="base64">Base64</option>
-      </optgroup>
-      <optgroup label="Text">
-        <option value="utf-8" selected>UTF-8</option>
-        <option value="utf-16le" data-load-encoding="1">UTF-16LE</option>
-        <option value="utf-16be" data-load-encoding="1">UTF-16BE</option>
-      </optgroup>
+      <option value="hex">Hex (Lower Case)</option>
+      <option value="hex_upper">Hex (Upper Case)</option>
+      <option value="base64" data-load-encoding="base64">Base64</option>
     </select>
   </div>
   <div class="setting">
@@ -299,7 +299,7 @@ const activePage = 'cryptography/triple-des/decrypt';
       src: '/js/crypto-js.js?v=5',
       onload: function () {
         if (typeof aes !== 'undefined' && typeof withOptions !== 'undefined') {
-          window.method = withOptions(tripleDes.decrypt, [
+          window.method = withOptions(tripleDes.encrypt, [
             'key-size',
             'mode',
             'padding',

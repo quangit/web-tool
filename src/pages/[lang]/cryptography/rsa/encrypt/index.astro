@@ -1,6 +1,7 @@
 ---
 import BasePage from '../../../../../components/BasePage.astro';
 import BaseSettingBlock from '../../../../../components/BaseSettingBlock.astro';
+import CopyButton from '../../../../../components/CopyButton.astro';
 import { languages } from '../../../../../i18n/ui';
 import { useTranslations } from '../../../../../i18n/utils';
 
@@ -51,12 +52,7 @@ const activePage = 'cryptography/rsa/encrypt';
           <div class="block-title">
             {t('output')}
             <div class="toolbar">
-              <button
-                class="icon"
-                data-toggle="copy"
-                data-clipboard-target="#output"
-                data-message="Output copied"><i data-lucide="copy" title="Copy"></i></button
-              >
+              <CopyButton target="#output" message="Output copied" />
               <button class="icon" data-toggle="fullscreen"
                 ><i class="fullscreen-icon" data-lucide="maximize" title="Full Screen"></i><i
                   class="fullscreen-icon-exit"
@@ -77,12 +73,7 @@ const activePage = 'cryptography/rsa/encrypt';
         <details class="block text-only" data-toggle="copyblock">
           <summary class="block-title"
             >{t('share_link')}<div class="toolbar">
-              <button
-                class="icon"
-                data-toggle="copy"
-                data-clipboard-target="#share-link"
-                data-message="Share link copied"><i data-lucide="copy" title="Copy"></i></button
-              >
+              <CopyButton target="#share-link" message="Share link copied" />
             </div></summary
           >
           <input id="share-link" type="text" placeholder={t('share_link')} readonly="readonly" />
@@ -188,17 +179,5 @@ const activePage = 'cryptography/rsa/encrypt';
     onload: function () {
       methodLoad();
     },
-  });
-</script>
-<script is:inline>
-  delayScripts.push({
-    src: '/js/clipboard.min.js',
-    onload: function () {
-      new ClipboardJS('[data-toggle="copy"]').on('success', function (e) {
-        showMessage(e.trigger.getAttribute('data-message'));
-        gtag('event', 'copy');
-      });
-    },
-    delay: 100,
   });
 </script>
