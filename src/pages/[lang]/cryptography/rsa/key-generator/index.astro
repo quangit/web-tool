@@ -188,7 +188,7 @@ const activePage = 'cryptography/rsa/key-generator';
         var passphraseEnabled = $('#passphrase-enabled').prop('checked');
         var passphrase = $('#passphrase').val();
         rsa
-          .generate(bits, pemFormat, cipher, passphraseEnabled, passphrase)
+          .generate(null, bits, pemFormat, cipher, passphraseEnabled, passphrase)
           .then(function (prvKey) {
             $('#output').val(prvKey);
           });
