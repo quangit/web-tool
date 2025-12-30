@@ -15,7 +15,9 @@ const translations = {
   untitled: t('s_notes.untitled'),
   category: t('s_notes.category'),
   confirmDelete: t('s_notes.confirm_delete'),
-  confirmDeleteWithChildren: t('s_notes.confirm_delete_with_children') || 'This note has child notes. Delete this note and all its children?',
+  confirmDeleteWithChildren:
+    t('s_notes.confirm_delete_with_children') ||
+    'This note has child notes. Delete this note and all its children?',
   delete: t('s_notes.delete'),
   createChild: t('s_notes.create_child') || 'Create Note Item',
   addToFavorites: t('s_notes.add_to_favorites') || 'Add to Favorites',
@@ -28,7 +30,7 @@ const translations = {
   error: t('s_notes.error') || 'Error',
   attachments: t('s_notes.attachments') || 'Attachments',
   deleteAttachment: t('s_notes.delete_attachment') || 'Delete attachment?',
-  openInNewWindow: t('s_notes.detach') || 'Open in new window'
+  openInNewWindow: t('s_notes.detach') || 'Open in new window',
 };
 
 // WebApplication structured data for SEO
@@ -43,7 +45,7 @@ const structuredData = {
   offers: {
     '@type': 'Offer',
     price: '0',
-    priceCurrency: 'USD'
+    priceCurrency: 'USD',
   },
   featureList: [
     'Rich Markdown editing',
@@ -52,15 +54,15 @@ const structuredData = {
     'Hierarchical nested notes',
     'Favorites system',
     'Auto-save',
-    'Privacy-focused - all data stored locally'
-  ]
+    'Privacy-focused - all data stored locally',
+  ],
 };
 ---
 
 <BasePage title={t('s_notes.title')} description={t('s_notes.description')} activePage="s-notes">
   <!-- WebApplication Structured Data for SEO -->
   <script type="application/ld+json" set:html={JSON.stringify(structuredData)} slot="head-extra" />
-  
+
   <div class="layout">
     <div class="layout-block">
       <div class="input">
@@ -80,7 +82,9 @@ const structuredData = {
       <div class="block block-fill">
         <div class="block-title">
           <span>{t('s_notes.category')}</span>
-          <button id="new-note-btn" class="btn" aria-label={t('s_notes.new_note')}>{t('s_notes.new_note')}</button>
+          <button id="new-note-btn" class="btn" aria-label={t('s_notes.new_note')}
+            >{t('s_notes.new_note')}</button
+          >
         </div>
         <div class="container">
           <div class="notes-sidebar-wrapper">
@@ -96,17 +100,17 @@ const structuredData = {
                 />
               </div>
               <nav class="notes-tabs" role="tablist" aria-label="Note filters">
-                <button 
-                  class="notes-tab active" 
-                  data-tab="all" 
+                <button
+                  class="notes-tab active"
+                  data-tab="all"
                   id="tab-all"
                   role="tab"
                   aria-selected="true"
-                  aria-controls="notes-list"
-                >{t('s_notes.tab_all') || 'All'}</button>
-                <button 
-                  class="notes-tab" 
-                  data-tab="favorites" 
+                  aria-controls="notes-list">{t('s_notes.tab_all') || 'All'}</button
+                >
+                <button
+                  class="notes-tab"
+                  data-tab="favorites"
                   id="tab-favorites"
                   role="tab"
                   aria-selected="false"
@@ -123,13 +127,7 @@ const structuredData = {
                 </span>
               </div>
             </div>
-            <div 
-              id="notes-list" 
-              class="notes-list" 
-              role="listbox" 
-              aria-label="Notes"
-              tabindex="0"
-            >
+            <div id="notes-list" class="notes-list" role="listbox" aria-label="Notes" tabindex="0">
               <!-- Notes will be dynamically inserted here -->
             </div>
           </div>
@@ -151,7 +149,7 @@ const structuredData = {
       white-space: nowrap;
       border: 0;
     }
-    
+
     /* Critical above-the-fold styles */
     .notes-content-wrapper {
       display: flex;
@@ -159,22 +157,22 @@ const structuredData = {
       height: 100%;
       min-height: 500px;
     }
-    
+
     .note-editor {
       flex: 1;
       display: flex;
       flex-direction: column;
     }
-    
+
     .note-editor.hidden {
       display: none;
     }
-    
+
     #editor-container {
       flex: 1;
       min-height: 450px;
     }
-    
+
     .empty-state {
       flex: 1;
       display: flex;
@@ -186,7 +184,7 @@ const structuredData = {
       padding: 2rem;
       min-height: 400px;
     }
-    
+
     .empty-state.hidden {
       display: none;
     }

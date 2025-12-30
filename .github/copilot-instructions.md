@@ -162,14 +162,14 @@ Use conventional commits: `feat:`, `fix:`, `docs:`, `refactor:`, `chore:`
 
 ### Script Location Decision Guide
 
-| Type | Location | How to Load |
-|------|----------|-------------|
-| **Project-owned code** | `src/scripts/` | `<script src="../scripts/file.js">` or `import()` |
-| **Project-owned CSS** | `src/styles/` | `import '../styles/file.css';` in `<script>` block |
-| **Scripts with CDN dependencies** | `public/js/` | `delayScripts` pattern with `is:inline` |
-| **Third-party minified libs** | `public/js/` | `<script is:inline src="/js/lib.js">` |
-| **Third-party CSS** | `public/css/` | `<link rel="stylesheet" href="/css/file.css">` |
-| **External CDN** | N/A | `<script is:inline src="https://cdn...">` |
+| Type                              | Location       | How to Load                                        |
+| --------------------------------- | -------------- | -------------------------------------------------- |
+| **Project-owned code**            | `src/scripts/` | `<script src="../scripts/file.js">` or `import()`  |
+| **Project-owned CSS**             | `src/styles/`  | `import '../styles/file.css';` in `<script>` block |
+| **Scripts with CDN dependencies** | `public/js/`   | `delayScripts` pattern with `is:inline`            |
+| **Third-party minified libs**     | `public/js/`   | `<script is:inline src="/js/lib.js">`              |
+| **Third-party CSS**               | `public/css/`  | `<link rel="stylesheet" href="/css/file.css">`     |
+| **External CDN**                  | N/A            | `<script is:inline src="https://cdn...">`          |
 
 > **Note:** Scripts that depend on external CDN libraries (like Toast UI Editor) and use the `delayScripts` pattern should stay in `public/js/` because `is:inline` scripts are not processed by Astro's bundler.
 
