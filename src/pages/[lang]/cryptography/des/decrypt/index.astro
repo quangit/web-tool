@@ -318,27 +318,5 @@ const activePage = 'cryptography/des/decrypt';
         methodLoad();
       },
     });
-
-    // Load clipboard
-    ++waitLoadCount;
-    delayScripts.push({
-      src: '/js/clipboard.min.js',
-      onload: function () {
-        new ClipboardJS('[data-toggle="copy"]').on('success', function (e) {
-          showMessage(e.trigger.getAttribute('data-message'));
-          gtag('event', 'copy');
-        });
-        methodLoad();
-      },
-    });
-
-    // Load file-loader
-    ++waitLoadCount;
-    delayScripts.push({
-      src: '/js/file-loader.js',
-      onload: function () {
-        methodLoad();
-      },
-    });
   </script>
 </BaseCryptoPage>

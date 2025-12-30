@@ -53,16 +53,6 @@ const activePage = 'encoding/html_encode';
     is:inline
     slot="scripts"
     set:html={`
-        delayScripts.push({
-            src: '/js/clipboard.min.js',
-            onload: function () {
-                new ClipboardJS('[data-toggle="copy"]').on('success', function (e) {
-                    showMessage(e.trigger.getAttribute('data-message'));
-                    gtag('event', 'copy');
-                });
-            },
-            delay: 100
-        });
         ++waitLoadCount;
         delayScripts.push({
             src: '/js/monaco-editor.js?v=1',

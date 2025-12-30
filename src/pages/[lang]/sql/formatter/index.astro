@@ -7,17 +7,16 @@ import { languages } from '../../../../i18n/ui';
 import { useTranslations } from '../../../../i18n/utils';
 
 export function getStaticPaths() {
-  return Object.keys(languages).map((lang) => {
-    return { params: { lang } };
-  });
+  return Object.keys(languages).map((lang) => ({ params: { lang } }));
 }
 
 const { lang = 'en' } = Astro.params;
 const t = useTranslations(lang as any);
 
+// Page metadata
 const title = t('sql_formatter.title');
 const description = t('sql_formatter.description');
-const activePage = 'sql/formatter/';
+const activePage = 'sql/formatter';
 ---
 
 <BasePage title={title} description={description} activePage={activePage}>
@@ -36,17 +35,7 @@ const activePage = 'sql/formatter/';
           data-language="mysql"></textarea>
       </BaseInputBlock>
 
-      <BaseOutputBlock title={t('output')} showCopy={true}>
-        <div class="toolbar" slot="toolbar">
-          <button
-            class="icon"
-            data-toggle="copy"
-            data-clipboard-target="#output"
-            data-message="Output copied"
-          >
-            <i data-lucide="copy" title="Copy"></i>
-          </button>
-        </div>
+      <BaseOutputBlock title={t('output')} showCopy copyTarget="#output">
         <pre class="container syntax-highlight" id="output"><code class="sql" /></pre>
       </BaseOutputBlock>
     </div>
@@ -58,7 +47,7 @@ const activePage = 'sql/formatter/';
 
       <div class="setting">
         <label class="switcher">
-          <input type="checkbox" value="1" id="auto-update" checked />
+          <input type="checkbox" id="auto-update" checked />
           <div class="toggle"></div>
           <span>{t('auto_update')}</span>
         </label>
@@ -66,7 +55,7 @@ const activePage = 'sql/formatter/';
 
       <div class="setting">
         <label class="switcher">
-          <input type="checkbox" value="1" id="remember-input" />
+          <input type="checkbox" id="remember-input" />
           <div class="toggle"></div>
           <span>{t('remember_input')}</span>
         </label>
@@ -76,7 +65,6 @@ const activePage = 'sql/formatter/';
         <label class="switcher">
           <input
             type="checkbox"
-            value="1"
             id="uppercase-keywords"
             checked
             data-remember="uppercase-keywords"
@@ -109,85 +97,112 @@ const activePage = 'sql/formatter/';
     </BaseSettingBlock>
   </div>
 
+  <!-- Highlight.js stylesheet -->
+  <link
+    rel="stylesheet"
+    href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.9.0/styles/default.min.css"
+  />
+
+  <!-- SQL Formatter implementation -->
   <script is:inline>
-    // SQL Formatter using sql-formatter library
-    (function () {
-      window.method = function (input) {
+    (function initSqlFormatter() {
+      'use strict';
+
+      /**
+       * Get formatting options from UI controls
+       * @returns {Object} SQL formatter options
+       */
+      function getFormatterOptions() {
+        var indentEl = document.getElementById('indent');
+        var indentTypeEl = document.getElementById('indent-type');
+        var uppercaseEl = document.getElementById('uppercase-keywords');
+
+        var indent = parseInt(indentEl?.value, 10) || 2;
+        var indentType = indentTypeEl?.value || 'space';
+        var uppercaseKeywords = uppercaseEl?.checked ?? true;
+
+        return {
+          language: 'sql',
+          tabWidth: indentType === 'tab' ? 1 : indent,
+          useTabs: indentType === 'tab',
+          keywordCase: uppercaseKeywords ? 'upper' : 'preserve',
+          indentStyle: 'standard',
+          logicalOperatorNewline: 'before',
+          expressionWidth: 50,
+        };
+      }
+
+      /**
+       * Apply syntax highlighting to code element
+       * @param {HTMLElement} codeEl - Code element to highlight
+       */
+      function applyHighlighting(codeEl) {
+        if (codeEl && typeof hljs !== 'undefined' && hljs.highlightElement) {
+          hljs.highlightElement(codeEl);
+        }
+      }
+
+      /**
+       * Main SQL formatting function
+       * @param {string} input - SQL query to format
+       * @returns {string} Formatted SQL
+       */
+      window.method = function formatSql(input) {
+        var codeEl = document.querySelector('#output code');
+
+        // Handle empty input
         if (!input || typeof input !== 'string') {
-          var codeElement = document.querySelector('#output code');
-          if (codeElement) codeElement.textContent = '';
+          if (codeEl) codeEl.textContent = '';
           return '';
         }
 
         try {
-          var indent = parseInt(document.getElementById('indent').value) || 2;
-          var indentType = document.getElementById('indent-type').value;
-          var uppercaseKeywords = document.getElementById('uppercase-keywords').checked;
+          var options = getFormatterOptions();
+          var formatted = input;
 
-          // Configure sql-formatter options
-          var options = {
-            language: 'sql',
-            tabWidth: indentType === 'tab' ? 1 : indent,
-            useTabs: indentType === 'tab',
-            keywordCase: uppercaseKeywords ? 'upper' : 'preserve',
-            indentStyle: 'standard',
-            logicalOperatorNewline: 'before',
-            expressionWidth: 50,
-          };
-
-          // Format SQL using sql-formatter library
-          var formatted = '';
+          // Format using sql-formatter library if available
           if (typeof sqlFormatter !== 'undefined' && sqlFormatter.format) {
             formatted = sqlFormatter.format(input, options);
-          } else {
-            formatted = input; // Fallback to original if library not loaded
           }
 
-          // Update code element and apply highlighting
-          var codeElement = document.querySelector('#output code');
-          if (codeElement) {
-            codeElement.textContent = formatted;
-            codeElement.className = 'sql';
-            if (typeof hljs !== 'undefined') {
-              hljs.highlightBlock(codeElement);
-            }
+          // Update output and apply highlighting
+          if (codeEl) {
+            codeEl.textContent = formatted;
+            codeEl.className = 'sql';
+            applyHighlighting(codeEl);
           }
 
           return formatted;
-        } catch (e) {
-          console.error('SQL formatting error:', e);
-          return input; // Return original on error
+        } catch (error) {
+          console.error('SQL formatting error:', error);
+          return input;
         }
       };
 
+      // Signal that method is ready
       if (typeof methodLoad === 'function') {
         methodLoad();
       }
     })();
   </script>
 
+  <!-- Load external libraries -->
   <script is:inline>
     ++waitLoadCount;
-    delayScripts.push({
-      src: 'https://cdn.jsdelivr.net/npm/sql-formatter@15.4.7/dist/sql-formatter.min.js',
-      onload: function () {
-        methodLoad();
-      },
-    });
-  </script>
-
-  <link
-    rel="stylesheet"
-    href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.9.0/styles/default.min.css"
-  />
-
-  <script is:inline>
     ++waitLoadCount;
-    delayScripts.push({
-      src: 'https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.9.0/highlight.min.js',
-      onload: function () {
-        methodLoad();
+    delayScripts.push(
+      {
+        src: 'https://cdn.jsdelivr.net/npm/sql-formatter@15.4.7/dist/sql-formatter.min.js',
+        onload: function () {
+          methodLoad();
+        },
       },
-    });
+      {
+        src: 'https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.9.0/highlight.min.js',
+        onload: function () {
+          methodLoad();
+        },
+      }
+    );
   </script>
 </BasePage>

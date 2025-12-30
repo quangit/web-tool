@@ -1,5 +1,6 @@
 ---
 import BasePage from '../../../../../components/BasePage.astro';
+import CopyButton from '../../../../../components/CopyButton.astro';
 import { languages } from '../../../../../i18n/ui';
 import { useTranslations } from '../../../../../i18n/utils';
 
@@ -93,14 +94,7 @@ const t = useTranslations(lang as any);
                   >{t('jwt_decoder.claims_table')}</button
                 >
               </div>
-              <button
-                class="icon"
-                data-toggle="copy"
-                data-clipboard-target="#header-json-text"
-                data-message="Header copied"
-              >
-                <i data-lucide="copy" title="Copy"></i>
-              </button>
+              <CopyButton target="#header-json-text" message="Header copied" />
             </div>
           </div>
           <div class="jwt-tab-content active" id="header-json-content">
@@ -132,14 +126,7 @@ const t = useTranslations(lang as any);
                   >{t('jwt_decoder.claims_table')}</button
                 >
               </div>
-              <button
-                class="icon"
-                data-toggle="copy"
-                data-clipboard-target="#payload-json-text"
-                data-message="Payload copied"
-              >
-                <i data-lucide="copy" title="Copy"></i>
-              </button>
+              <CopyButton target="#payload-json-text" message="Payload copied" />
             </div>
           </div>
           <div class="jwt-tab-content active" id="payload-json-content">
@@ -165,14 +152,10 @@ const t = useTranslations(lang as any);
           <summary class="block-title">
             {t('share_link')}
             <div class="toolbar">
-              <button
-                class="icon"
-                data-toggle="copy"
-                data-clipboard-target="#share-link"
-                data-message={t('share_link_copied') || 'Share link copied'}
-              >
-                <i data-lucide="copy" title="Copy"></i>
-              </button>
+              <CopyButton
+                target="#share-link"
+                message={t('share_link_copied') || 'Share link copied'}
+              />
             </div>
           </summary>
           <input id="share-link" type="text" placeholder={t('share_link')} readonly="readonly" />
@@ -189,25 +172,6 @@ const t = useTranslations(lang as any);
         initJwtDecoder();
         methodLoad();
       },
-    });
-    delayScripts.push({
-      src: '/js/clipboard.min.js',
-      onload: function () {
-        new ClipboardJS('[data-toggle="copy"]', {
-          text: function (trigger) {
-            const targetId = trigger.getAttribute('data-clipboard-target');
-            if (targetId) {
-              const target = document.querySelector(targetId);
-              return target ? target.value : '';
-            }
-            return '';
-          },
-        }).on('success', function (e) {
-          showMessage(e.trigger.getAttribute('data-message') || 'Copied');
-          gtag('event', 'copy');
-        });
-      },
-      delay: 100,
     });
 
     function initJwtDecoder() {

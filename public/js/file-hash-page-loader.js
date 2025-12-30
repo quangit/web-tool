@@ -40,18 +40,6 @@ class FileHashPageLoader {
       src: '/js/encoding.js?v=8'
     });
 
-    // Load clipboard support
-    delayScripts.push({
-      src: '/js/clipboard.min.js',
-      onload: function () {
-        new ClipboardJS('[data-toggle="copy"]').on('success', function (e) {
-          showMessage(e.trigger.getAttribute('data-message'));
-          gtag('event', 'copy');
-        });
-      },
-      delay: 100
-    });
-
     // Load file handling scripts
     ++waitLoadCount;
     delayScripts.push({

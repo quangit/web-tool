@@ -1,0 +1,17 @@
+---
+interface Props {
+  target?: string;
+  message?: string;
+}
+
+const { target, message = 'Output copied' } = Astro.props;
+---
+
+<button class="icon" data-toggle="copy" data-clipboard-target={target} data-message={message}>
+  <i data-lucide="copy" title="Copy"></i>
+</button>
+
+<script>
+  import { initClipboard } from '../scripts/clipboard-init.js';
+  initClipboard();
+</script>

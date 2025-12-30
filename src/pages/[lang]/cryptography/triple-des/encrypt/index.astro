@@ -1,0 +1,330 @@
+---
+import BaseCryptoPage from '../../../../../components/BaseCryptoPage.astro';
+import { languages } from '../../../../../i18n/ui';
+import { useTranslations } from '../../../../../i18n/utils';
+
+export function getStaticPaths() {
+  return Object.keys(languages).map((lang) => {
+    return { params: { lang } };
+  });
+}
+
+const { lang = 'en' } = Astro.params;
+const t = useTranslations(lang as any);
+
+const title = t('triple_des_encrypt.title');
+const description = t('triple_des_encrypt.description');
+const activePage = 'cryptography/triple-des/encrypt';
+---
+
+<BaseCryptoPage
+  title={title}
+  description={description}
+  activePage={activePage}
+  executeLabel={t('encrypt')}
+>
+  <div class="setting">
+    <label for="file-type">{t('input_type')}</label>
+    <select
+      id="file-type"
+      data-remember="source"
+      data-share="source"
+      data-auto-update
+      data-url-placeholder={t('url_placeholder')}
+    >
+      <option value="text">Text</option>
+      <option value="file">File</option>
+      <option value="url">URL</option>
+    </select>
+  </div>
+  <div class="setting text-only">
+    <label for="input-type">{t('input_encoding')}</label>
+    <select
+      data-toggle="encoding"
+      id="input-type"
+      data-remember="input-type"
+      data-share="input_type"
+      data-auto-update
+    >
+      <optgroup label="Binary">
+        <option value="hex">Hex</option>
+        <option value="base64" data-load-encoding="base64">Base64</option>
+      </optgroup>
+      <optgroup label="Text">
+        <option value="utf-8" selected>UTF-8</option>
+        <option value="utf-16le" data-load-encoding="1">UTF-16LE</option>
+        <option value="utf-16be" data-load-encoding="1">UTF-16BE</option>
+      </optgroup>
+    </select>
+  </div>
+  <div class="setting text-only">
+    <label for="output-type">{t('output_encoding')}</label>
+    <select
+      data-toggle="encoding"
+      id="output-type"
+      data-remember="output-type"
+      data-share="output_type"
+      data-auto-update
+    >
+      <option value="hex">Hex (Lower Case)</option>
+      <option value="hex_upper">Hex (Upper Case)</option>
+      <option value="base64" data-load-encoding="base64">Base64</option>
+    </select>
+  </div>
+  <div class="setting">
+    <label for="key-size">{t('key_size')}</label>
+    <select id="key-size" data-remember="key-size" data-option="key-size" data-share="key_size">
+      <option value="128">128 Bits</option>
+      <option value="192">192 Bits</option>
+      <option value="256" selected>256 Bits</option>
+    </select>
+  </div>
+  <div class="setting">
+    <label for="mode">{t('mode')}</label>
+    <select id="mode" data-remember="mode" data-option="mode" data-share="mode">
+      <option value="CBC">CBC</option>
+      <option value="CFB">CFB</option>
+      <option value="CTR">CTR</option>
+      <option value="OFB">OFB</option>
+      <option value="ECB">ECB</option>
+    </select>
+  </div>
+  <div class="setting" id="padding-block">
+    <label for="padding">Padding</label>
+    <select id="padding" data-remember="padding" data-option="padding" data-share="padding">
+      <option value="Pkcs7">Pkcs7</option>
+      <option value="Iso97971">Iso97971</option>
+      <option value="AnsiX923">AnsiX923</option>
+      <option value="Iso10126">Iso10126</option>
+      <option value="ZeroPadding">ZeroPadding</option>
+      <option value="NoPadding">NoPadding</option>
+    </select>
+  </div>
+  <div class="setting">
+    <label for="key-type">{t('key_type')}</label>
+    <select id="key-type" data-remember="key-type" data-option="key-type" data-share="key_type">
+      <option value="custom">Custom</option>
+      <option value="PBKDF2" selected>PBKDF2</option>
+      <option value="EvpKDF">EvpKDF</option>
+    </select>
+  </div>
+  <div class="setting" id="derivation-block">
+    <div class="setting" id="passphrase-block">
+      <label for="passphrase">{t('passphrase')}</label>
+      <input
+        type="text"
+        id="passphrase"
+        data-remember="passphrase"
+        data-option="passphrase"
+        data-share="passphrase"
+      />
+    </div>
+    <div class="setting">
+      <label for="hash">{t('hash')}</label>
+      <select id="hash" data-remember="hash" data-option="hash" data-share="hash">
+        <option value="MD5">MD5</option>
+        <option value="SHA1">SHA1</option>
+        <option value="SHA224">SHA224</option>
+        <option value="SHA256" selected>SHA256</option>
+        <option value="SHA384">SHA384</option>
+        <option value="SHA512">SHA512</option>
+        <option value="RIPEMD160">RIPEMD160</option>
+      </select>
+    </div>
+    <div class="setting">
+      <label for="salt-type">{t('salt_type')}</label>
+      <select
+        id="salt-type"
+        data-remember="salt-type"
+        data-option="salt-type"
+        data-share="salt_type"
+      >
+        <option value="random">Random</option>
+        <option value="nosalt">No Salt</option>
+        <option value="custom">Custom</option>
+      </select>
+    </div>
+    <details class="setting-group" open id="salt-block">
+      <summary>{t('salt')}</summary>
+      <div class="setting">
+        <label for="salt-input-type">{t('type')}</label>
+        <select
+          data-toggle="encoding"
+          id="salt-input-type"
+          data-remember="salt-input-type"
+          data-share="salt_input_type"
+          data-auto-update
+        >
+          <optgroup label="Binary">
+            <option value="hex">Hex</option>
+            <option value="base64" data-load-encoding="base64">Base64</option>
+          </optgroup>
+          <optgroup label="Text">
+            <option value="utf-8" selected>UTF-8</option>
+          </optgroup>
+        </select>
+      </div>
+      <div class="setting">
+        <label for="salt">{t('data')}</label>
+        <input
+          type="text"
+          id="salt"
+          data-option="salt"
+          data-remember="salt"
+          data-share="salt"
+          data-option-type="encoding"
+          data-encoding-from="#salt-input-type"
+        />
+      </div>
+    </details>
+    <div class="setting" id="custom-iteration-block">
+      <label class="switcher">
+        <input
+          type="checkbox"
+          value="1"
+          id="custom-iteration"
+          data-option="custom-iteration"
+          data-remember="custom-iteration"
+          data-share="custom_iteration_enabled"
+          data-toggle="toggle"
+          data-target="#iteration-block"
+        />
+        <div class="toggle"></div>
+        <span>{t('custom_iteration')}</span>
+      </label>
+    </div>
+    <div class="setting" id="iteration-block">
+      <label for="iteration">{t('iteration')}</label>
+      <input
+        type="number"
+        id="iteration"
+        data-remember="iteration"
+        data-option="iteration"
+        data-share="iteration"
+        value="1"
+        min="1"
+        step="1"
+      />
+    </div>
+  </div>
+  <div class="setting" id="key-iv">
+    <details class="setting-group" open id="key-block">
+      <summary>{t('key')}</summary>
+      <div class="setting">
+        <label for="key-input-type">{t('type')}</label>
+        <select
+          data-toggle="encoding"
+          id="key-input-type"
+          data-remember="key-input-type"
+          data-share="key_input_type"
+          data-auto-update
+        >
+          <optgroup label="Binary">
+            <option value="hex">Hex</option>
+            <option value="base64" data-load-encoding="base64">Base64</option>
+          </optgroup>
+          <optgroup label="Text">
+            <option value="utf-8" selected>UTF-8</option>
+          </optgroup>
+        </select>
+      </div>
+      <div class="setting">
+        <label for="key">{t('data')}</label>
+        <input
+          type="text"
+          id="key"
+          data-option="key"
+          data-remember="key"
+          data-share="key"
+          data-option-type="encoding"
+          data-encoding-from="#key-input-type"
+        />
+      </div>
+    </details>
+    <details class="setting-group" open id="iv-block">
+      <summary>{t('iv')}</summary>
+      <div class="setting">
+        <label for="iv-input-type">{t('type')}</label>
+        <select
+          data-toggle="encoding"
+          id="iv-input-type"
+          data-remember="iv-input-type"
+          data-share="iv_input_type"
+          data-auto-update
+        >
+          <optgroup label="Binary">
+            <option value="hex">Hex</option>
+            <option value="base64" data-load-encoding="base64">Base64</option>
+          </optgroup>
+          <optgroup label="Text">
+            <option value="utf-8" selected>UTF-8</option>
+          </optgroup>
+        </select>
+      </div>
+      <div class="setting">
+        <label for="iv">{t('data')}</label>
+        <input
+          type="text"
+          id="iv"
+          data-option="iv"
+          data-remember="iv"
+          data-share="iv"
+          data-option-type="encoding"
+          data-encoding-from="#iv-input-type"
+        />
+      </div>
+    </details>
+  </div>
+
+  <script is:inline slot="scripts">
+    function methodLoad() {
+      waitLoadCount--;
+      if (waitLoadCount === 0) {
+        // All scripts loaded
+      }
+    }
+
+    // Load crypto-js from CDN
+    ++waitLoadCount;
+    delayScripts.push({
+      src: 'https://cdnjs.cloudflare.com/ajax/libs/crypto-js/4.2.0/crypto-js.min.js',
+      onload: function () {
+        methodLoad();
+      },
+    });
+
+    // Load crypto-js wrapper
+    ++waitLoadCount;
+    delayScripts.push({
+      src: '/js/crypto-js.js?v=5',
+      onload: function () {
+        if (typeof aes !== 'undefined' && typeof withOptions !== 'undefined') {
+          window.method = withOptions(tripleDes.encrypt, [
+            'key-size',
+            'mode',
+            'padding',
+            'key-type',
+            'passphrase',
+            'hash',
+            'custom-iteration',
+            'iteration',
+            'key',
+            'iv',
+            'salt-type',
+            'salt',
+          ]);
+        }
+        methodLoad();
+      },
+    });
+
+    // Load encoding.js
+    ++waitLoadCount;
+    delayScripts.push({
+      src: '/js/encoding.js?v=8',
+      onload: function () {
+        methodLoad();
+      },
+    });
+  </script>
+</BaseCryptoPage>

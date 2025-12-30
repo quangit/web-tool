@@ -1,4 +1,8 @@
 ---
+import CopyButton from './CopyButton.astro';
+import DownloadButton from './DownloadButton.astro';
+import FullscreenButton from './FullscreenButton.astro';
+
 interface Props {
   title: string;
   showFullscreen?: boolean;
@@ -6,6 +10,9 @@ interface Props {
   showDownload?: boolean;
   copyTarget?: string;
   copyMessage?: string;
+  downloadId?: string;
+  downloadFilename?: string;
+  wrapperClass?: string;
 }
 
 const {
@@ -15,50 +22,24 @@ const {
   showDownload = false,
   copyTarget,
   copyMessage = 'Output copied',
+  downloadId = 'download-image',
+  downloadFilename = 'download',
+  wrapperClass = 'output',
 } = Astro.props;
 ---
 
-<div class="output">
+<div class={wrapperClass}>
   <div class="block block-fill">
     <div class="block-title">
       {title}
       <div class="toolbar">
         <slot name="toolbar" />
-        {
-          showDownload && (
-            <a
-              class="icon"
-              id="download-image"
-              download="download"
-              style="display:none"
-              onclick="gtag('event', 'download');"
-            >
-              <i data-lucide="download" title="Download" />
-            </a>
-          )
-        }
-        {
-          showCopy && (
-            <button
-              class="icon"
-              data-toggle="copy"
-              data-clipboard-target={copyTarget}
-              data-message={copyMessage}
-            >
-              <i data-lucide="copy" title="Copy" />
-            </button>
-          )
-        }
-        {
-          showFullscreen && (
-            <button class="icon" data-toggle="fullscreen">
-              <i class="fullscreen-icon" data-lucide="maximize" title="Full Screen" />
-              <i class="fullscreen-icon-exit" data-lucide="minimize" title="Full Screen" />
-            </button>
-          )
-        }
+        {showDownload && <DownloadButton id={downloadId} filename={downloadFilename} />}
+        {showCopy && <CopyButton target={copyTarget} message={copyMessage} />}
+        {showFullscreen && <FullscreenButton />}
       </div>
     </div>
     <slot />
   </div>
+  <slot name="extra" />
 </div>

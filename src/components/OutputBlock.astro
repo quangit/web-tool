@@ -1,5 +1,29 @@
 ---
 import { useTranslations } from '../i18n/utils';
+import BaseOutputBlock from './BaseOutputBlock.astro';
+import CopyButton from './CopyButton.astro';
+
+interface Props {
+  id?: string;
+  title?: string;
+  placeholder?: string;
+  copyMessage?: string;
+  showFullscreen?: boolean;
+  showCopy?: boolean;
+  showDownload?: boolean;
+  downloadId?: string;
+  downloadFilename?: string;
+  // Data attributes
+  dataEncodingFrom?: string | null;
+  dataToggleMonaco?: boolean;
+  dataLanguage?: string | null;
+  // Share link
+  showShareLink?: boolean;
+  isReadonly?: boolean;
+  textareaStyle?: string;
+  hasTextarea?: boolean;
+}
+
 const {
   id = 'output',
   title = 'Output',
@@ -8,6 +32,8 @@ const {
   showFullscreen = true,
   showCopy = true,
   showDownload = false,
+  downloadId = 'download-image',
+  downloadFilename = 'download',
   // Data attributes
   dataEncodingFrom = null,
   dataToggleMonaco = true,
@@ -35,47 +61,18 @@ const { lang = 'en' } = Astro.params;
 const t = useTranslations(lang as any);
 ---
 
-<div class="output">
-  <div class="block block-fill">
-    <div class="block-title">
-      {title}
-      <div class="toolbar">
-        <slot name="toolbar" />
-        {
-          showDownload && (
-            <a
-              class="icon"
-              id="download-image"
-              download="download"
-              style="display:none"
-              onclick="gtag('event', 'download');"
-            >
-              <i data-lucide="download" title="Download" />
-            </a>
-          )
-        }
-        {
-          showCopy && (
-            <button
-              class="icon"
-              data-toggle="copy"
-              data-clipboard-target={`#${id}`}
-              data-message={copyMessage}
-            >
-              <i data-lucide="copy" title="Copy" />
-            </button>
-          )
-        }
-        {
-          showFullscreen && (
-            <button class="icon" data-toggle="fullscreen">
-              <i class="fullscreen-icon" data-lucide="maximize" title="Full Screen" />
-              <i class="fullscreen-icon-exit" data-lucide="minimize" title="Full Screen" />
-            </button>
-          )
-        }
-      </div>
-    </div>
+<BaseOutputBlock
+  title={title}
+  showFullscreen={showFullscreen}
+  showCopy={showCopy}
+  showDownload={showDownload}
+  copyTarget={`#${id}`}
+  copyMessage={copyMessage}
+  downloadId={downloadId}
+  downloadFilename={downloadFilename}
+>
+  <slot name="toolbar" slot="toolbar" />
+  <Fragment>
     <slot name="before-textarea" />
     {
       hasTextarea && (
@@ -91,25 +88,18 @@ const t = useTranslations(lang as any);
       )
     }
     <slot name="after-textarea" />
-  </div>
+  </Fragment>
   {
     showShareLink && (
-      <details class="block text-only" data-toggle="copyblock">
+      <details class="block text-only" data-toggle="copyblock" slot="extra">
         <summary class="block-title">
           {t('share_link')}
           <div class="toolbar">
-            <button
-              class="icon"
-              data-toggle="copy"
-              data-clipboard-target="#share-link"
-              data-message="Share link copied"
-            >
-              <i data-lucide="copy" title="Copy" />
-            </button>
+            <CopyButton target="#share-link" message="Share link copied" />
           </div>
         </summary>
         <input id="share-link" type="text" placeholder={t('share_link')} readonly="readonly" />
       </details>
     )
   }
-</div>
+</BaseOutputBlock>

@@ -1,5 +1,7 @@
 ---
 import { useTranslations } from '../i18n/utils';
+import CopyButton from './CopyButton.astro';
+import FullscreenButton from './FullscreenButton.astro';
 const {
   id = 'input',
   title = 'Input',
@@ -51,26 +53,8 @@ const t = useTranslations(lang as any);
     <div class="block-title">
       {title}
       <div class="toolbar">
-        {
-          showCopy && (
-            <button
-              class="icon"
-              data-toggle="copy"
-              data-clipboard-target={`#${id}`}
-              data-message={copyMessage}
-            >
-              <i data-lucide="copy" title="Copy" />
-            </button>
-          )
-        }
-        {
-          showFullscreen && (
-            <button class="icon" data-toggle="fullscreen">
-              <i class="fullscreen-icon" data-lucide="maximize" title="Full Screen" />
-              <i class="fullscreen-icon-exit" data-lucide="minimize" title="Full Screen" />
-            </button>
-          )
-        }
+        {showCopy && <CopyButton target={`#${id}`} message={copyMessage} />}
+        {showFullscreen && <FullscreenButton />}
       </div>
     </div>
     <textarea
@@ -93,3 +77,22 @@ const t = useTranslations(lang as any);
     }
   </div>
 </div>
+
+{showFileUpload && <div id="file-upload-scripts" data-file-upload="true" style="display:none;" />}
+
+{
+  showFileUpload && (
+    <script
+      is:inline
+      set:html={`
+      ++waitLoadCount;
+      delayScripts.push({
+        src: '/js/file-loader.js?v=10',
+        onload: function () {
+          methodLoad();
+        },
+      });
+    `}
+    />
+  )
+}

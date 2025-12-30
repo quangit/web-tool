@@ -139,45 +139,4 @@ const t = useTranslations(lang as any);
       },
     });
   </script>
-
-  <!-- Load clipboard support -->
-  <script is:inline slot="scripts">
-    delayScripts.push({
-      src: '/js/clipboard.min.js',
-      onload: function () {
-        new ClipboardJS('[data-toggle="copy"]').on('success', function (e) {
-          showMessage(e.trigger.getAttribute('data-message'));
-          gtag('event', 'copy');
-        });
-      },
-      delay: 100,
-    });
-  </script>
-
-  <!-- Load file handling scripts -->
-  <script is:inline slot="scripts">
-    ++waitLoadCount;
-    delayScripts.push({
-      src: '/js/url-blob.js?v=1',
-      onload: function () {
-        methodLoad();
-      },
-    });
-
-    ++waitLoadCount;
-    delayScripts.push({
-      src: '/js/droppable-file.js',
-      onload: function () {
-        methodLoad();
-      },
-    });
-
-    ++waitLoadCount;
-    delayScripts.push({
-      src: '/js/file.js?v=10',
-      onload: function () {
-        methodLoad();
-      },
-    });
-  </script>
 </BaseHashPage>
