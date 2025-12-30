@@ -121,6 +121,58 @@ const t = useTranslations(lang as any);
 - `FileHashPage.astro` – File hash calculation
 - `EncodingPage.astro` – Encode/decode tools
 - `CRCPage.astro` – CRC checksum tools
+- `InputFileBlock.astro` – File input with drag & drop (auto-loads file handling scripts)
+
+### File Input Component (`InputFileBlock.astro`)
+
+`InputFileBlock.astro` automatically loads these file handling scripts:
+
+- `url-blob.js` – URL/Blob utilities
+- `droppable-file.js` – Drag & drop file support
+- `file.js` – File reading/processing
+
+`InputBlock.astro` with `showFileUpload={true}` also auto-loads these scripts plus `file-loader.js`.
+
+**⚠️ DO NOT duplicate these scripts in pages using `InputFileBlock` or `InputBlock` with `showFileUpload`:**
+
+| Component                                 | Uses InputFileBlock/InputBlock | File scripts needed?                       |
+| ----------------------------------------- | ------------------------------ | ------------------------------------------ |
+| `EncodingPage` with `hasFileInput={true}` | ✅ Yes (InputFileBlock)        | ❌ No - auto-loaded                        |
+| `BaseHashPage` with `isUseFile={true}`    | ✅ Yes (InputFileBlock)        | ❌ No - auto-loaded                        |
+| `BaseFileHashPage`                        | ✅ Yes (via BaseHashPage)      | ❌ No - auto-loaded                        |
+| `InputBlock` with `showFileUpload={true}` | ✅ Yes (internal)              | ❌ No - auto-loaded (incl. file-loader.js) |
+| `BaseCryptoPage`                          | ✅ Yes (via InputBlock)        | ❌ No - auto-loaded (incl. file-loader.js) |
+| Standalone pages with `<InputFileBlock>`  | ✅ Yes (direct)                | ❌ No - auto-loaded                        |
+| `CRCPage`                                 | ❌ No (standalone HTML)        | ⚠️ Loaded internally via set:html          |
+| Pages WITHOUT file components             | ❌ No                          | ✅ Yes - must load manually                |
+
+```astro
+<!-- ❌ WRONG - Duplicate scripts when using InputFileBlock -->
+<EncodingPage hasFileInput={true}> ... </EncodingPage>
+<script is:inline>
+  ++waitLoadCount;
+  delayScripts.push({
+    src: '/js/url-blob.js',
+    onload: function () {
+      methodLoad();
+    },
+  });
+  // These are already loaded by InputFileBlock!
+</script>
+
+<!-- ✅ CORRECT - Only load tool-specific scripts -->
+<EncodingPage hasFileInput={true}> ... </EncodingPage>
+<script is:inline>
+  ++waitLoadCount;
+  delayScripts.push({
+    src: '/js/base64.min.js', // Tool-specific library only
+    onload: function () {
+      window.method = base64encode;
+      methodLoad();
+    },
+  });
+</script>
+```
 
 ## Commands
 

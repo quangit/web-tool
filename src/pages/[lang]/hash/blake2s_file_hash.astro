@@ -125,31 +125,4 @@ const t = useTranslations(lang as any);
       },
     });
   </script>
-
-  <!-- Load file handling scripts -->
-  <script is:inline slot="scripts">
-    ++waitLoadCount;
-    delayScripts.push({
-      src: '/js/url-blob.js?v=1',
-      onload: function () {
-        methodLoad();
-      },
-    });
-
-    ++waitLoadCount;
-    delayScripts.push({
-      src: '/js/droppable-file.js',
-      onload: function () {
-        methodLoad();
-      },
-    });
-
-    ++waitLoadCount;
-    delayScripts.push({
-      src: '/js/file.js?v=10',
-      onload: function () {
-        methodLoad();
-      },
-    });
-  </script>
 </BaseHashPage>

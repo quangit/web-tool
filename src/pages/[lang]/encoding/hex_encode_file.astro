@@ -62,33 +62,7 @@ const activePage = 'encoding/hex_encode_file';
     </div>
   </div>
 
-  <script
-    is:inline
-    slot="scripts"
-    set:html={`
-
-        ++waitLoadCount;
-        delayScripts.push({
-            src: '/js/url-blob.js?v=1',
-            onload: function () {
-                methodLoad();
-            }
-        });
-        ++waitLoadCount;
-        delayScripts.push({
-            src: '/js/droppable-file.js',
-            onload: function () {
-                methodLoad();
-            }
-        });
-        ++waitLoadCount;
-        delayScripts.push({
-            src: '/js/file.js?v=10',
-            onload: function () {
-                methodLoad();
-            }
-        });
-        window.PROCESSING_MESSAGE = 'encoding...';
-    `}
-  />
+  <script is:inline slot="scripts">
+    window.PROCESSING_MESSAGE = 'encoding...';
+  </script>
 </EncodingPage>

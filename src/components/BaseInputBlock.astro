@@ -1,5 +1,6 @@
 ---
 import CopyButton from './CopyButton.astro';
+import FullscreenButton from './FullscreenButton.astro';
 
 interface Props {
   title: string;
@@ -24,14 +25,7 @@ const {
       {title}
       <div class="toolbar">
         {showCopy && copyTarget && <CopyButton target={copyTarget} message={copyMessage} />}
-        {
-          showFullscreen && (
-            <button class="icon" data-toggle="fullscreen">
-              <i class="fullscreen-icon" data-lucide="maximize" title="Full Screen" />
-              <i class="fullscreen-icon-exit" data-lucide="minimize" title="Full Screen" />
-            </button>
-          )
-        }
+        {showFullscreen && <FullscreenButton />}
       </div>
     </div>
     <slot />

@@ -57,39 +57,14 @@ const activePage = 'encoding/base64_decode_file';
     </div>
   </div>
 
-  <script
-    is:inline
-    slot="scripts"
-    set:html={`
-        ++waitLoadCount;
-        delayScripts.push({
-            src: '/js/base64.min.js?v=0.4.1',
-            onload: function () {
-                methodLoad();
-            }
-        });
-        ++waitLoadCount;
-        delayScripts.push({
-            src: '/js/url-blob.js?v=1',
-            onload: function () {
-                methodLoad();
-            }
-        });
-        ++waitLoadCount;
-        delayScripts.push({
-            src: '/js/droppable-file.js',
-            onload: function () {
-                methodLoad();
-            }
-        });
-        ++waitLoadCount;
-        delayScripts.push({
-            src: '/js/file.js?v=10',
-            onload: function () {
-                methodLoad();
-            }
-        });
-        window.PROCESSING_MESSAGE = 'decoding...';
-    `}
-  />
+  <script is:inline slot="scripts">
+    ++waitLoadCount;
+    delayScripts.push({
+      src: '/js/base64.min.js?v=0.4.1',
+      onload: function () {
+        methodLoad();
+      },
+    });
+    window.PROCESSING_MESSAGE = 'decoding...';
+  </script>
 </EncodingPage>
