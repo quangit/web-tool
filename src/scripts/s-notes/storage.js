@@ -294,7 +294,10 @@ export async function findOrphanedAttachments() {
       references.forEach((ref) => usedFilenames.add(ref));
 
       allAttachments.forEach((att) => {
-        if (note.content && (note.content.includes(att.id) || note.content.includes(att.fileName))) {
+        if (
+          note.content &&
+          (note.content.includes(att.id) || note.content.includes(att.fileName))
+        ) {
           usedAttachmentIds.add(att.id);
         }
       });

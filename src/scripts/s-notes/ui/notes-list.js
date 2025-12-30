@@ -10,14 +10,7 @@ const expandedNotes = new Set();
 /**
  * Render notes list
  */
-export async function renderNotesList(
-  notesList,
-  notes,
-  activeNoteId,
-  activeTab,
-  filter,
-  handlers
-) {
+export async function renderNotesList(notesList, notes, activeNoteId, activeTab, filter, handlers) {
   const t = getTranslations();
   let displayNotes = filter ? await searchNotes(filter) : notes;
 
