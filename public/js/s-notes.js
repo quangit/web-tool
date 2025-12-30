@@ -8,7 +8,7 @@
   // ============================================
   
   const DB_NAME = 'snotes-db';
-  const DB_VERSION = 1;
+  const DB_VERSION = 2;
   const NOTES_STORE = 'notes';
   const ATTACHMENTS_STORE = 'attachments';
   const OPFS_DIR = 'snotes-files';
@@ -30,6 +30,7 @@
 
       request.onupgradeneeded = (event) => {
         const database = event.target.result;
+        const oldVersion = event.oldVersion;
 
         // Notes store with indexes for fast querying
         if (!database.objectStoreNames.contains(NOTES_STORE)) {
@@ -38,6 +39,14 @@
           notesStore.createIndex('createdAt', 'createdAt', { unique: false });
           notesStore.createIndex('updatedAt', 'updatedAt', { unique: false });
           notesStore.createIndex('tags', 'tags', { unique: false, multiEntry: true });
+          notesStore.createIndex('parentId', 'parentId', { unique: false });
+        } else if (oldVersion < 2) {
+          // Upgrade from version 1: add parentId index
+          const transaction = event.target.transaction;
+          const notesStore = transaction.objectStore(NOTES_STORE);
+          if (!notesStore.indexNames.contains('parentId')) {
+            notesStore.createIndex('parentId', 'parentId', { unique: false });
+          }
         }
 
         // Attachments metadata store (file stored in OPFS)
@@ -110,6 +119,8 @@
   }
 
   async function deleteNote(id) {
+    console.log('Deleting note from database:', id);
+    
     // Clear caches before deleting
     cleanupNote();
     
@@ -124,8 +135,23 @@
       const store = transaction.objectStore(NOTES_STORE);
       const request = store.delete(id);
       
-      request.onsuccess = () => resolve();
-      request.onerror = () => reject(request.error);
+      request.onsuccess = () => {
+        console.log('Note deleted from database successfully:', id);
+        resolve();
+      };
+      request.onerror = () => {
+        console.error('Failed to delete note from database:', id, request.error);
+        reject(request.error);
+      };
+      
+      // Wait for transaction to complete
+      transaction.oncomplete = () => {
+        console.log('Delete transaction completed for note:', id);
+      };
+      transaction.onerror = () => {
+        console.error('Delete transaction failed for note:', id, transaction.error);
+        reject(transaction.error);
+      };
     });
   }
 
@@ -138,6 +164,76 @@
       note.content.toLowerCase().includes(lowerQuery) ||
       (note.tags && note.tags.some(tag => tag.toLowerCase().includes(lowerQuery)))
     );
+  }
+
+  // Get all descendant note IDs (children, grandchildren, etc.)
+  async function getDescendantIds(noteId, allNotes = null) {
+    if (!allNotes) {
+      allNotes = await getAllNotes();
+    }
+    const descendants = [];
+    const stack = [noteId];
+    
+    while (stack.length > 0) {
+      const currentId = stack.pop();
+      const children = allNotes.filter(n => n.parentId === currentId);
+      for (const child of children) {
+        descendants.push(child.id);
+        stack.push(child.id);
+      }
+    }
+    
+    return descendants;
+  }
+
+  // Delete note and all its descendants
+  async function deleteNoteWithDescendants(id) {
+    const allNotes = await getAllNotes();
+    const descendantIds = await getDescendantIds(id, allNotes);
+    const idsToDelete = [id, ...descendantIds];
+    
+    for (const noteId of idsToDelete) {
+      await deleteNote(noteId);
+    }
+    
+    return idsToDelete;
+  }
+
+  // Build tree structure from flat notes array
+  function buildNotesTree(notesArray) {
+    const noteMap = new Map();
+    const rootNotes = [];
+    
+    // First pass: create map
+    notesArray.forEach(note => {
+      noteMap.set(note.id, { ...note, children: [] });
+    });
+    
+    // Second pass: build tree
+    notesArray.forEach(note => {
+      const noteNode = noteMap.get(note.id);
+      if (note.parentId && noteMap.has(note.parentId)) {
+        noteMap.get(note.parentId).children.push(noteNode);
+      } else {
+        rootNotes.push(noteNode);
+      }
+    });
+    
+    // Sort children by updatedAt DESC
+    const sortChildren = (node) => {
+      node.children.sort((a, b) => b.updatedAt - a.updatedAt);
+      node.children.forEach(sortChildren);
+    };
+    
+    rootNotes.sort((a, b) => b.updatedAt - a.updatedAt);
+    rootNotes.forEach(sortChildren);
+    
+    return rootNotes;
+  }
+
+  // Check if a note has children
+  function hasChildren(noteId, notesArray) {
+    return notesArray.some(n => n.parentId === noteId);
   }
 
   // ============================================  // GARBAGE COLLECTION & AUTO CLEANUP
@@ -592,14 +688,25 @@
     untitled: 'Untitled Note',
     category: 'Notes',
     confirmDelete: 'Are you sure you want to delete this note?',
+    confirmDeleteWithChildren: 'This note has child notes. Delete this note and all its children?',
     noNotes: 'No notes yet. Click "New Note" to create one.',
+    noFavorites: 'No favorite notes yet',
     loading: 'Loading...',
     ready: 'Ready',
     syncing: 'Syncing...',
     error: 'Error',
     attachments: 'Attachments',
-    deleteAttachment: 'Delete attachment?'
+    deleteAttachment: 'Delete attachment?',
+    createChild: 'Create Note Item',
+    addToFavorites: 'Add to Favorites',
+    removeFromFavorites: 'Remove from Favorites'
   };
+
+  // Track expanded state for nested notes
+  const expandedNotes = new Set();
+  
+  // Current active tab: 'all' or 'favorites'
+  let activeTab = 'all';
 
   function updateStatus(status, text) {
     if (storageStatus) {
@@ -681,6 +788,76 @@
     return button;
   }
 
+  // Create favorite star button
+  let favoriteButton = null;
+  function createFavoriteButton() {
+    const button = document.createElement('button');
+    button.className = 'toastui-editor-toolbar-icons favorite-note-btn';
+    button.type = 'button';
+    button.innerHTML = '<svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="#6b6b6b" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"></polygon></svg>';
+    button.title = t.addToFavorites || 'Add to Favorites';
+    button.style.cssText = `
+      font-size: 16px;
+      border: none;
+      background: none;
+      cursor: pointer;
+      padding: 4px 4px;
+      border-radius: 4px;
+      margin: 0;
+    `;
+    
+    // Hover effects
+    button.addEventListener('mouseenter', () => {
+      button.style.background = 'rgba(245, 158, 11, 0.1)';
+    });
+    
+    button.addEventListener('mouseleave', () => {
+      button.style.background = 'none';
+    });
+    
+    button.addEventListener('click', async (e) => {
+      e.preventDefault();
+      await toggleFavorite();
+    });
+    
+    favoriteButton = button;
+    return button;
+  }
+
+  // Toggle favorite status for current note
+  async function toggleFavorite(noteId = null) {
+    const targetId = noteId || activeNoteId;
+    if (!targetId) return;
+    
+    const note = await getNote(targetId);
+    if (!note) return;
+    
+    note.isFavorite = !note.isFavorite;
+    await saveNote(note);
+    
+    // Update local notes array
+    const noteIndex = notes.findIndex(n => n.id === targetId);
+    if (noteIndex !== -1) {
+      notes[noteIndex] = note;
+    }
+    
+    updateFavoriteButton(note.isFavorite);
+    renderNotesList(searchInput?.value || '');
+  }
+
+  // Update favorite button appearance
+  function updateFavoriteButton(isFavorite) {
+    if (!favoriteButton) return;
+    
+    if (isFavorite) {
+      favoriteButton.innerHTML = '<svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="#f59e0b" stroke="#f59e0b" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"></polygon></svg>';
+      favoriteButton.title = t.removeFromFavorites || 'Remove from Favorites';
+    } else {
+      favoriteButton.innerHTML = '<svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="#6b6b6b" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"></polygon></svg>';
+      favoriteButton.title = t.addToFavorites || 'Add to Favorites';
+    }
+  }
+
   // Handle delete current note
   async function handleDeleteCurrentNote() {
     if (!activeNoteId) {
@@ -691,31 +868,34 @@
     const note = await getNote(activeNoteId);
     if (!note) return;
 
-    const confirmMsg = `${t.confirmDelete || 'Are you sure you want to delete this note?'}\n\n"${note.title}"`;
+    const hasChildNotes = hasChildren(activeNoteId, notes);
+    const confirmMsg = hasChildNotes
+      ? `${t.confirmDeleteWithChildren || 'This note has child notes. Delete this note and all its children?'}\n\n"${note.title}"`
+      : `${t.confirmDelete || 'Are you sure you want to delete this note?'}\n\n"${note.title}"`;
     
     if (confirm(confirmMsg)) {
       const deletedId = activeNoteId;
       
-      // Find next note to select
+      // Find next note to select (prefer sibling, not child)
       let nextNote = null;
-      const currentIndex = notes.findIndex(n => n.id === deletedId);
+      const rootNotes = notes.filter(n => !n.parentId || n.parentId === note.parentId);
+      const currentIndex = rootNotes.findIndex(n => n.id === deletedId);
       
-      if (notes.length > 1) {
-        // Try next note, if not available then previous
-        nextNote = notes[currentIndex + 1] || notes[currentIndex - 1];
+      if (rootNotes.length > 1) {
+        nextNote = rootNotes[currentIndex + 1] || rootNotes[currentIndex - 1];
+      } else if (note.parentId) {
+        // Select parent if no siblings
+        nextNote = notes.find(n => n.id === note.parentId);
       }
       
       try {
         updateStatus('syncing', t.syncing || 'Deleting...');
         
-        // Delete the note
-        await deleteNote(deletedId);
+        // Delete the note and its descendants
+        const deletedIds = await deleteNoteWithDescendants(deletedId);
         
-        // Remove from notes array
-        const noteIndex = notes.findIndex(n => n.id === deletedId);
-        if (noteIndex !== -1) {
-          notes.splice(noteIndex, 1);
-        }
+        // Remove deleted notes from notes array
+        notes = notes.filter(n => !deletedIds.includes(n.id));
         
         // Clear active note
         activeNoteId = null;
@@ -883,6 +1063,11 @@
           tooltip: 'Open in new window'
         }],
         [{
+          el: createFavoriteButton(),
+          name: 'favoriteNote',
+          tooltip: 'Toggle favorite'
+        }],
+        [{
           el: createDeleteButton(),
           name: 'deleteNote',
           tooltip: 'Delete current note'
@@ -954,6 +1139,10 @@
     if (!note) return;
 
     const content = editor.getMarkdown();
+    
+    // Only update if content actually changed
+    if (note.content === content) return;
+    
     note.content = content;
     note.title = getTitleFromContent(content);
     note.updatedAt = Date.now();
@@ -993,44 +1182,352 @@
     }
   }
 
+  // Context Menu
+  let contextMenu = null;
+  let contextMenuNoteId = null;
+
+  function createContextMenu() {
+    if (contextMenu) return contextMenu;
+    
+    contextMenu = document.createElement('div');
+    contextMenu.className = 'note-context-menu';
+    contextMenu.innerHTML = `
+      <div class="note-context-menu-item create-child" data-action="create-child">
+        <span>➕</span>
+        <span>${t.createChild || 'Create Note Item'}</span>
+      </div>
+      <div class="note-context-menu-item favorite" data-action="toggle-favorite">
+        <span>⭐</span>
+        <span class="favorite-text">${t.addToFavorites || 'Add to Favorites'}</span>
+      </div>
+      <div class="note-context-menu-item delete" data-action="delete">
+        <span>🗑️</span>
+        <span>${t.delete || 'Delete'}</span>
+      </div>
+    `;
+    
+    document.body.appendChild(contextMenu);
+    
+    // Handle menu item clicks
+    contextMenu.addEventListener('click', async (e) => {
+      const item = e.target.closest('.note-context-menu-item');
+      if (!item) return;
+      
+      const action = item.dataset.action;
+      const targetNoteId = contextMenuNoteId;
+      hideContextMenu();
+      
+      if (action === 'create-child' && targetNoteId) {
+        await createChildNote(targetNoteId);
+        return;
+      }
+      
+      if (action === 'toggle-favorite' && targetNoteId) {
+        await toggleFavorite(targetNoteId);
+        return;
+      }
+      
+      if (action === 'delete' && targetNoteId) {
+        const noteIdToDelete = targetNoteId;
+        console.log('Context menu delete clicked for note:', noteIdToDelete);
+        try {
+          // Select the note first if it's not already active
+          if (noteIdToDelete !== activeNoteId) {
+            console.log('Selecting note before delete:', noteIdToDelete);
+            await selectNote(noteIdToDelete);
+          }
+          
+          // Now delete the active note
+          if (!activeNoteId) {
+            console.error('No active note after selection');
+            return;
+          }
+
+          const note = await getNote(activeNoteId);
+          if (!note) {
+            console.error('Note not found:', activeNoteId);
+            return;
+          }
+
+          console.log('About to show confirm dialog for note:', note.title);
+          const hasChildNotes = hasChildren(activeNoteId, notes);
+          const confirmMsg = hasChildNotes
+            ? `${t.confirmDeleteWithChildren || 'This note has child notes. Delete this note and all its children?'}\n\n"${note.title}"`
+            : `${t.confirmDelete || 'Are you sure you want to delete this note?'}\n\n"${note.title}"`;
+          
+          if (confirm(confirmMsg)) {
+            console.log('User confirmed deletion');
+            const deletedId = activeNoteId;
+            
+            // Find next note to select
+            let nextNote = null;
+            const currentIndex = notes.findIndex(n => n.id === deletedId);
+            
+            if (notes.length > 1) {
+              // Try next note, if not available then previous
+              nextNote = notes[currentIndex + 1] || notes[currentIndex - 1];
+            }
+            
+            updateStatus('syncing', t.syncing || 'Deleting...');
+            
+            console.log('Calling deleteNote for:', deletedId);
+            // Delete the note and its descendants
+            const deletedIds = await deleteNoteWithDescendants(deletedId);
+            console.log('deleteNoteWithDescendants completed, deleted IDs:', deletedIds);
+            
+            // Remove deleted notes from notes array
+            notes = notes.filter(n => !deletedIds.includes(n.id));
+            console.log('Removed from notes array, remaining notes:', notes.length);
+            
+            // Clear active note
+            activeNoteId = null;
+            localStorage.removeItem('snotes-active');
+            
+            // Select next note or show empty state
+            if (nextNote) {
+              await selectNote(nextNote.id);
+            } else {
+              // No notes left
+              if (editor) {
+                editor.setMarkdown('');
+              }
+              showEmptyState();
+            }
+            
+            // Always refresh the notes list
+            renderNotesList();
+            
+            updateStatus('ready', t.ready);
+            
+            console.log(`Deleted note: ${note.title}`);
+          } else {
+            console.log('User cancelled deletion');
+          }
+        } catch (e) {
+          console.error('Failed to delete note:', e);
+          updateStatus('error', t.error);
+          alert('Failed to delete note. Please try again.');
+        }
+      }
+    });
+    
+    // Hide menu on click outside
+    document.addEventListener('click', (e) => {
+      if (contextMenu && !contextMenu.contains(e.target)) {
+        hideContextMenu();
+      }
+    });
+    
+    // Hide menu on escape key
+    document.addEventListener('keydown', (e) => {
+      if (e.key === 'Escape') {
+        hideContextMenu();
+      }
+    });
+    
+    // Hide menu on scroll
+    notesList.addEventListener('scroll', () => {
+      hideContextMenu();
+    });
+    
+    return contextMenu;
+  }
+
+  function showContextMenu(event, noteId) {
+    const menu = createContextMenu();
+    contextMenuNoteId = noteId;
+    
+    // Update favorite menu item text based on note's current state
+    const note = notes.find(n => n.id === noteId);
+    const favoriteItem = menu.querySelector('[data-action="toggle-favorite"] .favorite-text');
+    if (favoriteItem && note) {
+      favoriteItem.textContent = note.isFavorite 
+        ? (t.removeFromFavorites || 'Remove from Favorites')
+        : (t.addToFavorites || 'Add to Favorites');
+    }
+    
+    // Position menu at mouse cursor
+    const x = event.clientX;
+    const y = event.clientY;
+    
+    menu.style.left = x + 'px';
+    menu.style.top = y + 'px';
+    menu.classList.add('show');
+    
+    // Adjust position if menu goes off screen
+    requestAnimationFrame(() => {
+      const rect = menu.getBoundingClientRect();
+      const viewportWidth = window.innerWidth;
+      const viewportHeight = window.innerHeight;
+      
+      if (rect.right > viewportWidth) {
+        menu.style.left = (x - rect.width) + 'px';
+      }
+      
+      if (rect.bottom > viewportHeight) {
+        menu.style.top = (y - rect.height) + 'px';
+      }
+    });
+  }
+
+  function hideContextMenu() {
+    if (contextMenu) {
+      contextMenu.classList.remove('show');
+      contextMenuNoteId = null;
+    }
+  }
+
   // Render notes list
   async function renderNotesList(filter = '') {
     let displayNotes = filter ? await searchNotes(filter) : notes;
+    
+    // Filter by active tab
+    if (activeTab === 'favorites') {
+      displayNotes = displayNotes.filter(n => n.isFavorite);
+    }
 
     notesList.innerHTML = '';
+    
+    // Show empty state message for favorites tab
+    if (displayNotes.length === 0 && activeTab === 'favorites') {
+      const emptyMsg = document.createElement('div');
+      emptyMsg.className = 'notes-list-empty';
+      emptyMsg.textContent = t.noFavorites || 'No favorite notes yet';
+      notesList.appendChild(emptyMsg);
+      return;
+    }
 
-    displayNotes.forEach(note => {
-      const noteItem = document.createElement('div');
-      noteItem.className = 'note-item';
-      if (note.id === activeNoteId) {
-        noteItem.classList.add('active');
-      }
-
-      const attachmentBadge = note.attachmentCount 
-        ? `<span class="note-item-attachments">${note.attachmentCount}</span>` 
-        : '';
-
-      noteItem.innerHTML = `
-        <div class="note-item-title">${escapeHtml(note.title)}</div>
-        <div class="note-item-meta">
-          <span class="note-item-date">${formatDate(note.updatedAt)}</span>
-          ${attachmentBadge}
-          <span class="note-item-category">${t.category}</span>
-        </div>
-      `;
-
-      noteItem.addEventListener('click', () => selectNote(note.id));
-      
-      // Right click to delete
-      noteItem.addEventListener('contextmenu', async (e) => {
-        e.preventDefault();
-        if (confirm(t.confirmDelete)) {
-          await deleteNoteById(note.id);
-        }
+    // If filtering, show flat list
+    if (filter) {
+      displayNotes.forEach(note => {
+        const noteItem = createNoteItemElement(note, 0);
+        notesList.appendChild(noteItem);
       });
+      return;
+    }
 
+    // Build tree structure for nested display
+    const tree = buildNotesTree(displayNotes);
+    
+    // Render tree recursively
+    function renderNoteNode(node, level) {
+      const noteItem = createNoteItemElement(node, level);
       notesList.appendChild(noteItem);
+      
+      // Render children if expanded
+      if (node.children && node.children.length > 0 && expandedNotes.has(node.id)) {
+        node.children.forEach(child => renderNoteNode(child, level + 1));
+      }
+    }
+    
+    tree.forEach(node => renderNoteNode(node, 0));
+  }
+
+  // Create a note item DOM element
+  function createNoteItemElement(note, level) {
+    const noteItem = document.createElement('div');
+    noteItem.className = 'note-item';
+    noteItem.dataset.noteId = note.id;
+    noteItem.dataset.level = level;
+    
+    if (note.id === activeNoteId) {
+      noteItem.classList.add('active');
+    }
+
+    const attachmentBadge = note.attachmentCount 
+      ? `<span class="note-item-attachments">${note.attachmentCount}</span>` 
+      : '';
+    
+    const favoriteStar = note.isFavorite 
+      ? `<span class="note-item-favorite">⭐</span>` 
+      : '';
+
+    const hasChildNotes = note.children && note.children.length > 0;
+    const isExpanded = expandedNotes.has(note.id);
+    
+    const toggleIcon = hasChildNotes 
+      ? `<span class="note-toggle ${isExpanded ? 'expanded' : ''}" data-note-id="${note.id}">
+          <svg xmlns="http://www.w3.org/2000/svg" width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+            <polyline points="9 18 15 12 9 6"></polyline>
+          </svg>
+        </span>`
+      : `<span class="note-toggle-placeholder"></span>`;
+
+    const indentStyle = level > 0 ? `padding-left: ${level * 1.25 + 1}rem;` : '';
+
+    noteItem.innerHTML = `
+      <div class="note-item-content" style="${indentStyle}">
+        ${toggleIcon}
+        <div class="note-item-text">
+          <div class="note-item-title">${favoriteStar}${escapeHtml(note.title)}</div>
+          <div class="note-item-meta">
+            <span class="note-item-date">${formatDate(note.updatedAt)}</span>
+            ${attachmentBadge}
+            ${hasChildNotes ? `<span class="note-item-children">${note.children.length}</span>` : ''}
+          </div>
+        </div>
+      </div>
+    `;
+
+    // Handle toggle click
+    const toggle = noteItem.querySelector('.note-toggle');
+    if (toggle) {
+      toggle.addEventListener('click', (e) => {
+        e.stopPropagation();
+        toggleNoteExpand(note.id);
+      });
+    }
+
+    noteItem.addEventListener('click', (e) => {
+      // Don't select if clicking on toggle
+      if (!e.target.closest('.note-toggle')) {
+        selectNote(note.id);
+      }
     });
+    
+    // Right click to show context menu
+    noteItem.addEventListener('contextmenu', (e) => {
+      e.preventDefault();
+      showContextMenu(e, note.id);
+    });
+
+    return noteItem;
+  }
+
+  // Toggle expand/collapse for a note
+  function toggleNoteExpand(noteId) {
+    if (expandedNotes.has(noteId)) {
+      expandedNotes.delete(noteId);
+    } else {
+      expandedNotes.add(noteId);
+    }
+    renderNotesList(searchInput?.value || '');
+  }
+
+  // Create a child note under a parent
+  async function createChildNote(parentId) {
+    // Ensure parent is expanded
+    expandedNotes.add(parentId);
+    
+    const newNote = {
+      id: generateId(),
+      title: t.untitled,
+      content: '',
+      parentId: parentId,
+      tags: [],
+      attachmentCount: 0,
+      createdAt: Date.now(),
+      updatedAt: Date.now()
+    };
+
+    await saveNote(newNote);
+    notes.unshift(newNote);
+    renderNotesList(searchInput?.value || '');
+    await selectNote(newNote.id);
+    
+    if (editor) {
+      editor.focus();
+    }
   }
 
   // Select note
@@ -1051,6 +1548,9 @@
       const contentWithRestoredImages = await restoreImageUrls(id, note.content || '');
       editor.setMarkdown(contentWithRestoredImages);
     }
+    
+    // Update favorite button state
+    updateFavoriteButton(note.isFavorite);
 
     hideEmptyState();
     renderNotesList(searchInput.value);
@@ -1123,6 +1623,28 @@
     searchInput.addEventListener('input', (e) => {
       renderNotesList(e.target.value);
     });
+    
+    // Tab switching
+    const tabAll = document.getElementById('tab-all');
+    const tabFavorites = document.getElementById('tab-favorites');
+    
+    if (tabAll) {
+      tabAll.addEventListener('click', () => {
+        activeTab = 'all';
+        tabAll.classList.add('active');
+        tabFavorites?.classList.remove('active');
+        renderNotesList(searchInput?.value || '');
+      });
+    }
+    
+    if (tabFavorites) {
+      tabFavorites.addEventListener('click', () => {
+        activeTab = 'favorites';
+        tabFavorites.classList.add('active');
+        tabAll?.classList.remove('active');
+        renderNotesList(searchInput?.value || '');
+      });
+    }
 
     // Keyboard shortcuts
     document.addEventListener('keydown', (e) => {
