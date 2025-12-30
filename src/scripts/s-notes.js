@@ -1,3 +1,7 @@
+import Editor from '@toast-ui/editor';
+import '@toast-ui/editor/dist/toastui-editor.css';
+import '@toast-ui/editor/dist/theme/toastui-editor-dark.css';
+
 // S-Notes - Advanced Note Taking App with Toast UI Editor
 // Storage: IndexedDB for metadata + OPFS for attachments
 (function () {
@@ -1008,7 +1012,7 @@
           <script src="https://uicdn.toast.com/editor/latest/toastui-editor-all.min.js"></script>
           <script>
             const isDark = window.matchMedia && window.matchMedia('(prefers-color-scheme: dark)').matches;
-            const viewer = new toastui.Editor.factory({
+            const viewer = new Editor.factory({
               el: document.getElementById('viewer'),
               viewer: true,
               initialValue: \`${currentContent.replace(/`/g, '\\`').replace(/\$/g, '\\$')}\`,
@@ -1042,7 +1046,7 @@
   function initEditor() {
     const isDark = document.documentElement.getAttribute('data-theme') === 'dark';
     
-    editor = new toastui.Editor({
+    editor = new Editor({
       el: editorContainer,
       height: '450px',
       initialEditType: 'wysiwyg',
@@ -1843,4 +1847,7 @@ function hello() {
     runManual: runManualGarbageCollection,
     schedule: scheduleGarbageCollection
   };
+  if (typeof window !== 'undefined' && typeof window.methodLoad === 'function') {
+    window.methodLoad();
+  }
 })();

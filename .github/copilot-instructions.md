@@ -12,8 +12,10 @@ Privacy-focused web toolkit built with **Astro 4.x** – all cryptographic/encod
 - `src/pages/[lang]/` – Localized pages using dynamic routing (8 languages)
 - `src/i18n/locales/` – Translation files (en.ts is the source of truth)
 - `src/data/toolSections.ts` – Sidebar navigation and tool registry
-- `public/js/` – Client-side JS libraries (**excluded from linting/prettier**)
-- `public/css/` – Stylesheets
+- `src/scripts/` – **Project-owned JS/TS** (Astro-processed, optimized, bundled)
+- `src/styles/` – **Project-owned CSS** (Astro-processed, optimized, minified)
+- `public/js/` – **Third-party/legacy JS libraries** (excluded from linting/prettier, served as-is)
+- `public/css/` – **Third-party/legacy CSS** (served as-is, not processed)
 
 ### Component Hierarchy
 
@@ -96,7 +98,9 @@ const t = useTranslations(lang as any);
 1. Create page in `src/pages/[lang]/<category>/<tool>.astro` (or `index.astro` for category root)
 2. Add translations to ALL 8 locale files in `src/i18n/locales/`
 3. Register in `src/data/toolSections.ts` with URL, name, and icon
-4. Create JS logic in `public/js/` and set `window.method`
+4. Create JS logic:
+   - **Project-owned code** → `src/scripts/` (Astro optimizes, bundles, tree-shakes)
+   - **Third-party libraries** → `public/js/` or CDN (served as-is)
 
 ### i18n Pattern
 
@@ -132,7 +136,8 @@ pnpm run format       # Format code with Prettier
 
 ### Code Quality
 
-- **ESLint/Prettier ignore `public/js/`** – contains third-party and legacy code
+- **`src/scripts/`** – Project-owned JS/TS, processed by Astro (linted, optimized)
+- **`public/js/`** – Third-party/legacy code (ESLint/Prettier ignored, served as-is)
 - TypeScript strict mode enabled for `src/`
 - Astro components use TypeScript interfaces for Props
 
@@ -154,6 +159,21 @@ Use conventional commits: `feat:`, `fix:`, `docs:`, `refactor:`, `chore:`
 2. Create text & file hash pages in `src/pages/[lang]/hash/`
 3. Add entries to `toolSections.ts` under appropriate block
 4. Include external library via CDN or `public/js/`
+
+### Script Location Decision Guide
+
+| Type | Location | How to Load |
+|------|----------|-------------|
+| **Project-owned code** | `src/scripts/` | `<script src="../scripts/file.js">` or `import()` |
+| **Project-owned CSS** | `src/styles/` | `import '../styles/file.css';` in `<script>` block |
+| **Scripts with CDN dependencies** | `public/js/` | `delayScripts` pattern with `is:inline` |
+| **Third-party minified libs** | `public/js/` | `<script is:inline src="/js/lib.js">` |
+| **Third-party CSS** | `public/css/` | `<link rel="stylesheet" href="/css/file.css">` |
+| **External CDN** | N/A | `<script is:inline src="https://cdn...">` |
+
+> **Note:** Scripts that depend on external CDN libraries (like Toast UI Editor) and use the `delayScripts` pattern should stay in `public/js/` because `is:inline` scripts are not processed by Astro's bundler.
+
+> **CSS Note:** Project-owned CSS should be placed in `src/styles/` and imported via `import` statement. This allows Astro to optimize, minify, and bundle the CSS. Third-party CSS that needs to be served as-is should stay in `public/css/`.
 
 ### Adding a Language
 

@@ -1,0 +1,531 @@
+/* S-Notes Styles */
+
+/* Notes Sidebar in Settings Block */
+.notes-sidebar-wrapper {
+  display: flex;
+  flex-direction: column;
+  height: 100%;
+}
+
+/* Block title with button */
+.settings .block-title {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  gap: 1rem;
+}
+
+.notes-header {
+  padding-bottom: 0.5rem;
+}
+
+.search-input {
+  width: 100%;
+  padding: 0.6rem 0.8rem;
+  border: 1px solid var(--var-border-color);
+  border-radius: 6px;
+  font-size: 0.95rem;
+  background: var(--var-input-bg-color);
+  color: var(--var-input-color);
+}
+
+.search-input:focus {
+  outline: none;
+  border-color: var(--var-primary);
+}
+
+.storage-info {
+  padding: 0.5rem 0;
+}
+
+.storage-status {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  font-size: 0.8rem;
+  color: var(--var-sidebar-link-color);
+}
+
+.status-dot {
+  width: 8px;
+  height: 8px;
+  border-radius: 50%;
+  background: var(--var-gray);
+  transition: background 0.3s ease;
+}
+
+.storage-status.ready .status-dot {
+  background: #22c55e;
+}
+
+.storage-status.syncing .status-dot {
+  background: #f59e0b;
+  animation: pulse 1s ease-in-out infinite;
+}
+
+.storage-status.error .status-dot {
+  background: #ef4444;
+}
+
+@keyframes pulse {
+  0%,
+  100% {
+    opacity: 1;
+  }
+  50% {
+    opacity: 0.5;
+  }
+}
+
+/* Notes Tabs */
+.notes-tabs {
+  display: flex;
+  gap: 0;
+  margin: 0.5rem 0;
+  border: 1px solid var(--var-border-color);
+  border-radius: 6px;
+  overflow: hidden;
+}
+
+.notes-tab {
+  flex: 1;
+  padding: 0.5rem 0.75rem;
+  border: none;
+  background: var(--var-main-bg-color);
+  color: var(--var-sidebar-link-color);
+  font-size: 0.85rem;
+  cursor: pointer;
+  transition: all 0.15s ease;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 0.35rem;
+}
+
+.notes-tab:not(:last-child) {
+  border-right: 1px solid var(--var-border-color);
+}
+
+.notes-tab:hover {
+  background: var(--var-title-bg-color);
+  color: var(--var-font-color);
+}
+
+.notes-tab.active {
+  background: var(--var-primary);
+  color: var(--var-white);
+}
+
+.notes-tab .tab-star {
+  font-size: 0.9rem;
+}
+
+.notes-list {
+  flex: 1;
+  overflow-y: auto;
+  margin: 0 -1rem;
+  border-top: 1px solid var(--var-border-color);
+}
+
+.note-item {
+  padding: 0.65rem 1rem;
+  border-bottom: 1px solid var(--var-border-color);
+  cursor: pointer;
+  transition: all 0.15s ease;
+  background: var(--var-main-bg-color);
+  position: relative;
+}
+
+.note-item-content {
+  display: flex;
+  align-items: flex-start;
+  gap: 0.5rem;
+}
+
+.note-item-text {
+  flex: 1;
+  min-width: 0;
+}
+
+.note-toggle {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 18px;
+  height: 18px;
+  border-radius: 3px;
+  flex-shrink: 0;
+  color: var(--var-sidebar-link-color);
+  transition: all 0.15s ease;
+  margin-top: 2px;
+}
+
+.note-toggle:hover {
+  background: var(--var-title-bg-color);
+  color: var(--var-font-color);
+}
+
+.note-toggle svg {
+  transition: transform 0.2s ease;
+}
+
+.note-toggle.expanded svg {
+  transform: rotate(90deg);
+}
+
+.note-toggle-placeholder {
+  width: 18px;
+  height: 18px;
+  flex-shrink: 0;
+}
+
+.note-item:hover {
+  background: var(--var-title-bg-color);
+}
+
+.note-item.active {
+  background: var(--var-primary);
+  background: linear-gradient(135deg, var(--var-primary) 0%, var(--var-primary-dark) 100%);
+  color: var(--var-white) !important;
+  box-shadow: var(--var-shadow-md);
+}
+
+.note-item.active .note-toggle {
+  color: rgba(255, 255, 255, 0.8);
+}
+
+.note-item.active .note-toggle:hover {
+  background: rgba(255, 255, 255, 0.1);
+  color: var(--var-white);
+}
+
+.note-item.active:hover {
+  background: var(--var-primary-dark);
+}
+
+.note-item-title {
+  font-weight: 600;
+  font-size: 0.95rem;
+  margin-bottom: 0.25rem;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+  line-height: 1.3;
+  color: var(--var-font-color);
+}
+
+.note-item.active .note-item-title {
+  color: var(--var-white) !important;
+}
+
+.note-item-meta {
+  font-size: 0.8rem;
+  color: var(--var-sidebar-link-color);
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  opacity: 0.8;
+}
+
+.note-item.active .note-item-meta {
+  color: rgba(255, 255, 255, 0.85);
+  opacity: 1;
+}
+
+.note-item-date {
+  font-size: 0.75rem;
+  opacity: 0.7;
+}
+
+.note-item-attachments {
+  display: flex;
+  align-items: center;
+  gap: 0.25rem;
+  font-size: 0.75rem;
+}
+
+.note-item-attachments::before {
+  content: '📎';
+}
+
+.note-item-children {
+  display: flex;
+  align-items: center;
+  gap: 0.25rem;
+  font-size: 0.75rem;
+}
+
+.note-item-children::before {
+  content: '📁';
+}
+
+/* Favorite star in note item */
+.note-item-favorite {
+  font-size: 0.85rem;
+  color: #f59e0b;
+  flex-shrink: 0;
+}
+
+.note-item-category {
+  display: flex;
+  align-items: center;
+  gap: 0.35rem;
+  font-size: 0.8rem;
+}
+
+.note-item-category::before {
+  content: '📄';
+  font-size: 0.75rem;
+}
+
+.note-item.active .note-item-category::before {
+  content: '📝';
+}
+
+/* Empty notes list */
+.notes-list:empty::after {
+  content: 'No notes';
+  display: block;
+  text-align: center;
+  padding: 2rem 1rem;
+  color: var(--var-sidebar-link-color);
+  font-size: 0.9rem;
+}
+
+.notes-list-empty {
+  text-align: center;
+  padding: 2rem 1rem;
+  color: var(--var-sidebar-link-color);
+  font-size: 0.9rem;
+}
+
+/* Note Content in Input Block */
+.notes-content-wrapper {
+  display: flex;
+  flex-direction: column;
+  height: 100%;
+  min-height: 500px;
+}
+
+.note-editor {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+}
+
+.note-editor.hidden {
+  display: none;
+}
+
+#editor-container {
+  flex: 1;
+  min-height: 450px;
+}
+
+/* Toast UI Editor Theme Override */
+.toastui-editor-defaultUI {
+  border: none !important;
+  border-radius: 0 !important;
+}
+
+.toastui-editor-defaultUI .toastui-editor-toolbar {
+  background: var(--var-title-bg-color) !important;
+  border-bottom: 1px solid var(--var-border-color) !important;
+}
+
+.toastui-editor-defaultUI .toastui-editor-toolbar-icons {
+  color: var(--var-font-color) !important;
+}
+
+.toastui-editor-defaultUI .toastui-editor-toolbar-icons:hover {
+  background: var(--var-primary) !important;
+}
+
+.toastui-editor-defaultUI .toastui-editor-mode-switch {
+  background: var(--var-title-bg-color) !important;
+  border-top: 1px solid var(--var-border-color) !important;
+}
+
+.toastui-editor-md-container,
+.toastui-editor-ww-container {
+  background: var(--var-textarea-bg-color) !important;
+}
+
+.toastui-editor-contents {
+  font-family: inherit !important;
+  color: var(--var-font-color) !important;
+}
+
+.ProseMirror,
+.toastui-editor-md-preview {
+  color: var(--var-font-color) !important;
+}
+
+/* Dark mode adjustments */
+[data-theme='dark'] .toastui-editor-defaultUI {
+  border-color: var(--var-border-color) !important;
+}
+
+[data-theme='dark'] .toastui-editor-contents p,
+[data-theme='dark'] .toastui-editor-contents li,
+[data-theme='dark'] .ProseMirror p,
+[data-theme='dark'] .ProseMirror li {
+  color: var(--var-font-color) !important;
+}
+
+[data-theme='dark'] .toastui-editor-md-code-block-line-background,
+[data-theme='dark'] .toastui-editor-contents pre {
+  background: var(--var-bg-color) !important;
+}
+
+.empty-state {
+  flex: 1;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: var(--var-sidebar-link-color);
+  font-size: 1.1rem;
+  text-align: center;
+  padding: 2rem;
+  min-height: 400px;
+}
+
+.empty-state.hidden {
+  display: none;
+}
+
+/* Scrollbar styling */
+.notes-list::-webkit-scrollbar {
+  width: 8px;
+}
+
+.notes-list::-webkit-scrollbar-track {
+  background: var(--var-bg-color);
+}
+
+.notes-list::-webkit-scrollbar-thumb {
+  background: var(--var-border-color);
+  border-radius: 4px;
+}
+
+.notes-list::-webkit-scrollbar-thumb:hover {
+  background: var(--var-gray);
+}
+
+/* Custom Delete Button in Toast UI Editor */
+.delete-note-btn {
+  position: relative;
+  transition: all 0.2s ease;
+}
+
+.delete-note-btn:hover {
+  transform: scale(1.1);
+  background: rgba(220, 53, 69, 0.1) !important;
+}
+
+.delete-note-btn:active {
+  transform: scale(0.95);
+}
+
+/* Custom Open Window Button in Toast UI Editor */
+.open-window-btn {
+  position: relative;
+  transition: all 0.2s ease;
+}
+
+.open-window-btn:hover {
+  transform: scale(1.1);
+  background: rgba(59, 130, 246, 0.1) !important;
+}
+
+.open-window-btn:active {
+  transform: scale(0.95);
+}
+
+/* Custom Favorite Button in Toast UI Editor */
+.favorite-note-btn {
+  position: relative;
+  transition: all 0.2s ease;
+}
+
+.favorite-note-btn:hover {
+  transform: scale(1.1);
+  background: rgba(245, 158, 11, 0.1) !important;
+}
+
+.favorite-note-btn:active {
+  transform: scale(0.95);
+}
+
+/* Add separator before custom buttons */
+.delete-note-btn::before,
+.open-window-btn::before,
+.favorite-note-btn::before {
+  content: '';
+  position: absolute;
+  left: -8px;
+  top: 50%;
+  transform: translateY(-50%);
+  width: 1px;
+  height: 16px;
+  background: var(--var-border-color);
+  opacity: 0.5;
+}
+
+/* Toast UI Editor toolbar styling for custom buttons */
+.toastui-editor-toolbar .delete-note-btn,
+.toastui-editor-toolbar .open-window-btn,
+.toastui-editor-toolbar .favorite-note-btn {
+  margin-left: 8px;
+  border-radius: 4px !important;
+  font-size: 14px !important;
+}
+
+[data-theme='dark'] .delete-note-btn::before,
+[data-theme='dark'] .open-window-btn::before {
+  background: var(--var-border-color);
+}
+
+/* Context Menu */
+.note-context-menu {
+  position: fixed;
+  background: var(--var-main-bg-color);
+  border: 1px solid var(--var-border-color);
+  border-radius: 6px;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
+  padding: 0.25rem 0;
+  z-index: 10000;
+  min-width: 150px;
+  display: none;
+}
+
+.note-context-menu.show {
+  display: block;
+}
+
+.note-context-menu-item {
+  padding: 0.6rem 1rem;
+  cursor: pointer;
+  transition: all 0.15s ease;
+  color: var(--var-font-color);
+  font-size: 0.9rem;
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+}
+
+.note-context-menu-item:hover {
+  background: var(--var-title-bg-color);
+}
+
+.note-context-menu-item.delete {
+  color: #ef4444;
+}
+
+.note-context-menu-item.delete:hover {
+  background: rgba(239, 68, 68, 0.1);
+}
+
+[data-theme='dark'] .note-context-menu {
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.4);
+}
