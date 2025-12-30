@@ -44,6 +44,15 @@ const t = useTranslations(lang as any);
                   placeholder={t('s_notes.search_notes')}
                 />
               </div>
+              <div class="notes-tabs">
+                <button class="notes-tab active" data-tab="all" id="tab-all"
+                  >{t('s_notes.tab_all') || 'All'}</button
+                >
+                <button class="notes-tab" data-tab="favorites" id="tab-favorites">
+                  <span class="tab-star">⭐</span>
+                  {t('s_notes.tab_favorites') || 'Favorites'}
+                </button>
+              </div>
               <div class="setting storage-info">
                 <span id="storage-status" class="storage-status">
                   <span class="status-dot"></span>
@@ -67,8 +76,13 @@ const t = useTranslations(lang as any);
       untitled: ${JSON.stringify(t('s_notes.untitled'))},
       category: ${JSON.stringify(t('s_notes.category'))},
       confirmDelete: ${JSON.stringify(t('s_notes.confirm_delete'))},
+      confirmDeleteWithChildren: ${JSON.stringify(t('s_notes.confirm_delete_with_children') || 'This note has child notes. Delete this note and all its children?')},
       delete: ${JSON.stringify(t('s_notes.delete'))},
+      createChild: ${JSON.stringify(t('s_notes.create_child') || 'Create Note Item')},
+      addToFavorites: ${JSON.stringify(t('s_notes.add_to_favorites') || 'Add to Favorites')},
+      removeFromFavorites: ${JSON.stringify(t('s_notes.remove_from_favorites') || 'Remove from Favorites')},
       noNotes: ${JSON.stringify(t('s_notes.no_notes'))},
+      noFavorites: ${JSON.stringify(t('s_notes.no_favorites') || 'No favorite notes yet')},
       loading: ${JSON.stringify(t('s_notes.loading') || 'Loading...')},
       ready: ${JSON.stringify(t('s_notes.ready') || 'Ready')},
       syncing: ${JSON.stringify(t('s_notes.syncing') || 'Syncing...')},
@@ -190,6 +204,49 @@ const t = useTranslations(lang as any);
     }
   }
 
+  /* Notes Tabs */
+  .notes-tabs {
+    display: flex;
+    gap: 0;
+    margin: 0.5rem 0;
+    border: 1px solid var(--var-border-color);
+    border-radius: 6px;
+    overflow: hidden;
+  }
+
+  .notes-tab {
+    flex: 1;
+    padding: 0.5rem 0.75rem;
+    border: none;
+    background: var(--var-main-bg-color);
+    color: var(--var-sidebar-link-color);
+    font-size: 0.85rem;
+    cursor: pointer;
+    transition: all 0.15s ease;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 0.35rem;
+  }
+
+  .notes-tab:not(:last-child) {
+    border-right: 1px solid var(--var-border-color);
+  }
+
+  .notes-tab:hover {
+    background: var(--var-title-bg-color);
+    color: var(--var-font-color);
+  }
+
+  .notes-tab.active {
+    background: var(--var-primary);
+    color: var(--var-white);
+  }
+
+  .notes-tab .tab-star {
+    font-size: 0.9rem;
+  }
+
   .notes-list {
     flex: 1;
     overflow-y: auto;
@@ -198,7 +255,7 @@ const t = useTranslations(lang as any);
   }
 
   .note-item {
-    padding: 0.85rem 1rem;
+    padding: 0.65rem 1rem;
     border-bottom: 1px solid var(--var-border-color);
     cursor: pointer;
     transition: all 0.15s ease;
@@ -206,9 +263,51 @@ const t = useTranslations(lang as any);
     position: relative;
   }
 
+  .note-item-content {
+    display: flex;
+    align-items: flex-start;
+    gap: 0.5rem;
+  }
+
+  .note-item-text {
+    flex: 1;
+    min-width: 0;
+  }
+
+  .note-toggle {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 18px;
+    height: 18px;
+    border-radius: 3px;
+    flex-shrink: 0;
+    color: var(--var-sidebar-link-color);
+    transition: all 0.15s ease;
+    margin-top: 2px;
+  }
+
+  .note-toggle:hover {
+    background: var(--var-title-bg-color);
+    color: var(--var-font-color);
+  }
+
+  .note-toggle svg {
+    transition: transform 0.2s ease;
+  }
+
+  .note-toggle.expanded svg {
+    transform: rotate(90deg);
+  }
+
+  .note-toggle-placeholder {
+    width: 18px;
+    height: 18px;
+    flex-shrink: 0;
+  }
+
   .note-item:hover {
     background: var(--var-title-bg-color);
-    padding-left: 1.2rem;
   }
 
   .note-item.active {
@@ -218,15 +317,23 @@ const t = useTranslations(lang as any);
     box-shadow: var(--var-shadow-md);
   }
 
+  .note-item.active .note-toggle {
+    color: rgba(255, 255, 255, 0.8);
+  }
+
+  .note-item.active .note-toggle:hover {
+    background: rgba(255, 255, 255, 0.1);
+    color: var(--var-white);
+  }
+
   .note-item.active:hover {
-    padding-left: 1rem;
     background: var(--var-primary-dark);
   }
 
   .note-item-title {
     font-weight: 600;
     font-size: 0.95rem;
-    margin-bottom: 0.35rem;
+    margin-bottom: 0.25rem;
     overflow: hidden;
     text-overflow: ellipsis;
     white-space: nowrap;
@@ -268,6 +375,24 @@ const t = useTranslations(lang as any);
     content: '📎';
   }
 
+  .note-item-children {
+    display: flex;
+    align-items: center;
+    gap: 0.25rem;
+    font-size: 0.75rem;
+  }
+
+  .note-item-children::before {
+    content: '📁';
+  }
+
+  /* Favorite star in note item */
+  .note-item-favorite {
+    font-size: 0.85rem;
+    color: #f59e0b;
+    flex-shrink: 0;
+  }
+
   .note-item-category {
     display: flex;
     align-items: center;
@@ -288,6 +413,13 @@ const t = useTranslations(lang as any);
   .notes-list:empty::after {
     content: 'No notes';
     display: block;
+    text-align: center;
+    padding: 2rem 1rem;
+    color: var(--var-sidebar-link-color);
+    font-size: 0.9rem;
+  }
+
+  .notes-list-empty {
     text-align: center;
     padding: 2rem 1rem;
     color: var(--var-sidebar-link-color);
@@ -437,9 +569,25 @@ const t = useTranslations(lang as any);
     transform: scale(0.95);
   }
 
+  /* Custom Favorite Button in Toast UI Editor */
+  .favorite-note-btn {
+    position: relative;
+    transition: all 0.2s ease;
+  }
+
+  .favorite-note-btn:hover {
+    transform: scale(1.1);
+    background: rgba(245, 158, 11, 0.1) !important;
+  }
+
+  .favorite-note-btn:active {
+    transform: scale(0.95);
+  }
+
   /* Add separator before custom buttons */
   .delete-note-btn::before,
-  .open-window-btn::before {
+  .open-window-btn::before,
+  .favorite-note-btn::before {
     content: '';
     position: absolute;
     left: -8px;
@@ -453,7 +601,8 @@ const t = useTranslations(lang as any);
 
   /* Toast UI Editor toolbar styling for custom buttons */
   .toastui-editor-toolbar .delete-note-btn,
-  .toastui-editor-toolbar .open-window-btn {
+  .toastui-editor-toolbar .open-window-btn,
+  .toastui-editor-toolbar .favorite-note-btn {
     margin-left: 8px;
     border-radius: 4px !important;
     font-size: 14px !important;
