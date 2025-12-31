@@ -386,6 +386,12 @@ summary:hover {
   margin-bottom: 1.5rem;
   padding-bottom: 1rem;
   border-bottom: 2px solid var(--var-border-color);
+  position: sticky;
+  top: -1rem;
+  z-index: 10;
+  background: var(--var-main-bg-color);
+  padding-top: 1rem;
+  margin-top: -1rem;
 }
 
 #sidebar header a {
