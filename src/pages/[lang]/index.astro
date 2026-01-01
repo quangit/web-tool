@@ -6,6 +6,7 @@ import { toolSections } from '../../data/toolSections';
 import { languages } from '../../i18n/ui';
 import { useTranslations } from '../../i18n/utils';
 import '../../styles/index-page.css';
+import '../../styles/user-tools.css';
 
 export function getStaticPaths() {
   return Object.keys(languages).map((lang) => ({ params: { lang } }));
@@ -20,6 +21,42 @@ const i18nData = {
   found: t('sidebar.search.found'),
   empty: t('sidebar.my_tools.empty'),
   lang,
+};
+
+// User tools i18n data
+const userToolsI18n = {
+  title: t('user_tools.title'),
+  addCard: t('user_tools.add_card'),
+  addItem: t('user_tools.add_item'),
+  edit: t('user_tools.edit'),
+  delete: t('user_tools.delete'),
+  deleteConfirm: t('user_tools.delete_confirm'),
+  empty: t('user_tools.empty'),
+  popup: {
+    addCard: t('user_tools.popup.add_card'),
+    editCard: t('user_tools.popup.edit_card'),
+    cardName: t('user_tools.popup.card_name'),
+    cardNamePlaceholder: t('user_tools.popup.card_name_placeholder'),
+    addItem: t('user_tools.popup.add_item'),
+    editItem: t('user_tools.popup.edit_item'),
+    selectCard: t('user_tools.popup.select_card'),
+    selectCardPlaceholder: t('user_tools.popup.select_card_placeholder'),
+    icon: t('user_tools.popup.icon'),
+    iconPlaceholder: t('user_tools.popup.icon_placeholder'),
+    title: t('user_tools.popup.title'),
+    titlePlaceholder: t('user_tools.popup.title_placeholder'),
+    description: t('user_tools.popup.description'),
+    descriptionPlaceholder: t('user_tools.popup.description_placeholder'),
+    url: t('user_tools.popup.url'),
+    urlPlaceholder: t('user_tools.popup.url_placeholder'),
+    openNewWindow: t('user_tools.popup.open_new_window'),
+    save: t('user_tools.popup.save'),
+    cancel: t('user_tools.popup.cancel'),
+    deleteConfirm: t('user_tools.delete_confirm'),
+    iconPickerTitle: t('user_tools.icon_picker.title'),
+    iconPickerSearch: t('user_tools.icon_picker.search'),
+    iconPickerNoResult: t('user_tools.icon_picker.no_result'),
+  },
 };
 ---
 
@@ -61,6 +98,26 @@ const i18nData = {
                 autocomplete="off"
               />
               <div id="search-results-count"></div>
+            </div>
+          </div>
+
+          <!-- User Custom Tools Section -->
+          <div class="section" id="user-tools-section">
+            <div class="section-header">
+              <h2>{t('user_tools.title')}</h2>
+              <div class="section-actions">
+                <button type="button" class="btn-add" id="btn-add-card">
+                  <i data-lucide="plus"></i>
+                  <span>{t('user_tools.add_card')}</span>
+                </button>
+                <button type="button" class="btn-add" id="btn-add-item">
+                  <i data-lucide="plus"></i>
+                  <span>{t('user_tools.add_item')}</span>
+                </button>
+              </div>
+            </div>
+            <div id="user-cards-container">
+              <div class="empty-state">{t('user_tools.empty')}</div>
             </div>
           </div>
 
@@ -120,6 +177,14 @@ const i18nData = {
 
     <!-- i18n data for client-side scripts -->
     <script is:inline id="i18n-data" type="application/json" set:html={JSON.stringify(i18nData)} />
+
+    <!-- User tools i18n data -->
+    <script
+      is:inline
+      id="user-tools-i18n"
+      type="application/json"
+      set:html={JSON.stringify(userToolsI18n)}
+    />
   </div>
 
   <!-- Import modular scripts -->

@@ -698,4 +698,49 @@ export const zh = {
     '这些库都是积极维护并被社区广泛使用的。在生产环境中使用之前,请务必查看文档和安全建议。',
   'jwt_libraries.algorithms': '支持的算法',
   'jwt_libraries.back_to_decoder': '返回 JWT 解码器',
+
+  // User Tools
+  'user_tools.title': 'My Custom Tools',
+  'user_tools.add_card': 'Add Card',
+  'user_tools.add_item': 'Add Item',
+  'user_tools.edit': 'Edit',
+  'user_tools.delete': 'Delete',
+  'user_tools.delete_confirm': 'Are you sure you want to delete this?',
+  'user_tools.empty': 'No custom tools yet. Click "Add Card" to create your first card!',
+
+  // Add Card Popup
+  'user_tools.popup.add_card': 'Add New Card',
+  'user_tools.popup.edit_card': 'Edit Card',
+  'user_tools.popup.card_name': 'Card Name',
+  'user_tools.popup.card_name_placeholder': 'Enter card name...',
+
+  // Add Item Popup
+  'user_tools.popup.add_item': 'Add New Item',
+  'user_tools.popup.edit_item': 'Edit Item',
+  'user_tools.popup.select_card': 'Select Card',
+  'user_tools.popup.select_card_placeholder': 'Choose a card...',
+  'user_tools.popup.icon': 'Icon',
+  'user_tools.popup.icon_placeholder': 'Click to select icon...',
+  'user_tools.popup.title': 'Title',
+  'user_tools.popup.title_placeholder': 'Enter item title...',
+  'user_tools.popup.description': 'Description',
+  'user_tools.popup.description_placeholder': 'Enter item description...',
+  'user_tools.popup.url': 'URL',
+  'user_tools.popup.url_placeholder': 'Enter URL (e.g., https://example.com)...',
+  'user_tools.popup.open_new_window': 'Open in new window',
+
+  // Common Popup Buttons
+  'user_tools.popup.save': 'Save',
+  'user_tools.popup.cancel': 'Cancel',
+
+  // Icon Picker
+  'user_tools.icon_picker.title': 'Select Icon',
+  'user_tools.icon_picker.search': 'Search icons...',
+  'user_tools.icon_picker.no_result': 'No icons found',
+
+  // External Page
+  'external.title': '外部工具',
+  'external.description': '在嵌入框架中查看外部内容',
+  'external.back': 'Back',
+  'external.open_in_new_tab': 'Open in new tab',
 };

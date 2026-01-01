@@ -732,4 +732,49 @@ export const vi = {
     'Các thư viện này được duy trì tích cực và được sử dụng rộng rãi bởi cộng đồng. Luôn kiểm tra tài liệu và cảnh báo bảo mật trước khi sử dụng trong sản xuất.',
   'jwt_libraries.algorithms': 'Thuật toán hỗ trợ',
   'jwt_libraries.back_to_decoder': 'Quay lại JWT Decoder',
+
+  // User Tools
+  'user_tools.title': 'Công cụ tùy chỉnh',
+  'user_tools.add_card': 'Thêm thẻ',
+  'user_tools.add_item': 'Thêm mục',
+  'user_tools.edit': 'Sửa',
+  'user_tools.delete': 'Xóa',
+  'user_tools.delete_confirm': 'Bạn có chắc chắn muốn xóa?',
+  'user_tools.empty': 'Chưa có công cụ tùy chỉnh. Nhấn "Thêm thẻ" để tạo thẻ đầu tiên!',
+
+  // Add Card Popup
+  'user_tools.popup.add_card': 'Thêm thẻ mới',
+  'user_tools.popup.edit_card': 'Sửa thẻ',
+  'user_tools.popup.card_name': 'Tên thẻ',
+  'user_tools.popup.card_name_placeholder': 'Nhập tên thẻ...',
+
+  // Add Item Popup
+  'user_tools.popup.add_item': 'Thêm mục mới',
+  'user_tools.popup.edit_item': 'Sửa mục',
+  'user_tools.popup.select_card': 'Chọn thẻ',
+  'user_tools.popup.select_card_placeholder': 'Chọn một thẻ...',
+  'user_tools.popup.icon': 'Biểu tượng',
+  'user_tools.popup.icon_placeholder': 'Nhấn để chọn biểu tượng...',
+  'user_tools.popup.title': 'Tiêu đề',
+  'user_tools.popup.title_placeholder': 'Nhập tiêu đề...',
+  'user_tools.popup.description': 'Mô tả',
+  'user_tools.popup.description_placeholder': 'Nhập mô tả...',
+  'user_tools.popup.url': 'URL',
+  'user_tools.popup.url_placeholder': 'Nhập URL (ví dụ: https://example.com)...',
+  'user_tools.popup.open_new_window': 'Mở trong cửa sổ mới',
+
+  // Common Popup Buttons
+  'user_tools.popup.save': 'Lưu',
+  'user_tools.popup.cancel': 'Hủy',
+
+  // Icon Picker
+  'user_tools.icon_picker.title': 'Chọn biểu tượng',
+  'user_tools.icon_picker.search': 'Tìm kiếm biểu tượng...',
+  'user_tools.icon_picker.no_result': 'Không tìm thấy biểu tượng',
+
+  // External Page
+  'external.title': 'Công cụ bên ngoài',
+  'external.description': 'Xem nội dung bên ngoài trong khung nhúng',
+  'external.back': 'Quay lại',
+  'external.open_in_new_tab': 'Mở trong tab mới',
 };

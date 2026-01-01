@@ -5,6 +5,7 @@
 import { initFavorites } from './favorites';
 import { initSearch } from './search';
 import { initSectionToggle } from './section-toggle';
+import { initUserTools } from './user-tools-renderer';
 
 // Export types for external use
 export type { FavoriteItem, I18nData } from './types';
@@ -23,12 +24,14 @@ export {
 export { initFavorites } from './favorites';
 export { initSearch } from './search';
 export { initSectionToggle } from './section-toggle';
+export { initUserTools } from './user-tools-renderer';
 
 // Initialize all modules when DOM is ready
 export function initIndexPage(): void {
   initFavorites();
   initSearch();
   initSectionToggle();
+  initUserTools();
 }
 
 // Auto-initialize on DOMContentLoaded
