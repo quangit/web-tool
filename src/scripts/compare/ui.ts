@@ -139,7 +139,7 @@ function renderInlineDiff(
 
     const lineNumEl = document.createElement('span');
     lineNumEl.className = 'diff-line-number';
-    lineNumEl.textContent = line.lineNum || '';
+    lineNumEl.textContent = line.lineNum ? line.lineNum.toString() : '';
 
     const contentEl = document.createElement('span');
     contentEl.className = 'diff-line-content';
@@ -211,7 +211,7 @@ function renderCodeEditors(leftText: string, rightText: string) {
 
       const lineNumEl = document.createElement('span');
       lineNumEl.className = 'code-line-number';
-      lineNumEl.textContent = line.lineNum || '';
+      lineNumEl.textContent = line.lineNum ? line.lineNum.toString() : '';
 
       const contentEl = document.createElement('span');
       contentEl.className = 'code-line-content';
