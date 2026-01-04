@@ -1,42 +1,42 @@
-// Currency data with full names
-const currencies: Record<string, string> = {
-  USD: 'US Dollar',
-  EUR: 'Euro',
-  GBP: 'British Pound',
-  JPY: 'Japanese Yen',
-  AUD: 'Australian Dollar',
-  CAD: 'Canadian Dollar',
-  CHF: 'Swiss Franc',
-  CNY: 'Chinese Yuan',
-  HKD: 'Hong Kong Dollar',
-  NZD: 'New Zealand Dollar',
-  SEK: 'Swedish Krona',
-  KRW: 'South Korean Won',
-  SGD: 'Singapore Dollar',
-  NOK: 'Norwegian Krone',
-  MXN: 'Mexican Peso',
-  INR: 'Indian Rupee',
-  RUB: 'Russian Ruble',
-  ZAR: 'South African Rand',
-  TRY: 'Turkish Lira',
-  BRL: 'Brazilian Real',
-  TWD: 'Taiwan Dollar',
-  DKK: 'Danish Krone',
-  PLN: 'Polish Zloty',
-  THB: 'Thai Baht',
-  IDR: 'Indonesian Rupiah',
-  HUF: 'Hungarian Forint',
-  CZK: 'Czech Koruna',
-  ILS: 'Israeli Shekel',
-  CLP: 'Chilean Peso',
-  PHP: 'Philippine Peso',
-  AED: 'UAE Dirham',
-  COP: 'Colombian Peso',
-  SAR: 'Saudi Riyal',
-  MYR: 'Malaysian Ringgit',
-  RON: 'Romanian Leu',
-  VND: 'Vietnamese Dong',
-};
+// Currency codes - sorted alphabetically
+const currencyCodes: string[] = [
+  'AED', 'AFN', 'ALL', 'AMD', 'ANG', 'AOA', 'ARS', 'AUD', 'AWG', 'AZN',
+  'BAM', 'BBD', 'BDT', 'BGN', 'BHD', 'BIF', 'BMD', 'BND', 'BOB', 'BRL',
+  'BSD', 'BTC', 'BWP', 'BYN', 'BZD',
+  'CAD', 'CDF', 'CHF', 'CLP', 'CNY', 'COP', 'CRC', 'CUP', 'CVE', 'CZK',
+  'DJF', 'DKK', 'DOP', 'DZD',
+  'EGP', 'ERN', 'ETB', 'EUR',
+  'FJD',
+  'GBP', 'GEL', 'GHS', 'GMD', 'GNF', 'GTQ', 'GYD',
+  'HKD', 'HNL', 'HRK', 'HTG', 'HUF',
+  'IDR', 'ILS', 'INR', 'IQD', 'IRR', 'ISK',
+  'JMD', 'JOD', 'JPY',
+  'KES', 'KGS', 'KHR', 'KRW', 'KWD', 'KYD', 'KZT',
+  'LAK', 'LBP', 'LKR', 'LRD', 'LSL', 'LYD',
+  'MAD', 'MDL', 'MGA', 'MKD', 'MMK', 'MNT', 'MOP', 'MUR', 'MWK', 'MXN', 'MYR', 'MZN',
+  'NAD', 'NGN', 'NIO', 'NOK', 'NPR', 'NZD',
+  'OMR',
+  'PAB', 'PEN', 'PGK', 'PHP', 'PKR', 'PLN', 'PYG',
+  'QAR',
+  'RON', 'RSD', 'RUB', 'RWF',
+  'SAR', 'SBD', 'SCR', 'SDG', 'SEK', 'SGD', 'SLL', 'SOS', 'SRD', 'STN', 'SYP', 'SZL',
+  'THB', 'TJS', 'TMT', 'TND', 'TOP', 'TRY', 'TTD', 'TWD', 'TZS',
+  'UAH', 'UGX', 'USD', 'UYU', 'UZS',
+  'VES', 'VND', 'VUV',
+  'WST',
+  'XAF', 'XAG', 'XAU', 'XCD', 'XOF', 'XPF',
+  'YER',
+  'ZAR', 'ZMW', 'ZWL',
+];
+
+// Currency translations interface
+interface CurrencyTranslations {
+  loading: string;
+  error: string;
+  rate: string;
+  lastUpdated: string;
+  currencies: Record<string, string>;
+}
 
 // Constants for formatting
 const RATE_DISPLAY_PRECISION = 6;
@@ -57,25 +57,21 @@ let lastUpdated = '';
 // Get translations from the page (set via inline script with define:vars)
 declare global {
   interface Window {
-    currencyTranslations: {
-      loading: string;
-      error: string;
-      rate: string;
-      lastUpdated: string;
-    };
+    currencyTranslations: CurrencyTranslations;
     lucide?: {
       createIcons: () => void;
     };
   }
 }
 
-function getTranslations() {
+function getTranslations(): CurrencyTranslations {
   return (
     window.currencyTranslations || {
       loading: 'Loading exchange rates...',
       error: 'Failed to load exchange rates.',
       rate: 'Exchange Rate',
       lastUpdated: 'Last updated',
+      currencies: {},
     }
   );
 }
@@ -89,8 +85,9 @@ function updateStatus(message: string, type: 'loading' | 'error' | 'success') {
 }
 
 function populateCurrencySelects() {
-  const fromSelect = document.getElementById('from-currency') as HTMLSelectElement;
-  const toSelect = document.getElementById('to-currency') as HTMLSelectElement;
+  const fromSelect = document.getElementById('input-currency') as HTMLSelectElement;
+  const toSelect = document.getElementById('output-currency') as HTMLSelectElement;
+  const translations = getTranslations();
 
   if (!fromSelect || !toSelect) {
     return;
@@ -101,7 +98,8 @@ function populateCurrencySelects() {
   toSelect.innerHTML = '';
 
   // Create options safely using DOM methods to avoid XSS
-  Object.entries(currencies).forEach(([code, name]) => {
+  currencyCodes.forEach((code) => {
+    const name = translations.currencies[code] || code;
     const fromOption = document.createElement('option');
     fromOption.value = code;
     fromOption.textContent = `${code} - ${name}`;
@@ -165,10 +163,10 @@ async function fetchExchangeRates(base: string = 'USD'): Promise<boolean> {
 
 function convert() {
   const translations = getTranslations();
-  const amountInput = document.getElementById('amount') as HTMLInputElement;
-  const fromSelect = document.getElementById('from-currency') as HTMLSelectElement;
-  const toSelect = document.getElementById('to-currency') as HTMLSelectElement;
-  const resultInput = document.getElementById('result') as HTMLInputElement;
+  const amountInput = document.getElementById('input') as HTMLTextAreaElement;
+  const fromSelect = document.getElementById('input-currency') as HTMLSelectElement;
+  const toSelect = document.getElementById('output-currency') as HTMLSelectElement;
+  const resultInput = document.getElementById('output') as HTMLTextAreaElement;
   const rateDisplay = document.getElementById('rate-display');
 
   if (!amountInput || !fromSelect || !toSelect || !resultInput) {
@@ -232,8 +230,8 @@ function convert() {
 }
 
 function swapCurrencies() {
-  const fromSelect = document.getElementById('from-currency') as HTMLSelectElement;
-  const toSelect = document.getElementById('to-currency') as HTMLSelectElement;
+  const fromSelect = document.getElementById('input-currency') as HTMLSelectElement;
+  const toSelect = document.getElementById('output-currency') as HTMLSelectElement;
 
   if (!fromSelect || !toSelect) {
     return;
@@ -256,9 +254,9 @@ export function initCurrencyConverter() {
   });
 
   // Set up event listeners
-  const amountInput = document.getElementById('amount');
-  const fromSelect = document.getElementById('from-currency');
-  const toSelect = document.getElementById('to-currency');
+  const amountInput = document.getElementById('input');
+  const fromSelect = document.getElementById('input-currency');
+  const toSelect = document.getElementById('output-currency');
   const executeBtn = document.getElementById('execute');
   const swapBtn = document.getElementById('swap-currencies');
   const autoUpdateCheckbox = document.getElementById('auto-update') as HTMLInputElement;
