@@ -977,13 +977,13 @@ export const zh = {
   // Unit Conversion - Temperature
   'temperature_converter.title': '温度转换器',
   'temperature_converter.description':
-    '在温度单位之间转换：开尔文、摄氏度、华氏度、兰金、列氏度和水的三相点。免费在线温度转换工具。',
+    '在温度单位之间转换：开尔文、摄氏度、华氏度、兰金、列氏度和德利尔。免费在线温度转换工具。',
 
   // Temperature Units
   'temperature.K': '开尔文 [K]',
   'temperature.C': '摄氏度 [°C]',
   'temperature.F': '华氏度 [°F]',
   'temperature.R': '兰金 [°R]',
-  'temperature.r': '列氏度 [°r]',
-  'temperature.Tw': '水的三相点',
+  'temperature.r': '列氏度 [°Ré]',
+  'temperature.De': '德利尔 [°De]',
 };

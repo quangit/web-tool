@@ -990,13 +990,13 @@ export const ja = {
   // Unit Conversion - Temperature
   'temperature_converter.title': '温度変換',
   'temperature_converter.description':
-    '温度単位間で変換: ケルビン、摂氏、華氏、ランキン、レオミュール、水の三重点。無料のオンライン温度変換ツール。',
+    '温度単位間で変換: ケルビン、摂氏、華氏、ランキン、レオミュール、ドリール。無料のオンライン温度変換ツール。',
 
   // Temperature Units
   'temperature.K': 'ケルビン [K]',
   'temperature.C': '摂氏 [°C]',
   'temperature.F': '華氏 [°F]',
   'temperature.R': 'ランキン [°R]',
-  'temperature.r': 'レオミュール [°r]',
-  'temperature.Tw': '水の三重点',
+  'temperature.r': 'レオミュール [°Ré]',
+  'temperature.De': 'ドリール [°De]',
 };

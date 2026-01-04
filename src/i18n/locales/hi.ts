@@ -994,13 +994,13 @@ export const hi = {
   // Unit Conversion - Temperature
   'temperature_converter.title': 'तापमान कनवर्टर',
   'temperature_converter.description':
-    'तापमान इकाइयों के बीच रूपांतरण: केल्विन, सेल्सियस, फ़ारेनहाइट, रैंकिन, रेयुमर और पानी का त्रिगुण बिंदु। मुफ्त ऑनलाइन तापमान रूपांतरण उपकरण।',
+    'तापमान इकाइयों के बीच रूपांतरण: केल्विन, सेल्सियस, फ़ारेनहाइट, रैंकिन, रेयुमर और डेलिस्ल। मुफ्त ऑनलाइन तापमान रूपांतरण उपकरण।',
 
   // Temperature Units
   'temperature.K': 'केल्विन [K]',
   'temperature.C': 'सेल्सियस [°C]',
   'temperature.F': 'फ़ारेनहाइट [°F]',
   'temperature.R': 'रैंकिन [°R]',
-  'temperature.r': 'रेयुमर [°r]',
-  'temperature.Tw': 'पानी का त्रिगुण बिंदु',
+  'temperature.r': 'रेयुमर [°Ré]',
+  'temperature.De': 'डेलिस्ल [°De]',
 };

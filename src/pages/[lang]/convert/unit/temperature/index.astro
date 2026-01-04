@@ -26,7 +26,7 @@ const units = [
   { value: 'F', label: t('temperature.F') },
   { value: 'R', label: t('temperature.R') },
   { value: 'r', label: t('temperature.r') },
-  { value: 'Tw', label: t('temperature.Tw') },
+  { value: 'De', label: t('temperature.De') },
 ];
 ---
 
@@ -95,9 +95,9 @@ const units = [
         case 'R':
           return value * (5 / 9); // Rankine
         case 'r':
-          return value * (5 / 4) + 273.15; // Reaumur
-        case 'Tw':
-          return value * (5 / 9) + 273.15; // Triple point of water scale
+          return value * (5 / 4) + 273.15; // Réaumur
+        case 'De':
+          return 373.15 - value * (2 / 3); // Delisle
         default:
           return value;
       }
@@ -115,9 +115,9 @@ const units = [
         case 'R':
           return kelvin * (9 / 5); // Rankine
         case 'r':
-          return (kelvin - 273.15) * (4 / 5); // Reaumur
-        case 'Tw':
-          return (kelvin - 273.15) * (9 / 5); // Triple point of water scale
+          return (kelvin - 273.15) * (4 / 5); // Réaumur
+        case 'De':
+          return (373.15 - kelvin) * (3 / 2); // Delisle
         default:
           return kelvin;
       }

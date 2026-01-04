@@ -994,13 +994,13 @@ export const pt = {
   // Unit Conversion - Temperature
   'temperature_converter.title': 'Conversor de Temperatura',
   'temperature_converter.description':
-    'Converta entre unidades de temperatura: Kelvin, Celsius, Fahrenheit, Rankine, Réaumur e Ponto triplo da água. Ferramenta gratuita de conversão de temperatura online.',
+    'Converta entre unidades de temperatura: Kelvin, Celsius, Fahrenheit, Rankine, Réaumur e Delisle. Ferramenta gratuita de conversão de temperatura online.',
 
   // Temperature Units
   'temperature.K': 'kelvin [K]',
   'temperature.C': 'Celsius [°C]',
   'temperature.F': 'Fahrenheit [°F]',
   'temperature.R': 'Rankine [°R]',
-  'temperature.r': 'Réaumur [°r]',
-  'temperature.Tw': 'Ponto triplo da água',
+  'temperature.r': 'Réaumur [°Ré]',
+  'temperature.De': 'Delisle [°De]',
 };

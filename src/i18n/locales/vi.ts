@@ -1014,13 +1014,13 @@ export const vi = {
   // Unit Conversion - Temperature
   'temperature_converter.title': 'Chuyển đổi Nhiệt độ',
   'temperature_converter.description':
-    'Chuyển đổi giữa các đơn vị nhiệt độ: Kelvin, Celsius, Fahrenheit, Rankine, Réaumur và Điểm ba của nước. Công cụ chuyển đổi nhiệt độ trực tuyến miễn phí.',
+    'Chuyển đổi giữa các đơn vị nhiệt độ: Kelvin, Celsius, Fahrenheit, Rankine, Réaumur và Delisle. Công cụ chuyển đổi nhiệt độ trực tuyến miễn phí.',
 
   // Temperature Units
   'temperature.K': 'kelvin [K]',
   'temperature.C': 'Celsius [°C]',
   'temperature.F': 'Fahrenheit [°F]',
   'temperature.R': 'Rankine [°R]',
-  'temperature.r': 'Réaumur [°r]',
-  'temperature.Tw': 'Điểm ba của nước',
+  'temperature.r': 'Réaumur [°Ré]',
+  'temperature.De': 'Delisle [°De]',
 };
