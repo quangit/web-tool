@@ -1,0 +1,156 @@
+---
+import BasePage from '../../../../../components/BasePage.astro';
+import InputBlock from '../../../../../components/InputBlock.astro';
+import OutputBlock from '../../../../../components/OutputBlock.astro';
+import SettingBlock from '../../../../../components/SettingBlock.astro';
+import { languages } from '../../../../../i18n/ui';
+import { useTranslations } from '../../../../../i18n/utils';
+
+export function getStaticPaths() {
+  return Object.keys(languages).map((lang) => {
+    return { params: { lang } };
+  });
+}
+
+const { lang = 'en' } = Astro.params;
+const t = useTranslations(lang as any);
+
+const title = t('temperature_converter.title');
+const description = t('temperature_converter.description');
+const toolName = t('convert');
+const activePage = 'convert/unit/temperature/';
+
+const units = [
+  { value: 'K', label: t('temperature.K') },
+  { value: 'C', label: t('temperature.C') },
+  { value: 'F', label: t('temperature.F') },
+  { value: 'R', label: t('temperature.R') },
+  { value: 'r', label: t('temperature.r') },
+  { value: 'De', label: t('temperature.De') },
+];
+---
+
+<BasePage title={title} description={description} activePage={activePage}>
+  <div class="layout">
+    <div class="layout-block">
+      <InputBlock
+        id="input"
+        title={t('input')}
+        placeholder={t('enter_here')}
+        dataRemember="input"
+        dataShare="input"
+        dataAutoUpdate={true}
+        dataToggleMonaco={false}
+      >
+        <select slot="toolbar" id="input-unit" class="select" data-auto-update>
+          {
+            units.map((unit) => (
+              <option value={unit.value} selected={unit.value === 'C'}>
+                {unit.label}
+              </option>
+            ))
+          }
+        </select>
+      </InputBlock>
+
+      <OutputBlock
+        id="output"
+        title={t('output')}
+        placeholder={t('output_placeholder')}
+        dataToggleMonaco={false}
+        isReadonly={true}
+        textareaStyle="word-break:break-all;"
+      >
+        <button slot="toolbar" class="icon" id="swaplocal" onclick="swapUnits()">
+          <i data-lucide="arrow-left-right" title="Swap"></i>
+        </button>
+        <select slot="toolbar" id="output-unit" class="select" data-auto-update>
+          {
+            units.map((unit) => (
+              <option value={unit.value} selected={unit.value === 'F'}>
+                {unit.label}
+              </option>
+            ))
+          }
+        </select>
+      </OutputBlock>
+    </div>
+
+    <SettingBlock executeLabel={toolName} />
+  </div>
+
+  <script is:inline>
+    // Temperature conversion functions
+    // All conversions go through Kelvin as the base unit
+
+    // Convert to Kelvin
+    function toKelvin(value, fromUnit) {
+      switch (fromUnit) {
+        case 'K':
+          return value; // Kelvin
+        case 'C':
+          return value + 273.15; // Celsius
+        case 'F':
+          return (value + 459.67) * (5 / 9); // Fahrenheit
+        case 'R':
+          return value * (5 / 9); // Rankine
+        case 'r':
+          return value * (5 / 4) + 273.15; // Réaumur
+        case 'De':
+          return 373.15 - value * (2 / 3); // Delisle
+        default:
+          return value;
+      }
+    }
+
+    // Convert from Kelvin
+    function fromKelvin(kelvin, toUnit) {
+      switch (toUnit) {
+        case 'K':
+          return kelvin; // Kelvin
+        case 'C':
+          return kelvin - 273.15; // Celsius
+        case 'F':
+          return kelvin * (9 / 5) - 459.67; // Fahrenheit
+        case 'R':
+          return kelvin * (9 / 5); // Rankine
+        case 'r':
+          return (kelvin - 273.15) * (4 / 5); // Réaumur
+        case 'De':
+          return (373.15 - kelvin) * (3 / 2); // Delisle
+        default:
+          return kelvin;
+      }
+    }
+
+    function swapUnits() {
+      var inputUnit = document.getElementById('input-unit');
+      var outputUnit = document.getElementById('output-unit');
+      var inputValue = inputUnit.value;
+      inputUnit.value = outputUnit.value;
+      outputUnit.value = inputValue;
+      if (typeof runMethod === 'function') runMethod();
+    }
+
+    ++waitLoadCount;
+    delayScripts.push({
+      src: '',
+      onload: function () {
+        window.method = function convertTemperature(s) {
+          var value = parseFloat(s);
+          if (isNaN(value)) return '';
+
+          var fromUnit = document.getElementById('input-unit').value;
+          var toUnit = document.getElementById('output-unit').value;
+
+          // Convert to Kelvin first, then to target unit
+          var inKelvin = toKelvin(value, fromUnit);
+          var result = fromKelvin(inKelvin, toUnit);
+
+          return result.toString();
+        };
+        methodLoad();
+      },
+    });
+  </script>
+</BasePage>

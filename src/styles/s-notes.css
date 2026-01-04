@@ -1,6 +1,15 @@
 /* S-Notes Styles - Non-critical styles loaded asynchronously */
 /* Critical above-the-fold styles are inlined in the Astro page */
 
+/* Override global .input height: 50% rule for s-notes page */
+/* The global style.css sets .input { height: 50% } at min-width: 1024px */
+/* S-Notes only has .input (no .output), so it should take full height */
+@media (min-width: 1024px) {
+  .layout .input:only-child {
+    height: 100%;
+  }
+}
+
 /* Notes Sidebar in Settings Block */
 .notes-sidebar-wrapper {
   display: flex;
