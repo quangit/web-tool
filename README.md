@@ -54,12 +54,25 @@ Whether you need to hash a file, encrypt sensitive data, process images, compare
 - **QR Code**: QR code generator
 - **Syntax Highlighting**: Code syntax highlighter
 
+### � Converters
+
+- **Unit Converters**: Weight, Length, Temperature
+- **Currency Converter**: Currency exchange rates
+
 ### 🖼️ Productivity & Utilities
 
+- **S Notes**: A privacy-first, feature-rich note-taking application running entirely in your browser.
+  - **Rich Text**: Full Markdown support with instant preview.
+  - **Organization**: Hierarchical nested notes and favorites system.
+  - **Attachments**: Support for image attachments stored locally.
+  - **Privacy**: All data is stored in your browser's IndexedDB - nothing is sent to the cloud.
+- **File & Text Comparison**: Advanced diff tool for developers.
+  - **Dual Modes**: Compare text snippets or upload files for comparison.
+  - **Visual Diff**: Side-by-side view with color-coded changes (added, removed, modified).
+  - **Statistics**: Real-time diff statistics and synchronized scrolling.
 - **Image Tools**: Image processing utilities
-- **Note Taking**: Simple and secure note taking
 - **JWT**: JWT debugging and decoding
-- **File Comparison**: Compare files for differences
+- **Calculator**: Standard calculator
 
 ### 📁 File Processing
 
