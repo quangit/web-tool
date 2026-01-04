@@ -89,7 +89,13 @@ const t = useTranslations(lang as any);
     position: absolute;
     top: 10px;
     right: 10px;
-    z-index: 1001;
+    z-index: 10;
+  }
+
+  /* Hide feedback button when fullscreen mode is active */
+  .fullscreen ~ * .feedback-button-wrapper,
+  :has(.fullscreen) .feedback-button-wrapper {
+    display: none;
   }
 
   .feedback-btn {
