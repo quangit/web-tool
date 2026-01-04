@@ -1,0 +1,295 @@
+---
+import BasePage from '../../../../../components/BasePage.astro';
+import InputBlock from '../../../../../components/InputBlock.astro';
+import OutputBlock from '../../../../../components/OutputBlock.astro';
+import SettingBlock from '../../../../../components/SettingBlock.astro';
+import { languages } from '../../../../../i18n/ui';
+import { useTranslations } from '../../../../../i18n/utils';
+
+export function getStaticPaths() {
+  return Object.keys(languages).map((lang) => {
+    return { params: { lang } };
+  });
+}
+
+const { lang = 'en' } = Astro.params;
+const t = useTranslations(lang as any);
+
+const title = t('length_converter.title');
+const description = t('length_converter.description');
+const toolName = t('convert');
+const activePage = 'convert/unit/length/';
+
+const units = [
+  { value: 'm', label: t('length.m') },
+  { value: 'km', label: t('length.km') },
+  { value: 'dm', label: t('length.dm') },
+  { value: 'cm', label: t('length.cm') },
+  { value: 'mm', label: t('length.mm') },
+  { value: 'um', label: t('length.um') },
+  { value: 'nm', label: t('length.nm') },
+  { value: 'mi', label: t('length.mi') },
+  { value: 'yd', label: t('length.yd') },
+  { value: 'ft', label: t('length.ft') },
+  { value: 'in', label: t('length.in') },
+  { value: 'ly', label: t('length.ly') },
+  { value: 'Em', label: t('length.Em') },
+  { value: 'Pm', label: t('length.Pm') },
+  { value: 'Tm', label: t('length.Tm') },
+  { value: 'Gm', label: t('length.Gm') },
+  { value: 'Mm', label: t('length.Mm') },
+  { value: 'hm', label: t('length.hm') },
+  { value: 'dam', label: t('length.dam') },
+  { value: 'micron', label: t('length.micron') },
+  { value: 'pm', label: t('length.pm') },
+  { value: 'fm', label: t('length.fm') },
+  { value: 'am', label: t('length.am') },
+  { value: 'Mpc', label: t('length.Mpc') },
+  { value: 'kpc', label: t('length.kpc') },
+  { value: 'pc', label: t('length.pc') },
+  { value: 'AU', label: t('length.AU') },
+  { value: 'lea', label: t('length.lea') },
+  { value: 'nlea_uk', label: t('length.nlea_uk') },
+  { value: 'nlea_int', label: t('length.nlea_int') },
+  { value: 'lea_st', label: t('length.lea_st') },
+  { value: 'NM_uk', label: t('length.NM_uk') },
+  { value: 'NM_int', label: t('length.NM_int') },
+  { value: 'mi_st', label: t('length.mi_st') },
+  { value: 'mi_us', label: t('length.mi_us') },
+  { value: 'mi_roman', label: t('length.mi_roman') },
+  { value: 'kyd', label: t('length.kyd') },
+  { value: 'fur', label: t('length.fur') },
+  { value: 'fur_us', label: t('length.fur_us') },
+  { value: 'ch', label: t('length.ch') },
+  { value: 'ch_us', label: t('length.ch_us') },
+  { value: 'rope', label: t('length.rope') },
+  { value: 'rd', label: t('length.rd') },
+  { value: 'rd_us', label: t('length.rd_us') },
+  { value: 'perch', label: t('length.perch') },
+  { value: 'pole', label: t('length.pole') },
+  { value: 'fath', label: t('length.fath') },
+  { value: 'fath_us', label: t('length.fath_us') },
+  { value: 'ell', label: t('length.ell') },
+  { value: 'ft_us', label: t('length.ft_us') },
+  { value: 'li', label: t('length.li') },
+  { value: 'li_us', label: t('length.li_us') },
+  { value: 'cubit_uk', label: t('length.cubit_uk') },
+  { value: 'hand', label: t('length.hand') },
+  { value: 'span_cloth', label: t('length.span_cloth') },
+  { value: 'finger_cloth', label: t('length.finger_cloth') },
+  { value: 'nail_cloth', label: t('length.nail_cloth') },
+  { value: 'in_us', label: t('length.in_us') },
+  { value: 'barleycorn', label: t('length.barleycorn') },
+  { value: 'mil', label: t('length.mil') },
+  { value: 'microinch', label: t('length.microinch') },
+  { value: 'angstrom', label: t('length.angstrom') },
+  { value: 'au_length', label: t('length.au_length') },
+  { value: 'X_unit', label: t('length.X_unit') },
+  { value: 'fermi', label: t('length.fermi') },
+  { value: 'arpent', label: t('length.arpent') },
+  { value: 'pica', label: t('length.pica') },
+  { value: 'point', label: t('length.point') },
+  { value: 'twip', label: t('length.twip') },
+  { value: 'aln', label: t('length.aln') },
+  { value: 'famn', label: t('length.famn') },
+  { value: 'caliber', label: t('length.caliber') },
+  { value: 'cin', label: t('length.cin') },
+  { value: 'ken', label: t('length.ken') },
+  { value: 'archin', label: t('length.archin') },
+  { value: 'actus', label: t('length.actus') },
+  { value: 'vara_tarea', label: t('length.vara_tarea') },
+  { value: 'vara_conuquera', label: t('length.vara_conuquera') },
+  { value: 'vara_castellana', label: t('length.vara_castellana') },
+  { value: 'cubit_greek', label: t('length.cubit_greek') },
+  { value: 'long_reed', label: t('length.long_reed') },
+  { value: 'reed', label: t('length.reed') },
+  { value: 'long_cubit', label: t('length.long_cubit') },
+  { value: 'handbreadth', label: t('length.handbreadth') },
+  { value: 'fingerbreadth', label: t('length.fingerbreadth') },
+  { value: 'planck_length', label: t('length.planck_length') },
+  { value: 'electron_radius', label: t('length.electron_radius') },
+  { value: 'bohr_radius', label: t('length.bohr_radius') },
+  { value: 'earth_equatorial', label: t('length.earth_equatorial') },
+  { value: 'earth_polar', label: t('length.earth_polar') },
+  { value: 'earth_sun', label: t('length.earth_sun') },
+  { value: 'sun_radius', label: t('length.sun_radius') },
+];
+---
+
+<BasePage title={title} description={description} activePage={activePage}>
+  <div class="layout">
+    <div class="layout-block">
+      <InputBlock
+        id="input"
+        title={t('input')}
+        placeholder={t('enter_here')}
+        dataRemember="input"
+        dataShare="input"
+        dataAutoUpdate={true}
+        dataToggleMonaco={false}
+      >
+        <select slot="toolbar" id="input-unit" class="select" data-auto-update>
+          {
+            units.map((unit) => (
+              <option value={unit.value} selected={unit.value === 'ft'}>
+                {unit.label}
+              </option>
+            ))
+          }
+        </select>
+      </InputBlock>
+
+      <OutputBlock
+        id="output"
+        title={t('output')}
+        placeholder={t('output_placeholder')}
+        dataToggleMonaco={false}
+        isReadonly={true}
+        textareaStyle="word-break:break-all;"
+      >
+        <button slot="toolbar" class="icon" id="swaplocal" onclick="swapUnits()">
+          <i data-lucide="arrow-left-right" title="Swap"></i>
+        </button>
+        <select slot="toolbar" id="output-unit" class="select" data-auto-update>
+          {
+            units.map((unit) => (
+              <option value={unit.value} selected={unit.value === 'm'}>
+                {unit.label}
+              </option>
+            ))
+          }
+        </select>
+      </OutputBlock>
+    </div>
+
+    <SettingBlock executeLabel={toolName} />
+  </div>
+
+  <script is:inline>
+    // Conversion factors to meter (base unit)
+    var toMeter = {
+      m: 1,
+      km: 1000,
+      dm: 0.1,
+      cm: 0.01,
+      mm: 0.001,
+      um: 1e-6,
+      nm: 1e-9,
+      mi: 1609.344,
+      yd: 0.9144,
+      ft: 0.3048,
+      in: 0.0254,
+      ly: 9.4607304725808e15,
+      Em: 1e18,
+      Pm: 1e15,
+      Tm: 1e12,
+      Gm: 1e9,
+      Mm: 1e6,
+      hm: 100,
+      dam: 10,
+      micron: 1e-6,
+      pm: 1e-12,
+      fm: 1e-15,
+      am: 1e-18,
+      Mpc: 3.08567758149137e22,
+      kpc: 3.08567758149137e19,
+      pc: 3.08567758149137e16,
+      AU: 1.495978707e11,
+      lea: 4828.032,
+      nlea_uk: 5559.552,
+      nlea_int: 5556,
+      lea_st: 4828.0416560833,
+      NM_uk: 1853.184,
+      NM_int: 1852,
+      mi_st: 1609.344,
+      mi_us: 1609.3472186944,
+      mi_roman: 1479.804,
+      kyd: 914.4,
+      fur: 201.168,
+      fur_us: 201.1684023368,
+      ch: 20.1168,
+      ch_us: 20.11684023368,
+      rope: 6.096,
+      rd: 5.0292,
+      rd_us: 5.02921005842,
+      perch: 5.0292,
+      pole: 5.0292,
+      fath: 1.8288,
+      fath_us: 1.8288036576,
+      ell: 1.143,
+      ft_us: 0.3048006096,
+      li: 0.201168,
+      li_us: 0.2011684023368,
+      cubit_uk: 0.4572,
+      hand: 0.1016,
+      span_cloth: 0.2286,
+      finger_cloth: 0.1143,
+      nail_cloth: 0.05715,
+      in_us: 0.0254000508,
+      barleycorn: 0.0084666667,
+      mil: 0.0000254,
+      microinch: 2.54e-8,
+      angstrom: 1e-10,
+      au_length: 5.2917721067e-11,
+      X_unit: 1.0021e-13,
+      fermi: 1e-15,
+      arpent: 58.52137438,
+      pica: 0.0042333333,
+      point: 0.0003527778,
+      twip: 0.0000176389,
+      aln: 0.5937777778,
+      famn: 1.7813333333,
+      caliber: 0.000254,
+      cin: 0.000254,
+      ken: 2.11836,
+      archin: 0.7112,
+      actus: 35.47872,
+      vara_tarea: 2.505456,
+      vara_conuquera: 2.505456,
+      vara_castellana: 0.835152,
+      cubit_greek: 0.462788,
+      long_reed: 3.2004,
+      reed: 2.7432,
+      long_cubit: 0.5334,
+      handbreadth: 0.0762,
+      fingerbreadth: 0.01905,
+      planck_length: 1.616255e-35,
+      electron_radius: 2.8179403227e-15,
+      bohr_radius: 5.2917721067e-11,
+      earth_equatorial: 6378137,
+      earth_polar: 6356752.3,
+      earth_sun: 1.496e11,
+      sun_radius: 6.96e8,
+    };
+
+    function swapUnits() {
+      var inputUnit = document.getElementById('input-unit');
+      var outputUnit = document.getElementById('output-unit');
+      var inputValue = inputUnit.value;
+      inputUnit.value = outputUnit.value;
+      outputUnit.value = inputValue;
+      if (typeof runMethod === 'function') runMethod();
+    }
+
+    ++waitLoadCount;
+    delayScripts.push({
+      src: '',
+      onload: function () {
+        window.method = function convertLength(s) {
+          var value = parseFloat(s);
+          if (isNaN(value)) return '';
+
+          var fromUnit = document.getElementById('input-unit').value;
+          var toUnit = document.getElementById('output-unit').value;
+
+          // Convert to meter first, then to target unit
+          var inMeter = value * toMeter[fromUnit];
+          var result = inMeter / toMeter[toUnit];
+
+          return result.toString();
+        };
+        methodLoad();
+      },
+    });
+  </script>
+</BasePage>
