@@ -104,11 +104,13 @@ const units = [
         dataToggleMonaco={false}
       >
         <select slot="toolbar" id="input-unit" class="select" data-auto-update>
-          {units.map((unit) => (
-            <option value={unit.value} selected={unit.value === 'lbs'}>
-              {unit.label}
-            </option>
-          ))}
+          {
+            units.map((unit) => (
+              <option value={unit.value} selected={unit.value === 'lbs'}>
+                {unit.label}
+              </option>
+            ))
+          }
         </select>
       </InputBlock>
 
@@ -121,14 +123,16 @@ const units = [
         textareaStyle="word-break:break-all;"
       >
         <button slot="toolbar" class="icon" id="swaplocal" onclick="swapUnits()">
-          <i data-lucide="arrow-left-right" title="Swap" />
+          <i data-lucide="arrow-left-right" title="Swap"></i>
         </button>
         <select slot="toolbar" id="output-unit" class="select" data-auto-update>
-          {units.map((unit) => (
-            <option value={unit.value} selected={unit.value === 'kg'}>
-              {unit.label}
-            </option>
-          ))}
+          {
+            units.map((unit) => (
+              <option value={unit.value} selected={unit.value === 'kg'}>
+                {unit.label}
+              </option>
+            ))
+          }
         </select>
       </OutputBlock>
     </div>
@@ -148,7 +152,7 @@ const units = [
       ct: 0.0002,
       ton_us: 907.18474,
       ton_uk: 1016.0469088,
-      u: 1.66053906660e-27,
+      u: 1.6605390666e-27,
       Eg: 1e15,
       Pg: 1e12,
       Tg: 1e9,
@@ -163,7 +167,7 @@ const units = [
       pg: 1e-15,
       fg: 1e-18,
       ag: 1e-21,
-      dalton: 1.66053906660e-27,
+      dalton: 1.6605390666e-27,
       kgf_s2_m: 9.80665,
       kip: 453.59237,
       slug: 14.593903,

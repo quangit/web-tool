@@ -781,7 +781,8 @@ export const zh = {
 
   // Unit Conversion - Weight
   'weight_converter.title': '重量转换器',
-  'weight_converter.description': '在重量单位之间转换：千克、克、毫克、吨和磅。免费在线重量转换工具。',
+  'weight_converter.description':
+    '在重量单位之间转换：千克、克、毫克、吨和磅。免费在线重量转换工具。',
 
   // Weight Units
   'weight.kg': '千克 [kg]',

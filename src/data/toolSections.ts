@@ -343,9 +343,7 @@ export const toolSections: ToolSection[] = [
       },
       {
         title: 'Unit',
-        items: [
-          { url: 'convert/unit/weight', name: 'Weight converter', icon: 'scale' },
-        ],
+        items: [{ url: 'convert/unit/weight', name: 'Weight converter', icon: 'scale' }],
       },
     ],
   },
