@@ -1,0 +1,293 @@
+---
+import BasePage from '../../../../components/BasePage.astro';
+import InputBlock from '../../../../components/InputBlock.astro';
+import OutputBlock from '../../../../components/OutputBlock.astro';
+import SettingBlock from '../../../../components/SettingBlock.astro';
+import { languages } from '../../../../i18n/ui';
+import { useTranslations } from '../../../../i18n/utils';
+
+export function getStaticPaths() {
+  return Object.keys(languages).map((lang) => {
+    return { params: { lang } };
+  });
+}
+
+const { lang = 'en' } = Astro.params;
+const t = useTranslations(lang as any);
+
+const title = t('currency.title');
+const description = t('currency.description');
+const toolName = t('convert');
+const activePage = 'convert/currency';
+---
+
+<BasePage title={title} description={description} activePage={activePage}>
+  <div class="layout">
+    <div class="layout-block">
+      <InputBlock
+        id="input"
+        title={t('input')}
+        placeholder={t('currency.amount')}
+        dataRemember="input"
+        dataShare="input"
+        dataAutoUpdate={true}
+        dataToggleMonaco={false}
+      >
+        <select
+          slot="toolbar"
+          id="input-currency"
+          class="select"
+          data-auto-update
+          data-share="from"
+        >
+          <!-- Options populated by JavaScript -->
+        </select>
+      </InputBlock>
+
+      <OutputBlock
+        id="output"
+        title={t('output')}
+        placeholder={t('currency.result')}
+        dataToggleMonaco={false}
+        isReadonly={true}
+        textareaStyle="word-break:break-all;"
+      >
+        <button slot="toolbar" class="icon" id="swap-currencies" title={t('currency.swap')}>
+          <i data-lucide="arrow-left-right"></i>
+        </button>
+        <select slot="toolbar" id="output-currency" class="select" data-auto-update data-share="to">
+          <!-- Options populated by JavaScript -->
+        </select>
+        <div slot="after-textarea" class="exchange-rate-info">
+          <span id="rate-display"></span>
+          <span id="last-updated"></span>
+        </div>
+      </OutputBlock>
+    </div>
+
+    <SettingBlock executeLabel={toolName}>
+      <div class="setting status-display">
+        <span id="status-message" class="loading">{t('currency.loading')}</span>
+      </div>
+    </SettingBlock>
+  </div>
+
+  <style>
+    .exchange-rate-info {
+      display: flex;
+      justify-content: space-between;
+      padding: 0.5rem 0;
+      font-size: 0.875rem;
+      color: var(--text-secondary);
+    }
+
+    #rate-display {
+      font-weight: 500;
+    }
+
+    #last-updated {
+      font-style: italic;
+    }
+
+    .status-display {
+      padding: 0.5rem 0;
+    }
+
+    #status-message {
+      font-size: 0.875rem;
+    }
+
+    #status-message.loading {
+      color: var(--text-secondary);
+    }
+
+    #status-message.error {
+      color: var(--error-color, #e74c3c);
+    }
+
+    #status-message.success {
+      color: var(--success-color, #27ae60);
+    }
+
+    @media (max-width: 600px) {
+      .exchange-rate-info {
+        flex-direction: column;
+        gap: 0.25rem;
+      }
+    }
+  </style>
+
+  <script
+    is:inline
+    define:vars={{
+      t_loading: t('currency.loading'),
+      t_error: t('currency.error'),
+      t_rate: t('currency.rate'),
+      t_last_updated: t('currency.last_updated'),
+      t_currencies: {
+        AED: t('currency.AED'),
+        AFN: t('currency.AFN'),
+        ALL: t('currency.ALL'),
+        AMD: t('currency.AMD'),
+        ANG: t('currency.ANG'),
+        AOA: t('currency.AOA'),
+        ARS: t('currency.ARS'),
+        AUD: t('currency.AUD'),
+        AWG: t('currency.AWG'),
+        AZN: t('currency.AZN'),
+        BAM: t('currency.BAM'),
+        BBD: t('currency.BBD'),
+        BDT: t('currency.BDT'),
+        BGN: t('currency.BGN'),
+        BHD: t('currency.BHD'),
+        BIF: t('currency.BIF'),
+        BMD: t('currency.BMD'),
+        BND: t('currency.BND'),
+        BOB: t('currency.BOB'),
+        BRL: t('currency.BRL'),
+        BSD: t('currency.BSD'),
+        BTC: t('currency.BTC'),
+        BWP: t('currency.BWP'),
+        BYN: t('currency.BYN'),
+        BZD: t('currency.BZD'),
+        CAD: t('currency.CAD'),
+        CDF: t('currency.CDF'),
+        CHF: t('currency.CHF'),
+        CLP: t('currency.CLP'),
+        CNY: t('currency.CNY'),
+        COP: t('currency.COP'),
+        CRC: t('currency.CRC'),
+        CUP: t('currency.CUP'),
+        CVE: t('currency.CVE'),
+        CZK: t('currency.CZK'),
+        DJF: t('currency.DJF'),
+        DKK: t('currency.DKK'),
+        DOP: t('currency.DOP'),
+        DZD: t('currency.DZD'),
+        EGP: t('currency.EGP'),
+        ERN: t('currency.ERN'),
+        ETB: t('currency.ETB'),
+        EUR: t('currency.EUR'),
+        FJD: t('currency.FJD'),
+        GBP: t('currency.GBP'),
+        GEL: t('currency.GEL'),
+        GHS: t('currency.GHS'),
+        GMD: t('currency.GMD'),
+        GNF: t('currency.GNF'),
+        GTQ: t('currency.GTQ'),
+        GYD: t('currency.GYD'),
+        HKD: t('currency.HKD'),
+        HNL: t('currency.HNL'),
+        HRK: t('currency.HRK'),
+        HTG: t('currency.HTG'),
+        HUF: t('currency.HUF'),
+        IDR: t('currency.IDR'),
+        ILS: t('currency.ILS'),
+        INR: t('currency.INR'),
+        IQD: t('currency.IQD'),
+        IRR: t('currency.IRR'),
+        ISK: t('currency.ISK'),
+        JMD: t('currency.JMD'),
+        JOD: t('currency.JOD'),
+        JPY: t('currency.JPY'),
+        KES: t('currency.KES'),
+        KGS: t('currency.KGS'),
+        KHR: t('currency.KHR'),
+        KRW: t('currency.KRW'),
+        KWD: t('currency.KWD'),
+        KYD: t('currency.KYD'),
+        KZT: t('currency.KZT'),
+        LAK: t('currency.LAK'),
+        LBP: t('currency.LBP'),
+        LKR: t('currency.LKR'),
+        LRD: t('currency.LRD'),
+        LSL: t('currency.LSL'),
+        LYD: t('currency.LYD'),
+        MAD: t('currency.MAD'),
+        MDL: t('currency.MDL'),
+        MGA: t('currency.MGA'),
+        MKD: t('currency.MKD'),
+        MMK: t('currency.MMK'),
+        MNT: t('currency.MNT'),
+        MOP: t('currency.MOP'),
+        MUR: t('currency.MUR'),
+        MWK: t('currency.MWK'),
+        MXN: t('currency.MXN'),
+        MYR: t('currency.MYR'),
+        MZN: t('currency.MZN'),
+        NAD: t('currency.NAD'),
+        NGN: t('currency.NGN'),
+        NIO: t('currency.NIO'),
+        NOK: t('currency.NOK'),
+        NPR: t('currency.NPR'),
+        NZD: t('currency.NZD'),
+        OMR: t('currency.OMR'),
+        PAB: t('currency.PAB'),
+        PEN: t('currency.PEN'),
+        PGK: t('currency.PGK'),
+        PHP: t('currency.PHP'),
+        PKR: t('currency.PKR'),
+        PLN: t('currency.PLN'),
+        PYG: t('currency.PYG'),
+        QAR: t('currency.QAR'),
+        RON: t('currency.RON'),
+        RSD: t('currency.RSD'),
+        RUB: t('currency.RUB'),
+        RWF: t('currency.RWF'),
+        SAR: t('currency.SAR'),
+        SBD: t('currency.SBD'),
+        SCR: t('currency.SCR'),
+        SDG: t('currency.SDG'),
+        SEK: t('currency.SEK'),
+        SGD: t('currency.SGD'),
+        SLL: t('currency.SLL'),
+        SOS: t('currency.SOS'),
+        SRD: t('currency.SRD'),
+        STN: t('currency.STN'),
+        SYP: t('currency.SYP'),
+        SZL: t('currency.SZL'),
+        THB: t('currency.THB'),
+        TJS: t('currency.TJS'),
+        TMT: t('currency.TMT'),
+        TND: t('currency.TND'),
+        TOP: t('currency.TOP'),
+        TRY: t('currency.TRY'),
+        TTD: t('currency.TTD'),
+        TWD: t('currency.TWD'),
+        TZS: t('currency.TZS'),
+        UAH: t('currency.UAH'),
+        UGX: t('currency.UGX'),
+        USD: t('currency.USD'),
+        UYU: t('currency.UYU'),
+        UZS: t('currency.UZS'),
+        VES: t('currency.VES'),
+        VND: t('currency.VND'),
+        VUV: t('currency.VUV'),
+        WST: t('currency.WST'),
+        XAF: t('currency.XAF'),
+        XAG: t('currency.XAG'),
+        XAU: t('currency.XAU'),
+        XCD: t('currency.XCD'),
+        XOF: t('currency.XOF'),
+        XPF: t('currency.XPF'),
+        YER: t('currency.YER'),
+        ZAR: t('currency.ZAR'),
+        ZMW: t('currency.ZMW'),
+        ZWL: t('currency.ZWL'),
+      },
+    }}
+  >
+    window.currencyTranslations = {
+      loading: t_loading,
+      error: t_error,
+      rate: t_rate,
+      lastUpdated: t_last_updated,
+      currencies: t_currencies,
+    };
+  </script>
+
+  <script>
+    import { initCurrencyConverter } from '../../../../scripts/currency/converter';
+    initCurrencyConverter();
+  </script>
+</BasePage>

@@ -350,6 +350,10 @@ export const toolSections: ToolSection[] = [
           { url: 'convert/unit/temperature', name: 'Temperature converter', icon: 'thermometer' },
         ],
       },
+      {
+        title: 'Currency',
+        items: [{ url: 'convert/currency', name: 'Currency Converter', icon: 'banknote' }],
+      },
     ],
   },
   {
