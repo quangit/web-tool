@@ -2,6 +2,8 @@ export interface ToolItem {
   url: string;
   name: string;
   icon: string;
+  description?: string;
+  openNewWindow?: boolean;
 }
 
 export interface ToolBlock {
@@ -12,11 +14,29 @@ export interface ToolBlock {
 export interface ToolSection {
   title: string;
   blocks: ToolBlock[];
+  type: 'system' | 'user';
+}
+
+// User-defined card and item interfaces (stored in localStorage)
+export interface UserToolItem {
+  id: string;
+  icon: string;
+  title: string;
+  description: string;
+  url: string;
+  openNewWindow: boolean;
+}
+
+export interface UserCard {
+  id: string;
+  title: string;
+  items: UserToolItem[];
 }
 
 export const toolSections: ToolSection[] = [
   {
     title: 'Tools',
+    type: 'system',
     blocks: [
       {
         title: 'Popular tool',
@@ -24,6 +44,7 @@ export const toolSections: ToolSection[] = [
           { url: 'qr-code/generator', name: 'QR Code Generator', icon: 'qr-code' },
           { url: 'syntax-highlight', name: 'Syntax Highlight', icon: 'code-2' },
           { url: 's-notes', name: 'S Notes', icon: 'notebook-pen' },
+          { url: 'compare', name: 'Compare Files & Folders', icon: 'git-compare' },
         ],
       },
       {
@@ -38,6 +59,7 @@ export const toolSections: ToolSection[] = [
   },
   {
     title: 'Hash',
+    type: 'system',
     blocks: [
       { title: 'CRC', items: [{ url: 'hash/crc', name: 'CRC', icon: 'hash' }] },
       {
@@ -162,6 +184,7 @@ export const toolSections: ToolSection[] = [
   },
   {
     title: 'Cryptography',
+    type: 'system',
     blocks: [
       {
         title: 'AES',
@@ -221,6 +244,7 @@ export const toolSections: ToolSection[] = [
   },
   {
     title: 'Encoding',
+    type: 'system',
     blocks: [
       {
         title: 'Hex (Base16)',
@@ -276,6 +300,7 @@ export const toolSections: ToolSection[] = [
   },
   {
     title: 'Format',
+    type: 'system',
     blocks: [
       {
         title: 'JSON',
@@ -302,6 +327,7 @@ export const toolSections: ToolSection[] = [
   },
   {
     title: 'Convert',
+    type: 'system',
     blocks: [
       {
         title: 'Case',
@@ -319,6 +345,7 @@ export const toolSections: ToolSection[] = [
   },
   {
     title: 'Info',
+    type: 'system',
     blocks: [
       {
         title: 'About',

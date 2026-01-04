@@ -1,0 +1,256 @@
+---
+import BasePage from '../../../components/BasePage.astro';
+import BaseSettingBlock from '../../../components/BaseSettingBlock.astro';
+import { languages } from '../../../i18n/ui';
+import { useTranslations } from '../../../i18n/utils';
+import '../../../styles/compare.css';
+
+export function getStaticPaths() {
+  return Object.keys(languages).map((lang) => {
+    return { params: { lang } };
+  });
+}
+
+const { lang } = Astro.params;
+const t = useTranslations(lang as any);
+---
+
+<BasePage title={t('compare.title')} description={t('compare.description')} activePage="compare">
+  <div class="layout">
+    <div class="layout-block" style="flex: 1;">
+      <div class="compare-container">
+        <!-- Text Mode -->
+        <div id="mode-text" class="mode-content">
+          <!-- Input textareas (hidden when diff is shown) -->
+          <div class="compare-inputs" id="text-input-view">
+            <div class="input-panel">
+              <div class="panel-header">
+                <span class="panel-title">{t('compare.original')}</span>
+              </div>
+              <textarea
+                class="container"
+                id="input-left"
+                spellcheck="false"
+                placeholder={t('compare.original_placeholder')}
+                data-auto-update></textarea>
+            </div>
+            <div class="input-panel">
+              <div class="panel-header">
+                <span class="panel-title">{t('compare.modified')}</span>
+              </div>
+              <textarea
+                class="container"
+                id="input-right"
+                spellcheck="false"
+                placeholder={t('compare.modified_placeholder')}
+                data-auto-update></textarea>
+            </div>
+          </div>
+          <!-- Side-by-side diff view -->
+          <div class="diff-view-container" id="text-diff-view" style="display: none;">
+            <div class="diff-panel">
+              <div class="diff-panel-header">
+                <span>{t('compare.original')}</span>
+              </div>
+              <div class="diff-panel-content sync-scroll" id="diff-left"></div>
+            </div>
+            <div class="diff-panel">
+              <div class="diff-panel-header">
+                <span>{t('compare.modified')}</span>
+              </div>
+              <div class="diff-panel-content sync-scroll" id="diff-right"></div>
+            </div>
+          </div>
+          <div class="diff-stats-bar" id="text-stats">
+            <span class="stat-added" id="stat-added">+0 {t('compare.added')}</span>
+            <span class="stat-removed" id="stat-removed">-0 {t('compare.removed')}</span>
+            <span class="stat-unchanged" id="stat-unchanged">0 {t('compare.unchanged')}</span>
+            <button
+              class="btn btn-sm"
+              id="toggle-view-btn"
+              data-diff-text={t('compare.show_diff')}
+              data-edit-text={t('compare.edit_mode')}
+              style="margin-left: auto;">{t('compare.show_diff')}</button
+            >
+          </div>
+        </div>
+
+        <!-- File Mode -->
+        <div id="mode-file" class="mode-content" style="display: none;">
+          <!-- File input buttons - horizontal layout -->
+          <div style="display: flex; gap: 1rem; margin-bottom: 0.5rem;">
+            <div
+              style="flex: 1; display: flex; align-items: center; gap: 0.5rem; padding: 0.5rem; background: var(--bg-secondary); border-radius: 4px;"
+            >
+              <span style="font-weight: 600;">{t('compare.original_file')}</span>
+              <span
+                class="file-name"
+                id="file-name-left"
+                style="color: var(--text-secondary); flex: 1;"></span>
+              <button class="btn btn-sm" id="btn-file-left">{t('compare.choose_file')}</button>
+              <input type="file" id="file-left" style="display: none;" />
+            </div>
+            <div
+              style="flex: 1; display: flex; align-items: center; gap: 0.5rem; padding: 0.5rem; background: var(--bg-secondary); border-radius: 4px;"
+            >
+              <span style="font-weight: 600;">{t('compare.modified_file')}</span>
+              <span
+                class="file-name"
+                id="file-name-right"
+                style="color: var(--text-secondary); flex: 1;"></span>
+              <button class="btn btn-sm" id="btn-file-right">{t('compare.choose_file')}</button>
+              <input type="file" id="file-right" style="display: none;" />
+            </div>
+          </div>
+          <!-- Drop zones - side by side -->
+          <div
+            id="file-drop-zones"
+            style="display: grid; grid-template-columns: 1fr 1fr; gap: 0; margin-bottom: 0.5rem;"
+          >
+            <div
+              class="drop-zone"
+              id="drop-zone-left"
+              style="border-radius: 4px 0 0 4px; border-right: none;"
+            >
+              <div class="drop-zone-icon">📄</div>
+              <div>{t('compare.drop_file')}</div>
+            </div>
+            <div class="drop-zone" id="drop-zone-right" style="border-radius: 0 4px 4px 0;">
+              <div class="drop-zone-icon">📄</div>
+              <div>{t('compare.drop_file')}</div>
+            </div>
+          </div>
+          <!-- Side-by-side code editor with diff -->
+          <div class="code-editor-wrapper" id="file-editor-wrapper">
+            <div class="code-editor-panel">
+              <div class="code-editor sync-scroll" id="file-editor-left"></div>
+            </div>
+            <div class="code-editor-panel">
+              <div class="code-editor sync-scroll" id="file-editor-right"></div>
+            </div>
+          </div>
+          <div class="diff-stats-bar" id="file-stats">
+            <span class="stat-added" id="file-stat-added">+0 {t('compare.added')}</span>
+            <span class="stat-removed" id="file-stat-removed">-0 {t('compare.removed')}</span>
+            <span class="stat-unchanged" id="file-stat-unchanged">0 {t('compare.unchanged')}</span>
+          </div>
+        </div>
+
+        <!-- Folder Mode -->
+        <div id="mode-folder" class="mode-content" style="display: none;">
+          <div class="compare-inputs">
+            <div class="input-panel">
+              <div class="panel-header">
+                <span class="panel-title">
+                  {t('compare.original_folder')}
+                  <span class="file-name" id="folder-name-left"></span>
+                </span>
+                <div class="file-input-wrapper">
+                  <button class="btn btn-sm" id="btn-folder-left"
+                    >{t('compare.choose_folder')}</button
+                  >
+                  <input type="file" id="folder-left" multiple />
+                </div>
+              </div>
+              <div class="drop-zone" id="drop-zone-folder-left">
+                <div class="drop-zone-icon">📁</div>
+                <div>{t('compare.drop_folder')}</div>
+              </div>
+              <div id="folder-tree-left" class="folder-tree"></div>
+            </div>
+            <div class="input-panel">
+              <div class="panel-header">
+                <span class="panel-title">
+                  {t('compare.modified_folder')}
+                  <span class="file-name" id="folder-name-right"></span>
+                </span>
+                <div class="file-input-wrapper">
+                  <button class="btn btn-sm" id="btn-folder-right"
+                    >{t('compare.choose_folder')}</button
+                  >
+                  <input type="file" id="folder-right" multiple />
+                </div>
+              </div>
+              <div class="drop-zone" id="drop-zone-folder-right">
+                <div class="drop-zone-icon">📁</div>
+                <div>{t('compare.drop_folder')}</div>
+              </div>
+              <div id="folder-tree-right" class="folder-tree"></div>
+            </div>
+          </div>
+          <!-- Folder comparison result -->
+          <div class="folder-diff-output" id="folder-diff-output">
+            <div class="diff-stats-bar" id="folder-stats">
+              <span class="stat-added" id="folder-stat-added">+0 {t('compare.added')}</span>
+              <span class="stat-removed" id="folder-stat-removed">-0 {t('compare.removed')}</span>
+              <span class="stat-unchanged" id="folder-stat-unchanged"
+                >0 {t('compare.unchanged')}</span
+              >
+            </div>
+            <div class="folder-compare-result" id="folder-compare-result"></div>
+          </div>
+        </div>
+      </div>
+    </div>
+    <BaseSettingBlock title={t('settings')}>
+      <div class="setting"><a class="btn" id="execute">{t('compare.compare')}</a></div>
+      <div class="setting">
+        <label class="switcher"
+          ><input type="checkbox" value="1" id="auto-update" checked /><div class="toggle"></div>
+          <span>{t('auto_update')}</span></label
+        >
+      </div>
+      <div class="setting">
+        <label class="switcher"
+          ><input type="checkbox" value="1" id="ignore-whitespace" /><div class="toggle"></div>
+          <span>{t('compare.ignore_whitespace')}</span></label
+        >
+      </div>
+      <div class="setting">
+        <label class="switcher"
+          ><input type="checkbox" value="1" id="ignore-case" /><div class="toggle"></div>
+          <span>{t('compare.ignore_case')}</span></label
+        >
+      </div>
+      <!-- Mode Selection -->
+      <div class="setting">
+        <label for="compare-mode">{t('compare.mode')}</label>
+        <select id="compare-mode" data-auto-update>
+          <option value="text" selected>{t('compare.text_mode')}</option>
+          <option value="file">{t('compare.file_mode')}</option>
+          <option value="folder">{t('compare.folder_mode')}</option>
+        </select>
+      </div>
+    </BaseSettingBlock>
+  </div>
+
+  <!-- File Compare Modal -->
+  <div id="file-compare-modal" class="file-compare-modal hidden">
+    <div class="file-compare-modal-content">
+      <div class="file-compare-modal-header">
+        <h3 id="modal-file-title">{t('compare.compare')}</h3>
+        <button class="file-compare-modal-close" id="modal-close">&times;</button>
+      </div>
+      <div class="file-compare-modal-body">
+        <div class="diff-output" style="min-height: 200px;">
+          <div class="diff-header">
+            <span>{t('compare.diff_result')}</span>
+            <div class="diff-stats">
+              <span class="stat-added" id="modal-stat-added">+0 {t('compare.added')}</span>
+              <span class="stat-removed" id="modal-stat-removed">-0 {t('compare.removed')}</span>
+              <span class="stat-unchanged" id="modal-stat-unchanged"
+                >0 {t('compare.unchanged')}</span
+              >
+            </div>
+          </div>
+          <div class="diff-content" id="modal-diff-output"></div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <script>
+    import { initCompare } from '../../../scripts/compare/ui';
+    initCompare();
+  </script>
+</BasePage>

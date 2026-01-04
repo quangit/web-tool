@@ -711,4 +711,85 @@ export const fr = {
     'Ces bibliothèques sont activement maintenues et largement utilisées par la communauté. Vérifiez toujours la documentation et les avis de sécurité avant de les utiliser en production.',
   'jwt_libraries.algorithms': 'Algorithmes Supportés',
   'jwt_libraries.back_to_decoder': 'Retour au décodeur JWT',
+
+  // User Tools
+  'user_tools.title': 'My Custom Tools',
+  'user_tools.add_card': 'Add Card',
+  'user_tools.add_item': 'Add Item',
+  'user_tools.edit': 'Edit',
+  'user_tools.delete': 'Delete',
+  'user_tools.delete_confirm': 'Are you sure you want to delete this?',
+  'user_tools.empty': 'No custom tools yet. Click "Add Card" to create your first card!',
+
+  // Add Card Popup
+  'user_tools.popup.add_card': 'Add New Card',
+  'user_tools.popup.edit_card': 'Edit Card',
+  'user_tools.popup.card_name': 'Card Name',
+  'user_tools.popup.card_name_placeholder': 'Enter card name...',
+
+  // Add Item Popup
+  'user_tools.popup.add_item': 'Add New Item',
+  'user_tools.popup.edit_item': 'Edit Item',
+  'user_tools.popup.select_card': 'Select Card',
+  'user_tools.popup.select_card_placeholder': 'Choose a card...',
+  'user_tools.popup.icon': 'Icon',
+  'user_tools.popup.icon_placeholder': 'Click to select icon...',
+  'user_tools.popup.title': 'Title',
+  'user_tools.popup.title_placeholder': 'Enter item title...',
+  'user_tools.popup.description': 'Description',
+  'user_tools.popup.description_placeholder': 'Enter item description...',
+  'user_tools.popup.url': 'URL',
+  'user_tools.popup.url_placeholder': 'Enter URL (e.g., https://example.com)...',
+  'user_tools.popup.open_new_window': 'Open in new window',
+
+  // Common Popup Buttons
+  'user_tools.popup.save': 'Save',
+  'user_tools.popup.cancel': 'Cancel',
+
+  // Icon Picker
+  'user_tools.icon_picker.title': 'Select Icon',
+  'user_tools.icon_picker.search': 'Search icons...',
+  'user_tools.icon_picker.no_result': 'No icons found',
+
+  // External Page
+  'external.title': 'Outil Externe',
+  'external.description': 'Afficher le contenu externe dans un cadre intégré',
+  'external.back': 'Back',
+  'external.open_in_new_tab': 'Open in new tab',
+
+  // Compare
+  'compare.title': 'Comparer Fichiers et Dossiers',
+  'compare.description':
+    'Comparez texte, fichiers et dossiers côte à côte. Voyez les différences mises en évidence avec les ajouts, suppressions et modifications.',
+  'compare.mode': 'Mode',
+  'compare.text_mode': 'Texte',
+  'compare.file_mode': 'Fichier',
+  'compare.folder_mode': 'Dossier',
+  'compare.original': 'Original',
+  'compare.modified': 'Modifié',
+  'compare.original_placeholder': 'Collez le texte original ici...',
+  'compare.modified_placeholder': 'Collez le texte modifié ici...',
+  'compare.original_file': 'Fichier Original',
+  'compare.modified_file': 'Fichier Modifié',
+  'compare.original_folder': 'Dossier Original',
+  'compare.modified_folder': 'Dossier Modifié',
+  'compare.choose_file': 'Choisir Fichier',
+  'compare.choose_folder': 'Choisir Dossier',
+  'compare.drop_file': 'Déposez le fichier ici ou cliquez pour sélectionner',
+  'compare.drop_folder': 'Déposez le dossier ici ou cliquez pour sélectionner',
+  'compare.file_content_placeholder': 'Le contenu du fichier apparaîtra ici...',
+  'compare.diff_result': 'Résultat de la Comparaison',
+  'compare.added': 'ajouté',
+  'compare.removed': 'supprimé',
+  'compare.unchanged': 'inchangé',
+  'compare.compare': 'Comparer',
+  'compare.ignore_whitespace': 'Ignorer les Espaces',
+  'compare.ignore_case': 'Ignorer la Casse',
+  'compare.context_lines': 'Lignes de Contexte',
+  'compare.all_lines': 'Toutes les Lignes',
+  'compare.view_mode': "Mode d'Affichage",
+  'compare.unified': 'Unifié',
+  'compare.side_by_side': 'Côte à Côte',
+  'compare.show_diff': 'Afficher Diff',
+  'compare.edit_mode': 'Mode Édition',
 };

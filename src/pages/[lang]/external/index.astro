@@ -1,0 +1,203 @@
+---
+import BasePage from '../../../components/BasePage.astro';
+import { languages } from '../../../i18n/ui';
+import { useTranslations } from '../../../i18n/utils';
+
+export function getStaticPaths() {
+  return Object.keys(languages).map((lang) => ({ params: { lang } }));
+}
+
+const { lang = 'en' } = Astro.params;
+const t = useTranslations(lang as any);
+
+// Default values - will be updated by client-side JavaScript
+const defaultTitle = t('external.title');
+const defaultDescription = t('external.description');
+---
+
+<BasePage title={defaultTitle} description={defaultDescription} activePage="external">
+  <style>
+    #external-page {
+      display: flex;
+      flex-direction: column;
+      height: 100%;
+      overflow: hidden;
+    }
+
+    #external-iframe-container {
+      flex: 1;
+      overflow: hidden;
+      background: var(--var-bg-color);
+      border: 0;
+    }
+
+    #external-iframe {
+      width: 100%;
+      height: 100%;
+      border: none;
+    }
+
+    #external-loading {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      height: 100%;
+      color: var(--var-gray-500);
+    }
+
+    #external-error {
+      display: none;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      height: 100%;
+      padding: 40px;
+      text-align: center;
+      color: var(--var-gray-500);
+    }
+
+    #external-error.visible {
+      display: flex;
+    }
+
+    #external-error svg {
+      width: 48px;
+      height: 48px;
+      margin-bottom: 16px;
+      color: var(--var-danger, #dc3545);
+    }
+
+    #external-error h3 {
+      margin: 0 0 8px;
+      font-size: 18px;
+      color: var(--var-font-color);
+    }
+
+    #external-error p {
+      margin: 0 0 16px;
+      max-width: 400px;
+    }
+
+    #external-error .action-btn {
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+      padding: 8px 12px;
+      background: var(--var-primary);
+      color: white;
+      border: none;
+      border-radius: 6px;
+      font-size: 13px;
+      cursor: pointer;
+      text-decoration: none;
+      transition: all 0.2s;
+    }
+
+    #external-error .action-btn:hover {
+      background: var(--var-primary-dark, #0056b3);
+    }
+  </style>
+
+  <div id="external-page">
+    <div id="external-iframe-container">
+      <div id="external-loading">
+        <span>Loading...</span>
+      </div>
+      <div id="external-error">
+        <svg
+          xmlns="http://www.w3.org/2000/svg"
+          width="48"
+          height="48"
+          viewBox="0 0 24 24"
+          fill="none"
+          stroke="currentColor"
+          stroke-width="2"
+          stroke-linecap="round"
+          stroke-linejoin="round"
+          ><circle cx="12" cy="12" r="10"></circle><line x1="12" y1="8" x2="12" y2="12"></line><line
+            x1="12"
+            y1="16"
+            x2="12.01"
+            y2="16"></line></svg
+        >
+        <h3>Unable to load content</h3>
+        <p>
+          The content could not be loaded in this frame. Some websites block embedding for security
+          reasons.
+        </p>
+        <a
+          href="#"
+          target="_blank"
+          rel="noopener noreferrer"
+          class="action-btn"
+          id="error-open-btn"
+        >
+          {t('external.open_in_new_tab')}
+        </a>
+      </div>
+      <iframe id="external-iframe" style="display: none;"></iframe>
+    </div>
+  </div>
+
+  <script is:inline>
+    document.addEventListener('DOMContentLoaded', function () {
+      // Parse URL parameters from client-side
+      var params = new URLSearchParams(window.location.search);
+      var url = params.get('url') || '';
+      var title = params.get('title') || '';
+      var description = params.get('description') || '';
+
+      // Update page elements if URL params provided
+      if (title) {
+        document.title = title + ' - Web Tools';
+        // Update header title in BasePage
+        var headerTitle = document.querySelector('#content > header > h1');
+        if (headerTitle) headerTitle.textContent = title;
+      }
+      if (description) {
+        // Update header description in BasePage
+        var headerDesc = document.querySelector('#content > header > p');
+        if (headerDesc) headerDesc.textContent = description;
+      }
+
+      // Set up error open button
+      var errorOpenBtn = document.getElementById('error-open-btn');
+      if (url) {
+        errorOpenBtn.href = url;
+      }
+
+      // Load iframe
+      var iframe = document.getElementById('external-iframe');
+      var loading = document.getElementById('external-loading');
+      var errorDiv = document.getElementById('external-error');
+
+      if (!url) {
+        loading.style.display = 'none';
+        errorDiv.classList.add('visible');
+        return;
+      }
+
+      // Set up iframe load handlers
+      var loadTimeout = setTimeout(function () {
+        // If still loading after 10 seconds, assume it might be blocked
+        if (loading.style.display !== 'none' && iframe.style.display === 'none') {
+          // Don't show error yet, just keep loading indicator
+        }
+      }, 10000);
+
+      iframe.onload = function () {
+        clearTimeout(loadTimeout);
+        loading.style.display = 'none';
+        iframe.style.display = 'block';
+      };
+
+      iframe.onerror = function () {
+        loading.style.display = 'none';
+        errorDiv.classList.add('visible');
+      };
+
+      // Set iframe source
+      iframe.src = url;
+    });
+  </script>
+</BasePage>

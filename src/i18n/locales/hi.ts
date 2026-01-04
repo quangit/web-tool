@@ -712,4 +712,85 @@ export const hi = {
     'ये लाइब्रेरीज़ सक्रिय रूप से बनाए रखी जाती हैं और समुदाय द्वारा व्यापक रूप से उपयोग की जाती हैं। उत्पादन में उपयोग करने से पहले हमेशा दस्तावेज़ीकरण और सुरक्षा सलाह की जाँच करें।',
   'jwt_libraries.algorithms': 'समर्थित एल्गोरिदम',
   'jwt_libraries.back_to_decoder': 'JWT डिकोडर पर वापस जाएं',
+
+  // User Tools
+  'user_tools.title': 'My Custom Tools',
+  'user_tools.add_card': 'Add Card',
+  'user_tools.add_item': 'Add Item',
+  'user_tools.edit': 'Edit',
+  'user_tools.delete': 'Delete',
+  'user_tools.delete_confirm': 'Are you sure you want to delete this?',
+  'user_tools.empty': 'No custom tools yet. Click "Add Card" to create your first card!',
+
+  // Add Card Popup
+  'user_tools.popup.add_card': 'Add New Card',
+  'user_tools.popup.edit_card': 'Edit Card',
+  'user_tools.popup.card_name': 'Card Name',
+  'user_tools.popup.card_name_placeholder': 'Enter card name...',
+
+  // Add Item Popup
+  'user_tools.popup.add_item': 'Add New Item',
+  'user_tools.popup.edit_item': 'Edit Item',
+  'user_tools.popup.select_card': 'Select Card',
+  'user_tools.popup.select_card_placeholder': 'Choose a card...',
+  'user_tools.popup.icon': 'Icon',
+  'user_tools.popup.icon_placeholder': 'Click to select icon...',
+  'user_tools.popup.title': 'Title',
+  'user_tools.popup.title_placeholder': 'Enter item title...',
+  'user_tools.popup.description': 'Description',
+  'user_tools.popup.description_placeholder': 'Enter item description...',
+  'user_tools.popup.url': 'URL',
+  'user_tools.popup.url_placeholder': 'Enter URL (e.g., https://example.com)...',
+  'user_tools.popup.open_new_window': 'Open in new window',
+
+  // Common Popup Buttons
+  'user_tools.popup.save': 'Save',
+  'user_tools.popup.cancel': 'Cancel',
+
+  // Icon Picker
+  'user_tools.icon_picker.title': 'Select Icon',
+  'user_tools.icon_picker.search': 'Search icons...',
+  'user_tools.icon_picker.no_result': 'No icons found',
+
+  // External Page
+  'external.title': 'बाहरी उपकरण',
+  'external.description': 'एम्बेडेड फ्रेम में बाहरी सामग्री देखें',
+  'external.back': 'Back',
+  'external.open_in_new_tab': 'Open in new tab',
+
+  // Compare
+  'compare.title': 'फ़ाइलों और फ़ोल्डरों की तुलना',
+  'compare.description':
+    'टेक्स्ट, फ़ाइलों और फ़ोल्डरों की साथ-साथ तुलना करें। जोड़, हटाए और बदलावों के साथ हाइलाइट किए गए अंतर देखें।',
+  'compare.mode': 'मोड',
+  'compare.text_mode': 'टेक्स्ट',
+  'compare.file_mode': 'फ़ाइल',
+  'compare.folder_mode': 'फ़ोल्डर',
+  'compare.original': 'मूल',
+  'compare.modified': 'संशोधित',
+  'compare.original_placeholder': 'मूल टेक्स्ट यहाँ पेस्ट करें...',
+  'compare.modified_placeholder': 'संशोधित टेक्स्ट यहाँ पेस्ट करें...',
+  'compare.original_file': 'मूल फ़ाइल',
+  'compare.modified_file': 'संशोधित फ़ाइल',
+  'compare.original_folder': 'मूल फ़ोल्डर',
+  'compare.modified_folder': 'संशोधित फ़ोल्डर',
+  'compare.choose_file': 'फ़ाइल चुनें',
+  'compare.choose_folder': 'फ़ोल्डर चुनें',
+  'compare.drop_file': 'फ़ाइल यहाँ ड्रॉप करें या चुनने के लिए क्लिक करें',
+  'compare.drop_folder': 'फ़ोल्डर यहाँ ड्रॉप करें या चुनने के लिए क्लिक करें',
+  'compare.file_content_placeholder': 'फ़ाइल की सामग्री यहाँ दिखाई देगी...',
+  'compare.diff_result': 'तुलना परिणाम',
+  'compare.added': 'जोड़ा गया',
+  'compare.removed': 'हटाया गया',
+  'compare.unchanged': 'अपरिवर्तित',
+  'compare.compare': 'तुलना करें',
+  'compare.ignore_whitespace': 'रिक्त स्थान अनदेखा करें',
+  'compare.ignore_case': 'केस अनदेखा करें',
+  'compare.context_lines': 'संदर्भ पंक्तियाँ',
+  'compare.all_lines': 'सभी पंक्तियाँ',
+  'compare.view_mode': 'दृश्य मोड',
+  'compare.unified': 'एकीकृत',
+  'compare.side_by_side': 'साथ-साथ',
+  'compare.show_diff': 'अंतर दिखाएं',
+  'compare.edit_mode': 'संपादन मोड',
 };
