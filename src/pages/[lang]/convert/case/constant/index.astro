@@ -1,7 +1,7 @@
 ---
-import EncodingPage from '../../../../components/EncodingPage.astro';
-import { languages } from '../../../../i18n/ui';
-import { useTranslations } from '../../../../i18n/utils';
+import EncodingPage from '../../../../../components/EncodingPage.astro';
+import { languages } from '../../../../../i18n/ui';
+import { useTranslations } from '../../../../../i18n/utils';
 
 export function getStaticPaths() {
   return Object.keys(languages).map((lang) => {
@@ -12,12 +12,12 @@ export function getStaticPaths() {
 const { lang = 'en' } = Astro.params;
 const t = useTranslations(lang as any);
 
-const title = t('snake.title');
-const description = t('snake.description');
+const title = t('constant.title');
+const description = t('constant.description');
 const toolName = t('convert');
 const jsFile = 'change-case.min.js';
-const initScript = 'window.method = ChangeCase.snakeCase; methodLoad();';
-const activePage = 'case/snake/';
+const initScript = 'window.method = ChangeCase.constantCase; methodLoad();';
+const activePage = 'convert/case/constant/';
 const reverseLink = '';
 ---
 

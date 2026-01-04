@@ -1,0 +1,241 @@
+---
+import BasePage from '../../../../../components/BasePage.astro';
+import InputBlock from '../../../../../components/InputBlock.astro';
+import OutputBlock from '../../../../../components/OutputBlock.astro';
+import SettingBlock from '../../../../../components/SettingBlock.astro';
+import { languages } from '../../../../../i18n/ui';
+import { useTranslations } from '../../../../../i18n/utils';
+
+export function getStaticPaths() {
+  return Object.keys(languages).map((lang) => {
+    return { params: { lang } };
+  });
+}
+
+const { lang = 'en' } = Astro.params;
+const t = useTranslations(lang as any);
+
+const title = t('weight_converter.title');
+const description = t('weight_converter.description');
+const toolName = t('convert');
+const activePage = 'convert/unit/weight/';
+
+const units = [
+  { value: 'kg', label: t('weight.kg') },
+  { value: 'g', label: t('weight.g') },
+  { value: 'mg', label: t('weight.mg') },
+  { value: 't', label: t('weight.t') },
+  { value: 'lbs', label: t('weight.lbs') },
+  { value: 'oz', label: t('weight.oz') },
+  { value: 'ct', label: t('weight.ct') },
+  { value: 'ton_us', label: t('weight.ton_us') },
+  { value: 'ton_uk', label: t('weight.ton_uk') },
+  { value: 'u', label: t('weight.u') },
+  { value: 'Eg', label: t('weight.Eg') },
+  { value: 'Pg', label: t('weight.Pg') },
+  { value: 'Tg', label: t('weight.Tg') },
+  { value: 'Gg', label: t('weight.Gg') },
+  { value: 'Mg', label: t('weight.Mg') },
+  { value: 'hg', label: t('weight.hg') },
+  { value: 'dag', label: t('weight.dag') },
+  { value: 'dg', label: t('weight.dg') },
+  { value: 'cg', label: t('weight.cg') },
+  { value: 'ug', label: t('weight.ug') },
+  { value: 'ng', label: t('weight.ng') },
+  { value: 'pg', label: t('weight.pg') },
+  { value: 'fg', label: t('weight.fg') },
+  { value: 'ag', label: t('weight.ag') },
+  { value: 'dalton', label: t('weight.dalton') },
+  { value: 'kgf_s2_m', label: t('weight.kgf_s2_m') },
+  { value: 'kip', label: t('weight.kip') },
+  { value: 'slug', label: t('weight.slug') },
+  { value: 'lbf_s2_ft', label: t('weight.lbf_s2_ft') },
+  { value: 'lb_troy', label: t('weight.lb_troy') },
+  { value: 'pdl', label: t('weight.pdl') },
+  { value: 'at_us', label: t('weight.at_us') },
+  { value: 'at_uk', label: t('weight.at_uk') },
+  { value: 'kt', label: t('weight.kt') },
+  { value: 'cwt_metric', label: t('weight.cwt_metric') },
+  { value: 'cwt_us', label: t('weight.cwt_us') },
+  { value: 'cwt_uk', label: t('weight.cwt_uk') },
+  { value: 'qr_us', label: t('weight.qr_us') },
+  { value: 'qr_uk', label: t('weight.qr_uk') },
+  { value: 'stone_us', label: t('weight.stone_us') },
+  { value: 'stone_uk', label: t('weight.stone_uk') },
+  { value: 'pwt', label: t('weight.pwt') },
+  { value: 's_ap', label: t('weight.s_ap') },
+  { value: 'gr', label: t('weight.gr') },
+  { value: 'gamma', label: t('weight.gamma') },
+  { value: 'talent_hebrew', label: t('weight.talent_hebrew') },
+  { value: 'mina_hebrew', label: t('weight.mina_hebrew') },
+  { value: 'shekel_hebrew', label: t('weight.shekel_hebrew') },
+  { value: 'bekan_hebrew', label: t('weight.bekan_hebrew') },
+  { value: 'gerah_hebrew', label: t('weight.gerah_hebrew') },
+  { value: 'talent_greek', label: t('weight.talent_greek') },
+  { value: 'mina_greek', label: t('weight.mina_greek') },
+  { value: 'tetradrachma', label: t('weight.tetradrachma') },
+  { value: 'didrachma', label: t('weight.didrachma') },
+  { value: 'drachma', label: t('weight.drachma') },
+  { value: 'denarius', label: t('weight.denarius') },
+  { value: 'assarion', label: t('weight.assarion') },
+  { value: 'quadrans', label: t('weight.quadrans') },
+  { value: 'lepton', label: t('weight.lepton') },
+  { value: 'planck_mass', label: t('weight.planck_mass') },
+  { value: 'electron_mass', label: t('weight.electron_mass') },
+  { value: 'muon_mass', label: t('weight.muon_mass') },
+  { value: 'proton_mass', label: t('weight.proton_mass') },
+  { value: 'neutron_mass', label: t('weight.neutron_mass') },
+  { value: 'deuteron_mass', label: t('weight.deuteron_mass') },
+  { value: 'earth_mass', label: t('weight.earth_mass') },
+  { value: 'sun_mass', label: t('weight.sun_mass') },
+];
+---
+
+<BasePage title={title} description={description} activePage={activePage}>
+  <div class="layout">
+    <div class="layout-block">
+      <InputBlock
+        id="input"
+        title={t('input')}
+        placeholder={t('enter_here')}
+        dataRemember="input"
+        dataShare="input"
+        dataAutoUpdate={true}
+        dataToggleMonaco={false}
+      >
+        <select slot="toolbar" id="input-unit" class="select" data-auto-update>
+          {units.map((unit) => (
+            <option value={unit.value} selected={unit.value === 'lbs'}>
+              {unit.label}
+            </option>
+          ))}
+        </select>
+      </InputBlock>
+
+      <OutputBlock
+        id="output"
+        title={t('output')}
+        placeholder={t('output_placeholder')}
+        dataToggleMonaco={false}
+        isReadonly={true}
+        textareaStyle="word-break:break-all;"
+      >
+        <button slot="toolbar" class="icon" id="swaplocal" onclick="swapUnits()">
+          <i data-lucide="arrow-left-right" title="Swap" />
+        </button>
+        <select slot="toolbar" id="output-unit" class="select" data-auto-update>
+          {units.map((unit) => (
+            <option value={unit.value} selected={unit.value === 'kg'}>
+              {unit.label}
+            </option>
+          ))}
+        </select>
+      </OutputBlock>
+    </div>
+
+    <SettingBlock executeLabel={toolName} />
+  </div>
+
+  <script is:inline>
+    // Conversion factors to kilogram (base unit)
+    var toKg = {
+      kg: 1,
+      g: 0.001,
+      mg: 0.000001,
+      t: 1000,
+      lbs: 0.45359237,
+      oz: 0.028349523125,
+      ct: 0.0002,
+      ton_us: 907.18474,
+      ton_uk: 1016.0469088,
+      u: 1.66053906660e-27,
+      Eg: 1e15,
+      Pg: 1e12,
+      Tg: 1e9,
+      Gg: 1e6,
+      Mg: 1000,
+      hg: 0.1,
+      dag: 0.01,
+      dg: 0.0001,
+      cg: 0.00001,
+      ug: 1e-9,
+      ng: 1e-12,
+      pg: 1e-15,
+      fg: 1e-18,
+      ag: 1e-21,
+      dalton: 1.66053906660e-27,
+      kgf_s2_m: 9.80665,
+      kip: 453.59237,
+      slug: 14.593903,
+      lbf_s2_ft: 14.593903,
+      lb_troy: 0.3732417216,
+      pdl: 0.0140867196,
+      at_us: 0.029166666667,
+      at_uk: 0.0326666666667,
+      kt: 1e6,
+      cwt_metric: 100,
+      cwt_us: 45.359237,
+      cwt_uk: 50.80234544,
+      qr_us: 11.33980925,
+      qr_uk: 12.70058636,
+      stone_us: 5.669904625,
+      stone_uk: 6.35029318,
+      pwt: 0.00155517384,
+      s_ap: 0.0012959782,
+      gr: 0.00006479891,
+      gamma: 1e-9,
+      talent_hebrew: 34.2,
+      mina_hebrew: 0.57,
+      shekel_hebrew: 0.0114,
+      bekan_hebrew: 0.0057,
+      gerah_hebrew: 0.00057,
+      talent_greek: 26,
+      mina_greek: 0.4333333333,
+      tetradrachma: 0.01733333333,
+      didrachma: 0.008666666667,
+      drachma: 0.004333333333,
+      denarius: 0.00385,
+      assarion: 0.000240625,
+      quadrans: 0.00006015625,
+      lepton: 0.000030078125,
+      planck_mass: 2.176434e-8,
+      electron_mass: 9.1093837015e-31,
+      muon_mass: 1.883531627e-28,
+      proton_mass: 1.67262192369e-27,
+      neutron_mass: 1.67492749804e-27,
+      deuteron_mass: 3.3435837724e-27,
+      earth_mass: 5.9722e24,
+      sun_mass: 1.989e30,
+    };
+
+    function swapUnits() {
+      var inputUnit = document.getElementById('input-unit');
+      var outputUnit = document.getElementById('output-unit');
+      var inputValue = inputUnit.value;
+      inputUnit.value = outputUnit.value;
+      outputUnit.value = inputValue;
+      if (typeof runMethod === 'function') runMethod();
+    }
+
+    ++waitLoadCount;
+    delayScripts.push({
+      src: '',
+      onload: function () {
+        window.method = function convertWeight(s) {
+          var value = parseFloat(s);
+          if (isNaN(value)) return '';
+
+          var fromUnit = document.getElementById('input-unit').value;
+          var toUnit = document.getElementById('output-unit').value;
+
+          // Convert to kg first, then to target unit
+          var inKg = value * toKg[fromUnit];
+          var result = inKg / toKg[toUnit];
+
+          return result.toString();
+        };
+        methodLoad();
+      },
+    });
+  </script>
+</BasePage>

@@ -53,6 +53,7 @@ const t = useTranslations(lang as any);
     <div class="block-title">
       {title}
       <div class="toolbar">
+        <slot name="toolbar" />
         {showCopy && <CopyButton target={`#${id}`} message={copyMessage} />}
         {showFullscreen && <FullscreenButton />}
       </div>

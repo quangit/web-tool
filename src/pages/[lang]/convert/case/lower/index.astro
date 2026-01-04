@@ -1,7 +1,7 @@
 ---
-import EncodingPage from '../../../../components/EncodingPage.astro';
-import { languages } from '../../../../i18n/ui';
-import { useTranslations } from '../../../../i18n/utils';
+import EncodingPage from '../../../../../components/EncodingPage.astro';
+import { languages } from '../../../../../i18n/ui';
+import { useTranslations } from '../../../../../i18n/utils';
 
 export function getStaticPaths() {
   return Object.keys(languages).map((lang) => {
@@ -12,12 +12,12 @@ export function getStaticPaths() {
 const { lang = 'en' } = Astro.params;
 const t = useTranslations(lang as any);
 
-const title = t('kebab.title');
-const description = t('kebab.description');
+const title = t('lower.title');
+const description = t('lower.description');
 const toolName = t('convert');
-const jsFile = 'change-case.min.js';
-const initScript = 'window.method = ChangeCase.kebabCase; methodLoad();';
-const activePage = 'case/kebab/';
+const initScript =
+  'window.method = function toLowerCase(s) { return s.toLowerCase(); }; methodLoad();';
+const activePage = 'convert/case/lower/';
 const reverseLink = '';
 ---
 
@@ -25,7 +25,6 @@ const reverseLink = '';
   title={title}
   description={description}
   toolName={toolName}
-  jsFile={jsFile}
   initScript={initScript}
   activePage={activePage}
   reverseLink={reverseLink}

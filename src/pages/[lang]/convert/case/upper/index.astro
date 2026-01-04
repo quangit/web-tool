@@ -1,7 +1,7 @@
 ---
-import EncodingPage from '../../../../components/EncodingPage.astro';
-import { languages } from '../../../../i18n/ui';
-import { useTranslations } from '../../../../i18n/utils';
+import EncodingPage from '../../../../../components/EncodingPage.astro';
+import { languages } from '../../../../../i18n/ui';
+import { useTranslations } from '../../../../../i18n/utils';
 
 export function getStaticPaths() {
   return Object.keys(languages).map((lang) => {
@@ -17,7 +17,7 @@ const description = t('upper.description');
 const toolName = t('convert');
 const initScript =
   'window.method = function toUpperCase(s) { return s.toUpperCase(); }; methodLoad();';
-const activePage = 'case/upper/';
+const activePage = 'convert/case/upper/';
 const reverseLink = '';
 ---
 
