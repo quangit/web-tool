@@ -789,4 +789,12 @@ export const ja = {
   'compare.side_by_side': '並列',
   'compare.show_diff': '差分を表示',
   'compare.edit_mode': '編集モード',
+
+  // Unit Conversion - Weight
+  'pound_to_kilogram.title': 'ポンドからキログラムへの変換',
+  'pound_to_kilogram.description':
+    'ポンド（lb）をキログラム（kg）に簡単に変換できます。無料のオンライン重量変換ツール。',
+  'kilogram_to_pound.title': 'キログラムからポンドへの変換',
+  'kilogram_to_pound.description':
+    'キログラム（kg）をポンド（lb）に簡単に変換できます。無料のオンライン重量変換ツール。',
 };

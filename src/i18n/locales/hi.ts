@@ -793,4 +793,12 @@ export const hi = {
   'compare.side_by_side': 'साथ-साथ',
   'compare.show_diff': 'अंतर दिखाएं',
   'compare.edit_mode': 'संपादन मोड',
+
+  // Unit Conversion - Weight
+  'pound_to_kilogram.title': 'पाउंड से किलोग्राम कनवर्टर',
+  'pound_to_kilogram.description':
+    'पाउंड (lb) को किलोग्राम (kg) में आसानी से बदलें। मुफ्त ऑनलाइन वजन रूपांतरण उपकरण।',
+  'kilogram_to_pound.title': 'किलोग्राम से पाउंड कनवर्टर',
+  'kilogram_to_pound.description':
+    'किलोग्राम (kg) को पाउंड (lb) में आसानी से बदलें। मुफ्त ऑनलाइन वजन रूपांतरण उपकरण।',
 };

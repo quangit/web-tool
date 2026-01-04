@@ -344,6 +344,19 @@ export const toolSections: ToolSection[] = [
     ],
   },
   {
+    title: 'Unit',
+    type: 'system',
+    blocks: [
+      {
+        title: 'Weight',
+        items: [
+          { url: 'unit/pound-to-kilogram', name: 'Pound to Kilogram', icon: 'scale' },
+          { url: 'unit/kilogram-to-pound', name: 'Kilogram to Pound', icon: 'scale' },
+        ],
+      },
+    ],
+  },
+  {
     title: 'Info',
     type: 'system',
     blocks: [

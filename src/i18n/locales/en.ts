@@ -820,4 +820,12 @@ export const en = {
   'compare.side_by_side': 'Side by Side',
   'compare.show_diff': 'Show Diff',
   'compare.edit_mode': 'Edit Mode',
+
+  // Unit Conversion - Weight
+  'pound_to_kilogram.title': 'Pound to Kilogram Converter',
+  'pound_to_kilogram.description':
+    'Convert pounds (lb) to kilograms (kg) easily. Free online weight conversion tool.',
+  'kilogram_to_pound.title': 'Kilogram to Pound Converter',
+  'kilogram_to_pound.description':
+    'Convert kilograms (kg) to pounds (lb) easily. Free online weight conversion tool.',
 };

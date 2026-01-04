@@ -793,4 +793,12 @@ export const pt = {
   'compare.side_by_side': 'Lado a Lado',
   'compare.show_diff': 'Mostrar Diferenças',
   'compare.edit_mode': 'Modo Edição',
+
+  // Unit Conversion - Weight
+  'pound_to_kilogram.title': 'Conversor de Libra para Quilograma',
+  'pound_to_kilogram.description':
+    'Converta libras (lb) para quilogramas (kg) facilmente. Ferramenta gratuita de conversão de peso online.',
+  'kilogram_to_pound.title': 'Conversor de Quilograma para Libra',
+  'kilogram_to_pound.description':
+    'Converta quilogramas (kg) para libras (lb) facilmente. Ferramenta gratuita de conversão de peso online.',
 };

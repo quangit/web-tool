@@ -792,4 +792,12 @@ export const es = {
   'compare.side_by_side': 'Lado a Lado',
   'compare.show_diff': 'Mostrar Diferencias',
   'compare.edit_mode': 'Modo Edición',
+
+  // Unit Conversion - Weight
+  'pound_to_kilogram.title': 'Convertidor de Libras a Kilogramos',
+  'pound_to_kilogram.description':
+    'Convierte libras (lb) a kilogramos (kg) fácilmente. Herramienta gratuita de conversión de peso en línea.',
+  'kilogram_to_pound.title': 'Convertidor de Kilogramos a Libras',
+  'kilogram_to_pound.description':
+    'Convierte kilogramos (kg) a libras (lb) fácilmente. Herramienta gratuita de conversión de peso en línea.',
 };

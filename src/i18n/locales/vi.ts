@@ -813,4 +813,12 @@ export const vi = {
   'compare.side_by_side': 'Song song',
   'compare.show_diff': 'Xem khác biệt',
   'compare.edit_mode': 'Chế độ sửa',
+
+  // Unit Conversion - Weight
+  'pound_to_kilogram.title': 'Chuyển đổi Pound sang Kilogram',
+  'pound_to_kilogram.description':
+    'Chuyển đổi pound (lb) sang kilogram (kg) dễ dàng. Công cụ chuyển đổi trọng lượng trực tuyến miễn phí.',
+  'kilogram_to_pound.title': 'Chuyển đổi Kilogram sang Pound',
+  'kilogram_to_pound.description':
+    'Chuyển đổi kilogram (kg) sang pound (lb) dễ dàng. Công cụ chuyển đổi trọng lượng trực tuyến miễn phí.',
 };

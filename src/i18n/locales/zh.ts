@@ -778,4 +778,10 @@ export const zh = {
   'compare.side_by_side': '并排视图',
   'compare.show_diff': '显示差异',
   'compare.edit_mode': '编辑模式',
+
+  // Unit Conversion - Weight
+  'pound_to_kilogram.title': '磅转千克转换器',
+  'pound_to_kilogram.description': '轻松将磅（lb）转换为千克（kg）。免费在线重量转换工具。',
+  'kilogram_to_pound.title': '千克转磅转换器',
+  'kilogram_to_pound.description': '轻松将千克（kg）转换为磅（lb）。免费在线重量转换工具。',
 };
