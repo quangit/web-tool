@@ -14,6 +14,7 @@ export const es = {
   'sidebar.dark_mode': 'Modo oscuro',
 
   // Common
+  feedback: 'Comentarios',
   input: 'Entrada',
   output: 'Salida',
   text: 'Texto',

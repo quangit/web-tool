@@ -14,6 +14,7 @@ export const ja = {
   'sidebar.dark_mode': 'ダークモード',
 
   // Common
+  feedback: 'フィードバック',
   input: '入力',
   output: '出力',
   text: 'テキスト',

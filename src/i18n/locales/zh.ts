@@ -13,6 +13,7 @@ export const zh = {
   'sidebar.dark_mode': '深色模式',
 
   // Common
+  feedback: '反馈',
   input: '输入',
   output: '输出',
   text: '文本',

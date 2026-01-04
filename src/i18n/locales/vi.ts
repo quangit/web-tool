@@ -14,6 +14,7 @@ export const vi = {
   'sidebar.dark_mode': 'Chế độ tối',
 
   // Common
+  feedback: 'Góp ý',
   input: 'Đầu vào',
   output: 'Đầu ra',
   text: 'Văn bản',

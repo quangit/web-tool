@@ -1,13 +1,27 @@
 ---
-const { title, description } = Astro.props;
+import { useTranslations } from '../i18n/utils';
+
+interface Props {
+  title: string;
+  description: string;
+  lang?: string;
+}
+
+const { title, description, lang = 'en' } = Astro.props;
+const t = useTranslations(lang as any);
 ---
 
 <header>
   <h1>{title}</h1>
   <p>{description}</p>
   <div class="feedback-button-wrapper">
-    <button class="feedback-btn" id="feedback-btn" aria-label="Feedback/Report Bug">
-      <i data-lucide="message-square-plus"></i>
+    <button
+      class="feedback-btn"
+      id="feedback-btn"
+      aria-label="Feedback/Report Bug"
+      style="border: solid 0.1px; background-color: transparent; color: gray;"
+    >
+      <span class="feedback-text">{t('feedback')}</span>
     </button>
     <div class="feedback-dropdown" id="feedback-dropdown">
       <a
@@ -79,17 +93,34 @@ const { title, description } = Astro.props;
   }
 
   .feedback-btn {
-    background-color: transparent;
-    color: var(--text-color);
+    background-color: var(--var-primary, #3b82f6);
+    color: white;
     border: none;
-    padding: 8px;
-    border-radius: 4px;
+    padding: 8px 16px;
+    border-radius: 8px;
     cursor: pointer;
     display: flex;
+    align-items: center;
+    gap: 6px;
+    font-size: 0.9rem;
+    font-weight: 500;
+    transition: all 0.2s ease;
+    box-shadow: 0 2px 4px rgba(59, 130, 246, 0.2);
   }
 
   .feedback-btn:hover {
-    background-color: var(--hover-bg-color, rgba(0, 0, 0, 0.05));
+    background-color: var(--var-primary-dark, #2563eb);
+    transform: translateY(-1px);
+    box-shadow: 0 4px 8px rgba(59, 130, 246, 0.3);
+  }
+
+  .feedback-btn:active {
+    transform: translateY(0);
+  }
+
+  .feedback-btn i {
+    width: 16px;
+    height: 16px;
   }
 
   .feedback-dropdown {

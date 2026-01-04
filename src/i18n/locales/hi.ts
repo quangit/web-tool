@@ -14,6 +14,7 @@ export const hi = {
   'sidebar.dark_mode': 'डार्क मोड',
 
   // Common
+  feedback: 'प्रतिक्रिया',
   input: 'इनपुट',
   output: 'आउटपुट',
   text: 'टेक्स्ट',

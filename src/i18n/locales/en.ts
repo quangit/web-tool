@@ -13,6 +13,7 @@ export const en = {
   'sidebar.dark_mode': 'Dark mode',
 
   // Common
+  feedback: 'Feedback',
   input: 'Input',
   output: 'Output',
   text: 'Text',
