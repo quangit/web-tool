@@ -1,6 +1,6 @@
 /**
  * Build script for Web Tools Chrome Extension
- * 
+ *
  * This script:
  * 1. Builds the Astro app
  * 2. Copies the build output to chrome-extension/app/
@@ -11,7 +11,17 @@
  */
 
 import { execSync } from 'child_process';
-import { cpSync, rmSync, mkdirSync, existsSync, copyFileSync, readdirSync, statSync, readFileSync, writeFileSync } from 'fs';
+import {
+  cpSync,
+  rmSync,
+  mkdirSync,
+  existsSync,
+  copyFileSync,
+  readdirSync,
+  statSync,
+  readFileSync,
+  writeFileSync,
+} from 'fs';
 import { join, dirname, basename } from 'path';
 import { fileURLToPath } from 'url';
 import { createHash } from 'crypto';
@@ -39,10 +49,10 @@ mkdirSync(OUTPUT_DIR, { recursive: true });
 console.log('🔨 Step 2: Building Astro app...');
 // Astro check may exit with code 1 for warnings, so we catch and verify dist folder
 try {
-  execSync('pnpm run build', { 
-    cwd: ROOT_DIR, 
+  execSync('pnpm run build', {
+    cwd: ROOT_DIR,
     stdio: 'inherit',
-    env: { ...process.env, BUILD_FOR_EXTENSION: 'true' }
+    env: { ...process.env, BUILD_FOR_EXTENSION: 'true' },
   });
 } catch (error) {
   // Continue - will check if dist exists below
@@ -72,10 +82,7 @@ if (existsSync(webAppManifest)) {
 console.log('📋 Step 4: Copying extension files...');
 
 // Copy manifest.json
-copyFileSync(
-  join(EXTENSION_DIR, 'manifest.json'),
-  join(OUTPUT_DIR, 'manifest.json')
-);
+copyFileSync(join(EXTENSION_DIR, 'manifest.json'), join(OUTPUT_DIR, 'manifest.json'));
 
 // Copy popup folder
 const popupSrc = join(EXTENSION_DIR, 'popup');
@@ -85,10 +92,7 @@ if (existsSync(popupSrc)) {
 }
 
 // Copy background.js
-copyFileSync(
-  join(EXTENSION_DIR, 'background.js'),
-  join(OUTPUT_DIR, 'background.js')
-);
+copyFileSync(join(EXTENSION_DIR, 'background.js'), join(OUTPUT_DIR, 'background.js'));
 
 // Copy icons folder if exists
 const iconsSrc = join(EXTENSION_DIR, 'icons');
@@ -136,103 +140,103 @@ const CDN_LIBRARIES = [
   // jQuery
   {
     url: 'https://code.jquery.com/jquery-1.10.1.min.js',
-    filename: 'jquery-1.10.1.min.js'
+    filename: 'jquery-1.10.1.min.js',
   },
   // Lucide icons
   {
     url: 'https://cdn.jsdelivr.net/npm/lucide@0.469.0/dist/umd/lucide.min.js',
-    filename: 'lucide.min.js'
+    filename: 'lucide.min.js',
   },
   // Crypto libraries
   {
     url: 'https://cdnjs.cloudflare.com/ajax/libs/crypto-js/4.2.0/crypto-js.min.js',
-    filename: 'crypto-js.min.js'
+    filename: 'crypto-js.min.js',
   },
   {
     url: 'https://cdnjs.cloudflare.com/ajax/libs/js-sha1/0.7.0/sha1.min.js',
-    filename: 'sha1.min.js'
+    filename: 'sha1.min.js',
   },
   {
     url: 'https://cdnjs.cloudflare.com/ajax/libs/js-sha256/0.11.0/sha256.min.js',
-    filename: 'sha256.min.js'
+    filename: 'sha256.min.js',
   },
   {
     url: 'https://cdnjs.cloudflare.com/ajax/libs/js-sha3/0.9.3/sha3.min.js',
-    filename: 'sha3.min.js'
+    filename: 'sha3.min.js',
   },
   {
     url: 'https://cdnjs.cloudflare.com/ajax/libs/js-sha512/0.9.0/sha512.min.js',
-    filename: 'sha512.min.js'
+    filename: 'sha512.min.js',
   },
   // Highlight.js
   {
     url: 'https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.9.0/highlight.min.js',
-    filename: 'highlight-11.min.js'
+    filename: 'highlight-11.min.js',
   },
   {
     url: 'https://cdnjs.cloudflare.com/ajax/libs/highlight.js/9.5.0/highlight.min.js',
-    filename: 'highlight-9.min.js'
+    filename: 'highlight-9.min.js',
   },
   // TinyColorPicker
   {
     url: 'https://cdnjs.cloudflare.com/ajax/libs/tinyColorPicker/1.1.1/colors.min.js',
-    filename: 'colors.min.js'
+    filename: 'colors.min.js',
   },
   {
     url: 'https://cdnjs.cloudflare.com/ajax/libs/tinyColorPicker/1.1.1/jqColorPicker.min.js',
-    filename: 'jqColorPicker.min.js'
+    filename: 'jqColorPicker.min.js',
   },
   // Core-js polyfill
   {
     url: 'https://cdnjs.cloudflare.com/ajax/libs/core-js/3.33.1/minified.js',
-    filename: 'core-js.min.js'
+    filename: 'core-js.min.js',
   },
   // SQL Formatter
   {
     url: 'https://cdn.jsdelivr.net/npm/sql-formatter@15.4.7/dist/sql-formatter.min.js',
-    filename: 'sql-formatter.min.js'
+    filename: 'sql-formatter.min.js',
   },
   // Crypto API
   {
     url: 'https://nf404.github.io/crypto-api/crypto-api.min.js',
-    filename: 'crypto-api.min.js'
+    filename: 'crypto-api.min.js',
   },
   // Grapick (gradient picker)
   {
     url: 'https://artf.github.io/grapick/dist/grapick.min.js',
-    filename: 'grapick.min.js'
+    filename: 'grapick.min.js',
   },
   // JSON Viewer
   {
     url: 'https://pfau-software.de/json-viewer/dist/iife/index.js',
-    filename: 'json-viewer.min.js'
-  }
+    filename: 'json-viewer.min.js',
+  },
 ];
 
 async function downloadFile(url, destPath) {
   return new Promise((resolve, reject) => {
     const protocol = url.startsWith('https') ? https : http;
     const file = [];
-    
+
     const request = protocol.get(url, (response) => {
       // Handle redirects
       if (response.statusCode >= 300 && response.statusCode < 400 && response.headers.location) {
         downloadFile(response.headers.location, destPath).then(resolve).catch(reject);
         return;
       }
-      
+
       if (response.statusCode !== 200) {
         reject(new Error(`Failed to download ${url}: ${response.statusCode}`));
         return;
       }
-      
-      response.on('data', chunk => file.push(chunk));
+
+      response.on('data', (chunk) => file.push(chunk));
       response.on('end', () => {
         writeFileSync(destPath, Buffer.concat(file));
         resolve();
       });
     });
-    
+
     request.on('error', reject);
     request.setTimeout(30000, () => {
       request.destroy();
@@ -287,36 +291,36 @@ mkdirSync(inlineScriptsDir, { recursive: true });
 
 for (let i = 0; i < htmlFiles.length; i++) {
   const filePath = htmlFiles[i];
-  
+
   // Progress log every 100 files
   if (i > 0 && i % 100 === 0) {
     console.log(`   Processed ${i}/${htmlFiles.length} files...`);
   }
-  
+
   try {
     let content = readFileSync(filePath, 'utf-8');
     let modified = false;
-    
+
     // Fix _astro references
     if (content.includes('/_astro/')) {
       content = content.replaceAll('/_astro/', '/astro/');
       modified = true;
     }
-    
+
     // Replace CDN scripts with local versions
     const cdnReplacements = [
       // jQuery
       {
         pattern: /src=["']https:\/\/code\.jquery\.com\/jquery[^"']*\.min\.js["']/gi,
-        replacement: 'src="/js/cdn/jquery-1.10.1.min.js"'
+        replacement: 'src="/js/cdn/jquery-1.10.1.min.js"',
       },
       // Lucide
       {
         pattern: /src=["']https:\/\/unpkg\.com\/lucide@[^"']*["']/gi,
-        replacement: 'src="/js/cdn/lucide.min.js"'
-      }
+        replacement: 'src="/js/cdn/lucide.min.js"',
+      },
     ];
-    
+
     for (const cdn of cdnReplacements) {
       // Create new regex instance to avoid lastIndex issues
       const pattern = new RegExp(cdn.pattern.source, cdn.pattern.flags);
@@ -326,34 +330,34 @@ for (let i = 0; i < htmlFiles.length; i++) {
         modified = true;
       }
     }
-    
+
     // Extract inline scripts to external files (Chrome Extension CSP requirement)
     // Match <script>...</script> but NOT <script src="..."> or <script type="application/...">
     const relPath = filePath.replace(OUTPUT_DIR, '').replace(/\\/g, '/').replace(/^\//, '');
     const fileHash = createHash('md5').update(relPath).digest('hex').substring(0, 8);
     let scriptIndex = 0;
-    
+
     // Process inline scripts using a simpler, safer approach
     // First, find all script tags
     const scriptMatches = [];
     let lastIndex = 0;
-    
+
     while (true) {
       const scriptStart = content.indexOf('<script', lastIndex);
       if (scriptStart === -1) break;
-      
+
       // Check if it has src= attribute (skip external scripts)
       const tagEnd = content.indexOf('>', scriptStart);
       if (tagEnd === -1) break;
-      
+
       const openTag = content.substring(scriptStart, tagEnd + 1);
       const hasSrc = /\bsrc\s*=/.test(openTag);
       const isAppType = /type\s*=\s*["']application\//.test(openTag);
-      
+
       // Find closing tag
       const scriptEnd = content.indexOf('</script>', tagEnd);
       if (scriptEnd === -1) break;
-      
+
       if (!hasSrc && !isAppType) {
         const scriptContent = content.substring(tagEnd + 1, scriptEnd);
         const fullMatch = content.substring(scriptStart, scriptEnd + 9);
@@ -361,47 +365,51 @@ for (let i = 0; i < htmlFiles.length; i++) {
           start: scriptStart,
           end: scriptEnd + 9,
           content: scriptContent,
-          fullMatch: fullMatch
+          fullMatch: fullMatch,
         });
       }
-      
+
       lastIndex = scriptEnd + 9;
     }
-    
+
     // Process matches in reverse order to preserve indices
     for (let j = scriptMatches.length - 1; j >= 0; j--) {
       const match = scriptMatches[j];
       const trimmedContent = match.content.trim();
-      
+
       if (!trimmedContent) {
         // Remove empty scripts
         content = content.substring(0, match.start) + content.substring(match.end);
         modified = true;
         continue;
       }
-      
+
       // Generate unique filename for this inline script
       const scriptFilename = `inline-${fileHash}-${scriptIndex++}.js`;
       const scriptPath = join(inlineScriptsDir, scriptFilename);
-      
+
       // Write script content to file
       writeFileSync(scriptPath, trimmedContent, 'utf-8');
       inlineScriptCount++;
-      
+
       // Replace inline script with external reference
       const replacement = `<script src="/js/inline/${scriptFilename}"></script>`;
       content = content.substring(0, match.start) + replacement + content.substring(match.end);
       modified = true;
     }
-    
+
     // Fix internal links - add /app prefix and .html extension
     // Match href="/lang/path" where path doesn't already have extension
     const linkRegex = new RegExp(`href="/(${langPattern})/([^"#?]+)"`, 'g');
     const newContent = content.replace(linkRegex, (match, lang, pathPart) => {
       // Skip if is static asset (these stay at root level)
-      if (pathPart.startsWith('css/') || pathPart.startsWith('js/') || 
-          pathPart.startsWith('images/') || pathPart.startsWith('astro/') ||
-          pathPart.endsWith('/')) {
+      if (
+        pathPart.startsWith('css/') ||
+        pathPart.startsWith('js/') ||
+        pathPart.startsWith('images/') ||
+        pathPart.startsWith('astro/') ||
+        pathPart.endsWith('/')
+      ) {
         return match;
       }
       // Add .html extension if not present, and add /app prefix
@@ -410,12 +418,12 @@ for (let i = 0; i < htmlFiles.length; i++) {
       }
       return `href="/app/${lang}/${pathPart}.html"`;
     });
-    
+
     if (newContent !== content) {
       content = newContent;
       modified = true;
     }
-    
+
     // Fix root language links like href="/en" -> href="/app/en.html"
     const rootLangRegex = new RegExp(`href="/(${langPattern})"`, 'g');
     const finalContent = content.replace(rootLangRegex, 'href="/app/$1.html"');
@@ -423,7 +431,7 @@ for (let i = 0; i < htmlFiles.length; i++) {
       content = finalContent;
       modified = true;
     }
-    
+
     if (modified) {
       writeFileSync(filePath, content, 'utf-8');
       fixedCount++;
@@ -442,32 +450,90 @@ console.log('📋 Step 8: Replacing CDN URLs in JS files...');
 // CDN URL replacements for JS files
 const jsCdnReplacements = [
   // jQuery
-  { pattern: /["']https:\/\/code\.jquery\.com\/jquery[^"']*\.min\.js["']/g, replacement: '"/js/cdn/jquery-1.10.1.min.js"' },
+  {
+    pattern: /["']https:\/\/code\.jquery\.com\/jquery[^"']*\.min\.js["']/g,
+    replacement: '"/js/cdn/jquery-1.10.1.min.js"',
+  },
   // Crypto-js
-  { pattern: /["']https:\/\/cdnjs\.cloudflare\.com\/ajax\/libs\/crypto-js\/[^"']*\/crypto-js\.min\.js["']/g, replacement: '"/js/cdn/crypto-js.min.js"' },
+  {
+    pattern:
+      /["']https:\/\/cdnjs\.cloudflare\.com\/ajax\/libs\/crypto-js\/[^"']*\/crypto-js\.min\.js["']/g,
+    replacement: '"/js/cdn/crypto-js.min.js"',
+  },
   // SHA libraries
-  { pattern: /["']https:\/\/cdnjs\.cloudflare\.com\/ajax\/libs\/js-sha1\/[^"']*\/sha1\.min\.js["']/g, replacement: '"/js/cdn/sha1.min.js"' },
-  { pattern: /["']https:\/\/cdnjs\.cloudflare\.com\/ajax\/libs\/js-sha256\/[^"']*\/sha256\.min\.js["']/g, replacement: '"/js/cdn/sha256.min.js"' },
-  { pattern: /["']https:\/\/cdnjs\.cloudflare\.com\/ajax\/libs\/js-sha3\/[^"']*\/sha3\.min\.js["']/g, replacement: '"/js/cdn/sha3.min.js"' },
-  { pattern: /["']https:\/\/cdnjs\.cloudflare\.com\/ajax\/libs\/js-sha512\/[^"']*\/sha512\.min\.js["']/g, replacement: '"/js/cdn/sha512.min.js"' },
+  {
+    pattern:
+      /["']https:\/\/cdnjs\.cloudflare\.com\/ajax\/libs\/js-sha1\/[^"']*\/sha1\.min\.js["']/g,
+    replacement: '"/js/cdn/sha1.min.js"',
+  },
+  {
+    pattern:
+      /["']https:\/\/cdnjs\.cloudflare\.com\/ajax\/libs\/js-sha256\/[^"']*\/sha256\.min\.js["']/g,
+    replacement: '"/js/cdn/sha256.min.js"',
+  },
+  {
+    pattern:
+      /["']https:\/\/cdnjs\.cloudflare\.com\/ajax\/libs\/js-sha3\/[^"']*\/sha3\.min\.js["']/g,
+    replacement: '"/js/cdn/sha3.min.js"',
+  },
+  {
+    pattern:
+      /["']https:\/\/cdnjs\.cloudflare\.com\/ajax\/libs\/js-sha512\/[^"']*\/sha512\.min\.js["']/g,
+    replacement: '"/js/cdn/sha512.min.js"',
+  },
   // Highlight.js
-  { pattern: /["']https:\/\/cdnjs\.cloudflare\.com\/ajax\/libs\/highlight\.js\/11\.[^"']*\/highlight\.min\.js["']/g, replacement: '"/js/cdn/highlight-11.min.js"' },
-  { pattern: /["']https:\/\/cdnjs\.cloudflare\.com\/ajax\/libs\/highlight\.js\/9\.[^"']*\/highlight\.min\.js["']/g, replacement: '"/js/cdn/highlight-9.min.js"' },
+  {
+    pattern:
+      /["']https:\/\/cdnjs\.cloudflare\.com\/ajax\/libs\/highlight\.js\/11\.[^"']*\/highlight\.min\.js["']/g,
+    replacement: '"/js/cdn/highlight-11.min.js"',
+  },
+  {
+    pattern:
+      /["']https:\/\/cdnjs\.cloudflare\.com\/ajax\/libs\/highlight\.js\/9\.[^"']*\/highlight\.min\.js["']/g,
+    replacement: '"/js/cdn/highlight-9.min.js"',
+  },
   // TinyColorPicker
-  { pattern: /["']https:\/\/cdnjs\.cloudflare\.com\/ajax\/libs\/tinyColorPicker\/[^"']*\/colors\.min\.js["']/g, replacement: '"/js/cdn/colors.min.js"' },
-  { pattern: /["']https:\/\/cdnjs\.cloudflare\.com\/ajax\/libs\/tinyColorPicker\/[^"']*\/jqColorPicker\.min\.js["']/g, replacement: '"/js/cdn/jqColorPicker.min.js"' },
+  {
+    pattern:
+      /["']https:\/\/cdnjs\.cloudflare\.com\/ajax\/libs\/tinyColorPicker\/[^"']*\/colors\.min\.js["']/g,
+    replacement: '"/js/cdn/colors.min.js"',
+  },
+  {
+    pattern:
+      /["']https:\/\/cdnjs\.cloudflare\.com\/ajax\/libs\/tinyColorPicker\/[^"']*\/jqColorPicker\.min\.js["']/g,
+    replacement: '"/js/cdn/jqColorPicker.min.js"',
+  },
   // Core-js polyfill
-  { pattern: /["']https:\/\/cdnjs\.cloudflare\.com\/ajax\/libs\/core-js\/[^"']*\/minified\.js["']/g, replacement: '"/js/cdn/core-js.min.js"' },
+  {
+    pattern: /["']https:\/\/cdnjs\.cloudflare\.com\/ajax\/libs\/core-js\/[^"']*\/minified\.js["']/g,
+    replacement: '"/js/cdn/core-js.min.js"',
+  },
   // Lucide
-  { pattern: /["']https:\/\/unpkg\.com\/lucide@[^"']*["']/g, replacement: '"/js/cdn/lucide.min.js"' },
+  {
+    pattern: /["']https:\/\/unpkg\.com\/lucide@[^"']*["']/g,
+    replacement: '"/js/cdn/lucide.min.js"',
+  },
   // SQL Formatter
-  { pattern: /["']https:\/\/cdn\.jsdelivr\.net\/npm\/sql-formatter@[^"']*\/dist\/sql-formatter\.min\.js["']/g, replacement: '"/js/cdn/sql-formatter.min.js"' },
+  {
+    pattern:
+      /["']https:\/\/cdn\.jsdelivr\.net\/npm\/sql-formatter@[^"']*\/dist\/sql-formatter\.min\.js["']/g,
+    replacement: '"/js/cdn/sql-formatter.min.js"',
+  },
   // Crypto API
-  { pattern: /["']https:\/\/nf404\.github\.io\/crypto-api\/crypto-api\.min\.js["']/g, replacement: '"/js/cdn/crypto-api.min.js"' },
+  {
+    pattern: /["']https:\/\/nf404\.github\.io\/crypto-api\/crypto-api\.min\.js["']/g,
+    replacement: '"/js/cdn/crypto-api.min.js"',
+  },
   // Grapick
-  { pattern: /["']https:\/\/artf\.github\.io\/grapick\/dist\/grapick\.min\.js["']/g, replacement: '"/js/cdn/grapick.min.js"' },
+  {
+    pattern: /["']https:\/\/artf\.github\.io\/grapick\/dist\/grapick\.min\.js["']/g,
+    replacement: '"/js/cdn/grapick.min.js"',
+  },
   // JSON Viewer
-  { pattern: /["']https:\/\/pfau-software\.de\/json-viewer\/dist\/iife\/index\.js["']/g, replacement: '"/js/cdn/json-viewer.min.js"' },
+  {
+    pattern: /["']https:\/\/pfau-software\.de\/json-viewer\/dist\/iife\/index\.js["']/g,
+    replacement: '"/js/cdn/json-viewer.min.js"',
+  },
 ];
 
 function getAllJsFiles(dir, fileList = []) {
@@ -488,18 +554,18 @@ const jsDir = join(OUTPUT_DIR, 'js');
 if (existsSync(jsDir)) {
   const jsFiles = getAllJsFiles(jsDir);
   let jsFixedCount = 0;
-  
+
   for (const jsFilePath of jsFiles) {
     try {
       let jsContent = readFileSync(jsFilePath, 'utf-8');
       const originalContent = jsContent;
-      
+
       for (const repl of jsCdnReplacements) {
         // Create new regex instance to avoid lastIndex issues with global flag
         const pattern = new RegExp(repl.pattern.source, repl.pattern.flags);
         jsContent = jsContent.replace(pattern, repl.replacement);
       }
-      
+
       if (jsContent !== originalContent) {
         writeFileSync(jsFilePath, jsContent, 'utf-8');
         jsFixedCount++;
@@ -508,7 +574,7 @@ if (existsSync(jsDir)) {
       console.error(`   Error processing JS file ${jsFilePath}: ${err.message}`);
     }
   }
-  
+
   console.log(`   ✓ Fixed CDN URLs in ${jsFixedCount} JS files`);
 }
 

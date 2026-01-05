@@ -1,0 +1,603 @@
+---
+import BasePage from '../../../components/BasePage.astro';
+import { languages } from '../../../i18n/ui';
+import { useTranslations } from '../../../i18n/utils';
+
+export function getStaticPaths() {
+  return Object.keys(languages).map((lang) => {
+    return { params: { lang } };
+  });
+}
+
+const { lang = 'en' } = Astro.params;
+const t = useTranslations(lang as any);
+
+const title = t('image_edit.title');
+const description = t('image_edit.description');
+const activePage = 'image/edit';
+
+// Map language codes for filerobot-image-editor
+const langMap: Record<string, string> = {
+  en: 'en',
+  vi: 'vi',
+  es: 'es',
+  fr: 'fr',
+  zh: 'zh',
+  hi: 'hi',
+  ja: 'ja',
+  pt: 'pt',
+};
+const editorLang = langMap[lang] || 'en';
+---
+
+<BasePage title={title} description={description} activePage={activePage}>
+  <div
+    class="layout"
+    data-error-invalid-file={t('image_edit.error_invalid_file')}
+    data-lang={editorLang}
+  >
+    <div class="editor-wrapper">
+      <div class="drop-zone" id="drop-zone">
+        <div class="drop-zone-content" id="drop-zone-content">
+          <i data-lucide="upload-cloud" class="upload-icon"></i>
+          <p>{t('drag_drop')}</p>
+          <button class="btn upload-btn" id="upload-btn">{t('image_edit.upload_image')}</button>
+        </div>
+        <input type="file" id="file-input" accept="image/*" hidden />
+      </div>
+      <div id="editor-container" style="display: none;"></div>
+    </div>
+  </div>
+
+  <script is:inline>
+    document.addEventListener('DOMContentLoaded', function () {
+      // Load filerobot-image-editor from CDN
+      var script = document.createElement('script');
+      script.src =
+        'https://scaleflex.cloudimg.io/v7/plugins/filerobot-image-editor/latest/filerobot-image-editor.min.js';
+      script.onload = initEditor;
+      document.head.appendChild(script);
+    });
+
+    function initEditor() {
+      var layout = document.querySelector('.layout');
+      var errorInvalidFile =
+        layout?.getAttribute('data-error-invalid-file') || 'Please upload an image file';
+      var editorLang = layout?.getAttribute('data-lang') || 'en';
+
+      var dropZone = document.getElementById('drop-zone');
+      var dropZoneContent = document.getElementById('drop-zone-content');
+      var fileInput = document.getElementById('file-input');
+      var editorContainer = document.getElementById('editor-container');
+      var uploadBtn = document.getElementById('upload-btn');
+
+      var filerobotEditor = null;
+      var currentImageSrc = null;
+      var currentFileName = null;
+
+      // Theme change observer - reinitialize editor with new theme colors
+      var themeObserver = new MutationObserver(function (mutations) {
+        mutations.forEach(function (mutation) {
+          if (mutation.attributeName === 'class' && filerobotEditor && currentImageSrc) {
+            // Re-open editor with new theme
+            setTimeout(function () {
+              openEditor(currentImageSrc, currentFileName);
+            }, 100);
+          }
+        });
+      });
+      themeObserver.observe(document.documentElement, { attributes: true });
+
+      // Drag and Drop handlers
+      dropZone?.addEventListener('click', function (e) {
+        if (e.target === dropZone || dropZoneContent?.contains(e.target)) {
+          fileInput?.click();
+        }
+      });
+
+      uploadBtn?.addEventListener('click', function (e) {
+        e.stopPropagation();
+        fileInput?.click();
+      });
+
+      dropZone?.addEventListener('dragover', function (e) {
+        e.preventDefault();
+        dropZone.classList.add('drag-over');
+      });
+
+      dropZone?.addEventListener('dragleave', function () {
+        dropZone.classList.remove('drag-over');
+      });
+
+      dropZone?.addEventListener('drop', function (e) {
+        e.preventDefault();
+        dropZone.classList.remove('drag-over');
+        if (e.dataTransfer?.files.length) {
+          handleFile(e.dataTransfer.files[0]);
+        }
+      });
+
+      fileInput?.addEventListener('change', function (e) {
+        if (e.target.files.length) {
+          handleFile(e.target.files[0]);
+        }
+      });
+
+      function handleFile(file) {
+        if (!file.type.startsWith('image/')) {
+          alert(errorInvalidFile);
+          return;
+        }
+
+        var reader = new FileReader();
+        reader.onload = function (e) {
+          openEditor(e.target?.result, file.name);
+        };
+        reader.readAsDataURL(file);
+      }
+
+      function openEditor(imageSrc, fileName) {
+        // Store current image for theme change re-initialization
+        currentImageSrc = imageSrc;
+        currentFileName = fileName;
+
+        // Hide drop zone and show editor
+        dropZone.style.display = 'none';
+        editorContainer.style.display = 'block';
+
+        // Terminate previous editor if exists
+        if (filerobotEditor) {
+          filerobotEditor.terminate();
+        }
+
+        var FilerobotImageEditor = window.FilerobotImageEditor;
+        var TABS = FilerobotImageEditor.TABS;
+        var TOOLS = FilerobotImageEditor.TOOLS;
+
+        // Get filename without extension for default save name
+        var defaultFileName = fileName ? fileName.replace(/\.[^/.]+$/, '') : 'edited-image';
+
+        // Theme customization for dark mode support
+        // Get computed styles to pass actual color values to filerobot
+        var isDarkTheme = document.documentElement.classList.contains('dark-theme');
+
+        var theme = {
+          palette: {
+            'bg-secondary': isDarkTheme ? '#0f172a' : '#f9fafb',
+            'bg-primary': isDarkTheme ? '#334155' : '#ffffff',
+            'bg-primary-active': isDarkTheme ? '#475569' : '#e5e7eb',
+            'accent-primary': '#3b82f6',
+            'accent-primary-active': '#2563eb',
+            'icons-primary': isDarkTheme ? '#ffffff' : '#111827',
+            'icons-secondary': isDarkTheme ? '#e2e8f0' : '#6b7280',
+            'borders-secondary': isDarkTheme ? '#475569' : '#e5e7eb',
+            'borders-primary': isDarkTheme ? '#475569' : '#e5e7eb',
+            'borders-strong': isDarkTheme ? '#64748b' : '#d1d5db',
+            'light-shadow': isDarkTheme ? 'rgba(0, 0, 0, 0.5)' : 'rgba(0, 0, 0, 0.1)',
+            'txt-primary': isDarkTheme ? '#ffffff' : '#111827',
+            'txt-secondary': isDarkTheme ? '#e2e8f0' : '#6b7280',
+            'txt-primary-invert': isDarkTheme ? '#0f172a' : '#ffffff',
+            'btn-primary-text': '#ffffff',
+            error: '#ef4444',
+            warning: '#f59e0b',
+            link: '#60a5fa',
+          },
+          typography: {
+            fontFamily:
+              '-apple-system, BlinkMacSystemFont, "Segoe UI", "Inter", system-ui, sans-serif',
+          },
+        };
+
+        var config = {
+          source: imageSrc,
+          language: editorLang,
+          useBackendTranslations: true,
+          defaultSavedImageName: defaultFileName,
+          defaultSavedImageType: 'png',
+          defaultSavedImageQuality: 0.92,
+          avoidChangesNotSavedAlertOnLeave: false,
+          showBackButton: true,
+          savingPixelRatio: 4,
+          previewPixelRatio: window.devicePixelRatio || 1,
+          theme: theme,
+
+          // Enable all tabs
+          tabsIds: [
+            TABS.ADJUST,
+            TABS.FINETUNE,
+            TABS.FILTERS,
+            TABS.ANNOTATE,
+            TABS.WATERMARK,
+            TABS.RESIZE,
+          ],
+          defaultTabId: TABS.ADJUST,
+          defaultToolId: TOOLS.CROP,
+
+          // Annotation common settings
+          annotationsCommon: {
+            fill: '#ff0000',
+            stroke: '#ff0000',
+            strokeWidth: 2,
+            shadowOffsetX: 0,
+            shadowOffsetY: 0,
+            shadowBlur: 0,
+            shadowColor: '#000000',
+            shadowOpacity: 1,
+            opacity: 1,
+          },
+
+          // Text annotation settings
+          Text: {
+            text: 'Text',
+            fontFamily: 'Arial',
+            fonts: [
+              { label: 'Arial', value: 'Arial' },
+              { label: 'Tahoma', value: 'Tahoma' },
+              { label: 'Sans-serif', value: 'Sans-serif' },
+              { label: 'Serif', value: 'Serif' },
+              { label: 'Courier New', value: 'Courier New' },
+              { label: 'Times New Roman', value: 'Times New Roman' },
+              { label: 'Georgia', value: 'Georgia' },
+              { label: 'Verdana', value: 'Verdana' },
+              { label: 'Impact', value: 'Impact' },
+            ],
+            fontSize: 28,
+            letterSpacing: 0,
+            lineHeight: 1,
+            align: 'left',
+            fontStyle: 'normal',
+          },
+
+          // Image annotation settings
+          Image: {
+            fill: undefined,
+            disableUpload: false,
+          },
+
+          // Rectangle settings
+          Rect: {
+            cornerRadius: 0,
+          },
+
+          // Polygon settings
+          Polygon: {
+            sides: 3,
+          },
+
+          // Pen settings
+          Pen: {
+            strokeWidth: 5,
+            tension: 0.5,
+            lineCap: 'round',
+            selectAnnotationAfterDrawing: true,
+          },
+
+          // Line settings
+          Line: {
+            lineCap: 'round',
+            strokeWidth: 5,
+          },
+
+          // Arrow settings
+          Arrow: {
+            strokeWidth: 6,
+            lineCap: 'round',
+            pointerLength: undefined,
+            pointerWidth: undefined,
+          },
+
+          // Watermark settings
+          Watermark: {
+            gallery: [],
+            textScalingRatio: 0.33,
+            imageScalingRatio: 0.33,
+            hideTextWatermark: false,
+          },
+
+          // Rotate settings
+          Rotate: {
+            angle: 90,
+            componentType: 'slider',
+          },
+
+          // Crop settings with presets
+          Crop: {
+            minWidth: 10,
+            minHeight: 10,
+            maxWidth: null,
+            maxHeight: null,
+            ratio: 'original',
+            noPresets: false,
+            autoResize: false,
+            presetsItems: [
+              {
+                titleKey: 'classicTv',
+                descriptionKey: '4:3',
+                ratio: 4 / 3,
+              },
+              {
+                titleKey: 'cinemascope',
+                descriptionKey: '21:9',
+                ratio: 21 / 9,
+              },
+            ],
+            presetsFolders: [
+              {
+                titleKey: 'socialMedia',
+                groups: [
+                  {
+                    titleKey: 'facebook',
+                    items: [
+                      {
+                        titleKey: 'profile',
+                        width: 180,
+                        height: 180,
+                        descriptionKey: '180x180',
+                      },
+                      {
+                        titleKey: 'coverPhoto',
+                        width: 820,
+                        height: 312,
+                        descriptionKey: '820x312',
+                      },
+                    ],
+                  },
+                  {
+                    titleKey: 'instagram',
+                    items: [
+                      {
+                        titleKey: 'post',
+                        width: 1080,
+                        height: 1080,
+                        descriptionKey: '1080x1080',
+                      },
+                      {
+                        titleKey: 'story',
+                        width: 1080,
+                        height: 1920,
+                        descriptionKey: '1080x1920',
+                      },
+                    ],
+                  },
+                  {
+                    titleKey: 'twitter',
+                    items: [
+                      {
+                        titleKey: 'profile',
+                        width: 400,
+                        height: 400,
+                        descriptionKey: '400x400',
+                      },
+                      {
+                        titleKey: 'header',
+                        width: 1500,
+                        height: 500,
+                        descriptionKey: '1500x500',
+                      },
+                    ],
+                  },
+                ],
+              },
+            ],
+          },
+
+          // Callbacks
+          onSave: function (editedImageObject, designState) {
+            // Download the edited image
+            var link = document.createElement('a');
+            link.download = editedImageObject.fullName || 'edited-image.png';
+            link.href = editedImageObject.imageBase64;
+            document.body.appendChild(link);
+            link.click();
+            document.body.removeChild(link);
+
+            console.log('Image saved:', editedImageObject);
+            return Promise.resolve();
+          },
+
+          onClose: function (closingReason, haveNotSavedChanges) {
+            console.log('Editor closed:', closingReason, 'Unsaved changes:', haveNotSavedChanges);
+            // Return to upload view
+            editorContainer.style.display = 'none';
+            dropZone.style.display = 'flex';
+            // Reset file input and stored image
+            fileInput.value = '';
+            currentImageSrc = null;
+            currentFileName = null;
+          },
+
+          onModify: function (currentImageDesignState) {
+            // Called after any operation
+          },
+        };
+
+        filerobotEditor = new FilerobotImageEditor(editorContainer, config);
+
+        filerobotEditor.render({
+          onClose: function (closingReason) {
+            console.log('Closing reason', closingReason);
+            // Return to upload view
+            editorContainer.style.display = 'none';
+            dropZone.style.display = 'flex';
+            fileInput.value = '';
+            currentImageSrc = null;
+            currentFileName = null;
+          },
+        });
+      }
+    }
+  </script>
+
+  <style>
+    .layout {
+      display: flex;
+      flex-direction: column;
+      gap: 16px;
+      height: calc(100vh - 120px);
+      min-height: 600px;
+    }
+
+    .editor-wrapper {
+      flex: 1;
+      display: flex;
+      flex-direction: column;
+      background: var(--var-main-bg-color);
+      border-radius: 8px;
+      overflow: hidden;
+      box-shadow: var(--var-shadow);
+    }
+
+    .drop-zone {
+      flex: 1;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      border: 2px dashed var(--var-border-color);
+      border-radius: 8px;
+      margin: 16px;
+      cursor: pointer;
+      transition: all 0.3s ease;
+    }
+
+    .drop-zone:hover,
+    .drop-zone.drag-over {
+      border-color: var(--var-primary);
+      background: var(--var-title-bg-color);
+    }
+
+    .drop-zone-content {
+      text-align: center;
+      padding: 40px;
+      color: var(--text-secondary);
+    }
+
+    .upload-icon {
+      width: 64px;
+      height: 64px;
+      color: var(--var-primary);
+      margin-bottom: 16px;
+    }
+
+    .drop-zone-content p {
+      margin-bottom: 20px;
+      font-size: 1rem;
+      line-height: 1.5;
+      max-width: 400px;
+    }
+
+    .upload-btn {
+      padding: 12px 32px;
+      font-size: 1rem;
+    }
+
+    #editor-container {
+      width: 100%;
+      height: 100%;
+      min-height: 600px;
+    }
+
+    /* Override filerobot styles for better dark mode compatibility */
+    :global(.FIE_root) {
+      height: 100% !important;
+    }
+
+    :global(.FIE_canvas-container) {
+      background: var(--var-main-bg-color) !important;
+    }
+
+    /* Dark theme overrides for tab buttons */
+    :global(html.dark-theme .FIE_tabs-wrapper button),
+    :global(html.dark-theme .FIE_tab),
+    :global(html.dark-theme .SfxButton-root),
+    :global(html.dark-theme [class*='StyledTabItem']) {
+      background-color: #334155 !important;
+      color: #e2e8f0 !important;
+    }
+
+    :global(html.dark-theme .FIE_tabs-wrapper button:hover),
+    :global(html.dark-theme .FIE_tab:hover),
+    :global(html.dark-theme .SfxButton-root:hover),
+    :global(html.dark-theme [class*='StyledTabItem']:hover) {
+      background-color: #475569 !important;
+    }
+
+    :global(html.dark-theme .FIE_tabs-wrapper button[aria-selected='true']),
+    :global(html.dark-theme .FIE_tab[aria-selected='true']),
+    :global(html.dark-theme [class*='StyledTabItem'][class*='active']) {
+      background-color: #3b82f6 !important;
+      color: #ffffff !important;
+    }
+
+    /* Override white backgrounds in dark theme */
+    :global(html.dark-theme .FIE_root [style*='background'][style*='rgb(255, 255, 255)']),
+    :global(html.dark-theme .FIE_root [style*='background'][style*='#fff']),
+    :global(html.dark-theme .FIE_root [style*='background'][style*='#ffffff']) {
+      background-color: #334155 !important;
+    }
+
+    /* Dark theme overrides for input fields */
+    :global(html.dark-theme .FIE_root input),
+    :global(html.dark-theme .FIE_root input[type='text']),
+    :global(html.dark-theme .FIE_root input[type='number']),
+    :global(html.dark-theme .FIE_root textarea),
+    :global(html.dark-theme .FIE_root select),
+    :global(html.dark-theme .FIE_root [class*='Input']),
+    :global(html.dark-theme .FIE_root [class*='TextField']),
+    :global(html.dark-theme .FIE_root [class*='StyledInput']) {
+      background-color: #1e293b !important;
+      color: #e2e8f0 !important;
+      border-color: #475569 !important;
+    }
+
+    :global(html.dark-theme .FIE_root input:focus),
+    :global(html.dark-theme .FIE_root textarea:focus),
+    :global(html.dark-theme .FIE_root select:focus) {
+      background-color: #1e293b !important;
+      border-color: #3b82f6 !important;
+      outline-color: #3b82f6 !important;
+    }
+
+    /* Dark theme overrides for labels and text */
+    :global(html.dark-theme .FIE_root label),
+    :global(html.dark-theme .FIE_root [class*='Label']),
+    :global(html.dark-theme .FIE_root [class*='Text']) {
+      color: #e2e8f0 !important;
+    }
+
+    /* Dark theme for dropdown/select menus */
+    :global(html.dark-theme .FIE_root [class*='Menu']),
+    :global(html.dark-theme .FIE_root [class*='Dropdown']),
+    :global(html.dark-theme .FIE_root [class*='Popover']),
+    :global(html.dark-theme .FIE_root [class*='Modal']) {
+      background-color: #1e293b !important;
+      border-color: #475569 !important;
+    }
+
+    /* Dark theme for panels and containers */
+    :global(html.dark-theme .FIE_root [class*='Panel']),
+    :global(html.dark-theme .FIE_root [class*='Container']:not(.FIE_canvas-container)),
+    :global(html.dark-theme .FIE_root [class*='Wrapper']),
+    :global(html.dark-theme .FIE_root [class*='Box']) {
+      background-color: transparent !important;
+    }
+
+    @media (max-width: 768px) {
+      .layout {
+        height: auto;
+        min-height: calc(100vh - 120px);
+      }
+
+      .drop-zone-content {
+        padding: 20px;
+      }
+
+      .drop-zone-content p {
+        font-size: 0.9rem;
+      }
+
+      #editor-container {
+        min-height: 500px;
+      }
+    }
+  </style>
+</BasePage>

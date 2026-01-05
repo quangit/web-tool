@@ -163,6 +163,15 @@ export const ja = {
   'image_optimize.optimized_size': '最適化されたサイズ',
   'image_optimize.compression_ratio': '圧縮率',
 
+  // Image Edit
+  'image_edit.title': '画像を編集',
+  'image_edit.description':
+    'クロップ、リサイズ、回転、フィルター、注釈、透かしなどを備えたプロフェッショナルな画像エディター。無料のオンライン画像編集ツール。',
+  'image_edit.upload_image': '画像をアップロード',
+  'image_edit.error_invalid_file': '画像ファイルをアップロードしてください',
+  'image_edit.saving': '保存中...',
+  'image_edit.saved': '画像が正常に保存されました',
+
   // CRC
   'crc.title': 'CRC 計算機',
   'crc.description': 'CRC チェックサムを計算します。無料のオンライン CRC 計算ツール。',

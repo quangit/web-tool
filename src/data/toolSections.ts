@@ -51,6 +51,7 @@ export const toolSections: ToolSection[] = [
       {
         title: 'Images',
         items: [
+          { url: 'image/edit', name: 'Edit Image', icon: 'image' },
           { url: 'image/resize', name: 'Resize Image', icon: 'scale' },
           { url: 'image/optimize', name: 'Optimize Image', icon: 'zap' },
           { url: 'image/crop-rotate', name: 'Crop & Rotate Image', icon: 'crop' },

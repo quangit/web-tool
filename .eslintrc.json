@@ -47,6 +47,8 @@
     "node_modules",
     ".astro",
     "public/js/**",
-    "src/pages/**/cryptography/**"
+    "src/pages/**/cryptography/**",
+    "chrome-extension",
+    "chrome-extension-build"
   ]
 }

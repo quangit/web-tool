@@ -163,6 +163,15 @@ export const pt = {
   'image_optimize.optimized_size': 'Tamanho Otimizado',
   'image_optimize.compression_ratio': 'Taxa de Compressão',
 
+  // Image Edit
+  'image_edit.title': 'Editar Imagem',
+  'image_edit.description':
+    "Editor de imagens profissional com recorte, redimensionamento, rotação, filtros, anotações, marca d'água e muito mais. Ferramenta gratuita de edição de imagens online.",
+  'image_edit.upload_image': 'Carregar Imagem',
+  'image_edit.error_invalid_file': 'Por favor, carregue um arquivo de imagem',
+  'image_edit.saving': 'Salvando...',
+  'image_edit.saved': 'Imagem salva com sucesso',
+
   // CRC
   'crc.title': 'Calculadora CRC',
   'crc.description':

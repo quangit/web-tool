@@ -163,6 +163,15 @@ export const hi = {
   'image_optimize.optimized_size': 'अनुकूलित आकार',
   'image_optimize.compression_ratio': 'संपीड़न अनुपात',
 
+  // Image Edit
+  'image_edit.title': 'इमेज संपादित करें',
+  'image_edit.description':
+    'क्रॉप, रिसाइज़, रोटेट, फ़िल्टर, एनोटेशन, वॉटरमार्क और बहुत कुछ के साथ पेशेवर इमेज एडिटर। मुफ्त ऑनलाइन इमेज एडिटिंग टूल।',
+  'image_edit.upload_image': 'इमेज अपलोड करें',
+  'image_edit.error_invalid_file': 'कृपया एक इमेज फ़ाइल अपलोड करें',
+  'image_edit.saving': 'सहेजा जा रहा है...',
+  'image_edit.saved': 'इमेज सफलतापूर्वक सहेजी गई',
+
   // CRC
   'crc.title': 'CRC कैलकुलेटर',
   'crc.description': 'CRC चेकसम की गणना करें। मुफ्त ऑनलाइन CRC कैलकुलेटर टूल।',

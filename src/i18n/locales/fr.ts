@@ -163,6 +163,15 @@ export const fr = {
   'image_optimize.optimized_size': 'Taille Optimisée',
   'image_optimize.compression_ratio': 'Taux de Compression',
 
+  // Image Edit
+  'image_edit.title': 'Éditer Image',
+  'image_edit.description':
+    "Éditeur d'images professionnel avec recadrage, redimensionnement, rotation, filtres, annotations, filigrane et plus encore. Outil gratuit d'édition d'images en ligne.",
+  'image_edit.upload_image': 'Télécharger Image',
+  'image_edit.error_invalid_file': 'Veuillez télécharger un fichier image',
+  'image_edit.saving': 'Enregistrement...',
+  'image_edit.saved': 'Image enregistrée avec succès',
+
   // CRC
   'crc.title': 'Calculateur CRC',
   'crc.description': 'Calculer les sommes de contrôle CRC. Outil de calcul CRC en ligne gratuit.',

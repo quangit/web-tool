@@ -7,3 +7,5 @@ package-lock.json
 *.min.css
 public/js/**
 public/css/**/*.min.css
+chrome-extension
+chrome-extension-build

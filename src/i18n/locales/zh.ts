@@ -168,6 +168,15 @@ export const zh = {
   'image_optimize.optimized_size': '优化大小',
   'image_optimize.compression_ratio': '压缩比',
 
+  // Image Edit
+  'image_edit.title': '编辑图片',
+  'image_edit.description':
+    '专业图片编辑器，支持裁剪、调整大小、旋转、滤镜、标注、水印等功能。免费在线图片编辑工具。',
+  'image_edit.upload_image': '上传图片',
+  'image_edit.error_invalid_file': '请上传图片文件',
+  'image_edit.saving': '保存中...',
+  'image_edit.saved': '图片保存成功',
+
   // CRC
   'crc.title': 'CRC 计算器',
   'crc.description': '计算 CRC 校验和。免费在线 CRC 计算器工具。',

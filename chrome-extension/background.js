@@ -124,7 +124,7 @@ function createContextMenus() {
 chrome.contextMenus.onClicked.addListener((info, tab) => {
   const selectedText = info.selectionText;
   
-  if (!selectedText) return;
+  if (!selectedText) {return;}
 
   const toolMap = {
     'webtools-hash-md5': 'hash/md5',

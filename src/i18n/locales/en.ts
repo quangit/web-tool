@@ -174,6 +174,15 @@ export const en = {
   'image_optimize.optimized_size': 'Optimized Size',
   'image_optimize.compression_ratio': 'Compression Ratio',
 
+  // Image Edit
+  'image_edit.title': 'Edit Image',
+  'image_edit.description':
+    'Professional image editor with crop, resize, rotate, filters, annotations, watermark, and more. Free online image editing tool.',
+  'image_edit.upload_image': 'Upload Image',
+  'image_edit.error_invalid_file': 'Please upload an image file',
+  'image_edit.saving': 'Saving...',
+  'image_edit.saved': 'Image saved successfully',
+
   // CRC
   'crc.title': 'CRC Calculator',
   'crc.description': 'Calculate CRC checksums. Free online CRC calculator tool.',

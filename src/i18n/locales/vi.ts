@@ -175,6 +175,15 @@ export const vi = {
   'image_optimize.optimized_size': 'Kích thước đã tối ưu',
   'image_optimize.compression_ratio': 'Tỷ lệ nén',
 
+  // Image Edit
+  'image_edit.title': 'Chỉnh sửa ảnh',
+  'image_edit.description':
+    'Trình chỉnh sửa ảnh chuyên nghiệp với cắt, thay đổi kích thước, xoay, bộ lọc, chú thích, watermark và nhiều hơn nữa. Công cụ chỉnh sửa ảnh trực tuyến miễn phí.',
+  'image_edit.upload_image': 'Tải ảnh lên',
+  'image_edit.error_invalid_file': 'Vui lòng tải lên một tệp hình ảnh',
+  'image_edit.saving': 'Đang lưu...',
+  'image_edit.saved': 'Đã lưu ảnh thành công',
+
   // CRC
   'crc.title': 'Tính toán CRC',
   'crc.description': 'Tính toán tổng kiểm CRC. Công cụ tính toán CRC trực tuyến miễn phí.',
