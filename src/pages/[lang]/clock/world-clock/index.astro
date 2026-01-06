@@ -1,0 +1,131 @@
+---
+import BasePage from '../../../../components/BasePage.astro';
+import BaseSettingBlock from '../../../../components/BaseSettingBlock.astro';
+import { languages } from '../../../../i18n/ui';
+import { useTranslations } from '../../../../i18n/utils';
+import '../../../../styles/world-clock.css';
+
+export function getStaticPaths() {
+  return Object.keys(languages).map((lang) => {
+    return { params: { lang } };
+  });
+}
+
+const { lang = 'en' } = Astro.params;
+const t = useTranslations(lang as any);
+
+const title = t('world_clock.title');
+const description = t('world_clock.description');
+const activePage = 'clock/world-clock';
+---
+
+<BasePage title={title} description={description} activePage={activePage}>
+  <div class="layout">
+    <div class="layout-block" style="flex: 1;">
+      <div class="world-clock-container">
+        <!-- Local Time Display -->
+        <div class="local-time-card">
+          <h3>{t('world_clock.your_time')}</h3>
+          <div class="local-time-display" id="local-time">--:--:--</div>
+          <div class="local-date-display" id="local-date">---</div>
+        </div>
+
+        <!-- Search Input -->
+        <div class="city-search-container">
+          <svg
+            class="search-icon"
+            xmlns="http://www.w3.org/2000/svg"
+            width="18"
+            height="18"
+            viewBox="0 0 24 24"
+            fill="none"
+            stroke="currentColor"
+            stroke-width="2"
+            stroke-linecap="round"
+            stroke-linejoin="round"
+          >
+            <circle cx="11" cy="11" r="8"></circle>
+            <line x1="21" y1="21" x2="16.65" y2="16.65"></line>
+          </svg>
+          <input
+            type="text"
+            id="city-search"
+            class="city-search-input"
+            placeholder={t('world_clock.search_placeholder')}
+          />
+        </div>
+
+        <!-- Selected Cities -->
+        <div class="selected-cities-section">
+          <div class="section-title">{t('world_clock.selected_cities')}</div>
+          <div class="city-cards-grid" id="selected-cities-container">
+            <!-- Cities will be rendered here -->
+          </div>
+        </div>
+
+        <!-- Available Cities -->
+        <div class="available-cities-section">
+          <div class="section-title">{t('world_clock.available_cities')}</div>
+          <div class="available-cities-list" id="available-cities-container">
+            <!-- Available cities will be rendered here -->
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <BaseSettingBlock title={t('settings')}>
+      <div class="setting">
+        <p style="font-size: 0.875rem; color: var(--text-secondary);">
+          {t('world_clock.help_text')}
+        </p>
+      </div>
+    </BaseSettingBlock>
+  </div>
+
+  <script
+    is:inline
+    define:vars={{
+      t_noResults: t('world_clock.no_results'),
+      t_hoursAhead: t('world_clock.hours_ahead'),
+      t_hoursBehind: t('world_clock.hours_behind'),
+      t_sameTime: t('world_clock.same_time'),
+      t_emptyState: t('world_clock.empty_state'),
+      t_locale: lang,
+    }}
+  >
+    window.worldClockTranslations = {
+      noResults: t_noResults,
+      hoursAhead: t_hoursAhead,
+      hoursBehind: t_hoursBehind,
+      sameTime: t_sameTime,
+      emptyState: t_emptyState,
+      locale: t_locale,
+    };
+  </script>
+
+  <script>
+    import { initWorldClock } from '../../../../scripts/world-clock';
+
+    declare global {
+      interface Window {
+        worldClockTranslations: {
+          noResults: string;
+          hoursAhead: string;
+          hoursBehind: string;
+          sameTime: string;
+          emptyState: string;
+          locale: string;
+        };
+      }
+    }
+
+    // Wait for DOM to be ready
+    if (document.readyState === 'loading') {
+      document.addEventListener('DOMContentLoaded', () => {
+        initWorldClock(window.worldClockTranslations);
+      });
+    } else {
+      initWorldClock(window.worldClockTranslations);
+    }
+  </script>
+</BasePage>

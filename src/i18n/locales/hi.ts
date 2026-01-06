@@ -1177,4 +1177,22 @@ export const hi = {
   'currency.ZAR': 'दक्षिण अफ्रीकी रैंड',
   'currency.ZMW': 'जाम्बियन क्वाचा',
   'currency.ZWL': 'जिम्बाब्वे डॉलर',
+
+  // World Clock
+  'world_clock.title': 'विश्व घड़ी',
+  'world_clock.description':
+    'दुनिया भर के प्रमुख शहरों में वर्तमान समय देखें। इस मुफ्त ऑनलाइन विश्व घड़ी टूल के साथ एक साथ कई समय क्षेत्रों को ट्रैक करें।',
+  'world_clock.search_placeholder': 'शहर खोजें...',
+  'world_clock.no_results': 'कोई शहर नहीं मिला',
+  'world_clock.add_city': 'शहर जोड़ें',
+  'world_clock.remove_city': 'हटाएं',
+  'world_clock.your_time': 'आपका स्थानीय समय',
+  'world_clock.selected_cities': 'चयनित शहर',
+  'world_clock.available_cities': 'उपलब्ध शहर',
+  'world_clock.time_difference': 'समय अंतर',
+  'world_clock.hours_ahead': '{0} घंटे आगे',
+  'world_clock.hours_behind': '{0} घंटे पीछे',
+  'world_clock.same_time': 'समान समय',
+  'world_clock.empty_state': 'अपनी घड़ी में जोड़ने के लिए नीचे किसी शहर पर क्लिक करें',
+  'world_clock.help_text': 'अपनी विश्व घड़ी में जोड़ने के लिए किसी शहर पर क्लिक करें। आपके चयन स्थानीय रूप से सहेजे गए हैं।',
 };

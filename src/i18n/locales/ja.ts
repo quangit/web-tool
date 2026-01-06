@@ -1173,4 +1173,22 @@ export const ja = {
   'currency.ZAR': '南アフリカ・ランド',
   'currency.ZMW': 'ザンビア・クワチャ',
   'currency.ZWL': 'ジンバブエ・ドル',
+
+  // World Clock
+  'world_clock.title': '世界時計',
+  'world_clock.description':
+    '世界の主要都市の現在時刻を表示します。この無料オンライン世界時計ツールで複数のタイムゾーンを同時に追跡できます。',
+  'world_clock.search_placeholder': '都市を検索...',
+  'world_clock.no_results': '都市が見つかりません',
+  'world_clock.add_city': '都市を追加',
+  'world_clock.remove_city': '削除',
+  'world_clock.your_time': 'あなたの現地時間',
+  'world_clock.selected_cities': '選択した都市',
+  'world_clock.available_cities': '利用可能な都市',
+  'world_clock.time_difference': '時差',
+  'world_clock.hours_ahead': '{0}時間進んでいます',
+  'world_clock.hours_behind': '{0}時間遅れています',
+  'world_clock.same_time': '同じ時間',
+  'world_clock.empty_state': '下の都市をクリックして時計に追加してください',
+  'world_clock.help_text': '都市をクリックして世界時計に追加できます。選択内容はローカルに保存されます。',
 };
