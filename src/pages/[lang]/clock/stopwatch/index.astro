@@ -1,0 +1,106 @@
+---
+import BasePage from '../../../../components/BasePage.astro';
+import BaseSettingBlock from '../../../../components/BaseSettingBlock.astro';
+import { languages } from '../../../../i18n/ui';
+import { useTranslations } from '../../../../i18n/utils';
+import '../../../../styles/time-tools.css';
+
+export function getStaticPaths() {
+  return Object.keys(languages).map((lang) => {
+    return { params: { lang } };
+  });
+}
+
+const { lang = 'en' } = Astro.params;
+const t = useTranslations(lang as any);
+
+const title = t('stopwatch.title');
+const description = t('stopwatch.description');
+const activePage = 'clock/stopwatch';
+---
+
+<BasePage title={title} description={description} activePage={activePage}>
+  <div class="layout">
+    <div class="layout-block" style="flex: 1;">
+      <div class="time-tools-container">
+        <!-- Main Time Display -->
+        <div class="time-display-card">
+          <div class="time-display">
+            <span id="stopwatch-time">00:00</span><span class="time-display-ms" id="stopwatch-ms">.00</span>
+          </div>
+          <div class="time-controls">
+            <button class="btn-time btn-start" id="btn-start">{t('stopwatch.start')}</button>
+            <button class="btn-time btn-stop" id="btn-stop" style="display: none;">{t('stopwatch.stop')}</button>
+            <button class="btn-time btn-lap" id="btn-lap" disabled>{t('stopwatch.lap')}</button>
+            <button class="btn-time btn-reset" id="btn-reset" disabled>{t('stopwatch.reset')}</button>
+          </div>
+        </div>
+
+        <!-- Laps Section -->
+        <div class="laps-section">
+          <div class="laps-header">
+            <span class="laps-title">{t('stopwatch.laps')}</span>
+            <button class="btn-clear-laps" id="btn-clear-laps" title={t('stopwatch.clear_laps')}>🗑️</button>
+          </div>
+          <div class="laps-list" id="laps-list">
+            <div class="no-laps">{t('stopwatch.no_laps')}</div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <BaseSettingBlock title={t('settings')}>
+      <div class="setting">
+        <p style="font-size: 0.875rem; color: var(--text-secondary);">
+          {t('stopwatch.help_text')}
+        </p>
+      </div>
+      <div class="setting">
+        <p style="font-size: 0.75rem; color: var(--text-muted);">
+          Keyboard shortcuts: Space (Start/Stop), L (Lap), R (Reset)
+        </p>
+      </div>
+    </BaseSettingBlock>
+  </div>
+
+  <script
+    is:inline
+    define:vars={{
+      t_lap: t('stopwatch.lap'),
+      t_noLaps: t('stopwatch.no_laps'),
+      t_lapTime: t('stopwatch.lap_time'),
+      t_totalTime: t('stopwatch.total_time'),
+    }}
+  >
+    window.stopwatchTranslations = {
+      lap: t_lap,
+      noLaps: t_noLaps,
+      lapTime: t_lapTime,
+      totalTime: t_totalTime,
+    };
+  </script>
+
+  <script>
+    import { initStopwatch } from '../../../../scripts/stopwatch';
+
+    declare global {
+      interface Window {
+        stopwatchTranslations: {
+          lap: string;
+          noLaps: string;
+          lapTime: string;
+          totalTime: string;
+        };
+      }
+    }
+
+    // Wait for DOM to be ready
+    if (document.readyState === 'loading') {
+      document.addEventListener('DOMContentLoaded', () => {
+        initStopwatch(window.stopwatchTranslations);
+      });
+    } else {
+      initStopwatch(window.stopwatchTranslations);
+    }
+  </script>
+</BasePage>

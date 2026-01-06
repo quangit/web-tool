@@ -363,7 +363,12 @@ export const toolSections: ToolSection[] = [
     blocks: [
       {
         title: 'Time',
-        items: [{ url: 'clock/world-clock', name: 'World Clock', icon: 'globe' }],
+        items: [
+          { url: 'clock/world-clock', name: 'World Clock', icon: 'globe' },
+          { url: 'clock/stopwatch', name: 'Stopwatch', icon: 'timer' },
+          { url: 'clock/timer', name: 'Timer', icon: 'hourglass' },
+          { url: 'clock/alarm', name: 'Alarm', icon: 'alarm-clock' },
+        ],
       },
     ],
   },

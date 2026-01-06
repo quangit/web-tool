@@ -1,0 +1,125 @@
+---
+import BasePage from '../../../../components/BasePage.astro';
+import BaseSettingBlock from '../../../../components/BaseSettingBlock.astro';
+import { languages } from '../../../../i18n/ui';
+import { useTranslations } from '../../../../i18n/utils';
+import '../../../../styles/time-tools.css';
+
+export function getStaticPaths() {
+  return Object.keys(languages).map((lang) => {
+    return { params: { lang } };
+  });
+}
+
+const { lang = 'en' } = Astro.params;
+const t = useTranslations(lang as any);
+
+const title = t('timer.title');
+const description = t('timer.description');
+const activePage = 'clock/timer';
+---
+
+<BasePage title={title} description={description} activePage={activePage}>
+  <div class="layout">
+    <div class="layout-block" style="flex: 1;">
+      <div class="time-tools-container">
+        <!-- Timer Input Section -->
+        <div class="time-display-card">
+          <div class="timer-input-section" id="timer-input-section">
+            <div class="timer-input-group">
+              <label for="input-hours">{t('timer.hours')}</label>
+              <input type="number" class="timer-input" id="input-hours" min="0" max="99" value="0" />
+            </div>
+            <span class="timer-separator">:</span>
+            <div class="timer-input-group">
+              <label for="input-minutes">{t('timer.minutes')}</label>
+              <input type="number" class="timer-input" id="input-minutes" min="0" max="59" value="5" />
+            </div>
+            <span class="timer-separator">:</span>
+            <div class="timer-input-group">
+              <label for="input-seconds">{t('timer.seconds')}</label>
+              <input type="number" class="timer-input" id="input-seconds" min="0" max="59" value="0" />
+            </div>
+          </div>
+
+          <!-- Main Time Display -->
+          <div class="time-display" id="timer-time">05:00</div>
+
+          <div class="time-controls">
+            <button class="btn-time btn-start" id="btn-start">{t('timer.start')}</button>
+            <button class="btn-time btn-pause" id="btn-pause" style="display: none;">{t('timer.pause')}</button>
+            <button class="btn-time btn-reset" id="btn-reset" disabled>{t('timer.reset')}</button>
+          </div>
+
+          <!-- Presets -->
+          <div class="presets-section">
+            <div class="presets-title">{t('timer.presets')}</div>
+            <div class="presets-grid">
+              <button class="preset-btn" data-preset="60">1 min</button>
+              <button class="preset-btn" data-preset="180">3 min</button>
+              <button class="preset-btn" data-preset="300">5 min</button>
+              <button class="preset-btn" data-preset="600">10 min</button>
+              <button class="preset-btn" data-preset="900">15 min</button>
+              <button class="preset-btn" data-preset="1800">30 min</button>
+              <button class="preset-btn" data-preset="3600">1 hour</button>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <BaseSettingBlock title={t('settings')}>
+      <div class="setting">
+        <p style="font-size: 0.875rem; color: var(--text-secondary);">
+          {t('timer.help_text')}
+        </p>
+      </div>
+      <div class="setting">
+        <p style="font-size: 0.75rem; color: var(--text-muted);">
+          Keyboard shortcuts: Space (Start/Pause), R (Reset)
+        </p>
+      </div>
+    </BaseSettingBlock>
+  </div>
+
+  <script
+    is:inline
+    define:vars={{
+      t_timeUp: t('timer.time_up'),
+      t_start: t('timer.start'),
+      t_pause: t('timer.pause'),
+      t_resume: t('timer.resume'),
+    }}
+  >
+    window.timerTranslations = {
+      timeUp: t_timeUp,
+      start: t_start,
+      pause: t_pause,
+      resume: t_resume,
+    };
+  </script>
+
+  <script>
+    import { initTimer } from '../../../../scripts/timer';
+
+    declare global {
+      interface Window {
+        timerTranslations: {
+          timeUp: string;
+          start: string;
+          pause: string;
+          resume: string;
+        };
+      }
+    }
+
+    // Wait for DOM to be ready
+    if (document.readyState === 'loading') {
+      document.addEventListener('DOMContentLoaded', () => {
+        initTimer(window.timerTranslations);
+      });
+    } else {
+      initTimer(window.timerTranslations);
+    }
+  </script>
+</BasePage>

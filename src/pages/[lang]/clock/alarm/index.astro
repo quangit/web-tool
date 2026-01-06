@@ -1,0 +1,123 @@
+---
+import BasePage from '../../../../components/BasePage.astro';
+import BaseSettingBlock from '../../../../components/BaseSettingBlock.astro';
+import { languages } from '../../../../i18n/ui';
+import { useTranslations } from '../../../../i18n/utils';
+import '../../../../styles/time-tools.css';
+
+export function getStaticPaths() {
+  return Object.keys(languages).map((lang) => {
+    return { params: { lang } };
+  });
+}
+
+const { lang = 'en' } = Astro.params;
+const t = useTranslations(lang as any);
+
+const title = t('alarm.title');
+const description = t('alarm.description');
+const activePage = 'clock/alarm';
+---
+
+<BasePage title={title} description={description} activePage={activePage}>
+  <div class="layout">
+    <div class="layout-block" style="flex: 1;">
+      <div class="time-tools-container">
+        <!-- Current Time Display -->
+        <div class="time-display-card">
+          <div class="time-display" id="current-time">--:--:--</div>
+        </div>
+
+        <!-- Alarms Section -->
+        <div class="alarms-section">
+          <div class="alarms-header">
+            <span class="laps-title">{t('alarm.title')}</span>
+            <button class="btn-add-alarm" id="btn-add-alarm">
+              <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                <line x1="12" y1="5" x2="12" y2="19"></line>
+                <line x1="5" y1="12" x2="19" y2="12"></line>
+              </svg>
+              {t('alarm.add_alarm')}
+            </button>
+          </div>
+          <div class="alarm-list" id="alarms-list">
+            <div class="no-alarms">{t('alarm.no_alarms')}</div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <BaseSettingBlock title={t('settings')}>
+      <div class="setting">
+        <p style="font-size: 0.875rem; color: var(--text-secondary);">
+          {t('alarm.help_text')}
+        </p>
+      </div>
+    </BaseSettingBlock>
+  </div>
+
+  <script
+    is:inline
+    define:vars={{
+      t_addAlarm: t('alarm.add_alarm'),
+      t_editAlarm: t('alarm.edit_alarm'),
+      t_label: t('alarm.label'),
+      t_labelPlaceholder: t('alarm.label_placeholder'),
+      t_repeat: t('alarm.repeat'),
+      t_save: t('alarm.save'),
+      t_cancel: t('alarm.cancel'),
+      t_noAlarms: t('alarm.no_alarms'),
+      t_alarmRinging: t('alarm.alarm_ringing'),
+      t_snooze: t('alarm.snooze'),
+      t_dismiss: t('alarm.dismiss'),
+      t_days: [t('alarm.sun'), t('alarm.mon'), t('alarm.tue'), t('alarm.wed'), t('alarm.thu'), t('alarm.fri'), t('alarm.sat')],
+    }}
+  >
+    window.alarmTranslations = {
+      addAlarm: t_addAlarm,
+      editAlarm: t_editAlarm,
+      label: t_label,
+      labelPlaceholder: t_labelPlaceholder,
+      repeat: t_repeat,
+      save: t_save,
+      cancel: t_cancel,
+      noAlarms: t_noAlarms,
+      alarmRinging: t_alarmRinging,
+      snooze: t_snooze,
+      dismiss: t_dismiss,
+      days: t_days,
+    };
+  </script>
+
+  <script>
+    import { initAlarm } from '../../../../scripts/alarm';
+
+    declare global {
+      interface Window {
+        alarmTranslations: {
+          addAlarm: string;
+          editAlarm: string;
+          label: string;
+          labelPlaceholder: string;
+          repeat: string;
+          save: string;
+          cancel: string;
+          noAlarms: string;
+          alarmRinging: string;
+          snooze: string;
+          dismiss: string;
+          days: string[];
+        };
+      }
+    }
+
+    // Wait for DOM to be ready
+    if (document.readyState === 'loading') {
+      document.addEventListener('DOMContentLoaded', () => {
+        initAlarm(window.alarmTranslations);
+      });
+    } else {
+      initAlarm(window.alarmTranslations);
+    }
+  </script>
+</BasePage>
