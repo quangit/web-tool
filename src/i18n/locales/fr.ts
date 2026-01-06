@@ -1176,4 +1176,20 @@ export const fr = {
   'currency.ZAR': 'Rand sud-africain',
   'currency.ZMW': 'Kwacha zambien',
   'currency.ZWL': 'Dollar zimbabwéen',
+
+  // World Clock
+  'world_clock.title': 'Horloge Mondiale',
+  'world_clock.description':
+    'Voir l\'heure actuelle dans les grandes villes du monde. Suivez plusieurs fuseaux horaires simultanément avec cet outil d\'horloge mondiale en ligne gratuit.',
+  'world_clock.search_placeholder': 'Rechercher des villes...',
+  'world_clock.no_results': 'Aucune ville trouvée',
+  'world_clock.add_city': 'Ajouter une ville',
+  'world_clock.remove_city': 'Supprimer',
+  'world_clock.your_time': 'Votre heure locale',
+  'world_clock.selected_cities': 'Villes sélectionnées',
+  'world_clock.available_cities': 'Villes disponibles',
+  'world_clock.time_difference': 'Décalage horaire',
+  'world_clock.hours_ahead': '{0}h d\'avance',
+  'world_clock.hours_behind': '{0}h de retard',
+  'world_clock.same_time': 'Même heure',
 };

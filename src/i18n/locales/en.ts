@@ -1204,4 +1204,20 @@ export const en = {
   'currency.ZAR': 'South African Rand',
   'currency.ZMW': 'Zambian Kwacha',
   'currency.ZWL': 'Zimbabwean Dollar',
+
+  // World Clock
+  'world_clock.title': 'World Clock',
+  'world_clock.description':
+    'View current time in major cities around the world. Track multiple time zones simultaneously with this free online world clock tool.',
+  'world_clock.search_placeholder': 'Search cities...',
+  'world_clock.no_results': 'No cities found',
+  'world_clock.add_city': 'Add City',
+  'world_clock.remove_city': 'Remove',
+  'world_clock.your_time': 'Your Local Time',
+  'world_clock.selected_cities': 'Selected Cities',
+  'world_clock.available_cities': 'Available Cities',
+  'world_clock.time_difference': 'Time Difference',
+  'world_clock.hours_ahead': '{0}h ahead',
+  'world_clock.hours_behind': '{0}h behind',
+  'world_clock.same_time': 'Same time',
 };

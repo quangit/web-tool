@@ -1159,4 +1159,20 @@ export const zh = {
   'currency.ZAR': '南非兰特',
   'currency.ZMW': '赞比亚克瓦查',
   'currency.ZWL': '津巴布韦元',
+
+  // World Clock
+  'world_clock.title': '世界时钟',
+  'world_clock.description':
+    '查看世界各大城市的当前时间。使用这个免费的在线世界时钟工具同时跟踪多个时区。',
+  'world_clock.search_placeholder': '搜索城市...',
+  'world_clock.no_results': '未找到城市',
+  'world_clock.add_city': '添加城市',
+  'world_clock.remove_city': '删除',
+  'world_clock.your_time': '您的本地时间',
+  'world_clock.selected_cities': '已选城市',
+  'world_clock.available_cities': '可选城市',
+  'world_clock.time_difference': '时差',
+  'world_clock.hours_ahead': '快{0}小时',
+  'world_clock.hours_behind': '慢{0}小时',
+  'world_clock.same_time': '相同时间',
 };

@@ -1197,4 +1197,20 @@ export const vi = {
   'currency.ZAR': 'Rand Nam Phi',
   'currency.ZMW': 'Kwacha Zambia',
   'currency.ZWL': 'Đô la Zimbabwe',
+
+  // World Clock
+  'world_clock.title': 'Đồng hồ thế giới',
+  'world_clock.description':
+    'Xem thời gian hiện tại của các thành phố lớn trên thế giới. Theo dõi nhiều múi giờ cùng lúc với công cụ đồng hồ thế giới trực tuyến miễn phí này.',
+  'world_clock.search_placeholder': 'Tìm kiếm thành phố...',
+  'world_clock.no_results': 'Không tìm thấy thành phố',
+  'world_clock.add_city': 'Thêm thành phố',
+  'world_clock.remove_city': 'Xóa',
+  'world_clock.your_time': 'Giờ địa phương của bạn',
+  'world_clock.selected_cities': 'Thành phố đã chọn',
+  'world_clock.available_cities': 'Thành phố có sẵn',
+  'world_clock.time_difference': 'Chênh lệch múi giờ',
+  'world_clock.hours_ahead': 'Sớm hơn {0} giờ',
+  'world_clock.hours_behind': 'Muộn hơn {0} giờ',
+  'world_clock.same_time': 'Cùng múi giờ',
 };
