@@ -1280,5 +1280,5 @@ export const fr = {
   'weather.refresh': 'Actualiser',
   'weather.search_placeholder': 'Rechercher des villes...',
   'weather.help_text':
-    'Consultez la météo actuelle des villes du monde entier. Cliquez sur une ville pour l\'ajouter à votre tableau de bord. Les données météo sont actualisées automatiquement toutes les 5 minutes.',
+    "Consultez la météo actuelle des villes du monde entier. Cliquez sur une ville pour l'ajouter à votre tableau de bord. Les données météo sont actualisées automatiquement toutes les 5 minutes.",
 };

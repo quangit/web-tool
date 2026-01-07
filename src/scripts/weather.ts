@@ -23,63 +23,374 @@ export interface WeatherData {
 // Major world cities with their coordinates
 export const majorCities: City[] = [
   // Americas
-  { name: 'New York', country: 'USA', lat: 40.7128, lon: -74.006, flag: '🇺🇸', timezone: 'America/New_York' },
-  { name: 'Los Angeles', country: 'USA', lat: 34.0522, lon: -118.2437, flag: '🇺🇸', timezone: 'America/Los_Angeles' },
-  { name: 'Chicago', country: 'USA', lat: 41.8781, lon: -87.6298, flag: '🇺🇸', timezone: 'America/Chicago' },
-  { name: 'San Francisco', country: 'USA', lat: 37.7749, lon: -122.4194, flag: '🇺🇸', timezone: 'America/Los_Angeles' },
-  { name: 'Miami', country: 'USA', lat: 25.7617, lon: -80.1918, flag: '🇺🇸', timezone: 'America/New_York' },
-  { name: 'Toronto', country: 'Canada', lat: 43.6532, lon: -79.3832, flag: '🇨🇦', timezone: 'America/Toronto' },
-  { name: 'Vancouver', country: 'Canada', lat: 49.2827, lon: -123.1207, flag: '🇨🇦', timezone: 'America/Vancouver' },
-  { name: 'Mexico City', country: 'Mexico', lat: 19.4326, lon: -99.1332, flag: '🇲🇽', timezone: 'America/Mexico_City' },
-  { name: 'São Paulo', country: 'Brazil', lat: -23.5505, lon: -46.6333, flag: '🇧🇷', timezone: 'America/Sao_Paulo' },
-  { name: 'Buenos Aires', country: 'Argentina', lat: -34.6037, lon: -58.3816, flag: '🇦🇷', timezone: 'America/Argentina/Buenos_Aires' },
+  {
+    name: 'New York',
+    country: 'USA',
+    lat: 40.7128,
+    lon: -74.006,
+    flag: '🇺🇸',
+    timezone: 'America/New_York',
+  },
+  {
+    name: 'Los Angeles',
+    country: 'USA',
+    lat: 34.0522,
+    lon: -118.2437,
+    flag: '🇺🇸',
+    timezone: 'America/Los_Angeles',
+  },
+  {
+    name: 'Chicago',
+    country: 'USA',
+    lat: 41.8781,
+    lon: -87.6298,
+    flag: '🇺🇸',
+    timezone: 'America/Chicago',
+  },
+  {
+    name: 'San Francisco',
+    country: 'USA',
+    lat: 37.7749,
+    lon: -122.4194,
+    flag: '🇺🇸',
+    timezone: 'America/Los_Angeles',
+  },
+  {
+    name: 'Miami',
+    country: 'USA',
+    lat: 25.7617,
+    lon: -80.1918,
+    flag: '🇺🇸',
+    timezone: 'America/New_York',
+  },
+  {
+    name: 'Toronto',
+    country: 'Canada',
+    lat: 43.6532,
+    lon: -79.3832,
+    flag: '🇨🇦',
+    timezone: 'America/Toronto',
+  },
+  {
+    name: 'Vancouver',
+    country: 'Canada',
+    lat: 49.2827,
+    lon: -123.1207,
+    flag: '🇨🇦',
+    timezone: 'America/Vancouver',
+  },
+  {
+    name: 'Mexico City',
+    country: 'Mexico',
+    lat: 19.4326,
+    lon: -99.1332,
+    flag: '🇲🇽',
+    timezone: 'America/Mexico_City',
+  },
+  {
+    name: 'São Paulo',
+    country: 'Brazil',
+    lat: -23.5505,
+    lon: -46.6333,
+    flag: '🇧🇷',
+    timezone: 'America/Sao_Paulo',
+  },
+  {
+    name: 'Buenos Aires',
+    country: 'Argentina',
+    lat: -34.6037,
+    lon: -58.3816,
+    flag: '🇦🇷',
+    timezone: 'America/Argentina/Buenos_Aires',
+  },
 
   // Europe
-  { name: 'London', country: 'UK', lat: 51.5074, lon: -0.1278, flag: '🇬🇧', timezone: 'Europe/London' },
-  { name: 'Paris', country: 'France', lat: 48.8566, lon: 2.3522, flag: '🇫🇷', timezone: 'Europe/Paris' },
-  { name: 'Berlin', country: 'Germany', lat: 52.52, lon: 13.405, flag: '🇩🇪', timezone: 'Europe/Berlin' },
-  { name: 'Rome', country: 'Italy', lat: 41.9028, lon: 12.4964, flag: '🇮🇹', timezone: 'Europe/Rome' },
-  { name: 'Madrid', country: 'Spain', lat: 40.4168, lon: -3.7038, flag: '🇪🇸', timezone: 'Europe/Madrid' },
-  { name: 'Amsterdam', country: 'Netherlands', lat: 52.3676, lon: 4.9041, flag: '🇳🇱', timezone: 'Europe/Amsterdam' },
-  { name: 'Vienna', country: 'Austria', lat: 48.2082, lon: 16.3738, flag: '🇦🇹', timezone: 'Europe/Vienna' },
-  { name: 'Stockholm', country: 'Sweden', lat: 59.3293, lon: 18.0686, flag: '🇸🇪', timezone: 'Europe/Stockholm' },
-  { name: 'Moscow', country: 'Russia', lat: 55.7558, lon: 37.6173, flag: '🇷🇺', timezone: 'Europe/Moscow' },
-  { name: 'Istanbul', country: 'Turkey', lat: 41.0082, lon: 28.9784, flag: '🇹🇷', timezone: 'Europe/Istanbul' },
+  {
+    name: 'London',
+    country: 'UK',
+    lat: 51.5074,
+    lon: -0.1278,
+    flag: '🇬🇧',
+    timezone: 'Europe/London',
+  },
+  {
+    name: 'Paris',
+    country: 'France',
+    lat: 48.8566,
+    lon: 2.3522,
+    flag: '🇫🇷',
+    timezone: 'Europe/Paris',
+  },
+  {
+    name: 'Berlin',
+    country: 'Germany',
+    lat: 52.52,
+    lon: 13.405,
+    flag: '🇩🇪',
+    timezone: 'Europe/Berlin',
+  },
+  {
+    name: 'Rome',
+    country: 'Italy',
+    lat: 41.9028,
+    lon: 12.4964,
+    flag: '🇮🇹',
+    timezone: 'Europe/Rome',
+  },
+  {
+    name: 'Madrid',
+    country: 'Spain',
+    lat: 40.4168,
+    lon: -3.7038,
+    flag: '🇪🇸',
+    timezone: 'Europe/Madrid',
+  },
+  {
+    name: 'Amsterdam',
+    country: 'Netherlands',
+    lat: 52.3676,
+    lon: 4.9041,
+    flag: '🇳🇱',
+    timezone: 'Europe/Amsterdam',
+  },
+  {
+    name: 'Vienna',
+    country: 'Austria',
+    lat: 48.2082,
+    lon: 16.3738,
+    flag: '🇦🇹',
+    timezone: 'Europe/Vienna',
+  },
+  {
+    name: 'Stockholm',
+    country: 'Sweden',
+    lat: 59.3293,
+    lon: 18.0686,
+    flag: '🇸🇪',
+    timezone: 'Europe/Stockholm',
+  },
+  {
+    name: 'Moscow',
+    country: 'Russia',
+    lat: 55.7558,
+    lon: 37.6173,
+    flag: '🇷🇺',
+    timezone: 'Europe/Moscow',
+  },
+  {
+    name: 'Istanbul',
+    country: 'Turkey',
+    lat: 41.0082,
+    lon: 28.9784,
+    flag: '🇹🇷',
+    timezone: 'Europe/Istanbul',
+  },
 
   // Asia
-  { name: 'Tokyo', country: 'Japan', lat: 35.6762, lon: 139.6503, flag: '🇯🇵', timezone: 'Asia/Tokyo' },
-  { name: 'Beijing', country: 'China', lat: 39.9042, lon: 116.4074, flag: '🇨🇳', timezone: 'Asia/Shanghai' },
-  { name: 'Shanghai', country: 'China', lat: 31.2304, lon: 121.4737, flag: '🇨🇳', timezone: 'Asia/Shanghai' },
-  { name: 'Hong Kong', country: 'China', lat: 22.3193, lon: 114.1694, flag: '🇭🇰', timezone: 'Asia/Hong_Kong' },
-  { name: 'Singapore', country: 'Singapore', lat: 1.3521, lon: 103.8198, flag: '🇸🇬', timezone: 'Asia/Singapore' },
-  { name: 'Seoul', country: 'South Korea', lat: 37.5665, lon: 126.978, flag: '🇰🇷', timezone: 'Asia/Seoul' },
-  { name: 'Bangkok', country: 'Thailand', lat: 13.7563, lon: 100.5018, flag: '🇹🇭', timezone: 'Asia/Bangkok' },
-  { name: 'Ho Chi Minh City', country: 'Vietnam', lat: 10.8231, lon: 106.6297, flag: '🇻🇳', timezone: 'Asia/Ho_Chi_Minh' },
-  { name: 'Hanoi', country: 'Vietnam', lat: 21.0285, lon: 105.8542, flag: '🇻🇳', timezone: 'Asia/Ho_Chi_Minh' },
-  { name: 'Jakarta', country: 'Indonesia', lat: -6.2088, lon: 106.8456, flag: '🇮🇩', timezone: 'Asia/Jakarta' },
-  { name: 'Manila', country: 'Philippines', lat: 14.5995, lon: 120.9842, flag: '🇵🇭', timezone: 'Asia/Manila' },
-  { name: 'Mumbai', country: 'India', lat: 19.076, lon: 72.8777, flag: '🇮🇳', timezone: 'Asia/Kolkata' },
-  { name: 'New Delhi', country: 'India', lat: 28.6139, lon: 77.209, flag: '🇮🇳', timezone: 'Asia/Kolkata' },
+  {
+    name: 'Tokyo',
+    country: 'Japan',
+    lat: 35.6762,
+    lon: 139.6503,
+    flag: '🇯🇵',
+    timezone: 'Asia/Tokyo',
+  },
+  {
+    name: 'Beijing',
+    country: 'China',
+    lat: 39.9042,
+    lon: 116.4074,
+    flag: '🇨🇳',
+    timezone: 'Asia/Shanghai',
+  },
+  {
+    name: 'Shanghai',
+    country: 'China',
+    lat: 31.2304,
+    lon: 121.4737,
+    flag: '🇨🇳',
+    timezone: 'Asia/Shanghai',
+  },
+  {
+    name: 'Hong Kong',
+    country: 'China',
+    lat: 22.3193,
+    lon: 114.1694,
+    flag: '🇭🇰',
+    timezone: 'Asia/Hong_Kong',
+  },
+  {
+    name: 'Singapore',
+    country: 'Singapore',
+    lat: 1.3521,
+    lon: 103.8198,
+    flag: '🇸🇬',
+    timezone: 'Asia/Singapore',
+  },
+  {
+    name: 'Seoul',
+    country: 'South Korea',
+    lat: 37.5665,
+    lon: 126.978,
+    flag: '🇰🇷',
+    timezone: 'Asia/Seoul',
+  },
+  {
+    name: 'Bangkok',
+    country: 'Thailand',
+    lat: 13.7563,
+    lon: 100.5018,
+    flag: '🇹🇭',
+    timezone: 'Asia/Bangkok',
+  },
+  {
+    name: 'Ho Chi Minh City',
+    country: 'Vietnam',
+    lat: 10.8231,
+    lon: 106.6297,
+    flag: '🇻🇳',
+    timezone: 'Asia/Ho_Chi_Minh',
+  },
+  {
+    name: 'Hanoi',
+    country: 'Vietnam',
+    lat: 21.0285,
+    lon: 105.8542,
+    flag: '🇻🇳',
+    timezone: 'Asia/Ho_Chi_Minh',
+  },
+  {
+    name: 'Jakarta',
+    country: 'Indonesia',
+    lat: -6.2088,
+    lon: 106.8456,
+    flag: '🇮🇩',
+    timezone: 'Asia/Jakarta',
+  },
+  {
+    name: 'Manila',
+    country: 'Philippines',
+    lat: 14.5995,
+    lon: 120.9842,
+    flag: '🇵🇭',
+    timezone: 'Asia/Manila',
+  },
+  {
+    name: 'Mumbai',
+    country: 'India',
+    lat: 19.076,
+    lon: 72.8777,
+    flag: '🇮🇳',
+    timezone: 'Asia/Kolkata',
+  },
+  {
+    name: 'New Delhi',
+    country: 'India',
+    lat: 28.6139,
+    lon: 77.209,
+    flag: '🇮🇳',
+    timezone: 'Asia/Kolkata',
+  },
   { name: 'Dubai', country: 'UAE', lat: 25.2048, lon: 55.2708, flag: '🇦🇪', timezone: 'Asia/Dubai' },
-  { name: 'Riyadh', country: 'Saudi Arabia', lat: 24.7136, lon: 46.6753, flag: '🇸🇦', timezone: 'Asia/Riyadh' },
-  { name: 'Tel Aviv', country: 'Israel', lat: 32.0853, lon: 34.7818, flag: '🇮🇱', timezone: 'Asia/Jerusalem' },
+  {
+    name: 'Riyadh',
+    country: 'Saudi Arabia',
+    lat: 24.7136,
+    lon: 46.6753,
+    flag: '🇸🇦',
+    timezone: 'Asia/Riyadh',
+  },
+  {
+    name: 'Tel Aviv',
+    country: 'Israel',
+    lat: 32.0853,
+    lon: 34.7818,
+    flag: '🇮🇱',
+    timezone: 'Asia/Jerusalem',
+  },
 
   // Oceania
-  { name: 'Sydney', country: 'Australia', lat: -33.8688, lon: 151.2093, flag: '🇦🇺', timezone: 'Australia/Sydney' },
-  { name: 'Melbourne', country: 'Australia', lat: -37.8136, lon: 144.9631, flag: '🇦🇺', timezone: 'Australia/Melbourne' },
-  { name: 'Auckland', country: 'New Zealand', lat: -36.8485, lon: 174.7633, flag: '🇳🇿', timezone: 'Pacific/Auckland' },
+  {
+    name: 'Sydney',
+    country: 'Australia',
+    lat: -33.8688,
+    lon: 151.2093,
+    flag: '🇦🇺',
+    timezone: 'Australia/Sydney',
+  },
+  {
+    name: 'Melbourne',
+    country: 'Australia',
+    lat: -37.8136,
+    lon: 144.9631,
+    flag: '🇦🇺',
+    timezone: 'Australia/Melbourne',
+  },
+  {
+    name: 'Auckland',
+    country: 'New Zealand',
+    lat: -36.8485,
+    lon: 174.7633,
+    flag: '🇳🇿',
+    timezone: 'Pacific/Auckland',
+  },
 
   // Africa
-  { name: 'Cairo', country: 'Egypt', lat: 30.0444, lon: 31.2357, flag: '🇪🇬', timezone: 'Africa/Cairo' },
-  { name: 'Johannesburg', country: 'South Africa', lat: -26.2041, lon: 28.0473, flag: '🇿🇦', timezone: 'Africa/Johannesburg' },
-  { name: 'Cape Town', country: 'South Africa', lat: -33.9249, lon: 18.4241, flag: '🇿🇦', timezone: 'Africa/Johannesburg' },
-  { name: 'Lagos', country: 'Nigeria', lat: 6.5244, lon: 3.3792, flag: '🇳🇬', timezone: 'Africa/Lagos' },
-  { name: 'Nairobi', country: 'Kenya', lat: -1.2921, lon: 36.8219, flag: '🇰🇪', timezone: 'Africa/Nairobi' },
-  { name: 'Casablanca', country: 'Morocco', lat: 33.5731, lon: -7.5898, flag: '🇲🇦', timezone: 'Africa/Casablanca' },
+  {
+    name: 'Cairo',
+    country: 'Egypt',
+    lat: 30.0444,
+    lon: 31.2357,
+    flag: '🇪🇬',
+    timezone: 'Africa/Cairo',
+  },
+  {
+    name: 'Johannesburg',
+    country: 'South Africa',
+    lat: -26.2041,
+    lon: 28.0473,
+    flag: '🇿🇦',
+    timezone: 'Africa/Johannesburg',
+  },
+  {
+    name: 'Cape Town',
+    country: 'South Africa',
+    lat: -33.9249,
+    lon: 18.4241,
+    flag: '🇿🇦',
+    timezone: 'Africa/Johannesburg',
+  },
+  {
+    name: 'Lagos',
+    country: 'Nigeria',
+    lat: 6.5244,
+    lon: 3.3792,
+    flag: '🇳🇬',
+    timezone: 'Africa/Lagos',
+  },
+  {
+    name: 'Nairobi',
+    country: 'Kenya',
+    lat: -1.2921,
+    lon: 36.8219,
+    flag: '🇰🇪',
+    timezone: 'Africa/Nairobi',
+  },
+  {
+    name: 'Casablanca',
+    country: 'Morocco',
+    lat: 33.5731,
+    lon: -7.5898,
+    flag: '🇲🇦',
+    timezone: 'Africa/Casablanca',
+  },
 ];
 
 // Weather code to description and icon mapping
-export const weatherCodes: Record<number, { description: string; icon: string; iconNight?: string }> = {
+export const weatherCodes: Record<
+  number,
+  { description: string; icon: string; iconNight?: string }
+> = {
   0: { description: 'Clear sky', icon: '☀️', iconNight: '🌙' },
   1: { description: 'Mainly clear', icon: '🌤️', iconNight: '🌙' },
   2: { description: 'Partly cloudy', icon: '⛅', iconNight: '☁️' },
@@ -236,7 +547,7 @@ function getWeatherBackground(code: number, isDay: number): string {
     return 'linear-gradient(135deg, #4b6cb7 0%, #182848 100%)'; // Rain blue-dark
   }
   // Snow
-  if (code >= 71 && code <= 77 || code >= 85 && code <= 86) {
+  if ((code >= 71 && code <= 77) || (code >= 85 && code <= 86)) {
     return 'linear-gradient(135deg, #e0eafc 0%, #cfdef3 100%)'; // Snowy white-blue
   }
   // Rain showers
@@ -284,7 +595,7 @@ async function getUserLocation(): Promise<City | null> {
     navigator.geolocation.getCurrentPosition(
       async (position) => {
         const { latitude, longitude } = position.coords;
-        
+
         // Try to get location name from reverse geocoding using Nominatim (OpenStreetMap)
         let locationName = translations.yourLocation;
         try {
@@ -297,7 +608,14 @@ async function getUserLocation(): Promise<City | null> {
           const geoData = await geoResponse.json();
           if (geoData && geoData.address) {
             const addr = geoData.address;
-            const placeName = addr.city || addr.town || addr.village || addr.municipality || addr.county || addr.state || '';
+            const placeName =
+              addr.city ||
+              addr.town ||
+              addr.village ||
+              addr.municipality ||
+              addr.county ||
+              addr.state ||
+              '';
             if (placeName) {
               locationName = `${translations.yourLocation} (${placeName})`;
             }
@@ -306,12 +624,12 @@ async function getUserLocation(): Promise<City | null> {
           // Fallback to "Your Location" if geocoding fails
           console.warn('Reverse geocoding failed:', error);
         }
-        
+
         // Find the closest city from our list using simple Euclidean distance
         // (adequate for nearby city matching)
         let closestCity: City | null = null;
         let minDistance = Infinity;
-        
+
         for (const city of majorCities) {
           const distance = Math.sqrt(
             Math.pow(city.lat - latitude, 2) + Math.pow(city.lon - longitude, 2)
@@ -353,7 +671,11 @@ async function getUserLocation(): Promise<City | null> {
   });
 }
 
-function renderWeatherCard(city: City, weather: WeatherData | null, isUserLocation = false): string {
+function renderWeatherCard(
+  city: City,
+  weather: WeatherData | null,
+  isUserLocation = false
+): string {
   const loading = !weather;
   const icon = weather ? getWeatherIcon(weather.weathercode, weather.is_day) : '⏳';
   const temp = weather ? formatTemperature(weather.temperature) : '--°C';
@@ -364,7 +686,9 @@ function renderWeatherCard(city: City, weather: WeatherData | null, isUserLocati
   const humidity = weather ? `${Math.round(weather.humidity)}%` : '--%';
   const feelsLike = weather ? formatTemperature(weather.apparent_temperature) : '--°C';
   const precipitation = weather ? `${weather.precipitation} mm` : '-- mm';
-  const backgroundGradient = weather ? getWeatherBackground(weather.weathercode, weather.is_day) : 'linear-gradient(135deg, #667eea 0%, #764ba2 100%)';
+  const backgroundGradient = weather
+    ? getWeatherBackground(weather.weathercode, weather.is_day)
+    : 'linear-gradient(135deg, #667eea 0%, #764ba2 100%)';
 
   return `
     <div class="weather-card ${loading ? 'loading' : ''} ${isUserLocation ? 'user-location' : ''}" data-city="${city.name}" ${isUserLocation ? 'data-user-location="true"' : ''} style="background: ${backgroundGradient}; border: none;">
@@ -374,14 +698,18 @@ function renderWeatherCard(city: City, weather: WeatherData | null, isUserLocati
           ${city.country ? `<span class="city-country">${city.country}</span>` : ''}
           <span class="city-time">${currentTime}</span>
         </div>
-        ${!isUserLocation ? `
+        ${
+          !isUserLocation
+            ? `
           <button class="btn-remove" data-city="${city.name}" title="Remove">
             <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
               <line x1="18" y1="6" x2="6" y2="18"></line>
               <line x1="6" y1="6" x2="18" y2="18"></line>
             </svg>
           </button>
-        ` : ''}
+        `
+            : ''
+        }
       </div>
       <div class="weather-main">
         <span class="weather-icon">${icon}</span>
@@ -418,7 +746,7 @@ async function loadWeatherForCities(): Promise<void> {
 
   // First, render loading state
   let html = '';
-  
+
   // Render user location first if available
   if (userLocationCity) {
     html += renderWeatherCard(userLocationCity, null, true);

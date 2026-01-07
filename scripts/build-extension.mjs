@@ -562,7 +562,8 @@ const jsCdnReplacements = [
     replacement: '"/css/cdn/toastui-editor.min.css"',
   },
   {
-    pattern: /["']https:\/\/uicdn\.toast\.com\/editor\/latest\/theme\/toastui-editor-dark\.min\.css["']/g,
+    pattern:
+      /["']https:\/\/uicdn\.toast\.com\/editor\/latest\/theme\/toastui-editor-dark\.min\.css["']/g,
     replacement: '"/css/cdn/toastui-editor-dark.min.css"',
   },
 ];
@@ -582,11 +583,7 @@ function getAllJsFiles(dir, fileList = []) {
 }
 
 // Process JS files in multiple directories
-const jsDirs = [
-  join(OUTPUT_DIR, 'js'),
-  join(OUTPUT_DIR, 'app', 'js'),
-  join(OUTPUT_DIR, 'astro'),
-];
+const jsDirs = [join(OUTPUT_DIR, 'js'), join(OUTPUT_DIR, 'app', 'js'), join(OUTPUT_DIR, 'astro')];
 
 let allJsFiles = [];
 for (const jsDir of jsDirs) {
