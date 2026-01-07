@@ -122,7 +122,6 @@ const pageDescription = description || defaultDescription;
 
     <!-- Preload critical resources (version must match actual resource links below) -->
     <link rel="preload" href="/css/style.css?v=27" as="style" />
-    <link rel="preload" href="https://unpkg.com/lucide@latest" as="script" crossorigin />
 
     <!-- Structured Data (JSON-LD) -->
     <script
@@ -211,7 +210,7 @@ const pageDescription = description || defaultDescription;
       }
     </script>
     <link rel="stylesheet" href="/css/style.css?v=27" />
-    <script is:inline src="https://unpkg.com/lucide@latest" defer></script>
+    <script is:inline src="https://unpkg.com/lucide@latest" defer crossorigin="anonymous"></script>
     <slot name="head-css" />
   </head>
   <body>
