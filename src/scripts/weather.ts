@@ -492,8 +492,8 @@ async function fetchWeatherForCity(city: City): Promise<WeatherData | null> {
       apparent_temperature: current.apparent_temperature,
       precipitation: current.precipitation,
     } as WeatherData;
-  } catch (error) {
-    console.error(`Error fetching weather for ${city.name}:`, error);
+  } catch {
+    // Error fetching weather data
     return null;
   }
 }
@@ -620,9 +620,9 @@ async function getUserLocation(): Promise<City | null> {
               locationName = `${translations.yourLocation} (${placeName})`;
             }
           }
-        } catch (error) {
+        } catch {
           // Fallback to "Your Location" if geocoding fails
-          console.warn('Reverse geocoding failed:', error);
+          // Reverse geocoding failed
         }
 
         // Find the closest city from our list using simple Euclidean distance
@@ -869,7 +869,7 @@ async function addCityCard(city: City): Promise<void> {
   const tempDiv = document.createElement('div');
   tempDiv.innerHTML = renderWeatherCard(city, null);
   const newCard = tempDiv.firstElementChild as HTMLElement;
-  
+
   // Append the new card
   container.appendChild(newCard);
   addRemoveListeners();
@@ -886,12 +886,12 @@ async function addCity(cityName: string): Promise<void> {
   if (!selectedCities.includes(cityName)) {
     selectedCities.push(cityName);
     saveSelectedCities();
-    
+
     const city = majorCities.find((c) => c.name === cityName);
     if (city) {
       await addCityCard(city);
     }
-    
+
     renderAvailableCities(
       (document.getElementById('city-search') as HTMLInputElement)?.value || ''
     );
@@ -905,7 +905,9 @@ function removeCity(cityName: string): void {
   }
 
   // Find and remove the specific card
-  const cardToRemove = container.querySelector(`.weather-card[data-city="${cityName}"]:not([data-user-location])`);
+  const cardToRemove = container.querySelector(
+    `.weather-card[data-city="${cityName}"]:not([data-user-location])`
+  );
   if (cardToRemove) {
     // Add fade out animation
     cardToRemove.classList.add('removing');

@@ -165,17 +165,29 @@ function getTimeOfDayClass(timezone: string): string {
   );
 
   // Night: 0-5 (12am-5am)
-  if (hour >= 0 && hour < 5) return 'time-night';
+  if (hour >= 0 && hour < 5) {
+    return 'time-night';
+  }
   // Dawn: 5-7 (5am-7am)
-  if (hour >= 5 && hour < 7) return 'time-dawn';
+  if (hour >= 5 && hour < 7) {
+    return 'time-dawn';
+  }
   // Morning: 7-11 (7am-11am)
-  if (hour >= 7 && hour < 11) return 'time-morning';
+  if (hour >= 7 && hour < 11) {
+    return 'time-morning';
+  }
   // Day: 11-15 (11am-3pm)
-  if (hour >= 11 && hour < 15) return 'time-day';
+  if (hour >= 11 && hour < 15) {
+    return 'time-day';
+  }
   // Afternoon: 15-17 (3pm-5pm)
-  if (hour >= 15 && hour < 17) return 'time-afternoon';
+  if (hour >= 15 && hour < 17) {
+    return 'time-afternoon';
+  }
   // Dusk: 17-19 (5pm-7pm)
-  if (hour >= 17 && hour < 19) return 'time-dusk';
+  if (hour >= 17 && hour < 19) {
+    return 'time-dusk';
+  }
   // Evening: 19-24 (7pm-12am)
   return 'time-evening';
 }

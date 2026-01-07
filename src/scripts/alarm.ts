@@ -401,7 +401,9 @@ let alarmGain: GainNode | null = null;
 function playAlarmSound(): void {
   try {
     if (!audioContext) {
-      audioContext = new (window.AudioContext || (window as any).webkitAudioContext)();
+      audioContext = new (
+        window.AudioContext || (window as typeof AudioContext).webkitAudioContext
+      )();
     }
 
     // Create oscillator for continuous alarm sound

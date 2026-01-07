@@ -180,7 +180,9 @@ function playAlarmSound(): void {
   try {
     // Initialize audio context if not already done
     if (!audioContext) {
-      audioContext = new (window.AudioContext || (window as any).webkitAudioContext)();
+      audioContext = new (
+        window.AudioContext || (window as typeof AudioContext).webkitAudioContext
+      )();
     }
 
     // Create a simple beep sound
