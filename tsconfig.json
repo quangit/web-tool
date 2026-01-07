@@ -9,5 +9,6 @@
     "noUnusedParameters": true,
     "noImplicitReturns": true,
     "noFallthroughCasesInSwitch": true
-  }
+  },
+  "exclude": ["chrome-extension/**", "chrome-extension-build/**", "node_modules/**"]
 }

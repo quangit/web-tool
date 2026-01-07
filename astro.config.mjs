@@ -36,6 +36,11 @@ export default defineConfig({
         },
       },
     },
+    server: {
+      watch: {
+        ignored: ['**/chrome-extension/**', '**/chrome-extension-build/**'],
+      },
+    },
   },
   i18n: {
     defaultLocale: 'en',
