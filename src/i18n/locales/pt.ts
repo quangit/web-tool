@@ -1177,4 +1177,109 @@ export const pt = {
   'currency.ZAR': 'Rand sul-africano',
   'currency.ZMW': 'Kwacha zambiano',
   'currency.ZWL': 'Dólar zimbabuano',
+
+  // World Clock
+  'world_clock.title': 'Relógio Mundial',
+  'world_clock.description':
+    'Veja a hora atual nas principais cidades do mundo. Acompanhe vários fusos horários simultaneamente com esta ferramenta gratuita de relógio mundial online.',
+  'world_clock.search_placeholder': 'Pesquisar cidades...',
+  'world_clock.no_results': 'Nenhuma cidade encontrada',
+  'world_clock.add_city': 'Adicionar cidade',
+  'world_clock.remove_city': 'Remover',
+  'world_clock.your_time': 'Seu horário local',
+  'world_clock.selected_cities': 'Cidades selecionadas',
+  'world_clock.available_cities': 'Cidades disponíveis',
+  'world_clock.time_difference': 'Diferença de fuso',
+  'world_clock.hours_ahead': '{0}h à frente',
+  'world_clock.hours_behind': '{0}h atrás',
+  'world_clock.same_time': 'Mesmo horário',
+  'world_clock.empty_state': 'Clique em uma cidade abaixo para adicioná-la ao seu relógio',
+  'world_clock.help_text':
+    'Clique em uma cidade para adicioná-la ao seu relógio mundial. Suas seleções são salvas localmente.',
+
+  // Stopwatch
+  'stopwatch.title': 'Cronômetro',
+  'stopwatch.description':
+    'Cronômetro online gratuito com tempos de volta. Funcionalidades de iniciar, parar e redefinir com precisão de milissegundos. Acompanhe várias voltas com tempos detalhados.',
+  'stopwatch.start': 'Iniciar',
+  'stopwatch.stop': 'Parar',
+  'stopwatch.reset': 'Redefinir',
+  'stopwatch.lap': 'Volta',
+  'stopwatch.laps': 'Voltas',
+  'stopwatch.lap_time': 'Tempo da volta',
+  'stopwatch.total_time': 'Tempo total',
+  'stopwatch.no_laps': 'Nenhuma volta registrada ainda',
+  'stopwatch.clear_laps': 'Limpar voltas',
+  'stopwatch.help_text':
+    'Clique em Iniciar para começar a cronometrar. Use Volta para registrar tempos parciais.',
+
+  // Timer
+  'timer.title': 'Temporizador',
+  'timer.description':
+    'Temporizador de contagem regressiva online gratuito. Defina horas, minutos e segundos personalizados. Notificação de áudio quando o temporizador terminar.',
+  'timer.start': 'Iniciar',
+  'timer.pause': 'Pausar',
+  'timer.resume': 'Retomar',
+  'timer.reset': 'Redefinir',
+  'timer.hours': 'Horas',
+  'timer.minutes': 'Minutos',
+  'timer.seconds': 'Segundos',
+  'timer.set_time': 'Definir tempo',
+  'timer.time_up': 'Tempo esgotado!',
+  'timer.presets': 'Predefinições rápidas',
+  'timer.help_text':
+    'Defina a duração da contagem regressiva e clique em Iniciar. Um alarme soará quando o tempo acabar.',
+
+  // Alarm
+  'alarm.title': 'Alarme',
+  'alarm.description':
+    'Despertador online gratuito. Configure alarmes com rótulos e sons personalizados. Suporte a múltiplos alarmes com função de soneca.',
+  'alarm.add_alarm': 'Adicionar alarme',
+  'alarm.edit_alarm': 'Editar alarme',
+  'alarm.delete_alarm': 'Excluir alarme',
+  'alarm.alarm_time': 'Hora do alarme',
+  'alarm.label': 'Rótulo',
+  'alarm.label_placeholder': 'Digite o rótulo do alarme...',
+  'alarm.repeat': 'Repetir',
+  'alarm.sound': 'Som',
+  'alarm.snooze': 'Soneca',
+  'alarm.dismiss': 'Dispensar',
+  'alarm.no_alarms': 'Nenhum alarme definido',
+  'alarm.alarm_ringing': 'Alarme tocando!',
+  'alarm.enabled': 'Ativado',
+  'alarm.disabled': 'Desativado',
+  'alarm.save': 'Salvar',
+  'alarm.cancel': 'Cancelar',
+  'alarm.help_text':
+    'Configure alarmes para receber notificações em horários específicos. Os alarmes são salvos localmente.',
+  'alarm.sun': 'Dom',
+  'alarm.mon': 'Seg',
+  'alarm.tue': 'Ter',
+  'alarm.wed': 'Qua',
+  'alarm.thu': 'Qui',
+  'alarm.fri': 'Sex',
+  'alarm.sat': 'Sáb',
+
+  // Weather
+  'weather.title': 'Clima',
+  'weather.description':
+    'Verifique as condições climáticas atuais das principais cidades do mundo. Obtenha temperatura, velocidade do vento e condições climáticas em tempo real. Detecta automaticamente sua localização.',
+  'weather.loading': 'Carregando...',
+  'weather.error': 'Falha ao carregar dados do clima',
+  'weather.no_results': 'Nenhuma cidade encontrada',
+  'weather.your_location': 'Sua localização',
+  'weather.location_error': 'Não foi possível detectar sua localização',
+  'weather.temperature': 'Temperatura',
+  'weather.wind_speed': 'Vento',
+  'weather.humidity': 'Umidade',
+  'weather.feels_like': 'Sensação',
+  'weather.precipitation': 'Precipitação',
+  'weather.select_cities': 'Selecione cidades para exibir',
+  'weather.selected_cities': 'Clima',
+  'weather.available_cities': 'Adicionar mais cidades',
+  'weather.last_updated': 'Última atualização',
+  'weather.refresh': 'Atualizar',
+  'weather.search_placeholder': 'Buscar cidades...',
+  'weather.help_text':
+    'Veja o clima atual de cidades ao redor do mundo. Clique em uma cidade para adicioná-la ao seu painel. Os dados do clima são atualizados automaticamente a cada 5 minutos.',
 };

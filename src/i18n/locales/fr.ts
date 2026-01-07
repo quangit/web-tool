@@ -1176,4 +1176,109 @@ export const fr = {
   'currency.ZAR': 'Rand sud-africain',
   'currency.ZMW': 'Kwacha zambien',
   'currency.ZWL': 'Dollar zimbabwéen',
+
+  // World Clock
+  'world_clock.title': 'Horloge Mondiale',
+  'world_clock.description':
+    "Voir l'heure actuelle dans les grandes villes du monde. Suivez plusieurs fuseaux horaires simultanément avec cet outil d'horloge mondiale en ligne gratuit.",
+  'world_clock.search_placeholder': 'Rechercher des villes...',
+  'world_clock.no_results': 'Aucune ville trouvée',
+  'world_clock.add_city': 'Ajouter une ville',
+  'world_clock.remove_city': 'Supprimer',
+  'world_clock.your_time': 'Votre heure locale',
+  'world_clock.selected_cities': 'Villes sélectionnées',
+  'world_clock.available_cities': 'Villes disponibles',
+  'world_clock.time_difference': 'Décalage horaire',
+  'world_clock.hours_ahead': "{0}h d'avance",
+  'world_clock.hours_behind': '{0}h de retard',
+  'world_clock.same_time': 'Même heure',
+  'world_clock.empty_state': "Cliquez sur une ville ci-dessous pour l'ajouter à votre horloge",
+  'world_clock.help_text':
+    "Cliquez sur une ville pour l'ajouter à votre horloge mondiale. Vos sélections sont enregistrées localement.",
+
+  // Stopwatch
+  'stopwatch.title': 'Chronomètre',
+  'stopwatch.description':
+    'Chronomètre en ligne gratuit avec temps de tour. Fonctions de démarrage, arrêt et réinitialisation avec précision à la milliseconde. Enregistrez plusieurs tours avec des temps détaillés.',
+  'stopwatch.start': 'Démarrer',
+  'stopwatch.stop': 'Arrêter',
+  'stopwatch.reset': 'Réinitialiser',
+  'stopwatch.lap': 'Tour',
+  'stopwatch.laps': 'Tours',
+  'stopwatch.lap_time': 'Temps du tour',
+  'stopwatch.total_time': 'Temps total',
+  'stopwatch.no_laps': 'Aucun tour enregistré',
+  'stopwatch.clear_laps': 'Effacer les tours',
+  'stopwatch.help_text':
+    'Cliquez sur Démarrer pour commencer le chronométrage. Utilisez Tour pour enregistrer les temps intermédiaires.',
+
+  // Timer
+  'timer.title': 'Minuteur',
+  'timer.description':
+    'Minuteur à rebours en ligne gratuit. Définissez des heures, minutes et secondes personnalisées. Notification sonore à la fin du compte à rebours.',
+  'timer.start': 'Démarrer',
+  'timer.pause': 'Pause',
+  'timer.resume': 'Reprendre',
+  'timer.reset': 'Réinitialiser',
+  'timer.hours': 'Heures',
+  'timer.minutes': 'Minutes',
+  'timer.seconds': 'Secondes',
+  'timer.set_time': 'Définir le temps',
+  'timer.time_up': 'Temps écoulé !',
+  'timer.presets': 'Préréglages rapides',
+  'timer.help_text':
+    'Définissez la durée du compte à rebours et cliquez sur Démarrer. Une alarme sonnera à la fin.',
+
+  // Alarm
+  'alarm.title': 'Alarme',
+  'alarm.description':
+    'Réveil en ligne gratuit. Configurez des alarmes avec des étiquettes et des sons personnalisés. Prise en charge de plusieurs alarmes avec fonction de répétition.',
+  'alarm.add_alarm': 'Ajouter une alarme',
+  'alarm.edit_alarm': "Modifier l'alarme",
+  'alarm.delete_alarm': "Supprimer l'alarme",
+  'alarm.alarm_time': "Heure de l'alarme",
+  'alarm.label': 'Étiquette',
+  'alarm.label_placeholder': "Entrez l'étiquette de l'alarme...",
+  'alarm.repeat': 'Répéter',
+  'alarm.sound': 'Son',
+  'alarm.snooze': 'Répéter',
+  'alarm.dismiss': 'Ignorer',
+  'alarm.no_alarms': 'Aucune alarme définie',
+  'alarm.alarm_ringing': "L'alarme sonne !",
+  'alarm.enabled': 'Activée',
+  'alarm.disabled': 'Désactivée',
+  'alarm.save': 'Enregistrer',
+  'alarm.cancel': 'Annuler',
+  'alarm.help_text':
+    'Définissez des alarmes pour recevoir des notifications à des heures spécifiques. Les alarmes sont enregistrées localement.',
+  'alarm.sun': 'Dim',
+  'alarm.mon': 'Lun',
+  'alarm.tue': 'Mar',
+  'alarm.wed': 'Mer',
+  'alarm.thu': 'Jeu',
+  'alarm.fri': 'Ven',
+  'alarm.sat': 'Sam',
+
+  // Weather
+  'weather.title': 'Météo',
+  'weather.description':
+    'Consultez les conditions météorologiques actuelles des grandes villes du monde. Obtenez la température, la vitesse du vent et les conditions météorologiques en temps réel. Détecte automatiquement votre position.',
+  'weather.loading': 'Chargement...',
+  'weather.error': 'Échec du chargement des données météo',
+  'weather.no_results': 'Aucune ville trouvée',
+  'weather.your_location': 'Votre position',
+  'weather.location_error': 'Impossible de détecter votre position',
+  'weather.temperature': 'Température',
+  'weather.wind_speed': 'Vent',
+  'weather.humidity': 'Humidité',
+  'weather.feels_like': 'Ressenti',
+  'weather.precipitation': 'Précipitations',
+  'weather.select_cities': 'Sélectionner les villes à afficher',
+  'weather.selected_cities': 'Météo',
+  'weather.available_cities': 'Ajouter des villes',
+  'weather.last_updated': 'Dernière mise à jour',
+  'weather.refresh': 'Actualiser',
+  'weather.search_placeholder': 'Rechercher des villes...',
+  'weather.help_text':
+    "Consultez la météo actuelle des villes du monde entier. Cliquez sur une ville pour l'ajouter à votre tableau de bord. Les données météo sont actualisées automatiquement toutes les 5 minutes.",
 };

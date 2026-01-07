@@ -1173,4 +1173,109 @@ export const ja = {
   'currency.ZAR': '南アフリカ・ランド',
   'currency.ZMW': 'ザンビア・クワチャ',
   'currency.ZWL': 'ジンバブエ・ドル',
+
+  // World Clock
+  'world_clock.title': '世界時計',
+  'world_clock.description':
+    '世界の主要都市の現在時刻を表示します。この無料オンライン世界時計ツールで複数のタイムゾーンを同時に追跡できます。',
+  'world_clock.search_placeholder': '都市を検索...',
+  'world_clock.no_results': '都市が見つかりません',
+  'world_clock.add_city': '都市を追加',
+  'world_clock.remove_city': '削除',
+  'world_clock.your_time': 'あなたの現地時間',
+  'world_clock.selected_cities': '選択した都市',
+  'world_clock.available_cities': '利用可能な都市',
+  'world_clock.time_difference': '時差',
+  'world_clock.hours_ahead': '{0}時間進んでいます',
+  'world_clock.hours_behind': '{0}時間遅れています',
+  'world_clock.same_time': '同じ時間',
+  'world_clock.empty_state': '下の都市をクリックして時計に追加してください',
+  'world_clock.help_text':
+    '都市をクリックして世界時計に追加できます。選択内容はローカルに保存されます。',
+
+  // Stopwatch
+  'stopwatch.title': 'ストップウォッチ',
+  'stopwatch.description':
+    'ラップタイム機能付きの無料オンラインストップウォッチ。ミリ秒精度でスタート、ストップ、リセット機能。詳細なタイミングで複数のラップを記録できます。',
+  'stopwatch.start': 'スタート',
+  'stopwatch.stop': 'ストップ',
+  'stopwatch.reset': 'リセット',
+  'stopwatch.lap': 'ラップ',
+  'stopwatch.laps': 'ラップ',
+  'stopwatch.lap_time': 'ラップタイム',
+  'stopwatch.total_time': '合計時間',
+  'stopwatch.no_laps': 'まだラップが記録されていません',
+  'stopwatch.clear_laps': 'ラップをクリア',
+  'stopwatch.help_text':
+    'スタートをクリックして計測を開始します。ラップでスプリットタイムを記録します。',
+
+  // Timer
+  'timer.title': 'タイマー',
+  'timer.description':
+    '無料オンラインカウントダウンタイマー。時間、分、秒をカスタム設定。タイマー終了時に音声通知。',
+  'timer.start': 'スタート',
+  'timer.pause': '一時停止',
+  'timer.resume': '再開',
+  'timer.reset': 'リセット',
+  'timer.hours': '時間',
+  'timer.minutes': '分',
+  'timer.seconds': '秒',
+  'timer.set_time': '時間を設定',
+  'timer.time_up': '時間です！',
+  'timer.presets': 'クイックプリセット',
+  'timer.help_text':
+    'カウントダウン時間を設定してスタートをクリックしてください。時間になるとアラームが鳴ります。',
+
+  // Alarm
+  'alarm.title': 'アラーム',
+  'alarm.description':
+    '無料オンライン目覚まし時計。カスタムラベルとサウンドでアラームを設定。スヌーズ機能付きの複数アラーム対応。',
+  'alarm.add_alarm': 'アラームを追加',
+  'alarm.edit_alarm': 'アラームを編集',
+  'alarm.delete_alarm': 'アラームを削除',
+  'alarm.alarm_time': 'アラーム時刻',
+  'alarm.label': 'ラベル',
+  'alarm.label_placeholder': 'アラームラベルを入力...',
+  'alarm.repeat': '繰り返し',
+  'alarm.sound': 'サウンド',
+  'alarm.snooze': 'スヌーズ',
+  'alarm.dismiss': '解除',
+  'alarm.no_alarms': 'アラームが設定されていません',
+  'alarm.alarm_ringing': 'アラームが鳴っています！',
+  'alarm.enabled': '有効',
+  'alarm.disabled': '無効',
+  'alarm.save': '保存',
+  'alarm.cancel': 'キャンセル',
+  'alarm.help_text':
+    '特定の時間に通知を受け取るようにアラームを設定します。アラームはローカルに保存されます。',
+  'alarm.sun': '日',
+  'alarm.mon': '月',
+  'alarm.tue': '火',
+  'alarm.wed': '水',
+  'alarm.thu': '木',
+  'alarm.fri': '金',
+  'alarm.sat': '土',
+
+  // Weather
+  'weather.title': '天気',
+  'weather.description':
+    '世界の主要都市の現在の天気状況を確認できます。リアルタイムの気温、風速、天気状況を取得します。位置情報を自動検出します。',
+  'weather.loading': '読み込み中...',
+  'weather.error': '天気データの読み込みに失敗しました',
+  'weather.no_results': '都市が見つかりません',
+  'weather.your_location': '現在地',
+  'weather.location_error': '位置を検出できませんでした',
+  'weather.temperature': '気温',
+  'weather.wind_speed': '風速',
+  'weather.humidity': '湿度',
+  'weather.feels_like': '体感温度',
+  'weather.precipitation': '降水量',
+  'weather.select_cities': '表示する都市を選択',
+  'weather.selected_cities': '天気',
+  'weather.available_cities': '都市を追加',
+  'weather.last_updated': '最終更新',
+  'weather.refresh': '更新',
+  'weather.search_placeholder': '都市を検索...',
+  'weather.help_text':
+    '世界中の都市の現在の天気を表示します。都市をクリックしてダッシュボードに追加します。天気データは5分ごとに自動更新されます。',
 };

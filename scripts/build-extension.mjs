@@ -211,6 +211,21 @@ const CDN_LIBRARIES = [
     url: 'https://pfau-software.de/json-viewer/dist/iife/index.js',
     filename: 'json-viewer.min.js',
   },
+  // Toast UI Editor
+  {
+    url: 'https://uicdn.toast.com/editor/latest/toastui-editor-all.min.js',
+    filename: 'toastui-editor-all.min.js',
+  },
+  {
+    url: 'https://uicdn.toast.com/editor/latest/toastui-editor.min.css',
+    filename: 'toastui-editor.min.css',
+    isCSS: true,
+  },
+  {
+    url: 'https://uicdn.toast.com/editor/latest/theme/toastui-editor-dark.min.css',
+    filename: 'toastui-editor-dark.min.css',
+    isCSS: true,
+  },
 ];
 
 async function downloadFile(url, destPath) {
@@ -246,10 +261,13 @@ async function downloadFile(url, destPath) {
 }
 
 const cdnJsDir = join(OUTPUT_DIR, 'js', 'cdn');
+const cdnCssDir = join(OUTPUT_DIR, 'css', 'cdn');
 mkdirSync(cdnJsDir, { recursive: true });
+mkdirSync(cdnCssDir, { recursive: true });
 
 for (const lib of CDN_LIBRARIES) {
-  const destPath = join(cdnJsDir, lib.filename);
+  const destDir = lib.isCSS ? cdnCssDir : cdnJsDir;
+  const destPath = join(destDir, lib.filename);
   try {
     console.log(`   Downloading ${lib.filename}...`);
     await downloadFile(lib.url, destPath);
@@ -534,6 +552,20 @@ const jsCdnReplacements = [
     pattern: /["']https:\/\/pfau-software\.de\/json-viewer\/dist\/iife\/index\.js["']/g,
     replacement: '"/js/cdn/json-viewer.min.js"',
   },
+  // Toast UI Editor
+  {
+    pattern: /["']https:\/\/uicdn\.toast\.com\/editor\/latest\/toastui-editor-all\.min\.js["']/g,
+    replacement: '"/js/cdn/toastui-editor-all.min.js"',
+  },
+  {
+    pattern: /["']https:\/\/uicdn\.toast\.com\/editor\/latest\/toastui-editor\.min\.css["']/g,
+    replacement: '"/css/cdn/toastui-editor.min.css"',
+  },
+  {
+    pattern:
+      /["']https:\/\/uicdn\.toast\.com\/editor\/latest\/theme\/toastui-editor-dark\.min\.css["']/g,
+    replacement: '"/css/cdn/toastui-editor-dark.min.css"',
+  },
 ];
 
 function getAllJsFiles(dir, fileList = []) {
@@ -550,33 +582,38 @@ function getAllJsFiles(dir, fileList = []) {
   return fileList;
 }
 
-const jsDir = join(OUTPUT_DIR, 'js');
-if (existsSync(jsDir)) {
-  const jsFiles = getAllJsFiles(jsDir);
-  let jsFixedCount = 0;
+// Process JS files in multiple directories
+const jsDirs = [join(OUTPUT_DIR, 'js'), join(OUTPUT_DIR, 'app', 'js'), join(OUTPUT_DIR, 'astro')];
 
-  for (const jsFilePath of jsFiles) {
-    try {
-      let jsContent = readFileSync(jsFilePath, 'utf-8');
-      const originalContent = jsContent;
-
-      for (const repl of jsCdnReplacements) {
-        // Create new regex instance to avoid lastIndex issues with global flag
-        const pattern = new RegExp(repl.pattern.source, repl.pattern.flags);
-        jsContent = jsContent.replace(pattern, repl.replacement);
-      }
-
-      if (jsContent !== originalContent) {
-        writeFileSync(jsFilePath, jsContent, 'utf-8');
-        jsFixedCount++;
-      }
-    } catch (err) {
-      console.error(`   Error processing JS file ${jsFilePath}: ${err.message}`);
-    }
+let allJsFiles = [];
+for (const jsDir of jsDirs) {
+  if (existsSync(jsDir)) {
+    allJsFiles = allJsFiles.concat(getAllJsFiles(jsDir));
   }
-
-  console.log(`   ✓ Fixed CDN URLs in ${jsFixedCount} JS files`);
 }
+
+let jsFixedCount = 0;
+for (const jsFilePath of allJsFiles) {
+  try {
+    let jsContent = readFileSync(jsFilePath, 'utf-8');
+    const originalContent = jsContent;
+
+    for (const repl of jsCdnReplacements) {
+      // Create new regex instance to avoid lastIndex issues with global flag
+      const pattern = new RegExp(repl.pattern.source, repl.pattern.flags);
+      jsContent = jsContent.replace(pattern, repl.replacement);
+    }
+
+    if (jsContent !== originalContent) {
+      writeFileSync(jsFilePath, jsContent, 'utf-8');
+      jsFixedCount++;
+    }
+  } catch (err) {
+    console.error(`   Error processing JS file ${jsFilePath}: ${err.message}`);
+  }
+}
+
+console.log(`   ✓ Fixed CDN URLs in ${jsFixedCount} JS files`);
 
 // Step 9: Calculate size
 console.log('\n📊 Step 9: Calculating extension size...');

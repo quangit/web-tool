@@ -547,10 +547,7 @@ summary:hover {
 }
 
 #content .top-nav {
-  padding: 1rem 1.5rem;
-  background-color: var(--var-main-bg-color);
-  border-bottom: 1px solid var(--var-border-color);
-  box-shadow: var(--var-shadow-sm);
+  display: none;
 }
 
 #content .top-nav img {
@@ -1381,10 +1378,6 @@ input[type='range']::-moz-range-thumb:hover {
     transform: none;
   }
 
-  #content .top-nav {
-    display: none;
-  }
-
   #content header {
     padding: 2.5rem 3rem;
   }
@@ -1405,10 +1398,6 @@ input[type='range']::-moz-range-thumb:hover {
   #sidebar .container {
     position: static;
     transform: none;
-  }
-
-  #content .top-nav {
-    display: none;
   }
 
   #content header {
@@ -1454,7 +1443,6 @@ input[type='range']::-moz-range-thumb:hover {
 /* Print Styles */
 @media print {
   #sidebar,
-  #content .top-nav,
   .toolbar,
   #message {
     display: none !important;

@@ -1177,4 +1177,109 @@ export const hi = {
   'currency.ZAR': 'दक्षिण अफ्रीकी रैंड',
   'currency.ZMW': 'जाम्बियन क्वाचा',
   'currency.ZWL': 'जिम्बाब्वे डॉलर',
+
+  // World Clock
+  'world_clock.title': 'विश्व घड़ी',
+  'world_clock.description':
+    'दुनिया भर के प्रमुख शहरों में वर्तमान समय देखें। इस मुफ्त ऑनलाइन विश्व घड़ी टूल के साथ एक साथ कई समय क्षेत्रों को ट्रैक करें।',
+  'world_clock.search_placeholder': 'शहर खोजें...',
+  'world_clock.no_results': 'कोई शहर नहीं मिला',
+  'world_clock.add_city': 'शहर जोड़ें',
+  'world_clock.remove_city': 'हटाएं',
+  'world_clock.your_time': 'आपका स्थानीय समय',
+  'world_clock.selected_cities': 'चयनित शहर',
+  'world_clock.available_cities': 'उपलब्ध शहर',
+  'world_clock.time_difference': 'समय अंतर',
+  'world_clock.hours_ahead': '{0} घंटे आगे',
+  'world_clock.hours_behind': '{0} घंटे पीछे',
+  'world_clock.same_time': 'समान समय',
+  'world_clock.empty_state': 'अपनी घड़ी में जोड़ने के लिए नीचे किसी शहर पर क्लिक करें',
+  'world_clock.help_text':
+    'अपनी विश्व घड़ी में जोड़ने के लिए किसी शहर पर क्लिक करें। आपके चयन स्थानीय रूप से सहेजे गए हैं।',
+
+  // Stopwatch
+  'stopwatch.title': 'स्टॉपवॉच',
+  'stopwatch.description':
+    'लैप समय के साथ मुफ्त ऑनलाइन स्टॉपवॉच। मिलीसेकंड सटीकता के साथ शुरू, रोकें और रीसेट करें। विस्तृत समय के साथ कई लैप ट्रैक करें।',
+  'stopwatch.start': 'शुरू करें',
+  'stopwatch.stop': 'रोकें',
+  'stopwatch.reset': 'रीसेट',
+  'stopwatch.lap': 'लैप',
+  'stopwatch.laps': 'लैप्स',
+  'stopwatch.lap_time': 'लैप समय',
+  'stopwatch.total_time': 'कुल समय',
+  'stopwatch.no_laps': 'अभी तक कोई लैप रिकॉर्ड नहीं',
+  'stopwatch.clear_laps': 'लैप साफ़ करें',
+  'stopwatch.help_text':
+    'समय शुरू करने के लिए शुरू पर क्लिक करें। स्प्लिट टाइम रिकॉर्ड करने के लिए लैप का उपयोग करें।',
+
+  // Timer
+  'timer.title': 'टाइमर',
+  'timer.description':
+    'मुफ्त ऑनलाइन काउंटडाउन टाइमर। कस्टम घंटे, मिनट और सेकंड सेट करें। टाइमर पूरा होने पर ऑडियो नोटिफिकेशन।',
+  'timer.start': 'शुरू करें',
+  'timer.pause': 'रोकें',
+  'timer.resume': 'जारी रखें',
+  'timer.reset': 'रीसेट',
+  'timer.hours': 'घंटे',
+  'timer.minutes': 'मिनट',
+  'timer.seconds': 'सेकंड',
+  'timer.set_time': 'समय सेट करें',
+  'timer.time_up': 'समय समाप्त!',
+  'timer.presets': 'त्वरित प्रीसेट',
+  'timer.help_text':
+    'काउंटडाउन अवधि सेट करें और शुरू पर क्लिक करें। समय समाप्त होने पर अलार्म बजेगा।',
+
+  // Alarm
+  'alarm.title': 'अलार्म',
+  'alarm.description':
+    'मुफ्त ऑनलाइन अलार्म घड़ी। कस्टम लेबल और ध्वनियों के साथ अलार्म सेट करें। स्नूज़ कार्यक्षमता के साथ कई अलार्म समर्थन।',
+  'alarm.add_alarm': 'अलार्म जोड़ें',
+  'alarm.edit_alarm': 'अलार्म संपादित करें',
+  'alarm.delete_alarm': 'अलार्म हटाएं',
+  'alarm.alarm_time': 'अलार्म समय',
+  'alarm.label': 'लेबल',
+  'alarm.label_placeholder': 'अलार्म लेबल दर्ज करें...',
+  'alarm.repeat': 'दोहराएं',
+  'alarm.sound': 'ध्वनि',
+  'alarm.snooze': 'स्नूज़',
+  'alarm.dismiss': 'खारिज करें',
+  'alarm.no_alarms': 'कोई अलार्म सेट नहीं',
+  'alarm.alarm_ringing': 'अलार्म बज रहा है!',
+  'alarm.enabled': 'सक्षम',
+  'alarm.disabled': 'अक्षम',
+  'alarm.save': 'सहेजें',
+  'alarm.cancel': 'रद्द करें',
+  'alarm.help_text':
+    'विशिष्ट समय पर नोटिफिकेशन प्राप्त करने के लिए अलार्म सेट करें। अलार्म स्थानीय रूप से सहेजे जाते हैं।',
+  'alarm.sun': 'रवि',
+  'alarm.mon': 'सोम',
+  'alarm.tue': 'मंगल',
+  'alarm.wed': 'बुध',
+  'alarm.thu': 'गुरु',
+  'alarm.fri': 'शुक्र',
+  'alarm.sat': 'शनि',
+
+  // Weather
+  'weather.title': 'मौसम',
+  'weather.description':
+    'दुनिया भर के प्रमुख शहरों की वर्तमान मौसम स्थितियों की जांच करें। वास्तविक समय में तापमान, हवा की गति और मौसम की स्थिति प्राप्त करें। स्वचालित रूप से आपका स्थान पता लगाता है।',
+  'weather.loading': 'लोड हो रहा है...',
+  'weather.error': 'मौसम डेटा लोड करने में विफल',
+  'weather.no_results': 'कोई शहर नहीं मिला',
+  'weather.your_location': 'आपका स्थान',
+  'weather.location_error': 'आपका स्थान पता नहीं चल सका',
+  'weather.temperature': 'तापमान',
+  'weather.wind_speed': 'हवा',
+  'weather.humidity': 'नमी',
+  'weather.feels_like': 'महसूस होता है',
+  'weather.precipitation': 'वर्षा',
+  'weather.select_cities': 'प्रदर्शित करने के लिए शहर चुनें',
+  'weather.selected_cities': 'मौसम',
+  'weather.available_cities': 'अधिक शहर जोड़ें',
+  'weather.last_updated': 'अंतिम अपडेट',
+  'weather.refresh': 'रिफ्रेश',
+  'weather.search_placeholder': 'शहर खोजें...',
+  'weather.help_text':
+    'दुनिया भर के शहरों का वर्तमान मौसम देखें। अपने डैशबोर्ड में जोड़ने के लिए किसी शहर पर क्लिक करें। मौसम डेटा हर 5 मिनट में स्वचालित रूप से अपडेट होता है।',
 };

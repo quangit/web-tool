@@ -1204,4 +1204,108 @@ export const en = {
   'currency.ZAR': 'South African Rand',
   'currency.ZMW': 'Zambian Kwacha',
   'currency.ZWL': 'Zimbabwean Dollar',
+
+  // World Clock
+  'world_clock.title': 'World Clock',
+  'world_clock.description':
+    'View current time in major cities around the world. Track multiple time zones simultaneously with this free online world clock tool.',
+  'world_clock.search_placeholder': 'Search cities...',
+  'world_clock.no_results': 'No cities found',
+  'world_clock.add_city': 'Add City',
+  'world_clock.remove_city': 'Remove',
+  'world_clock.your_time': 'Your Local Time',
+  'world_clock.selected_cities': 'Selected Cities',
+  'world_clock.available_cities': 'Available Cities',
+  'world_clock.time_difference': 'Time Difference',
+  'world_clock.hours_ahead': '{0}h ahead',
+  'world_clock.hours_behind': '{0}h behind',
+  'world_clock.same_time': 'Same time',
+  'world_clock.empty_state': 'Click on a city below to add it to your clock',
+  'world_clock.help_text':
+    'Click on a city to add it to your world clock. Your selections are saved locally.',
+
+  // Stopwatch
+  'stopwatch.title': 'Stopwatch',
+  'stopwatch.description':
+    'Free online stopwatch with lap times. Start, stop, and reset functionality with millisecond precision. Track multiple laps with detailed timing.',
+  'stopwatch.start': 'Start',
+  'stopwatch.stop': 'Stop',
+  'stopwatch.reset': 'Reset',
+  'stopwatch.lap': 'Lap',
+  'stopwatch.laps': 'Laps',
+  'stopwatch.lap_time': 'Lap Time',
+  'stopwatch.total_time': 'Total Time',
+  'stopwatch.no_laps': 'No laps recorded yet',
+  'stopwatch.clear_laps': 'Clear Laps',
+  'stopwatch.help_text': 'Click Start to begin timing. Use Lap to record split times.',
+
+  // Timer
+  'timer.title': 'Timer',
+  'timer.description':
+    'Free online countdown timer. Set custom hours, minutes, and seconds. Audio notification when timer completes.',
+  'timer.start': 'Start',
+  'timer.pause': 'Pause',
+  'timer.resume': 'Resume',
+  'timer.reset': 'Reset',
+  'timer.hours': 'Hours',
+  'timer.minutes': 'Minutes',
+  'timer.seconds': 'Seconds',
+  'timer.set_time': 'Set Time',
+  'timer.time_up': "Time's Up!",
+  'timer.presets': 'Quick Presets',
+  'timer.help_text':
+    'Set the countdown duration and click Start. An alarm will sound when time is up.',
+
+  // Alarm
+  'alarm.title': 'Alarm',
+  'alarm.description':
+    'Free online alarm clock. Set alarms with custom labels and sounds. Multiple alarm support with snooze functionality.',
+  'alarm.add_alarm': 'Add Alarm',
+  'alarm.edit_alarm': 'Edit Alarm',
+  'alarm.delete_alarm': 'Delete Alarm',
+  'alarm.alarm_time': 'Alarm Time',
+  'alarm.label': 'Label',
+  'alarm.label_placeholder': 'Enter alarm label...',
+  'alarm.repeat': 'Repeat',
+  'alarm.sound': 'Sound',
+  'alarm.snooze': 'Snooze',
+  'alarm.dismiss': 'Dismiss',
+  'alarm.no_alarms': 'No alarms set',
+  'alarm.alarm_ringing': 'Alarm Ringing!',
+  'alarm.enabled': 'Enabled',
+  'alarm.disabled': 'Disabled',
+  'alarm.save': 'Save',
+  'alarm.cancel': 'Cancel',
+  'alarm.help_text':
+    'Set alarms to receive notifications at specific times. Alarms are saved locally.',
+  'alarm.sun': 'Sun',
+  'alarm.mon': 'Mon',
+  'alarm.tue': 'Tue',
+  'alarm.wed': 'Wed',
+  'alarm.thu': 'Thu',
+  'alarm.fri': 'Fri',
+  'alarm.sat': 'Sat',
+
+  // Weather
+  'weather.title': 'Weather',
+  'weather.description':
+    'Check current weather conditions for major cities around the world. Get real-time temperature, wind speed, and weather conditions. Auto-detects your location.',
+  'weather.loading': 'Loading...',
+  'weather.error': 'Failed to load weather data',
+  'weather.no_results': 'No cities found',
+  'weather.your_location': 'Your Location',
+  'weather.location_error': 'Could not detect your location',
+  'weather.temperature': 'Temperature',
+  'weather.wind_speed': 'Wind',
+  'weather.humidity': 'Humidity',
+  'weather.feels_like': 'Feels like',
+  'weather.precipitation': 'Precipitation',
+  'weather.select_cities': 'Select cities to display',
+  'weather.selected_cities': 'Weather',
+  'weather.available_cities': 'Add More Cities',
+  'weather.last_updated': 'Last updated',
+  'weather.refresh': 'Refresh',
+  'weather.search_placeholder': 'Search cities...',
+  'weather.help_text':
+    'View current weather for cities worldwide. Click on a city to add it to your dashboard. Weather data is refreshed automatically every 5 minutes.',
 };

@@ -57,6 +57,19 @@ export const toolSections: ToolSection[] = [
           { url: 'image/crop-rotate', name: 'Crop & Rotate Image', icon: 'crop' },
         ],
       },
+      {
+        title: 'Time',
+        items: [
+          { url: 'clock/world-clock', name: 'World Clock', icon: 'globe' },
+          { url: 'clock/stopwatch', name: 'Stopwatch', icon: 'timer' },
+          { url: 'clock/timer', name: 'Timer', icon: 'hourglass' },
+          { url: 'clock/alarm', name: 'Alarm', icon: 'alarm-clock' },
+        ],
+      },
+      {
+        title: 'Weather',
+        items: [{ url: 'weather', name: 'Weather', icon: 'cloud-sun' }],
+      },
     ],
   },
   {

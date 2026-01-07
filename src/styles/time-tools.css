@@ -1,0 +1,695 @@
+/* Common styles for time tools */
+.time-tools-container {
+  display: flex;
+  flex-direction: column;
+  gap: 1.5rem;
+  padding: 1rem;
+}
+
+/* Main time display */
+.time-display-card {
+  background: var(--card-bg, #1a1a2e);
+  border-radius: 12px;
+  padding: 2rem;
+  text-align: center;
+  border: 1px solid var(--border-color, #333);
+}
+
+.time-display {
+  font-size: 4rem;
+  font-weight: 700;
+  font-family:
+    'JetBrains Mono', 'Fira Code', 'SF Mono', 'Consolas', 'Liberation Mono', 'Menlo', monospace;
+  color: var(--primary-color, #00d9ff);
+  line-height: 1.2;
+  margin-bottom: 0.5rem;
+}
+
+.time-display.time-up {
+  color: #e74c3c;
+  animation: pulse 1s infinite;
+}
+
+@keyframes pulse {
+  0%,
+  100% {
+    opacity: 1;
+  }
+  50% {
+    opacity: 0.5;
+  }
+}
+
+.time-display-ms {
+  font-size: 2rem;
+  color: var(--text-secondary, #888);
+}
+
+/* Control buttons */
+.time-controls {
+  display: flex;
+  justify-content: center;
+  gap: 1rem;
+  margin-top: 1.5rem;
+  flex-wrap: wrap;
+}
+
+.btn-time {
+  padding: 0.75rem 2rem;
+  border: none;
+  border-radius: 8px;
+  font-size: 1rem;
+  font-weight: 600;
+  cursor: pointer;
+  transition: all 0.2s ease;
+  min-width: 120px;
+}
+
+.btn-time:disabled {
+  opacity: 0.5;
+  cursor: not-allowed;
+}
+
+.btn-start {
+  background: #27ae60;
+  color: white;
+}
+
+.btn-start:hover:not(:disabled) {
+  background: #219a52;
+}
+
+.btn-stop {
+  background: #e74c3c;
+  color: white;
+}
+
+.btn-stop:hover:not(:disabled) {
+  background: #c0392b;
+}
+
+.btn-pause {
+  background: #f39c12;
+  color: white;
+}
+
+.btn-pause:hover:not(:disabled) {
+  background: #d68910;
+}
+
+.btn-reset {
+  background: var(--card-bg, #1a1a2e);
+  color: var(--text-color, #fff);
+  border: 1px solid var(--border-color, #333);
+}
+
+.btn-reset:hover:not(:disabled) {
+  background: var(--hover-bg, #252540);
+}
+
+.btn-lap {
+  background: var(--primary-color, #00d9ff);
+  color: #000;
+}
+
+.btn-lap:hover:not(:disabled) {
+  filter: brightness(1.1);
+}
+
+/* Stopwatch laps */
+.laps-section {
+  background: var(--card-bg, #1a1a2e);
+  border-radius: 12px;
+  padding: 1rem;
+  border: 1px solid var(--border-color, #333);
+}
+
+.laps-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 1rem;
+  padding-bottom: 0.5rem;
+  border-bottom: 1px solid var(--border-color, #333);
+}
+
+.laps-title {
+  font-size: 1rem;
+  font-weight: 600;
+  color: var(--text-color, #fff);
+}
+
+.btn-clear-laps {
+  background: transparent;
+  border: none;
+  color: var(--text-secondary, #888);
+  cursor: pointer;
+  padding: 0.25rem 0.5rem;
+  border-radius: 4px;
+  font-size: 0.875rem;
+}
+
+.btn-clear-laps:hover {
+  color: #e74c3c;
+  background: rgba(231, 76, 60, 0.15);
+}
+
+.laps-list {
+  max-height: 250px;
+  overflow-y: auto;
+}
+
+.lap-item {
+  display: flex;
+  justify-content: space-between;
+  padding: 0.5rem 0;
+  border-bottom: 1px solid var(--border-color, #333);
+}
+
+.lap-item:last-child {
+  border-bottom: none;
+}
+
+.lap-number {
+  font-weight: 600;
+  color: var(--text-color, #fff);
+}
+
+.lap-time {
+  font-family: 'JetBrains Mono', 'Fira Code', 'SF Mono', monospace;
+  color: var(--primary-color, #00d9ff);
+}
+
+.lap-total {
+  font-family: 'JetBrains Mono', 'Fira Code', 'SF Mono', monospace;
+  color: var(--text-secondary, #888);
+  font-size: 0.875rem;
+}
+
+.no-laps {
+  text-align: center;
+  padding: 2rem;
+  color: var(--text-secondary, #888);
+}
+
+/* Timer input */
+.timer-input-section {
+  display: flex;
+  justify-content: center;
+  gap: 0.5rem;
+  margin-bottom: 1.5rem;
+  align-items: center;
+}
+
+.timer-input-group {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 0.25rem;
+}
+
+.timer-input-group label {
+  font-size: 0.75rem;
+  color: var(--text-secondary, #888);
+  text-transform: uppercase;
+}
+
+.timer-input {
+  width: 80px;
+  padding: 0.75rem;
+  border: 1px solid var(--border-color, #333);
+  border-radius: 8px;
+  background: var(--input-bg, #0d0d1a);
+  color: var(--text-color, #fff);
+  font-size: 1.5rem;
+  font-family: 'JetBrains Mono', 'Fira Code', 'SF Mono', monospace;
+  text-align: center;
+}
+
+.timer-input:focus {
+  outline: none;
+  border-color: var(--primary-color, #00d9ff);
+}
+
+.timer-separator {
+  font-size: 2rem;
+  color: var(--text-secondary, #888);
+  padding-top: 1rem;
+}
+
+/* Timer presets */
+.presets-section {
+  margin-top: 1.5rem;
+}
+
+.presets-title {
+  font-size: 0.875rem;
+  color: var(--text-secondary, #888);
+  margin-bottom: 0.75rem;
+  text-transform: uppercase;
+}
+
+.presets-grid {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.5rem;
+}
+
+.preset-btn {
+  padding: 0.5rem 1rem;
+  background: var(--card-bg, #1a1a2e);
+  border: 1px solid var(--border-color, #333);
+  border-radius: 20px;
+  color: var(--text-color, #fff);
+  font-size: 0.875rem;
+  cursor: pointer;
+  transition: all 0.2s ease;
+}
+
+.preset-btn:hover {
+  background: var(--hover-bg, #252540);
+  border-color: var(--primary-color, #00d9ff);
+}
+
+/* Alarm list */
+.alarms-section {
+  background: var(--card-bg, #1a1a2e);
+  border-radius: 12px;
+  padding: 1rem;
+  border: 1px solid var(--border-color, #333);
+}
+
+.alarms-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 1rem;
+  padding-bottom: 0.5rem;
+  border-bottom: 1px solid var(--border-color, #333);
+}
+
+.btn-add-alarm {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  padding: 0.5rem 1rem;
+  background: var(--primary-color, #00d9ff);
+  color: #000;
+  border: none;
+  border-radius: 8px;
+  font-size: 0.875rem;
+  font-weight: 600;
+  cursor: pointer;
+  transition: all 0.2s ease;
+}
+
+.btn-add-alarm:hover {
+  filter: brightness(1.1);
+}
+
+.alarm-list {
+  display: flex;
+  flex-direction: column;
+  gap: 0.75rem;
+}
+
+.alarm-item {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 1rem;
+  background: var(--input-bg, #0d0d1a);
+  border-radius: 8px;
+  border: 1px solid var(--border-color, #333);
+}
+
+.alarm-item.ringing {
+  border-color: #e74c3c;
+  animation: alarm-pulse 0.5s infinite;
+}
+
+@keyframes alarm-pulse {
+  0%,
+  100% {
+    box-shadow: 0 0 0 0 rgba(231, 76, 60, 0.4);
+  }
+  50% {
+    box-shadow: 0 0 0 10px rgba(231, 76, 60, 0);
+  }
+}
+
+.alarm-info {
+  display: flex;
+  flex-direction: column;
+  gap: 0.25rem;
+}
+
+.alarm-time-display {
+  font-size: 1.5rem;
+  font-weight: 700;
+  font-family: 'JetBrains Mono', 'Fira Code', 'SF Mono', monospace;
+  color: var(--text-color, #fff);
+}
+
+.alarm-label {
+  font-size: 0.875rem;
+  color: var(--text-secondary, #888);
+}
+
+.alarm-repeat-days {
+  display: flex;
+  gap: 0.25rem;
+  margin-top: 0.25rem;
+}
+
+.alarm-day {
+  font-size: 0.75rem;
+  padding: 0.125rem 0.375rem;
+  background: var(--badge-bg, rgba(0, 217, 255, 0.1));
+  border-radius: 4px;
+  color: var(--primary-color, #00d9ff);
+}
+
+.alarm-day.inactive {
+  opacity: 0.3;
+}
+
+.alarm-actions {
+  display: flex;
+  align-items: center;
+  gap: 0.75rem;
+}
+
+.alarm-toggle {
+  position: relative;
+  width: 48px;
+  height: 24px;
+  background: var(--border-color, #333);
+  border-radius: 12px;
+  cursor: pointer;
+  transition: background 0.2s ease;
+}
+
+.alarm-toggle.enabled {
+  background: #27ae60;
+}
+
+.alarm-toggle::after {
+  content: '';
+  position: absolute;
+  top: 2px;
+  left: 2px;
+  width: 20px;
+  height: 20px;
+  background: white;
+  border-radius: 50%;
+  transition: transform 0.2s ease;
+}
+
+.alarm-toggle.enabled::after {
+  transform: translateX(24px);
+}
+
+.btn-alarm-action {
+  background: transparent;
+  border: none;
+  color: var(--text-secondary, #888);
+  cursor: pointer;
+  padding: 0.25rem;
+  border-radius: 4px;
+  transition: all 0.2s ease;
+}
+
+.btn-alarm-action:hover {
+  color: var(--text-color, #fff);
+  background: var(--hover-bg, #252540);
+}
+
+.btn-alarm-action.delete:hover {
+  color: #e74c3c;
+  background: rgba(231, 76, 60, 0.15);
+}
+
+.no-alarms {
+  text-align: center;
+  padding: 2rem;
+  color: var(--text-secondary, #888);
+}
+
+/* Alarm ringing overlay */
+.alarm-ringing-overlay {
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background: rgba(0, 0, 0, 0.8);
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  z-index: 1000;
+}
+
+.alarm-ringing-card {
+  background: var(--card-bg, #1a1a2e);
+  border-radius: 16px;
+  padding: 2rem;
+  text-align: center;
+  max-width: 400px;
+  width: 90%;
+  animation: scale-in 0.3s ease;
+}
+
+@keyframes scale-in {
+  from {
+    transform: scale(0.9);
+    opacity: 0;
+  }
+  to {
+    transform: scale(1);
+    opacity: 1;
+  }
+}
+
+.alarm-ringing-icon {
+  font-size: 4rem;
+  margin-bottom: 1rem;
+  animation: shake 0.5s infinite;
+}
+
+@keyframes shake {
+  0%,
+  100% {
+    transform: rotate(-10deg);
+  }
+  50% {
+    transform: rotate(10deg);
+  }
+}
+
+.alarm-ringing-time {
+  font-size: 3rem;
+  font-weight: 700;
+  font-family: 'JetBrains Mono', 'Fira Code', 'SF Mono', monospace;
+  color: var(--primary-color, #00d9ff);
+  margin-bottom: 0.5rem;
+}
+
+.alarm-ringing-label {
+  font-size: 1.25rem;
+  color: var(--text-color, #fff);
+  margin-bottom: 1.5rem;
+}
+
+.alarm-ringing-actions {
+  display: flex;
+  justify-content: center;
+  gap: 1rem;
+}
+
+.btn-snooze {
+  padding: 0.75rem 2rem;
+  background: var(--card-bg, #1a1a2e);
+  color: var(--text-color, #fff);
+  border: 1px solid var(--border-color, #333);
+  border-radius: 8px;
+  font-size: 1rem;
+  font-weight: 600;
+  cursor: pointer;
+}
+
+.btn-snooze:hover {
+  background: var(--hover-bg, #252540);
+}
+
+.btn-dismiss {
+  padding: 0.75rem 2rem;
+  background: #e74c3c;
+  color: white;
+  border: none;
+  border-radius: 8px;
+  font-size: 1rem;
+  font-weight: 600;
+  cursor: pointer;
+}
+
+.btn-dismiss:hover {
+  background: #c0392b;
+}
+
+/* Alarm edit modal */
+.alarm-modal-overlay {
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background: rgba(0, 0, 0, 0.6);
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  z-index: 1000;
+}
+
+.alarm-modal {
+  background: var(--card-bg, #1a1a2e);
+  border-radius: 12px;
+  padding: 1.5rem;
+  max-width: 400px;
+  width: 90%;
+}
+
+.alarm-modal-header {
+  font-size: 1.25rem;
+  font-weight: 600;
+  color: var(--text-color, #fff);
+  margin-bottom: 1.5rem;
+}
+
+.alarm-modal-field {
+  margin-bottom: 1rem;
+}
+
+.alarm-modal-field label {
+  display: block;
+  font-size: 0.875rem;
+  color: var(--text-secondary, #888);
+  margin-bottom: 0.5rem;
+}
+
+.alarm-modal-field input[type='time'],
+.alarm-modal-field input[type='text'] {
+  width: 100%;
+  padding: 0.75rem;
+  border: 1px solid var(--border-color, #333);
+  border-radius: 8px;
+  background: var(--input-bg, #0d0d1a);
+  color: var(--text-color, #fff);
+  font-size: 1rem;
+}
+
+.alarm-modal-field input:focus {
+  outline: none;
+  border-color: var(--primary-color, #00d9ff);
+}
+
+.repeat-days {
+  display: flex;
+  gap: 0.5rem;
+  flex-wrap: wrap;
+}
+
+.repeat-day-btn {
+  width: 40px;
+  height: 40px;
+  border-radius: 50%;
+  border: 1px solid var(--border-color, #333);
+  background: transparent;
+  color: var(--text-color, #fff);
+  font-size: 0.75rem;
+  cursor: pointer;
+  transition: all 0.2s ease;
+}
+
+.repeat-day-btn.selected {
+  background: var(--primary-color, #00d9ff);
+  color: #000;
+  border-color: var(--primary-color, #00d9ff);
+}
+
+.alarm-modal-actions {
+  display: flex;
+  justify-content: flex-end;
+  gap: 0.75rem;
+  margin-top: 1.5rem;
+}
+
+.btn-modal-cancel {
+  padding: 0.75rem 1.5rem;
+  background: transparent;
+  color: var(--text-color, #fff);
+  border: 1px solid var(--border-color, #333);
+  border-radius: 8px;
+  font-size: 0.875rem;
+  cursor: pointer;
+}
+
+.btn-modal-cancel:hover {
+  background: var(--hover-bg, #252540);
+}
+
+.btn-modal-save {
+  padding: 0.75rem 1.5rem;
+  background: var(--primary-color, #00d9ff);
+  color: #000;
+  border: none;
+  border-radius: 8px;
+  font-size: 0.875rem;
+  font-weight: 600;
+  cursor: pointer;
+}
+
+.btn-modal-save:hover {
+  filter: brightness(1.1);
+}
+
+/* Responsive */
+@media (max-width: 600px) {
+  .time-display {
+    font-size: 3rem;
+  }
+
+  .time-display-ms {
+    font-size: 1.5rem;
+  }
+
+  .time-controls {
+    flex-direction: column;
+    align-items: center;
+  }
+
+  .btn-time {
+    width: 100%;
+    max-width: 200px;
+  }
+
+  .timer-input-section {
+    flex-wrap: wrap;
+  }
+
+  .timer-input {
+    width: 60px;
+    font-size: 1.25rem;
+  }
+
+  .alarm-item {
+    flex-direction: column;
+    gap: 1rem;
+    align-items: flex-start;
+  }
+
+  .alarm-actions {
+    width: 100%;
+    justify-content: space-between;
+  }
+}

@@ -12,8 +12,19 @@ const t = useTranslations(lang as any);
 ---
 
 <header>
-  <h1>{title}</h1>
-  <p>{description}</p>
+  <button
+    class="mobile-menu-btn"
+    id="sidebar-toggler-header"
+    aria-controls="sidebar"
+    aria-expanded="false"
+    aria-label={t('sidebar.toggle_menu')}
+  >
+    <i data-lucide="menu"></i>
+  </button>
+  <div class="header-content">
+    <h1>{title}</h1>
+    <p>{description}</p>
+  </div>
   <div class="feedback-button-wrapper">
     <button
       class="feedback-btn"
@@ -83,6 +94,49 @@ const t = useTranslations(lang as any);
 <style>
   header {
     position: relative;
+    display: flex;
+    align-items: flex-start;
+    gap: 1rem;
+  }
+
+  .header-content {
+    flex: 1;
+    min-width: 0;
+  }
+
+  .header-content h1 {
+    margin: 0;
+  }
+
+  .header-content p {
+    margin: 0;
+  }
+
+  .mobile-menu-btn {
+    display: none;
+    border: 0;
+    background-color: transparent;
+    padding: 0.5rem;
+    border-radius: 0.5rem;
+    transition: all 0.2s ease;
+    cursor: pointer;
+    flex-shrink: 0;
+    margin-top: 0.25rem;
+  }
+
+  .mobile-menu-btn:hover {
+    background-color: var(--var-icon-hover-bg-color);
+    transform: scale(1.1);
+  }
+
+  @media (max-width: 1279px) {
+    .mobile-menu-btn {
+      display: block;
+    }
+
+    .header-content p {
+      display: none;
+    }
   }
 
   .feedback-button-wrapper {
@@ -447,6 +501,22 @@ const t = useTranslations(lang as any);
           } catch (err) {
             console.error('Failed to copy email:', err);
           }
+        }
+      });
+    }
+
+    // Mobile menu button in header - toggle sidebar
+    const mobileMenuBtn = document.getElementById('sidebar-toggler-header');
+    const sidebar = document.getElementById('sidebar');
+    if (mobileMenuBtn && sidebar) {
+      mobileMenuBtn.addEventListener('click', () => {
+        sidebar.classList.toggle('open');
+        const isOpen = sidebar.classList.contains('open');
+        mobileMenuBtn.setAttribute('aria-expanded', isOpen);
+        // Also sync with the original toggler if it exists
+        const originalToggler = document.getElementById('sidebar-toggler');
+        if (originalToggler) {
+          originalToggler.setAttribute('aria-expanded', isOpen);
         }
       });
     }
