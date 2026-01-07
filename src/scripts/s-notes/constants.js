@@ -50,5 +50,6 @@ export const DEFAULT_TRANSLATIONS = {
 
 // Get translations (from window or defaults)
 export function getTranslations() {
+  // @ts-ignore - notesTranslations is set dynamically by the page
   return window.notesTranslations || DEFAULT_TRANSLATIONS;
 }

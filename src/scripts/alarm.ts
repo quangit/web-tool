@@ -1,3 +1,10 @@
+// Extend Window interface for webkit prefix
+declare global {
+  interface Window {
+    webkitAudioContext?: typeof AudioContext;
+  }
+}
+
 // Alarm interfaces
 interface Alarm {
   id: string;
@@ -401,9 +408,12 @@ let alarmGain: GainNode | null = null;
 function playAlarmSound(): void {
   try {
     if (!audioContext) {
-      audioContext = new (
-        window.AudioContext || (window as typeof AudioContext).webkitAudioContext
-      )();
+      const AudioContextClass = window.AudioContext || window.webkitAudioContext;
+      if (AudioContextClass) {
+        audioContext = new AudioContextClass();
+      } else {
+        return; // No AudioContext support
+      }
     }
 
     // Create oscillator for continuous alarm sound

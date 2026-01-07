@@ -1,3 +1,10 @@
+// Extend Window interface for webkit prefix
+declare global {
+  interface Window {
+    webkitAudioContext?: typeof AudioContext;
+  }
+}
+
 // Timer state
 let remainingTime: number = 0;
 let initialTime: number = 0;
@@ -180,9 +187,12 @@ function playAlarmSound(): void {
   try {
     // Initialize audio context if not already done
     if (!audioContext) {
-      audioContext = new (
-        window.AudioContext || (window as typeof AudioContext).webkitAudioContext
-      )();
+      const AudioContextClass = window.AudioContext || window.webkitAudioContext;
+      if (AudioContextClass) {
+        audioContext = new AudioContextClass();
+      } else {
+        return; // No AudioContext support
+      }
     }
 
     // Create a simple beep sound
