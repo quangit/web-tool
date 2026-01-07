@@ -843,6 +843,15 @@ export const vi = {
   'calculator.vibration': 'Rung',
   'calculator.no_calculations': 'Chưa có phép tính nào',
   'calculator.scientific_mode': 'Chế độ khoa học',
+
+  // Keyboard Test
+  'keyboard_test.title': 'Kiểm tra bàn phím',
+  'keyboard_test.description': 'Kiểm tra chức năng bàn phím của bạn với phản hồi trực quan.',
+  'keyboard_test.key_code': 'Mã phím',
+  'keyboard_test.key_name': 'Tên phím',
+  'keyboard_test.key_location': 'Vị trí',
+  'keyboard_test.reset': 'Đặt lại',
+
   // Unit Conversion - Weight
   'weight_converter.title': 'Chuyển đổi Trọng lượng',
   'weight_converter.description':
