@@ -1272,6 +1272,7 @@ export const es = {
   'weather.wind_speed': 'Viento',
   'weather.humidity': 'Humedad',
   'weather.feels_like': 'Sensación',
+  'weather.precipitation': 'Precipitación',
   'weather.select_cities': 'Selecciona ciudades para mostrar',
   'weather.selected_cities': 'Clima',
   'weather.available_cities': 'Agregar más ciudades',

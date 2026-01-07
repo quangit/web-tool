@@ -1273,6 +1273,7 @@ export const hi = {
   'weather.wind_speed': 'हवा',
   'weather.humidity': 'नमी',
   'weather.feels_like': 'महसूस होता है',
+  'weather.precipitation': 'वर्षा',
   'weather.select_cities': 'प्रदर्शित करने के लिए शहर चुनें',
   'weather.selected_cities': 'मौसम',
   'weather.available_cities': 'अधिक शहर जोड़ें',

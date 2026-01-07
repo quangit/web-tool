@@ -1299,6 +1299,7 @@ export const en = {
   'weather.wind_speed': 'Wind',
   'weather.humidity': 'Humidity',
   'weather.feels_like': 'Feels like',
+  'weather.precipitation': 'Precipitation',
   'weather.select_cities': 'Select cities to display',
   'weather.selected_cities': 'Weather',
   'weather.available_cities': 'Add More Cities',

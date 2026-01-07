@@ -53,8 +53,18 @@ const activePage = 'weather';
             <!-- Weather cards will be rendered here -->
           </div>
         </div>
+      </div>
+    </div>
 
-        <!-- Search Input -->
+    <BaseSettingBlock title={t('settings')}>
+      <div class="setting">
+        <p style="font-size: 0.875rem; color: var(--text-secondary);">
+          {t('weather.help_text')}
+        </p>
+      </div>
+
+      <!-- Search Input -->
+      <div class="setting">
         <div class="city-search-container">
           <svg
             class="search-icon"
@@ -78,22 +88,16 @@ const activePage = 'weather';
             placeholder={t('weather.search_placeholder')}
           />
         </div>
+      </div>
 
-        <!-- Available Cities -->
+      <!-- Available Cities -->
+      <div class="setting">
         <div class="available-cities-section">
           <div class="section-title">{t('weather.available_cities')}</div>
           <div class="available-cities-list" id="available-cities-container">
             <!-- Available cities will be rendered here -->
           </div>
         </div>
-      </div>
-    </div>
-
-    <BaseSettingBlock title={t('settings')}>
-      <div class="setting">
-        <p style="font-size: 0.875rem; color: var(--text-secondary);">
-          {t('weather.help_text')}
-        </p>
       </div>
     </BaseSettingBlock>
   </div>
@@ -110,6 +114,7 @@ const activePage = 'weather';
       t_windSpeed: t('weather.wind_speed'),
       t_humidity: t('weather.humidity'),
       t_feelsLike: t('weather.feels_like'),
+      t_precipitation: t('weather.precipitation'),
       t_selectCities: t('weather.select_cities'),
       t_selectedCities: t('weather.selected_cities'),
       t_availableCities: t('weather.available_cities'),
@@ -128,6 +133,7 @@ const activePage = 'weather';
       windSpeed: t_windSpeed,
       humidity: t_humidity,
       feelsLike: t_feelsLike,
+      precipitation: t_precipitation,
       selectCities: t_selectCities,
       selectedCities: t_selectedCities,
       availableCities: t_availableCities,
@@ -152,6 +158,7 @@ const activePage = 'weather';
           windSpeed: string;
           humidity: string;
           feelsLike: string;
+          precipitation: string;
           selectCities: string;
           selectedCities: string;
           availableCities: string;

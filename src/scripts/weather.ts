@@ -15,6 +15,9 @@ export interface WeatherData {
   weathercode: number;
   is_day: number;
   time: string;
+  humidity: number;
+  apparent_temperature: number;
+  precipitation: number;
 }
 
 // Major world cities with their coordinates
@@ -125,6 +128,7 @@ export interface WeatherTranslations {
   windSpeed: string;
   humidity: string;
   feelsLike: string;
+  precipitation: string;
   selectCities: string;
   selectedCities: string;
   availableCities: string;
@@ -159,13 +163,24 @@ function saveSelectedCities(): void {
 
 async function fetchWeatherForCity(city: City): Promise<WeatherData | null> {
   try {
-    const url = `https://api.open-meteo.com/v1/forecast?latitude=${city.lat}&longitude=${city.lon}&current_weather=true&timezone=${encodeURIComponent(city.timezone)}`;
+    const url = `https://api.open-meteo.com/v1/forecast?latitude=${city.lat}&longitude=${city.lon}&current=temperature_2m,relative_humidity_2m,apparent_temperature,precipitation,weather_code,wind_speed_10m,wind_direction_10m,is_day&timezone=${encodeURIComponent(city.timezone)}`;
     const response = await fetch(url);
     if (!response.ok) {
       throw new Error('Failed to fetch weather data');
     }
     const data = await response.json();
-    return data.current_weather as WeatherData;
+    const current = data.current;
+    return {
+      temperature: current.temperature_2m,
+      windspeed: current.wind_speed_10m,
+      winddirection: current.wind_direction_10m,
+      weathercode: current.weather_code,
+      is_day: current.is_day,
+      time: current.time,
+      humidity: current.relative_humidity_2m,
+      apparent_temperature: current.apparent_temperature,
+      precipitation: current.precipitation,
+    } as WeatherData;
   } catch (error) {
     console.error(`Error fetching weather for ${city.name}:`, error);
     return null;
@@ -183,6 +198,57 @@ function getWeatherIcon(code: number, isDay: number): string {
 function getWeatherDescription(code: number): string {
   const weather = weatherCodes[code];
   return weather ? weather.description : 'Unknown';
+}
+
+function getWeatherBackground(code: number, isDay: number): string {
+  // Clear sky
+  if (code === 0) {
+    return isDay === 1
+      ? 'linear-gradient(135deg, #667eea 0%, #764ba2 100%)' // Day: Blue-purple
+      : 'linear-gradient(135deg, #0f2027 0%, #203a43 50%, #2c5364 100%)'; // Night: Dark blue
+  }
+  // Mainly clear
+  if (code === 1) {
+    return isDay === 1
+      ? 'linear-gradient(135deg, #4facfe 0%, #00f2fe 100%)' // Day: Light blue
+      : 'linear-gradient(135deg, #2c3e50 0%, #3498db 100%)'; // Night: Blue
+  }
+  // Partly cloudy
+  if (code === 2) {
+    return isDay === 1
+      ? 'linear-gradient(135deg, #a1c4fd 0%, #c2e9fb 100%)' // Day: Cloudy blue
+      : 'linear-gradient(135deg, #373b44 0%, #4286f4 100%)'; // Night: Dark cloudy
+  }
+  // Overcast
+  if (code === 3) {
+    return 'linear-gradient(135deg, #bdc3c7 0%, #2c3e50 100%)'; // Gray
+  }
+  // Fog
+  if (code === 45 || code === 48) {
+    return 'linear-gradient(135deg, #757f9a 0%, #d7dde8 100%)'; // Foggy gray
+  }
+  // Drizzle
+  if (code >= 51 && code <= 57) {
+    return 'linear-gradient(135deg, #89f7fe 0%, #66a6ff 100%)'; // Light rain blue
+  }
+  // Rain
+  if (code >= 61 && code <= 67) {
+    return 'linear-gradient(135deg, #4b6cb7 0%, #182848 100%)'; // Rain blue-dark
+  }
+  // Snow
+  if (code >= 71 && code <= 77 || code >= 85 && code <= 86) {
+    return 'linear-gradient(135deg, #e0eafc 0%, #cfdef3 100%)'; // Snowy white-blue
+  }
+  // Rain showers
+  if (code >= 80 && code <= 82) {
+    return 'linear-gradient(135deg, #5f72bd 0%, #9b23ea 100%)'; // Purple rain
+  }
+  // Thunderstorm
+  if (code >= 95 && code <= 99) {
+    return 'linear-gradient(135deg, #360033 0%, #0b8793 100%)'; // Dark storm
+  }
+  // Default
+  return 'linear-gradient(135deg, #667eea 0%, #764ba2 100%)';
 }
 
 function getWindDirection(degrees: number): string {
@@ -219,6 +285,28 @@ async function getUserLocation(): Promise<City | null> {
       async (position) => {
         const { latitude, longitude } = position.coords;
         
+        // Try to get location name from reverse geocoding using Nominatim (OpenStreetMap)
+        let locationName = translations.yourLocation;
+        try {
+          const geoUrl = `https://nominatim.openstreetmap.org/reverse?format=json&lat=${latitude}&lon=${longitude}&zoom=10&addressdetails=1`;
+          const geoResponse = await fetch(geoUrl, {
+            headers: {
+              'Accept-Language': translations.locale || 'en',
+            },
+          });
+          const geoData = await geoResponse.json();
+          if (geoData && geoData.address) {
+            const addr = geoData.address;
+            const placeName = addr.city || addr.town || addr.village || addr.municipality || addr.county || addr.state || '';
+            if (placeName) {
+              locationName = `${translations.yourLocation} (${placeName})`;
+            }
+          }
+        } catch (error) {
+          // Fallback to "Your Location" if geocoding fails
+          console.warn('Reverse geocoding failed:', error);
+        }
+        
         // Find the closest city from our list using simple Euclidean distance
         // (adequate for nearby city matching)
         let closestCity: City | null = null;
@@ -237,7 +325,7 @@ async function getUserLocation(): Promise<City | null> {
         // If user is far from any major city, create a custom location
         if (minDistance > MAX_CITY_DISTANCE_DEGREES) {
           userLocationCity = {
-            name: translations.yourLocation,
+            name: locationName,
             country: '',
             lat: latitude,
             lon: longitude,
@@ -246,6 +334,13 @@ async function getUserLocation(): Promise<City | null> {
           };
           resolve(userLocationCity);
         } else {
+          // Use the closest city but update the name to show it's user location
+          if (closestCity) {
+            closestCity = {
+              ...closestCity,
+              name: `${translations.yourLocation} (${closestCity.name})`,
+            };
+          }
           resolve(closestCity);
         }
       },
@@ -266,9 +361,13 @@ function renderWeatherCard(city: City, weather: WeatherData | null, isUserLocati
   const windSpeed = weather ? `${Math.round(weather.windspeed)} km/h` : '--';
   const windDir = weather ? getWindDirection(weather.winddirection) : '--';
   const currentTime = formatTime(city.timezone);
+  const humidity = weather ? `${Math.round(weather.humidity)}%` : '--%';
+  const feelsLike = weather ? formatTemperature(weather.apparent_temperature) : '--°C';
+  const precipitation = weather ? `${weather.precipitation} mm` : '-- mm';
+  const backgroundGradient = weather ? getWeatherBackground(weather.weathercode, weather.is_day) : 'linear-gradient(135deg, #667eea 0%, #764ba2 100%)';
 
   return `
-    <div class="weather-card ${loading ? 'loading' : ''} ${isUserLocation ? 'user-location' : ''}" data-city="${city.name}">
+    <div class="weather-card ${loading ? 'loading' : ''} ${isUserLocation ? 'user-location' : ''}" data-city="${city.name}" ${isUserLocation ? 'data-user-location="true"' : ''} style="background: ${backgroundGradient}; border: none;">
       <div class="weather-card-header">
         <div class="city-info">
           <span class="city-name">${city.flag} ${city.name}</span>
@@ -291,8 +390,20 @@ function renderWeatherCard(city: City, weather: WeatherData | null, isUserLocati
       <div class="weather-description">${description}</div>
       <div class="weather-details">
         <div class="weather-detail">
+          <span class="detail-label">🌡️ ${translations.feelsLike}</span>
+          <span class="detail-value">${feelsLike}</span>
+        </div>
+        <div class="weather-detail">
+          <span class="detail-label">💧 ${translations.humidity}</span>
+          <span class="detail-value">${humidity}</span>
+        </div>
+        <div class="weather-detail">
           <span class="detail-label">💨 ${translations.windSpeed}</span>
           <span class="detail-value">${windSpeed} ${windDir}</span>
+        </div>
+        <div class="weather-detail">
+          <span class="detail-label">🌧️ ${translations.precipitation}</span>
+          <span class="detail-value">${precipitation}</span>
         </div>
       </div>
     </div>
@@ -331,7 +442,7 @@ async function loadWeatherForCities(): Promise<void> {
   if (userLocationCity) {
     fetchPromises.push(
       fetchWeatherForCity(userLocationCity).then((weather) => {
-        const card = container.querySelector(`.weather-card[data-city="${userLocationCity!.name}"]`);
+        const card = container.querySelector('.weather-card[data-user-location="true"]');
         if (card && weather) {
           card.outerHTML = renderWeatherCard(userLocationCity!, weather, true);
         }
@@ -466,14 +577,8 @@ export async function initWeather(t: WeatherTranslations): Promise<void> {
 
   // Wait for location (with timeout)
   const userLocation = await locationPromise;
-  if (userLocation && userLocation.name === translations.yourLocation) {
+  if (userLocation && userLocation.name.startsWith(translations.yourLocation)) {
     userLocationCity = userLocation;
-  } else if (userLocation) {
-    // User is near a known city, add it to selection if not already there
-    if (!selectedCities.includes(userLocation.name)) {
-      selectedCities.unshift(userLocation.name);
-      saveSelectedCities();
-    }
   }
 
   // Initial render

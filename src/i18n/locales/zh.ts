@@ -1249,6 +1249,7 @@ export const zh = {
   'weather.wind_speed': '风速',
   'weather.humidity': '湿度',
   'weather.feels_like': '体感温度',
+  'weather.precipitation': '降水量',
   'weather.select_cities': '选择要显示的城市',
   'weather.selected_cities': '天气',
   'weather.available_cities': '添加更多城市',

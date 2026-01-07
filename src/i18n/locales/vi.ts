@@ -1291,6 +1291,7 @@ export const vi = {
   'weather.wind_speed': 'Gió',
   'weather.humidity': 'Độ ẩm',
   'weather.feels_like': 'Cảm giác như',
+  'weather.precipitation': 'Lượng mưa',
   'weather.select_cities': 'Chọn thành phố để hiển thị',
   'weather.selected_cities': 'Thời tiết',
   'weather.available_cities': 'Thêm thành phố',

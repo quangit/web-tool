@@ -1269,6 +1269,7 @@ export const ja = {
   'weather.wind_speed': '風速',
   'weather.humidity': '湿度',
   'weather.feels_like': '体感温度',
+  'weather.precipitation': '降水量',
   'weather.select_cities': '表示する都市を選択',
   'weather.selected_cities': '天気',
   'weather.available_cities': '都市を追加',
