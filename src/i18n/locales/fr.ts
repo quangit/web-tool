@@ -9,7 +9,7 @@ export const fr = {
   'sidebar.search.found': '{0} outil{1} trouvé{1}',
   'sidebar.my_tools': 'Mes outils favoris',
   'sidebar.my_tools.empty':
-    "Cliquez sur l'icône en forme de cœur à côté de n'importe quel outil pour l'ajouter à vos favoris !",
+    "Cliquez sur l'icône en forme de cœur (ou appuyez longuement sur mobile) pour ajouter des outils à vos favoris !",
   'sidebar.toggle_menu': 'Menu',
   'sidebar.dark_mode': 'Mode sombre',
 

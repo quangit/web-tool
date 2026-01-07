@@ -8,7 +8,7 @@ export const zh = {
   'sidebar.search.no_result': '未找到工具',
   'sidebar.search.found': '找到 {0} 个工具',
   'sidebar.my_tools': '我的收藏',
-  'sidebar.my_tools.empty': '点击工具旁边的爱心图标将其添加到收藏夹！',
+  'sidebar.my_tools.empty': '点击爱心图标（或在手机上长按）将工具添加到收藏夹！',
   'sidebar.toggle_menu': '菜单',
   'sidebar.dark_mode': '深色模式',
 

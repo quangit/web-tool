@@ -9,7 +9,7 @@ export const ja = {
   'sidebar.search.found': '{0} 個のツールが見つかりました',
   'sidebar.my_tools': 'お気に入りのツール',
   'sidebar.my_tools.empty':
-    'ツールの横にあるハート of アイコンをクリックして、お気に入りに追加してください！',
+    'ハートアイコンをクリック（モバイルでは長押し）してツールをお気に入りに追加してください！',
   'sidebar.toggle_menu': 'メニュー',
   'sidebar.dark_mode': 'ダークモード',
 

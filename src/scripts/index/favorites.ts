@@ -130,6 +130,62 @@ export function initFavorites(): void {
     });
 
     li.appendChild(heart);
+
+    // Add long press support for mobile devices
+    let touchTimer: ReturnType<typeof setTimeout> | null = null;
+    let touchStartX = 0;
+    let touchStartY = 0;
+
+    li.addEventListener('touchstart', (e) => {
+      const touch = e.touches[0];
+      touchStartX = touch.clientX;
+      touchStartY = touch.clientY;
+
+      touchTimer = setTimeout(() => {
+        // Trigger favorite toggle on long press
+        e.preventDefault();
+        toggleFavorite(url, title, icon);
+
+        // Add visual feedback
+        heart.style.transform = 'translateY(-50%) scale(1.3)';
+        setTimeout(() => {
+          heart.style.transform = '';
+        }, 200);
+
+        // Haptic feedback if available
+        if ('vibrate' in navigator) {
+          navigator.vibrate(50);
+        }
+      }, 500); // 500ms long press
+    });
+
+    li.addEventListener('touchmove', (e) => {
+      const touch = e.touches[0];
+      const moveX = Math.abs(touch.clientX - touchStartX);
+      const moveY = Math.abs(touch.clientY - touchStartY);
+
+      // Cancel long press if user moves finger too much
+      if (moveX > 10 || moveY > 10) {
+        if (touchTimer) {
+          clearTimeout(touchTimer);
+          touchTimer = null;
+        }
+      }
+    });
+
+    li.addEventListener('touchend', () => {
+      if (touchTimer) {
+        clearTimeout(touchTimer);
+        touchTimer = null;
+      }
+    });
+
+    li.addEventListener('touchcancel', () => {
+      if (touchTimer) {
+        clearTimeout(touchTimer);
+        touchTimer = null;
+      }
+    });
   });
 
   updateFavoritesList();

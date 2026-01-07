@@ -8,7 +8,8 @@ export const en = {
   'sidebar.search.no_result': 'No tools found',
   'sidebar.search.found': 'Found {0} tool{1}',
   'sidebar.my_tools': 'My Favorite Tools',
-  'sidebar.my_tools.empty': 'Click the heart icon next to any tool to add it to your favorites!',
+  'sidebar.my_tools.empty':
+    'Click the heart icon (or long press on mobile) to add tools to your favorites!',
   'sidebar.toggle_menu': 'Menu',
   'sidebar.dark_mode': 'Dark mode',
 

@@ -9,7 +9,7 @@ export const vi = {
   'sidebar.search.found': 'Tìm thấy {0} công cụ',
   'sidebar.my_tools': 'Công cụ yêu thích',
   'sidebar.my_tools.empty':
-    'Nhấn vào biểu tượng trái tim bên cạnh công cụ để thêm vào danh sách yêu thích!',
+    'Nhấn vào biểu tượng trái tim (hoặc giữ lâu trên di động) để thêm công cụ vào yêu thích!',
   'sidebar.toggle_menu': 'Menu',
   'sidebar.dark_mode': 'Chế độ tối',
 

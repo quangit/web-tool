@@ -9,7 +9,7 @@ export const es = {
   'sidebar.search.found': 'Se encontraron {0} herramienta{1}',
   'sidebar.my_tools': 'Mis herramientas favoritas',
   'sidebar.my_tools.empty':
-    '¡Haz clic en el icono del corazón junto a cualquier herramienta para agregarla a tus favoritos!',
+    '¡Haz clic en el icono del corazón (o mantén presionado en móvil) para agregar herramientas a tus favoritos!',
   'sidebar.toggle_menu': 'Menú',
   'sidebar.dark_mode': 'Modo oscuro',
 
