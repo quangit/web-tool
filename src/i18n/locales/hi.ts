@@ -1259,4 +1259,26 @@ export const hi = {
   'alarm.thu': 'गुरु',
   'alarm.fri': 'शुक्र',
   'alarm.sat': 'शनि',
+
+  // Weather
+  'weather.title': 'मौसम',
+  'weather.description':
+    'दुनिया भर के प्रमुख शहरों की वर्तमान मौसम स्थितियों की जांच करें। वास्तविक समय में तापमान, हवा की गति और मौसम की स्थिति प्राप्त करें। स्वचालित रूप से आपका स्थान पता लगाता है।',
+  'weather.loading': 'लोड हो रहा है...',
+  'weather.error': 'मौसम डेटा लोड करने में विफल',
+  'weather.no_results': 'कोई शहर नहीं मिला',
+  'weather.your_location': 'आपका स्थान',
+  'weather.location_error': 'आपका स्थान पता नहीं चल सका',
+  'weather.temperature': 'तापमान',
+  'weather.wind_speed': 'हवा',
+  'weather.humidity': 'नमी',
+  'weather.feels_like': 'महसूस होता है',
+  'weather.select_cities': 'प्रदर्शित करने के लिए शहर चुनें',
+  'weather.selected_cities': 'मौसम',
+  'weather.available_cities': 'अधिक शहर जोड़ें',
+  'weather.last_updated': 'अंतिम अपडेट',
+  'weather.refresh': 'रिफ्रेश',
+  'weather.search_placeholder': 'शहर खोजें...',
+  'weather.help_text':
+    'दुनिया भर के शहरों का वर्तमान मौसम देखें। अपने डैशबोर्ड में जोड़ने के लिए किसी शहर पर क्लिक करें। मौसम डेटा हर 5 मिनट में स्वचालित रूप से अपडेट होता है।',
 };

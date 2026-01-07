@@ -1277,4 +1277,26 @@ export const vi = {
   'alarm.thu': 'T5',
   'alarm.fri': 'T6',
   'alarm.sat': 'T7',
+
+  // Weather
+  'weather.title': 'Thời tiết',
+  'weather.description':
+    'Xem thời tiết hiện tại của các thành phố lớn trên thế giới. Cập nhật nhiệt độ, tốc độ gió và điều kiện thời tiết theo thời gian thực. Tự động phát hiện vị trí của bạn.',
+  'weather.loading': 'Đang tải...',
+  'weather.error': 'Không thể tải dữ liệu thời tiết',
+  'weather.no_results': 'Không tìm thấy thành phố',
+  'weather.your_location': 'Vị trí của bạn',
+  'weather.location_error': 'Không thể xác định vị trí của bạn',
+  'weather.temperature': 'Nhiệt độ',
+  'weather.wind_speed': 'Gió',
+  'weather.humidity': 'Độ ẩm',
+  'weather.feels_like': 'Cảm giác như',
+  'weather.select_cities': 'Chọn thành phố để hiển thị',
+  'weather.selected_cities': 'Thời tiết',
+  'weather.available_cities': 'Thêm thành phố',
+  'weather.last_updated': 'Cập nhật lần cuối',
+  'weather.refresh': 'Làm mới',
+  'weather.search_placeholder': 'Tìm kiếm thành phố...',
+  'weather.help_text':
+    'Xem thời tiết hiện tại của các thành phố trên thế giới. Nhấp vào thành phố để thêm vào bảng điều khiển. Dữ liệu thời tiết tự động cập nhật mỗi 5 phút.',
 };

@@ -1259,4 +1259,26 @@ export const pt = {
   'alarm.thu': 'Qui',
   'alarm.fri': 'Sex',
   'alarm.sat': 'Sáb',
+
+  // Weather
+  'weather.title': 'Clima',
+  'weather.description':
+    'Verifique as condições climáticas atuais das principais cidades do mundo. Obtenha temperatura, velocidade do vento e condições climáticas em tempo real. Detecta automaticamente sua localização.',
+  'weather.loading': 'Carregando...',
+  'weather.error': 'Falha ao carregar dados do clima',
+  'weather.no_results': 'Nenhuma cidade encontrada',
+  'weather.your_location': 'Sua localização',
+  'weather.location_error': 'Não foi possível detectar sua localização',
+  'weather.temperature': 'Temperatura',
+  'weather.wind_speed': 'Vento',
+  'weather.humidity': 'Umidade',
+  'weather.feels_like': 'Sensação',
+  'weather.select_cities': 'Selecione cidades para exibir',
+  'weather.selected_cities': 'Clima',
+  'weather.available_cities': 'Adicionar mais cidades',
+  'weather.last_updated': 'Última atualização',
+  'weather.refresh': 'Atualizar',
+  'weather.search_placeholder': 'Buscar cidades...',
+  'weather.help_text':
+    'Veja o clima atual de cidades ao redor do mundo. Clique em uma cidade para adicioná-la ao seu painel. Os dados do clima são atualizados automaticamente a cada 5 minutos.',
 };

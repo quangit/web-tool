@@ -1258,4 +1258,26 @@ export const fr = {
   'alarm.thu': 'Jeu',
   'alarm.fri': 'Ven',
   'alarm.sat': 'Sam',
+
+  // Weather
+  'weather.title': 'Météo',
+  'weather.description':
+    'Consultez les conditions météorologiques actuelles des grandes villes du monde. Obtenez la température, la vitesse du vent et les conditions météorologiques en temps réel. Détecte automatiquement votre position.',
+  'weather.loading': 'Chargement...',
+  'weather.error': 'Échec du chargement des données météo',
+  'weather.no_results': 'Aucune ville trouvée',
+  'weather.your_location': 'Votre position',
+  'weather.location_error': 'Impossible de détecter votre position',
+  'weather.temperature': 'Température',
+  'weather.wind_speed': 'Vent',
+  'weather.humidity': 'Humidité',
+  'weather.feels_like': 'Ressenti',
+  'weather.select_cities': 'Sélectionner les villes à afficher',
+  'weather.selected_cities': 'Météo',
+  'weather.available_cities': 'Ajouter des villes',
+  'weather.last_updated': 'Dernière mise à jour',
+  'weather.refresh': 'Actualiser',
+  'weather.search_placeholder': 'Rechercher des villes...',
+  'weather.help_text':
+    'Consultez la météo actuelle des villes du monde entier. Cliquez sur une ville pour l\'ajouter à votre tableau de bord. Les données météo sont actualisées automatiquement toutes les 5 minutes.',
 };

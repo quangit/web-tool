@@ -1255,4 +1255,26 @@ export const ja = {
   'alarm.thu': '木',
   'alarm.fri': '金',
   'alarm.sat': '土',
+
+  // Weather
+  'weather.title': '天気',
+  'weather.description':
+    '世界の主要都市の現在の天気状況を確認できます。リアルタイムの気温、風速、天気状況を取得します。位置情報を自動検出します。',
+  'weather.loading': '読み込み中...',
+  'weather.error': '天気データの読み込みに失敗しました',
+  'weather.no_results': '都市が見つかりません',
+  'weather.your_location': '現在地',
+  'weather.location_error': '位置を検出できませんでした',
+  'weather.temperature': '気温',
+  'weather.wind_speed': '風速',
+  'weather.humidity': '湿度',
+  'weather.feels_like': '体感温度',
+  'weather.select_cities': '表示する都市を選択',
+  'weather.selected_cities': '天気',
+  'weather.available_cities': '都市を追加',
+  'weather.last_updated': '最終更新',
+  'weather.refresh': '更新',
+  'weather.search_placeholder': '都市を検索...',
+  'weather.help_text':
+    '世界中の都市の現在の天気を表示します。都市をクリックしてダッシュボードに追加します。天気データは5分ごとに自動更新されます。',
 };

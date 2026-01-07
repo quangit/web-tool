@@ -1235,4 +1235,26 @@ export const zh = {
   'alarm.thu': '四',
   'alarm.fri': '五',
   'alarm.sat': '六',
+
+  // Weather
+  'weather.title': '天气',
+  'weather.description':
+    '查看世界主要城市的当前天气状况。获取实时温度、风速和天气状况。自动检测您的位置。',
+  'weather.loading': '加载中...',
+  'weather.error': '加载天气数据失败',
+  'weather.no_results': '未找到城市',
+  'weather.your_location': '您的位置',
+  'weather.location_error': '无法检测您的位置',
+  'weather.temperature': '温度',
+  'weather.wind_speed': '风速',
+  'weather.humidity': '湿度',
+  'weather.feels_like': '体感温度',
+  'weather.select_cities': '选择要显示的城市',
+  'weather.selected_cities': '天气',
+  'weather.available_cities': '添加更多城市',
+  'weather.last_updated': '最后更新',
+  'weather.refresh': '刷新',
+  'weather.search_placeholder': '搜索城市...',
+  'weather.help_text':
+    '查看世界各地城市的当前天气。单击城市将其添加到您的仪表板。天气数据每5分钟自动更新。',
 };

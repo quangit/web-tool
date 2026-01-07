@@ -370,6 +370,10 @@ export const toolSections: ToolSection[] = [
           { url: 'clock/alarm', name: 'Alarm', icon: 'alarm-clock' },
         ],
       },
+      {
+        title: 'Weather',
+        items: [{ url: 'weather', name: 'Weather', icon: 'cloud-sun' }],
+      },
     ],
   },
   {

@@ -1285,4 +1285,26 @@ export const en = {
   'alarm.thu': 'Thu',
   'alarm.fri': 'Fri',
   'alarm.sat': 'Sat',
+
+  // Weather
+  'weather.title': 'Weather',
+  'weather.description':
+    'Check current weather conditions for major cities around the world. Get real-time temperature, wind speed, and weather conditions. Auto-detects your location.',
+  'weather.loading': 'Loading...',
+  'weather.error': 'Failed to load weather data',
+  'weather.no_results': 'No cities found',
+  'weather.your_location': 'Your Location',
+  'weather.location_error': 'Could not detect your location',
+  'weather.temperature': 'Temperature',
+  'weather.wind_speed': 'Wind',
+  'weather.humidity': 'Humidity',
+  'weather.feels_like': 'Feels like',
+  'weather.select_cities': 'Select cities to display',
+  'weather.selected_cities': 'Weather',
+  'weather.available_cities': 'Add More Cities',
+  'weather.last_updated': 'Last updated',
+  'weather.refresh': 'Refresh',
+  'weather.search_placeholder': 'Search cities...',
+  'weather.help_text':
+    'View current weather for cities worldwide. Click on a city to add it to your dashboard. Weather data is refreshed automatically every 5 minutes.',
 };
