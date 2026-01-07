@@ -850,6 +850,15 @@ export const en = {
   'calculator.vibration': 'Vibration',
   'calculator.no_calculations': 'No calculations yet',
   'calculator.scientific_mode': 'Scientific Mode',
+
+  // Keyboard Test
+  'keyboard_test.title': 'Keyboard Test',
+  'keyboard_test.description': 'Test your keyboard functionality with visual feedback.',
+  'keyboard_test.key_code': 'Key Code',
+  'keyboard_test.key_name': 'Key Name',
+  'keyboard_test.key_location': 'Location',
+  'keyboard_test.reset': 'Reset',
+
   // Unit Conversion - Weight
   'weight_converter.title': 'Weight Converter',
   'weight_converter.description':
