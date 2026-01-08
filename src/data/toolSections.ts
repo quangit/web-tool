@@ -47,6 +47,7 @@ export const toolSections: ToolSection[] = [
           { url: 'compare', name: 'Compare Files & Folders', icon: 'git-compare' },
           { url: 'calculator', name: 'Calculator', icon: 'calculator' },
           { url: 'keyboard-test', name: 'Keyboard Test', icon: 'keyboard' },
+          { url: 'typing-practice', name: 'Typing Practice', icon: 'type' },
         ],
       },
       {
