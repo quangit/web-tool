@@ -1384,4 +1384,27 @@ export const fr = {
   'typing_practice.highlight_fingers': 'Mettre en Surbrillance les Doigts',
   'typing_practice.lesson_complete': 'Leçon Terminée!',
   'typing_practice.start_typing': 'Commencez à taper...',
+
+  // Network Speed Test
+  'speed_test.title': 'Test de Vitesse Réseau',
+  'speed_test.description':
+    'Testez la vitesse de votre connexion internet. Mesurez la vitesse de téléchargement, la vitesse de téléversement et la latence. Outil de test de vitesse en ligne gratuit.',
+  'speed_test.download': 'Téléchargement',
+  'speed_test.upload': 'Téléversement',
+  'speed_test.latency': 'Latence',
+  'speed_test.mbps': 'Mbps',
+  'speed_test.ms': 'ms',
+  'speed_test.startTest': 'Démarrer le Test',
+  'speed_test.testing': 'Test en cours',
+  'speed_test.testComplete': 'Test Terminé',
+  'speed_test.error': 'Le test a échoué. Veuillez réessayer.',
+  'speed_test.downloadSpeed': 'Vitesse de Téléchargement',
+  'speed_test.uploadSpeed': 'Vitesse de Téléversement',
+  'speed_test.ping': 'Ping',
+  'speed_test.testAgain': 'Tester à Nouveau',
+  'speed_test.ipAddress': 'Adresse IP',
+  'speed_test.unknown': 'Inconnu',
+  'speed_test.ready': 'Cliquez sur Démarrer pour commencer le test de vitesse',
+  'speed_test.help_text':
+    'Cet outil mesure la vitesse de votre connexion internet en téléchargeant et téléversant des données de test. Les résultats peuvent varier en fonction des conditions du réseau, de la charge du serveur et de votre FAI. Pour des résultats précis, fermez les autres applications utilisant la bande passante.',
 };

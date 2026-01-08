@@ -1421,4 +1421,27 @@ export const en = {
   'typing_practice.highlight_fingers': 'Highlight Fingers',
   'typing_practice.lesson_complete': 'Lesson Complete!',
   'typing_practice.start_typing': 'Start typing to begin...',
+
+  // Network Speed Test
+  'speed_test.title': 'Network Speed Test',
+  'speed_test.description':
+    'Test your internet connection speed. Measure download speed, upload speed, and latency. Free online speed test tool.',
+  'speed_test.download': 'Download',
+  'speed_test.upload': 'Upload',
+  'speed_test.latency': 'Latency',
+  'speed_test.mbps': 'Mbps',
+  'speed_test.ms': 'ms',
+  'speed_test.startTest': 'Start Test',
+  'speed_test.testing': 'Testing',
+  'speed_test.testComplete': 'Test Complete',
+  'speed_test.error': 'Test failed. Please try again.',
+  'speed_test.downloadSpeed': 'Download Speed',
+  'speed_test.uploadSpeed': 'Upload Speed',
+  'speed_test.ping': 'Ping',
+  'speed_test.testAgain': 'Test Again',
+  'speed_test.ipAddress': 'IP Address',
+  'speed_test.unknown': 'Unknown',
+  'speed_test.ready': 'Click Start to begin the speed test',
+  'speed_test.help_text':
+    'This tool measures your internet connection speed by downloading and uploading test data. Results may vary depending on network conditions, server load, and your ISP. For accurate results, close other applications using bandwidth.',
 };

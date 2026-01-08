@@ -1412,4 +1412,27 @@ export const vi = {
   'typing_practice.highlight_fingers': 'Đánh Dấu Ngón Tay',
   'typing_practice.lesson_complete': 'Hoàn Thành Bài Học!',
   'typing_practice.start_typing': 'Bắt đầu gõ để luyện tập...',
+
+  // Network Speed Test
+  'speed_test.title': 'Kiểm Tra Tốc Độ Mạng',
+  'speed_test.description':
+    'Kiểm tra tốc độ kết nối internet của bạn. Đo tốc độ tải xuống, tốc độ tải lên và độ trễ. Công cụ kiểm tra tốc độ trực tuyến miễn phí.',
+  'speed_test.download': 'Tải xuống',
+  'speed_test.upload': 'Tải lên',
+  'speed_test.latency': 'Độ trễ',
+  'speed_test.mbps': 'Mbps',
+  'speed_test.ms': 'ms',
+  'speed_test.startTest': 'Bắt đầu',
+  'speed_test.testing': 'Đang kiểm tra',
+  'speed_test.testComplete': 'Hoàn thành',
+  'speed_test.error': 'Kiểm tra thất bại. Vui lòng thử lại.',
+  'speed_test.downloadSpeed': 'Tốc độ tải xuống',
+  'speed_test.uploadSpeed': 'Tốc độ tải lên',
+  'speed_test.ping': 'Ping',
+  'speed_test.testAgain': 'Kiểm tra lại',
+  'speed_test.ipAddress': 'Địa chỉ IP',
+  'speed_test.unknown': 'Không xác định',
+  'speed_test.ready': 'Nhấn Bắt đầu để kiểm tra tốc độ',
+  'speed_test.help_text':
+    'Công cụ này đo tốc độ kết nối internet bằng cách tải xuống và tải lên dữ liệu thử nghiệm. Kết quả có thể thay đổi tùy thuộc vào điều kiện mạng, tải máy chủ và ISP của bạn. Để có kết quả chính xác, hãy đóng các ứng dụng khác đang sử dụng băng thông.',
 };

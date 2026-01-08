@@ -1385,4 +1385,27 @@ export const pt = {
   'typing_practice.highlight_fingers': 'Destacar Dedos',
   'typing_practice.lesson_complete': 'Lição Concluída!',
   'typing_practice.start_typing': 'Comece a digitar...',
+
+  // Network Speed Test
+  'speed_test.title': 'Teste de Velocidade de Rede',
+  'speed_test.description':
+    'Teste a velocidade da sua conexão com a internet. Meça a velocidade de download, velocidade de upload e latência. Ferramenta gratuita de teste de velocidade online.',
+  'speed_test.download': 'Download',
+  'speed_test.upload': 'Upload',
+  'speed_test.latency': 'Latência',
+  'speed_test.mbps': 'Mbps',
+  'speed_test.ms': 'ms',
+  'speed_test.startTest': 'Iniciar Teste',
+  'speed_test.testing': 'Testando',
+  'speed_test.testComplete': 'Teste Concluído',
+  'speed_test.error': 'O teste falhou. Por favor, tente novamente.',
+  'speed_test.downloadSpeed': 'Velocidade de Download',
+  'speed_test.uploadSpeed': 'Velocidade de Upload',
+  'speed_test.ping': 'Ping',
+  'speed_test.testAgain': 'Testar Novamente',
+  'speed_test.ipAddress': 'Endereço IP',
+  'speed_test.unknown': 'Desconhecido',
+  'speed_test.ready': 'Clique em Iniciar para começar o teste de velocidade',
+  'speed_test.help_text':
+    'Esta ferramenta mede a velocidade da sua conexão com a internet baixando e enviando dados de teste. Os resultados podem variar dependendo das condições da rede, carga do servidor e seu ISP. Para resultados precisos, feche outros aplicativos que usam largura de banda.',
 };

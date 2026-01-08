@@ -1384,4 +1384,27 @@ export const es = {
   'typing_practice.highlight_fingers': 'Resaltar Dedos',
   'typing_practice.lesson_complete': '¡Lección Completada!',
   'typing_practice.start_typing': 'Empieza a escribir...',
+
+  // Network Speed Test
+  'speed_test.title': 'Prueba de Velocidad de Red',
+  'speed_test.description':
+    'Prueba la velocidad de tu conexión a internet. Mide la velocidad de descarga, velocidad de carga y latencia. Herramienta gratuita de prueba de velocidad en línea.',
+  'speed_test.download': 'Descarga',
+  'speed_test.upload': 'Carga',
+  'speed_test.latency': 'Latencia',
+  'speed_test.mbps': 'Mbps',
+  'speed_test.ms': 'ms',
+  'speed_test.startTest': 'Iniciar Prueba',
+  'speed_test.testing': 'Probando',
+  'speed_test.testComplete': 'Prueba Completada',
+  'speed_test.error': 'La prueba falló. Por favor, inténtalo de nuevo.',
+  'speed_test.downloadSpeed': 'Velocidad de Descarga',
+  'speed_test.uploadSpeed': 'Velocidad de Carga',
+  'speed_test.ping': 'Ping',
+  'speed_test.testAgain': 'Probar de Nuevo',
+  'speed_test.ipAddress': 'Dirección IP',
+  'speed_test.unknown': 'Desconocido',
+  'speed_test.ready': 'Haz clic en Iniciar para comenzar la prueba de velocidad',
+  'speed_test.help_text':
+    'Esta herramienta mide la velocidad de tu conexión a internet descargando y cargando datos de prueba. Los resultados pueden variar según las condiciones de la red, la carga del servidor y tu ISP. Para obtener resultados precisos, cierra otras aplicaciones que usen ancho de banda.',
 };

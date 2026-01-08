@@ -1385,4 +1385,27 @@ export const hi = {
   'typing_practice.highlight_fingers': 'उंगलियां हाइलाइट करें',
   'typing_practice.lesson_complete': 'पाठ पूर्ण!',
   'typing_practice.start_typing': 'टाइप करना शुरू करें...',
+
+  // Network Speed Test
+  'speed_test.title': 'नेटवर्क स्पीड टेस्ट',
+  'speed_test.description':
+    'अपने इंटरनेट कनेक्शन की गति का परीक्षण करें। डाउनलोड गति, अपलोड गति और विलंबता मापें। मुफ्त ऑनलाइन स्पीड टेस्ट टूल।',
+  'speed_test.download': 'डाउनलोड',
+  'speed_test.upload': 'अपलोड',
+  'speed_test.latency': 'विलंबता',
+  'speed_test.mbps': 'Mbps',
+  'speed_test.ms': 'ms',
+  'speed_test.startTest': 'टेस्ट शुरू करें',
+  'speed_test.testing': 'परीक्षण जारी',
+  'speed_test.testComplete': 'टेस्ट पूर्ण',
+  'speed_test.error': 'टेस्ट विफल। कृपया पुनः प्रयास करें।',
+  'speed_test.downloadSpeed': 'डाउनलोड गति',
+  'speed_test.uploadSpeed': 'अपलोड गति',
+  'speed_test.ping': 'पिंग',
+  'speed_test.testAgain': 'पुनः टेस्ट करें',
+  'speed_test.ipAddress': 'IP पता',
+  'speed_test.unknown': 'अज्ञात',
+  'speed_test.ready': 'स्पीड टेस्ट शुरू करने के लिए Start पर क्लिक करें',
+  'speed_test.help_text':
+    'यह टूल टेस्ट डेटा डाउनलोड और अपलोड करके आपके इंटरनेट कनेक्शन की गति मापता है। नेटवर्क स्थितियों, सर्वर लोड और आपके ISP के आधार पर परिणाम भिन्न हो सकते हैं। सटीक परिणामों के लिए, बैंडविड्थ का उपयोग करने वाले अन्य एप्लिकेशन बंद करें।',
 };

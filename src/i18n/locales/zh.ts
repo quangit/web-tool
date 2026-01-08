@@ -1361,4 +1361,27 @@ export const zh = {
   'typing_practice.highlight_fingers': '高亮手指',
   'typing_practice.lesson_complete': '课程完成！',
   'typing_practice.start_typing': '开始打字...',
+
+  // Network Speed Test
+  'speed_test.title': '网络速度测试',
+  'speed_test.description':
+    '测试您的互联网连接速度。测量下载速度、上传速度和延迟。免费在线速度测试工具。',
+  'speed_test.download': '下载',
+  'speed_test.upload': '上传',
+  'speed_test.latency': '延迟',
+  'speed_test.mbps': 'Mbps',
+  'speed_test.ms': '毫秒',
+  'speed_test.startTest': '开始测试',
+  'speed_test.testing': '测试中',
+  'speed_test.testComplete': '测试完成',
+  'speed_test.error': '测试失败，请重试。',
+  'speed_test.downloadSpeed': '下载速度',
+  'speed_test.uploadSpeed': '上传速度',
+  'speed_test.ping': 'Ping',
+  'speed_test.testAgain': '再次测试',
+  'speed_test.ipAddress': 'IP地址',
+  'speed_test.unknown': '未知',
+  'speed_test.ready': '点击开始进行速度测试',
+  'speed_test.help_text':
+    '此工具通过下载和上传测试数据来测量您的互联网连接速度。结果可能因网络条件、服务器负载和您的ISP而异。为获得准确结果，请关闭其他使用带宽的应用程序。',
 };

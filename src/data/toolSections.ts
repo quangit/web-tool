@@ -73,6 +73,10 @@ export const toolSections: ToolSection[] = [
         title: 'Weather',
         items: [{ url: 'weather', name: 'Weather', icon: 'cloud-sun' }],
       },
+      {
+        title: 'Network',
+        items: [{ url: 'network-speed-test', name: 'Speed Test', icon: 'gauge' }],
+      },
     ],
   },
   {

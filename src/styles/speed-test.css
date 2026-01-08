@@ -1,0 +1,242 @@
+.speed-test-container {
+  display: flex;
+  flex-direction: column;
+  gap: 2rem;
+  padding: 1.5rem;
+  width: 100%;
+  height: 100%;
+}
+
+.speed-test-header {
+  text-align: center;
+}
+
+.speed-gauge-wrapper {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  padding: 2rem 0;
+}
+
+.speed-gauge {
+  position: relative;
+  width: 240px;
+  height: 240px;
+}
+
+.speed-gauge svg {
+  width: 100%;
+  height: 100%;
+  transform: rotate(-90deg);
+}
+
+.speed-gauge-bg {
+  fill: none;
+  stroke: var(--border-color, #333);
+  stroke-width: 8;
+}
+
+.speed-gauge-progress {
+  fill: none;
+  stroke: var(--primary-color, #00d9ff);
+  stroke-width: 8;
+  stroke-linecap: round;
+  stroke-dasharray: 565.48;
+  /* 2 * PI * 90 */
+  stroke-dashoffset: 565.48;
+  transition: stroke-dashoffset 0.3s ease;
+}
+
+.speed-gauge-content {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  text-align: center;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 0.25rem;
+}
+
+.current-speed-value {
+  font-size: 3rem;
+  font-weight: 700;
+  font-family:
+    'JetBrains Mono', 'Fira Code', 'SF Mono', 'Consolas', 'Liberation Mono', 'Menlo', monospace;
+  color: var(--text-color, #fff);
+  line-height: 1;
+}
+
+.current-speed-unit {
+  font-size: 1rem;
+  color: var(--text-secondary, #888);
+  font-weight: 500;
+}
+
+.current-speed-label {
+  font-size: 0.875rem;
+  color: var(--primary-color, #00d9ff);
+  font-weight: 600;
+  text-transform: uppercase;
+  letter-spacing: 0.1em;
+  min-height: 1.25rem;
+}
+
+.status-text {
+  font-size: 1rem;
+  color: var(--text-secondary, #888);
+  margin-top: 0.5rem;
+  min-height: 1.5rem;
+}
+
+.start-btn {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 0.5rem;
+  padding: 1rem 2.5rem;
+  background: var(--primary-color, #00d9ff);
+  color: #000;
+  border: none;
+  border-radius: 50px;
+  font-size: 1.125rem;
+  font-weight: 600;
+  cursor: pointer;
+  transition:
+    background 0.2s ease,
+    transform 0.2s ease,
+    box-shadow 0.2s ease;
+  margin-top: 1rem;
+}
+
+.start-btn:hover:not(:disabled) {
+  background: var(--primary-hover, #00b8d9);
+  transform: translateY(-2px);
+  box-shadow: 0 4px 20px rgba(0, 217, 255, 0.4);
+}
+
+.start-btn:active:not(:disabled) {
+  transform: translateY(0);
+}
+
+.start-btn:disabled {
+  opacity: 0.7;
+  cursor: not-allowed;
+}
+
+.start-btn svg {
+  width: 24px;
+  height: 24px;
+}
+
+.results-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+  gap: 1rem;
+  width: 100%;
+}
+
+.result-card {
+  background: var(--card-bg, #1a1a2e);
+  border: 1px solid var(--border-color, #333);
+  border-radius: 12px;
+  padding: 1.25rem;
+  display: flex;
+  flex-direction: column;
+  gap: 0.5rem;
+  transition:
+    border-color 0.2s ease,
+    box-shadow 0.2s ease;
+}
+
+.result-card:hover {
+  border-color: var(--primary-color, #00d9ff);
+  box-shadow: 0 0 20px rgba(0, 217, 255, 0.1);
+}
+
+.result-card-header {
+  display: flex;
+  align-items: center;
+  gap: 0.75rem;
+}
+
+.result-icon {
+  font-size: 1.5rem;
+  width: 40px;
+  height: 40px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: rgba(0, 217, 255, 0.1);
+  border-radius: 10px;
+}
+
+.result-icon.download {
+  background: rgba(72, 187, 120, 0.1);
+  color: #48bb78;
+}
+
+.result-icon.upload {
+  background: rgba(237, 137, 54, 0.1);
+  color: #ed8936;
+}
+
+.result-icon.latency {
+  background: rgba(159, 122, 234, 0.1);
+  color: #9f7aea;
+}
+
+.result-icon.ip {
+  background: rgba(99, 179, 237, 0.1);
+  color: #63b3ed;
+}
+
+.result-label {
+  font-size: 0.875rem;
+  color: var(--text-secondary, #888);
+  font-weight: 500;
+}
+
+.result-value {
+  font-size: 1.75rem;
+  font-weight: 700;
+  font-family:
+    'JetBrains Mono', 'Fira Code', 'SF Mono', 'Consolas', 'Liberation Mono', 'Menlo', monospace;
+  color: var(--text-color, #fff);
+}
+
+.result-card.ip .result-value {
+  font-size: 1.125rem;
+  word-break: break-all;
+}
+
+.help-text {
+  font-size: 0.875rem;
+  color: var(--text-secondary, #888);
+  line-height: 1.6;
+  margin: 0;
+}
+
+@media (max-width: 600px) {
+  .speed-gauge {
+    width: 200px;
+    height: 200px;
+  }
+
+  .current-speed-value {
+    font-size: 2.5rem;
+  }
+
+  .results-grid {
+    grid-template-columns: 1fr;
+  }
+
+  .result-value {
+    font-size: 1.5rem;
+  }
+
+  .start-btn {
+    width: 100%;
+  }
+}

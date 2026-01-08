@@ -1381,4 +1381,27 @@ export const ja = {
   'typing_practice.highlight_fingers': '指をハイライト',
   'typing_practice.lesson_complete': 'レッスン完了！',
   'typing_practice.start_typing': '入力を開始...',
+
+  // Network Speed Test
+  'speed_test.title': 'ネットワーク速度テスト',
+  'speed_test.description':
+    'インターネット接続速度をテストします。ダウンロード速度、アップロード速度、レイテンシを測定します。無料のオンライン速度テストツール。',
+  'speed_test.download': 'ダウンロード',
+  'speed_test.upload': 'アップロード',
+  'speed_test.latency': 'レイテンシ',
+  'speed_test.mbps': 'Mbps',
+  'speed_test.ms': 'ms',
+  'speed_test.startTest': 'テスト開始',
+  'speed_test.testing': 'テスト中',
+  'speed_test.testComplete': 'テスト完了',
+  'speed_test.error': 'テストに失敗しました。もう一度お試しください。',
+  'speed_test.downloadSpeed': 'ダウンロード速度',
+  'speed_test.uploadSpeed': 'アップロード速度',
+  'speed_test.ping': 'Ping',
+  'speed_test.testAgain': '再テスト',
+  'speed_test.ipAddress': 'IPアドレス',
+  'speed_test.unknown': '不明',
+  'speed_test.ready': '開始をクリックして速度テストを始めます',
+  'speed_test.help_text':
+    'このツールは、テストデータをダウンロードおよびアップロードすることで、インターネット接続速度を測定します。結果は、ネットワーク状態、サーバー負荷、ISPによって異なる場合があります。正確な結果を得るには、帯域幅を使用している他のアプリケーションを閉じてください。',
 };
