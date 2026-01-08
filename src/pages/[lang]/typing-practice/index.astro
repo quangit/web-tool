@@ -1,0 +1,1322 @@
+---
+import BasePage from '../../../components/BasePage.astro';
+import BaseSettingBlock from '../../../components/BaseSettingBlock.astro';
+import { languages } from '../../../i18n/ui';
+import { useTranslations } from '../../../i18n/utils';
+
+export function getStaticPaths() {
+  return Object.keys(languages).map((lang) => {
+    return { params: { lang } };
+  });
+}
+
+const { lang } = Astro.params;
+const t = useTranslations(lang as any);
+
+// Type for keyboard keys
+interface KeyDef {
+  code: string;
+  label: string;
+  shiftLabel?: string;
+  width?: number;
+  finger?: string; // Which finger should press this key
+  invisible?: boolean;
+}
+
+// Main keyboard area with finger assignments
+const mainRows: KeyDef[][] = [
+  // Number row
+  [
+    { code: 'Backquote', label: '`', shiftLabel: '~', finger: 'left-pinky' },
+    { code: 'Digit1', label: '1', shiftLabel: '!', finger: 'left-pinky' },
+    { code: 'Digit2', label: '2', shiftLabel: '@', finger: 'left-ring' },
+    { code: 'Digit3', label: '3', shiftLabel: '#', finger: 'left-middle' },
+    { code: 'Digit4', label: '4', shiftLabel: '$', finger: 'left-index' },
+    { code: 'Digit5', label: '5', shiftLabel: '%', finger: 'left-index' },
+    { code: 'Digit6', label: '6', shiftLabel: '^', finger: 'right-index' },
+    { code: 'Digit7', label: '7', shiftLabel: '&', finger: 'right-index' },
+    { code: 'Digit8', label: '8', shiftLabel: '*', finger: 'right-middle' },
+    { code: 'Digit9', label: '9', shiftLabel: '(', finger: 'right-ring' },
+    { code: 'Digit0', label: '0', shiftLabel: ')', finger: 'right-pinky' },
+    { code: 'Minus', label: '-', shiftLabel: '_', finger: 'right-pinky' },
+    { code: 'Equal', label: '=', shiftLabel: '+', finger: 'right-pinky' },
+    { code: 'Backspace', label: '⌫', width: 2, finger: 'right-pinky' },
+  ],
+  // QWERTY row
+  [
+    { code: 'Tab', label: 'Tab', width: 1.5, finger: 'left-pinky' },
+    { code: 'KeyQ', label: 'Q', finger: 'left-pinky' },
+    { code: 'KeyW', label: 'W', finger: 'left-ring' },
+    { code: 'KeyE', label: 'E', finger: 'left-middle' },
+    { code: 'KeyR', label: 'R', finger: 'left-index' },
+    { code: 'KeyT', label: 'T', finger: 'left-index' },
+    { code: 'KeyY', label: 'Y', finger: 'right-index' },
+    { code: 'KeyU', label: 'U', finger: 'right-index' },
+    { code: 'KeyI', label: 'I', finger: 'right-middle' },
+    { code: 'KeyO', label: 'O', finger: 'right-ring' },
+    { code: 'KeyP', label: 'P', finger: 'right-pinky' },
+    { code: 'BracketLeft', label: '[', shiftLabel: '{', finger: 'right-pinky' },
+    { code: 'BracketRight', label: ']', shiftLabel: '}', finger: 'right-pinky' },
+    { code: 'Backslash', label: '\\', shiftLabel: '|', width: 1.5, finger: 'right-pinky' },
+  ],
+  // Home row (ASDF JKL;)
+  [
+    { code: 'CapsLock', label: 'Caps', width: 1.75, finger: 'left-pinky' },
+    { code: 'KeyA', label: 'A', finger: 'left-pinky' },
+    { code: 'KeyS', label: 'S', finger: 'left-ring' },
+    { code: 'KeyD', label: 'D', finger: 'left-middle' },
+    { code: 'KeyF', label: 'F', finger: 'left-index' },
+    { code: 'KeyG', label: 'G', finger: 'left-index' },
+    { code: 'KeyH', label: 'H', finger: 'right-index' },
+    { code: 'KeyJ', label: 'J', finger: 'right-index' },
+    { code: 'KeyK', label: 'K', finger: 'right-middle' },
+    { code: 'KeyL', label: 'L', finger: 'right-ring' },
+    { code: 'Semicolon', label: ';', shiftLabel: ':', finger: 'right-pinky' },
+    { code: 'Quote', label: "'", shiftLabel: '"', finger: 'right-pinky' },
+    { code: 'Enter', label: 'Enter', width: 2.25, finger: 'right-pinky' },
+  ],
+  // Shift row
+  [
+    { code: 'ShiftLeft', label: 'Shift', width: 2.25, finger: 'left-pinky' },
+    { code: 'KeyZ', label: 'Z', finger: 'left-pinky' },
+    { code: 'KeyX', label: 'X', finger: 'left-ring' },
+    { code: 'KeyC', label: 'C', finger: 'left-middle' },
+    { code: 'KeyV', label: 'V', finger: 'left-index' },
+    { code: 'KeyB', label: 'B', finger: 'left-index' },
+    { code: 'KeyN', label: 'N', finger: 'right-index' },
+    { code: 'KeyM', label: 'M', finger: 'right-index' },
+    { code: 'Comma', label: ',', shiftLabel: '<', finger: 'right-middle' },
+    { code: 'Period', label: '.', shiftLabel: '>', finger: 'right-ring' },
+    { code: 'Slash', label: '/', shiftLabel: '?', finger: 'right-pinky' },
+    { code: 'ShiftRight', label: 'Shift', width: 2.75, finger: 'right-pinky' },
+  ],
+  // Bottom row
+  [
+    { code: 'ControlLeft', label: 'Ctrl', width: 1.25, finger: 'left-pinky' },
+    { code: 'MetaLeft', label: 'Win', width: 1.25, finger: 'left-pinky' },
+    { code: 'AltLeft', label: 'Alt', width: 1.25, finger: 'left-pinky' },
+    { code: 'Space', label: '', width: 6.25, finger: 'thumb' },
+    { code: 'AltRight', label: 'Alt', width: 1.25, finger: 'right-pinky' },
+    { code: 'MetaRight', label: 'Win', width: 1.25, finger: 'right-pinky' },
+    { code: 'ContextMenu', label: 'Menu', width: 1.25, finger: 'right-pinky' },
+    { code: 'ControlRight', label: 'Ctrl', width: 1.25, finger: 'right-pinky' },
+  ],
+];
+
+// Helper to calculate width
+const baseWidth = 40;
+const gap = 4;
+const getKeyStyle = (key: KeyDef) => {
+  const w = key.width || 1;
+  const widthPx = baseWidth * w + (w - 1) * gap;
+  let style = `width: ${widthPx}px;`;
+  if (key.invisible) {
+    style += ' visibility: hidden;';
+  }
+  return style;
+};
+---
+
+<BasePage
+  title={t('typing_practice.title')}
+  description={t('typing_practice.description')}
+  activePage="typing-practice"
+>
+  <div class="layout typing-layout">
+    <div class="layout-block" style="flex: 1; min-width: 0;">
+      <div class="typing-container">
+        <!-- Lesson selector -->
+        <div class="lesson-selector">
+          <label for="lesson-select">{t('typing_practice.select_lesson')}</label>
+          <select id="lesson-select">
+            <option value="home-row">{t('typing_practice.lesson_home_row')}</option>
+            <option value="home-row-extended"
+              >{t('typing_practice.lesson_home_row_extended')}</option
+            >
+            <option value="top-row">{t('typing_practice.lesson_top_row')}</option>
+            <option value="bottom-row">{t('typing_practice.lesson_bottom_row')}</option>
+            <option value="all-letters">{t('typing_practice.lesson_all_letters')}</option>
+            <option value="numbers">{t('typing_practice.lesson_numbers')}</option>
+            <option value="symbols">{t('typing_practice.lesson_symbols')}</option>
+            <option value="full">{t('typing_practice.lesson_full')}</option>
+          </select>
+        </div>
+
+        <!-- Instructions -->
+        <div class="instructions" id="instructions">
+          <h3>{t('typing_practice.finger_guide')}</h3>
+          <div class="finger-legend">
+            <div class="finger-item">
+              <span class="finger-dot" style="background: #e74c3c;"></span>
+              <span>{t('typing_practice.left_pinky')}</span>
+            </div>
+            <div class="finger-item">
+              <span class="finger-dot" style="background: #e67e22;"></span>
+              <span>{t('typing_practice.left_ring')}</span>
+            </div>
+            <div class="finger-item">
+              <span class="finger-dot" style="background: #f1c40f;"></span>
+              <span>{t('typing_practice.left_middle')}</span>
+            </div>
+            <div class="finger-item">
+              <span class="finger-dot" style="background: #2ecc71;"></span>
+              <span>{t('typing_practice.left_index')}</span>
+            </div>
+            <div class="finger-item">
+              <span class="finger-dot" style="background: #3498db;"></span>
+              <span>{t('typing_practice.right_index')}</span>
+            </div>
+            <div class="finger-item">
+              <span class="finger-dot" style="background: #9b59b6;"></span>
+              <span>{t('typing_practice.right_middle')}</span>
+            </div>
+            <div class="finger-item">
+              <span class="finger-dot" style="background: #e91e63;"></span>
+              <span>{t('typing_practice.right_ring')}</span>
+            </div>
+            <div class="finger-item">
+              <span class="finger-dot" style="background: #00bcd4;"></span>
+              <span>{t('typing_practice.right_pinky')}</span>
+            </div>
+            <div class="finger-item">
+              <span class="finger-dot" style="background: #95a5a6;"></span>
+              <span>{t('typing_practice.thumb')}</span>
+            </div>
+          </div>
+        </div>
+
+        <!-- Text display area -->
+        <div class="text-display" id="text-display">
+          <div class="text-content" id="text-content"></div>
+        </div>
+
+        <!-- Stats display -->
+        <div class="stats-panel">
+          <div class="stat-item">
+            <span class="stat-label">{t('typing_practice.wpm')}</span>
+            <span class="stat-value" id="wpm">0</span>
+          </div>
+          <div class="stat-item">
+            <span class="stat-label">{t('typing_practice.accuracy')}</span>
+            <span class="stat-value" id="accuracy">100%</span>
+          </div>
+          <div class="stat-item">
+            <span class="stat-label">{t('typing_practice.errors')}</span>
+            <span class="stat-value" id="errors">0</span>
+          </div>
+          <div class="stat-item">
+            <span class="stat-label">{t('typing_practice.time')}</span>
+            <span class="stat-value" id="time">0:00</span>
+          </div>
+        </div>
+
+        <!-- Keyboard display -->
+        <div class="keyboard-wrapper">
+          <div id="keyboard" class="keyboard">
+            <div class="main-keys">
+              {
+                mainRows.map((row) => (
+                  <div class="row">
+                    {row.map((key) => (
+                      <div
+                        class={`key ${key.invisible ? 'invisible' : ''}`}
+                        data-code={key.code}
+                        data-finger={key.finger}
+                        data-label={key.label}
+                        data-shift-label={key.shiftLabel || key.label}
+                        style={getKeyStyle(key)}
+                      >
+                        <span class="key-main">{key.label}</span>
+                        {key.shiftLabel && <span class="key-shift">{key.shiftLabel}</span>}
+                      </div>
+                    ))}
+                  </div>
+                ))
+              }
+            </div>
+          </div>
+        </div>
+
+        <!-- Hands display -->
+        <div class="hands-guide" id="hands-guide">
+          <div class="hand left-hand">
+            <div class="finger pinky" data-finger="left-pinky"></div>
+            <div class="finger ring" data-finger="left-ring"></div>
+            <div class="finger middle" data-finger="left-middle"></div>
+            <div class="finger index" data-finger="left-index"></div>
+            <div class="finger thumb" data-finger="thumb"></div>
+          </div>
+          <div class="hand right-hand">
+            <div class="finger thumb" data-finger="thumb"></div>
+            <div class="finger index" data-finger="right-index"></div>
+            <div class="finger middle" data-finger="right-middle"></div>
+            <div class="finger ring" data-finger="right-ring"></div>
+            <div class="finger pinky" data-finger="right-pinky"></div>
+          </div>
+        </div>
+
+        <!-- Actions -->
+        <div class="actions">
+          <button id="restart-btn" class="btn-action">{t('typing_practice.restart')}</button>
+          <button id="next-btn" class="btn-action btn-primary"
+            >{t('typing_practice.next_lesson')}</button
+          >
+        </div>
+      </div>
+    </div>
+
+    <BaseSettingBlock title={t('settings')}>
+      <div class="setting">
+        <label class="switcher">
+          <input type="checkbox" id="show-keyboard" checked />
+          <div class="toggle"></div>
+          <span>{t('typing_practice.show_keyboard')}</span>
+        </label>
+      </div>
+      <div class="setting">
+        <label class="switcher">
+          <input type="checkbox" id="show-hands" checked />
+          <div class="toggle"></div>
+          <span>{t('typing_practice.show_hands')}</span>
+        </label>
+      </div>
+      <div class="setting">
+        <label class="switcher">
+          <input type="checkbox" id="show-instructions" checked />
+          <div class="toggle"></div>
+          <span>{t('typing_practice.show_instructions')}</span>
+        </label>
+      </div>
+      <div class="setting">
+        <label class="switcher">
+          <input type="checkbox" id="sound-enabled" checked />
+          <div class="toggle"></div>
+          <span>{t('calculator.sound')}</span>
+        </label>
+      </div>
+      <div class="setting">
+        <label class="switcher">
+          <input type="checkbox" id="highlight-fingers" checked />
+          <div class="toggle"></div>
+          <span>{t('typing_practice.highlight_fingers')}</span>
+        </label>
+      </div>
+    </BaseSettingBlock>
+  </div>
+
+  <!-- Completion Modal -->
+  <div class="completion-modal" id="completion-modal">
+    <div class="completion-content">
+      <h2>{t('typing_practice.lesson_complete')}</h2>
+      <div class="completion-stats">
+        <div class="completion-stat">
+          <div class="label">{t('typing_practice.wpm')}</div>
+          <div class="value" id="modal-wpm">0</div>
+        </div>
+        <div class="completion-stat">
+          <div class="label">{t('typing_practice.accuracy')}</div>
+          <div class="value" id="modal-accuracy">100%</div>
+        </div>
+        <div class="completion-stat">
+          <div class="label">{t('typing_practice.errors')}</div>
+          <div class="value" id="modal-errors">0</div>
+        </div>
+        <div class="completion-stat">
+          <div class="label">{t('typing_practice.time')}</div>
+          <div class="value" id="modal-time">0:00</div>
+        </div>
+      </div>
+      <div class="completion-actions">
+        <button class="btn-action" id="modal-restart">{t('typing_practice.restart')}</button>
+        <button class="btn-action btn-primary" id="modal-next"
+          >{t('typing_practice.next_lesson')}</button
+        >
+      </div>
+    </div>
+  </div>
+
+  <style>
+    .typing-layout {
+      gap: 1rem;
+    }
+
+    .typing-container {
+      display: flex;
+      flex-direction: column;
+      gap: 1.5rem;
+      padding: 1.5rem;
+      background: var(--bg-card);
+      border-radius: 8px;
+      box-shadow: var(--shadow-sm);
+    }
+
+    .lesson-selector {
+      display: flex;
+      align-items: center;
+      gap: 1rem;
+      flex-wrap: wrap;
+    }
+
+    .lesson-selector label {
+      font-weight: 600;
+      color: var(--text-main);
+    }
+
+    .lesson-selector select {
+      padding: 0.5rem 1rem;
+      border-radius: 6px;
+      border: 1px solid var(--border-color);
+      background: var(--bg-input);
+      color: var(--text-main);
+      font-size: 1rem;
+      cursor: pointer;
+      min-width: 200px;
+    }
+
+    .instructions {
+      background: var(--bg-input);
+      padding: 1rem;
+      border-radius: 8px;
+      border: 1px solid var(--border-color);
+    }
+
+    .instructions h3 {
+      margin: 0 0 0.75rem 0;
+      font-size: 1rem;
+      color: var(--text-main);
+    }
+
+    .finger-legend {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 0.75rem;
+    }
+
+    .finger-item {
+      display: flex;
+      align-items: center;
+      gap: 0.5rem;
+      font-size: 0.85rem;
+      color: var(--text-muted);
+    }
+
+    .finger-dot {
+      width: 12px;
+      height: 12px;
+      border-radius: 50%;
+    }
+
+    .text-display {
+      background: var(--bg-input);
+      padding: 1.5rem;
+      border-radius: 8px;
+      border: 2px solid var(--border-color);
+      min-height: 100px;
+      font-family: 'Fira Code', 'Consolas', monospace;
+      font-size: 1.5rem;
+      line-height: 2;
+      overflow-x: auto;
+    }
+
+    .text-content {
+      white-space: pre-wrap;
+      word-break: break-all;
+    }
+
+    .text-content .char {
+      padding: 2px 0;
+      border-radius: 2px;
+      transition: background-color 0.1s;
+    }
+
+    .text-content .char.current {
+      background-color: var(--primary-color);
+      color: white;
+      animation: pulse 1s infinite;
+    }
+
+    .text-content .char.correct {
+      color: #2ecc71;
+    }
+
+    .text-content .char.incorrect {
+      color: #e74c3c;
+      text-decoration: underline;
+      text-decoration-color: #e74c3c;
+    }
+
+    .text-content .char.space {
+      background-color: rgba(var(--primary-rgb), 0.2);
+    }
+
+    @keyframes pulse {
+      0%,
+      100% {
+        opacity: 1;
+      }
+      50% {
+        opacity: 0.7;
+      }
+    }
+
+    .stats-panel {
+      display: flex;
+      justify-content: center;
+      gap: 2rem;
+      flex-wrap: wrap;
+    }
+
+    .stat-item {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      gap: 0.25rem;
+      min-width: 80px;
+    }
+
+    .stat-label {
+      font-size: 0.8rem;
+      text-transform: uppercase;
+      letter-spacing: 0.05em;
+      color: var(--text-muted);
+    }
+
+    .stat-value {
+      font-size: 1.5rem;
+      font-weight: 700;
+      color: var(--primary-color);
+      font-family: monospace;
+    }
+
+    .keyboard-wrapper {
+      display: flex;
+      justify-content: center;
+      overflow-x: auto;
+      padding: 1rem 0;
+    }
+
+    .keyboard {
+      display: flex;
+      flex-direction: column;
+      gap: 4px;
+      padding: 15px;
+      background: #2d3748;
+      border-radius: 12px;
+      user-select: none;
+      box-shadow: inset 0 2px 4px rgba(0, 0, 0, 0.3);
+    }
+
+    .main-keys {
+      display: flex;
+      flex-direction: column;
+      gap: 4px;
+    }
+
+    .row {
+      display: flex;
+      gap: 4px;
+      flex-wrap: nowrap;
+    }
+
+    .key {
+      background: linear-gradient(180deg, #5a6578 0%, #4a5568 100%);
+      color: #fff;
+      border-radius: 5px;
+      padding: 2px 5px;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      cursor: default;
+      transition: all 0.1s ease;
+      font-size: 0.75rem;
+      font-weight: 600;
+      height: 40px;
+      box-shadow:
+        0 1px 0 rgba(255, 255, 255, 0.1) inset,
+        0 -2px 0 rgba(0, 0, 0, 0.3) inset,
+        0 3px 0 #2d3748;
+      white-space: nowrap;
+      overflow: hidden;
+      flex-shrink: 0;
+      border: 2px solid transparent;
+      position: relative;
+    }
+
+    .key .key-main {
+      font-size: 0.85rem;
+    }
+
+    .key .key-shift {
+      font-size: 0.6rem;
+      position: absolute;
+      top: 2px;
+      right: 4px;
+      opacity: 0.7;
+    }
+
+    .key.invisible {
+      visibility: hidden;
+    }
+
+    .key.highlight {
+      border-color: var(--highlight-color, #fff);
+      box-shadow:
+        0 0 10px var(--highlight-color, #fff),
+        0 1px 0 rgba(255, 255, 255, 0.1) inset,
+        0 -2px 0 rgba(0, 0, 0, 0.3) inset,
+        0 3px 0 #2d3748;
+    }
+
+    .key.active {
+      background: linear-gradient(180deg, #68d391 0%, #48bb78 100%);
+      transform: translateY(2px);
+      box-shadow:
+        0 1px 0 rgba(255, 255, 255, 0.2) inset,
+        0 -1px 0 rgba(0, 0, 0, 0.2) inset;
+      color: white;
+    }
+
+    .key.error {
+      background: linear-gradient(180deg, #fc8181 0%, #f56565 100%);
+      animation: shake 0.2s ease-in-out;
+    }
+
+    @keyframes shake {
+      0%,
+      100% {
+        transform: translateX(0);
+      }
+      25% {
+        transform: translateX(-4px);
+      }
+      75% {
+        transform: translateX(4px);
+      }
+    }
+
+    .key.home-key::after {
+      content: '';
+      position: absolute;
+      bottom: 6px;
+      width: 8px;
+      height: 2px;
+      background: rgba(255, 255, 255, 0.5);
+      border-radius: 1px;
+    }
+
+    .hands-guide {
+      display: flex;
+      justify-content: center;
+      gap: 3rem;
+      padding: 1rem 0;
+    }
+
+    .hand {
+      display: flex;
+      gap: 0.5rem;
+      align-items: flex-end;
+    }
+
+    .left-hand {
+      flex-direction: row;
+    }
+
+    .right-hand {
+      flex-direction: row;
+    }
+
+    .finger {
+      width: 24px;
+      height: 40px;
+      background: #4a5568;
+      border-radius: 12px 12px 6px 6px;
+      transition: all 0.15s ease;
+      border: 2px solid transparent;
+    }
+
+    .finger.thumb {
+      height: 30px;
+      width: 30px;
+      border-radius: 50%;
+      margin-top: 10px;
+    }
+
+    .finger.pinky {
+      height: 30px;
+    }
+
+    .finger.ring {
+      height: 38px;
+    }
+
+    .finger.index {
+      height: 36px;
+    }
+
+    .finger.highlight {
+      transform: translateY(-8px);
+      box-shadow: 0 8px 20px rgba(0, 0, 0, 0.3);
+    }
+
+    .finger[data-finger='left-pinky'].highlight,
+    .finger[data-finger='left-pinky'].active {
+      background: #e74c3c;
+      border-color: #c0392b;
+    }
+    .finger[data-finger='left-ring'].highlight,
+    .finger[data-finger='left-ring'].active {
+      background: #e67e22;
+      border-color: #d35400;
+    }
+    .finger[data-finger='left-middle'].highlight,
+    .finger[data-finger='left-middle'].active {
+      background: #f1c40f;
+      border-color: #f39c12;
+    }
+    .finger[data-finger='left-index'].highlight,
+    .finger[data-finger='left-index'].active {
+      background: #2ecc71;
+      border-color: #27ae60;
+    }
+    .finger[data-finger='right-index'].highlight,
+    .finger[data-finger='right-index'].active {
+      background: #3498db;
+      border-color: #2980b9;
+    }
+    .finger[data-finger='right-middle'].highlight,
+    .finger[data-finger='right-middle'].active {
+      background: #9b59b6;
+      border-color: #8e44ad;
+    }
+    .finger[data-finger='right-ring'].highlight,
+    .finger[data-finger='right-ring'].active {
+      background: #e91e63;
+      border-color: #c2185b;
+    }
+    .finger[data-finger='right-pinky'].highlight,
+    .finger[data-finger='right-pinky'].active {
+      background: #00bcd4;
+      border-color: #0097a7;
+    }
+    .finger[data-finger='thumb'].highlight,
+    .finger[data-finger='thumb'].active {
+      background: #95a5a6;
+      border-color: #7f8c8d;
+    }
+
+    .actions {
+      display: flex;
+      justify-content: center;
+      gap: 1rem;
+    }
+
+    .btn-action {
+      padding: 0.75rem 2rem;
+      background-color: var(--bg-input);
+      color: var(--text-main);
+      border: 1px solid var(--border-color);
+      border-radius: 6px;
+      font-weight: 600;
+      cursor: pointer;
+      transition:
+        background-color 0.2s,
+        transform 0.1s;
+    }
+
+    .btn-action:hover {
+      background-color: var(--bg-hover);
+    }
+
+    .btn-action:active {
+      transform: translateY(1px);
+    }
+
+    .btn-primary {
+      background-color: var(--primary-color);
+      color: white;
+      border-color: var(--primary-color);
+    }
+
+    .btn-primary:hover {
+      background-color: var(--primary-hover);
+    }
+
+    /* Completion modal */
+    .completion-modal {
+      display: none;
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      background: rgba(0, 0, 0, 0.7);
+      z-index: 1000;
+      justify-content: center;
+      align-items: center;
+    }
+
+    .completion-modal.show {
+      display: flex;
+    }
+
+    .completion-content {
+      background: var(--bg-card);
+      padding: 2rem;
+      border-radius: 12px;
+      text-align: center;
+      max-width: 400px;
+      width: 90%;
+    }
+
+    .completion-content h2 {
+      margin: 0 0 1rem 0;
+      color: var(--primary-color);
+    }
+
+    .completion-stats {
+      display: grid;
+      grid-template-columns: repeat(2, 1fr);
+      gap: 1rem;
+      margin: 1.5rem 0;
+    }
+
+    .completion-stat {
+      background: var(--bg-input);
+      padding: 1rem;
+      border-radius: 8px;
+    }
+
+    .completion-stat .label {
+      font-size: 0.8rem;
+      color: var(--text-muted);
+      text-transform: uppercase;
+    }
+
+    .completion-stat .value {
+      font-size: 1.5rem;
+      font-weight: 700;
+      color: var(--text-main);
+    }
+
+    .completion-actions {
+      display: flex;
+      gap: 1rem;
+      justify-content: center;
+      margin-top: 1rem;
+    }
+
+    /* Responsive */
+    @media (max-width: 900px) {
+      .keyboard-wrapper {
+        transform: scale(0.85);
+        transform-origin: center;
+      }
+
+      .stats-panel {
+        gap: 1rem;
+      }
+
+      .finger-legend {
+        justify-content: center;
+      }
+    }
+
+    @media (max-width: 600px) {
+      .keyboard-wrapper {
+        transform: scale(0.65);
+      }
+
+      .text-display {
+        font-size: 1.2rem;
+        padding: 1rem;
+      }
+
+      .hands-guide {
+        gap: 1.5rem;
+      }
+
+      .finger {
+        width: 18px;
+        height: 32px;
+      }
+
+      .finger.thumb {
+        width: 24px;
+        height: 24px;
+      }
+    }
+  </style>
+
+  <script>
+    // Finger color mapping
+    const fingerColors: Record<string, string> = {
+      'left-pinky': '#e74c3c',
+      'left-ring': '#e67e22',
+      'left-middle': '#f1c40f',
+      'left-index': '#2ecc71',
+      'right-index': '#3498db',
+      'right-middle': '#9b59b6',
+      'right-ring': '#e91e63',
+      'right-pinky': '#00bcd4',
+      thumb: '#95a5a6',
+    };
+
+    // Lessons configuration
+    const lessons: Record<string, { chars: string; text: string }> = {
+      'home-row': {
+        chars: 'asdfjkl;',
+        text: 'asdf jkl; asdf jkl; asd fjkl asdf jkl; fjdk slaf jkds afld jkas dlf; jasdk fla; sdkf jalsd fkja; sldkfj asd; lkfja sdl;kfj asd;lfkj',
+      },
+      'home-row-extended': {
+        chars: 'asdfghjkl;',
+        text: 'asdf ghjkl; fghj dksl; ghjk fdsa; asdf ghjkl; hjkl asdf; ghfd jkls; asdfg hjkl; fghjk dsla; ghjkl asdf; hgfds jkla;',
+      },
+      'top-row': {
+        chars: 'qwertyuiop',
+        text: 'qwer tyui op qwert yuiop qwerty uiop qwer tyui op wert yuio qwer tyui powe rtyu ioqw erty uiop qwer tyui',
+      },
+      'bottom-row': {
+        chars: 'zxcvbnm,.',
+        text: 'zxcv bnm, zxcv bnm. xcvb nm,. vbnm ,zxc vbnm. zxcv bnm, xcvb nm,. zxcv bnm, vbnm ,zxc bnm. zxcv',
+      },
+      'all-letters': {
+        chars: 'abcdefghijklmnopqrstuvwxyz',
+        text: 'the quick brown fox jumps over the lazy dog pack my box with five dozen liquor jugs how vexingly quick daft zebras jump the five boxing wizards jump quickly',
+      },
+      numbers: {
+        chars: '1234567890',
+        text: '123 456 7890 12345 67890 1234567890 123 456 789 012 345 678 901 234 567 890 1234 5678 9012 3456 7890',
+      },
+      symbols: {
+        chars: '!@#$%^&*()_+-=[]{}|;:\'",.<>/?`~',
+        text: 'hello! what? yes... no!!! @email.com #hashtag $100 50% 2^8 a&b (test) under_score 2+2=4 [array] {object} a|b semi;colon \'quote\' "double" 1<2 2>1 path/to/file back\\slash',
+      },
+      full: {
+        chars: 'abcdefghijklmnopqrstuvwxyz1234567890!@#$%',
+        text: 'The quick brown fox jumps over the lazy dog. Pack my box with 5 dozen liquor jugs! How vexingly quick daft zebras jump? The 5 boxing wizards jump quickly @ 100% speed.',
+      },
+    };
+
+    // Key to character mapping
+    const keyToChar: Record<string, { normal: string; shift: string }> = {
+      Backquote: { normal: '`', shift: '~' },
+      Digit1: { normal: '1', shift: '!' },
+      Digit2: { normal: '2', shift: '@' },
+      Digit3: { normal: '3', shift: '#' },
+      Digit4: { normal: '4', shift: '$' },
+      Digit5: { normal: '5', shift: '%' },
+      Digit6: { normal: '6', shift: '^' },
+      Digit7: { normal: '7', shift: '&' },
+      Digit8: { normal: '8', shift: '*' },
+      Digit9: { normal: '9', shift: '(' },
+      Digit0: { normal: '0', shift: ')' },
+      Minus: { normal: '-', shift: '_' },
+      Equal: { normal: '=', shift: '+' },
+      KeyQ: { normal: 'q', shift: 'Q' },
+      KeyW: { normal: 'w', shift: 'W' },
+      KeyE: { normal: 'e', shift: 'E' },
+      KeyR: { normal: 'r', shift: 'R' },
+      KeyT: { normal: 't', shift: 'T' },
+      KeyY: { normal: 'y', shift: 'Y' },
+      KeyU: { normal: 'u', shift: 'U' },
+      KeyI: { normal: 'i', shift: 'I' },
+      KeyO: { normal: 'o', shift: 'O' },
+      KeyP: { normal: 'p', shift: 'P' },
+      BracketLeft: { normal: '[', shift: '{' },
+      BracketRight: { normal: ']', shift: '}' },
+      Backslash: { normal: '\\', shift: '|' },
+      KeyA: { normal: 'a', shift: 'A' },
+      KeyS: { normal: 's', shift: 'S' },
+      KeyD: { normal: 'd', shift: 'D' },
+      KeyF: { normal: 'f', shift: 'F' },
+      KeyG: { normal: 'g', shift: 'G' },
+      KeyH: { normal: 'h', shift: 'H' },
+      KeyJ: { normal: 'j', shift: 'J' },
+      KeyK: { normal: 'k', shift: 'K' },
+      KeyL: { normal: 'l', shift: 'L' },
+      Semicolon: { normal: ';', shift: ':' },
+      Quote: { normal: "'", shift: '"' },
+      KeyZ: { normal: 'z', shift: 'Z' },
+      KeyX: { normal: 'x', shift: 'X' },
+      KeyC: { normal: 'c', shift: 'C' },
+      KeyV: { normal: 'v', shift: 'V' },
+      KeyB: { normal: 'b', shift: 'B' },
+      KeyN: { normal: 'n', shift: 'N' },
+      KeyM: { normal: 'm', shift: 'M' },
+      Comma: { normal: ',', shift: '<' },
+      Period: { normal: '.', shift: '>' },
+      Slash: { normal: '/', shift: '?' },
+      Space: { normal: ' ', shift: ' ' },
+    };
+
+    // Character to key code mapping
+    const charToKeyCode: Record<string, { code: string; shift: boolean }> = {};
+    Object.entries(keyToChar).forEach(([code, chars]) => {
+      charToKeyCode[chars.normal] = { code, shift: false };
+      charToKeyCode[chars.shift] = { code, shift: true };
+    });
+
+    // State
+    let currentLesson = 'home-row';
+    let currentText = '';
+    let currentIndex = 0;
+    let errors = 0;
+    let totalChars = 0;
+    let startTime: number | null = null;
+    let timerInterval: number | null = null;
+    let isCompleted = false;
+
+    // DOM elements
+    const lessonSelect = document.getElementById('lesson-select') as HTMLSelectElement;
+    const textContent = document.getElementById('text-content') as HTMLDivElement;
+    const wpmEl = document.getElementById('wpm') as HTMLSpanElement;
+    const accuracyEl = document.getElementById('accuracy') as HTMLSpanElement;
+    const errorsEl = document.getElementById('errors') as HTMLSpanElement;
+    const timeEl = document.getElementById('time') as HTMLSpanElement;
+    const restartBtn = document.getElementById('restart-btn') as HTMLButtonElement;
+    const nextBtn = document.getElementById('next-btn') as HTMLButtonElement;
+    const showKeyboard = document.getElementById('show-keyboard') as HTMLInputElement;
+    const showHands = document.getElementById('show-hands') as HTMLInputElement;
+    const showInstructions = document.getElementById('show-instructions') as HTMLInputElement;
+    const soundEnabled = document.getElementById('sound-enabled') as HTMLInputElement;
+    const highlightFingers = document.getElementById('highlight-fingers') as HTMLInputElement;
+    const keyboardEl = document.querySelector('.keyboard-wrapper') as HTMLDivElement;
+    const handsEl = document.getElementById('hands-guide') as HTMLDivElement;
+    const instructionsEl = document.getElementById('instructions') as HTMLDivElement;
+
+    // Modal elements
+    const completionModal = document.getElementById('completion-modal') as HTMLDivElement;
+    const modalWpm = document.getElementById('modal-wpm') as HTMLDivElement;
+    const modalAccuracy = document.getElementById('modal-accuracy') as HTMLDivElement;
+    const modalErrors = document.getElementById('modal-errors') as HTMLDivElement;
+    const modalTime = document.getElementById('modal-time') as HTMLDivElement;
+    const modalRestart = document.getElementById('modal-restart') as HTMLButtonElement;
+    const modalNext = document.getElementById('modal-next') as HTMLButtonElement;
+
+    // AudioContext for sound
+    let audioCtx: AudioContext | null = null;
+
+    function getAudioContext() {
+      if (!audioCtx) {
+        const AudioContext = window.AudioContext || (window as any).webkitAudioContext;
+        if (AudioContext) {
+          audioCtx = new AudioContext();
+        }
+      }
+      return audioCtx;
+    }
+
+    function playSound(frequency: number, duration: number) {
+      if (!soundEnabled?.checked) return;
+      try {
+        const ctx = getAudioContext();
+        if (ctx) {
+          if (ctx.state === 'suspended') ctx.resume();
+          const osc = ctx.createOscillator();
+          const gain = ctx.createGain();
+          osc.type = 'sine';
+          osc.frequency.setValueAtTime(frequency, ctx.currentTime);
+          gain.gain.setValueAtTime(0.1, ctx.currentTime);
+          gain.gain.exponentialRampToValueAtTime(0.001, ctx.currentTime + duration);
+          osc.connect(gain);
+          gain.connect(ctx.destination);
+          osc.start();
+          osc.stop(ctx.currentTime + duration);
+        }
+      } catch (err) {
+        console.error('Audio error', err);
+      }
+    }
+
+    function playCorrectSound() {
+      playSound(880, 0.05);
+    }
+
+    function playErrorSound() {
+      playSound(220, 0.15);
+    }
+
+    // Initialize the lesson
+    function initLesson() {
+      currentText = lessons[currentLesson].text;
+      currentIndex = 0;
+      errors = 0;
+      totalChars = 0;
+      startTime = null;
+      isCompleted = false;
+
+      if (timerInterval) {
+        clearInterval(timerInterval);
+        timerInterval = null;
+      }
+
+      // Render text
+      renderText();
+      updateStats();
+      highlightCurrentKey();
+
+      // Mark home keys
+      document.querySelectorAll('.key').forEach((key) => key.classList.remove('home-key'));
+      ['KeyF', 'KeyJ'].forEach((code) => {
+        const key = document.querySelector(`.key[data-code="${code}"]`);
+        if (key) key.classList.add('home-key');
+      });
+    }
+
+    function renderText() {
+      let html = '';
+      for (let i = 0; i < currentText.length; i++) {
+        const char = currentText[i];
+        let className = 'char';
+        if (i < currentIndex) {
+          className += ' correct';
+        } else if (i === currentIndex) {
+          className += ' current';
+        }
+        if (char === ' ') {
+          className += ' space';
+        }
+        const displayChar = char === ' ' ? '␣' : char;
+        html += `<span class="${className}" data-index="${i}">${escapeHtml(displayChar)}</span>`;
+      }
+      textContent.innerHTML = html;
+
+      // Scroll to current character
+      const currentEl = textContent.querySelector('.current');
+      if (currentEl) {
+        currentEl.scrollIntoView({ behavior: 'smooth', block: 'center', inline: 'center' });
+      }
+    }
+
+    function escapeHtml(text: string): string {
+      const div = document.createElement('div');
+      div.textContent = text;
+      return div.innerHTML;
+    }
+
+    function highlightCurrentKey() {
+      // Remove all highlights
+      document
+        .querySelectorAll('.key.highlight')
+        .forEach((key) => key.classList.remove('highlight'));
+      document
+        .querySelectorAll('.finger.highlight')
+        .forEach((f) => f.classList.remove('highlight'));
+
+      if (isCompleted || currentIndex >= currentText.length) return;
+
+      const currentChar = currentText[currentIndex];
+      const keyInfo = charToKeyCode[currentChar];
+
+      if (keyInfo && highlightFingers?.checked) {
+        const keyEl = document.querySelector(`.key[data-code="${keyInfo.code}"]`);
+        if (keyEl) {
+          const finger = keyEl.getAttribute('data-finger');
+          const color = finger ? fingerColors[finger] : '#fff';
+          (keyEl as HTMLElement).style.setProperty('--highlight-color', color);
+          keyEl.classList.add('highlight');
+
+          // Highlight shift key if needed
+          if (keyInfo.shift) {
+            // Use opposite hand shift
+            const isLeftHand =
+              finger?.startsWith('left') || (finger === 'thumb' && keyInfo.code.includes('Left'));
+            const shiftCode = isLeftHand ? 'ShiftRight' : 'ShiftLeft';
+            const shiftEl = document.querySelector(`.key[data-code="${shiftCode}"]`);
+            if (shiftEl) {
+              (shiftEl as HTMLElement).style.setProperty(
+                '--highlight-color',
+                fingerColors['right-pinky']
+              );
+              shiftEl.classList.add('highlight');
+            }
+          }
+
+          // Highlight finger
+          if (finger) {
+            const fingerEl = document.querySelector(`.finger[data-finger="${finger}"]`);
+            if (fingerEl) fingerEl.classList.add('highlight');
+          }
+        }
+      }
+    }
+
+    function updateStats() {
+      // WPM calculation
+      let wpm = 0;
+      if (startTime && totalChars > 0) {
+        const minutes = (Date.now() - startTime) / 60000;
+        wpm = Math.round(totalChars / 5 / minutes);
+      }
+      wpmEl.textContent = String(wpm);
+
+      // Accuracy
+      const accuracy =
+        totalChars > 0 ? Math.round(((totalChars - errors) / totalChars) * 100) : 100;
+      accuracyEl.textContent = accuracy + '%';
+
+      // Errors
+      errorsEl.textContent = String(errors);
+    }
+
+    function updateTimer() {
+      if (!startTime) return;
+      const elapsed = Math.floor((Date.now() - startTime) / 1000);
+      const minutes = Math.floor(elapsed / 60);
+      const seconds = elapsed % 60;
+      timeEl.textContent = `${minutes}:${seconds.toString().padStart(2, '0')}`;
+    }
+
+    function handleKeyDown(e: KeyboardEvent) {
+      if (isCompleted) return;
+
+      // Prevent default for most keys
+      if (e.code !== 'Tab' && e.code !== 'F5' && e.code !== 'F12') {
+        e.preventDefault();
+      }
+
+      // Start timer on first keypress
+      if (!startTime && currentIndex === 0) {
+        startTime = Date.now();
+        timerInterval = window.setInterval(updateTimer, 100);
+      }
+
+      // Get the expected character
+      const expectedChar = currentText[currentIndex];
+      let typedChar = '';
+
+      // Handle special keys
+      if (e.code === 'Backspace') {
+        // Allow backspace to correct errors (optional)
+        return;
+      }
+
+      // Get typed character
+      if (keyToChar[e.code]) {
+        typedChar = e.shiftKey ? keyToChar[e.code].shift : keyToChar[e.code].normal;
+      } else if (e.key.length === 1) {
+        typedChar = e.key;
+      } else {
+        return;
+      }
+
+      // Visual feedback on key
+      const keyEl = document.querySelector(`.key[data-code="${e.code}"]`);
+      if (keyEl) {
+        keyEl.classList.add('active');
+        setTimeout(() => keyEl.classList.remove('active'), 100);
+      }
+
+      // Check if correct
+      totalChars++;
+      if (typedChar === expectedChar) {
+        playCorrectSound();
+        currentIndex++;
+        renderText();
+        highlightCurrentKey();
+      } else {
+        playErrorSound();
+        errors++;
+        if (keyEl) {
+          keyEl.classList.add('error');
+          setTimeout(() => keyEl.classList.remove('error'), 200);
+        }
+        // Mark as incorrect but still advance
+        const charEl = textContent.querySelector(`.char[data-index="${currentIndex}"]`);
+        if (charEl) {
+          charEl.classList.remove('current');
+          charEl.classList.add('incorrect');
+        }
+        currentIndex++;
+        renderText();
+        highlightCurrentKey();
+      }
+
+      updateStats();
+
+      // Check if completed
+      if (currentIndex >= currentText.length) {
+        completeLesson();
+      }
+    }
+
+    function completeLesson() {
+      isCompleted = true;
+      if (timerInterval) {
+        clearInterval(timerInterval);
+        timerInterval = null;
+      }
+      playSound(523.25, 0.3); // C5 note for completion
+
+      // Show completion modal
+      if (completionModal) {
+        modalWpm.textContent = wpmEl.textContent || '0';
+        modalAccuracy.textContent = accuracyEl.textContent || '100%';
+        modalErrors.textContent = errorsEl.textContent || '0';
+        modalTime.textContent = timeEl.textContent || '0:00';
+        completionModal.classList.add('show');
+      }
+    }
+
+    function hideModal() {
+      if (completionModal) {
+        completionModal.classList.remove('show');
+      }
+    }
+
+    function goToNextLesson() {
+      hideModal();
+      const lessonKeys = Object.keys(lessons);
+      const currentIdx = lessonKeys.indexOf(currentLesson);
+      const nextIdx = (currentIdx + 1) % lessonKeys.length;
+      currentLesson = lessonKeys[nextIdx];
+      lessonSelect.value = currentLesson;
+      initLesson();
+    }
+
+    // Event listeners
+    lessonSelect?.addEventListener('change', () => {
+      currentLesson = lessonSelect.value;
+      initLesson();
+    });
+
+    restartBtn?.addEventListener('click', initLesson);
+    nextBtn?.addEventListener('click', goToNextLesson);
+
+    // Modal event listeners
+    modalRestart?.addEventListener('click', () => {
+      hideModal();
+      initLesson();
+    });
+    modalNext?.addEventListener('click', goToNextLesson);
+
+    // Close modal when clicking outside
+    completionModal?.addEventListener('click', (e) => {
+      if (e.target === completionModal) {
+        hideModal();
+      }
+    });
+
+    showKeyboard?.addEventListener('change', () => {
+      keyboardEl.style.display = showKeyboard.checked ? 'flex' : 'none';
+    });
+
+    showHands?.addEventListener('change', () => {
+      handsEl.style.display = showHands.checked ? 'flex' : 'none';
+    });
+
+    showInstructions?.addEventListener('change', () => {
+      instructionsEl.style.display = showInstructions.checked ? 'block' : 'none';
+    });
+
+    highlightFingers?.addEventListener('change', () => {
+      highlightCurrentKey();
+    });
+
+    window.addEventListener('keydown', handleKeyDown);
+
+    // Initialize
+    initLesson();
+  </script>
+</BasePage>

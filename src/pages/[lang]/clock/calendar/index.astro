@@ -1,0 +1,279 @@
+---
+import BasePage from '../../../../components/BasePage.astro';
+import BaseSettingBlock from '../../../../components/BaseSettingBlock.astro';
+import { languages } from '../../../../i18n/ui';
+import { useTranslations } from '../../../../i18n/utils';
+import '../../../../styles/calendar.css';
+
+export function getStaticPaths() {
+  return Object.keys(languages).map((lang) => {
+    return { params: { lang } };
+  });
+}
+
+const { lang = 'en' } = Astro.params;
+const t = useTranslations(lang as any);
+
+const title = t('calendar.title');
+const description = t('calendar.description');
+const activePage = 'clock/calendar';
+
+// Prepare translation arrays for months
+const months = [
+  t('calendar.month_1'),
+  t('calendar.month_2'),
+  t('calendar.month_3'),
+  t('calendar.month_4'),
+  t('calendar.month_5'),
+  t('calendar.month_6'),
+  t('calendar.month_7'),
+  t('calendar.month_8'),
+  t('calendar.month_9'),
+  t('calendar.month_10'),
+  t('calendar.month_11'),
+  t('calendar.month_12'),
+];
+
+// Prepare translation arrays for weekdays
+const weekdays = [
+  t('calendar.weekday_sun'),
+  t('calendar.weekday_mon'),
+  t('calendar.weekday_tue'),
+  t('calendar.weekday_wed'),
+  t('calendar.weekday_thu'),
+  t('calendar.weekday_fri'),
+  t('calendar.weekday_sat'),
+];
+
+// Prepare translation arrays for stems and branches
+const stems = [
+  t('calendar.stem_1'),
+  t('calendar.stem_2'),
+  t('calendar.stem_3'),
+  t('calendar.stem_4'),
+  t('calendar.stem_5'),
+  t('calendar.stem_6'),
+  t('calendar.stem_7'),
+  t('calendar.stem_8'),
+  t('calendar.stem_9'),
+  t('calendar.stem_10'),
+];
+
+const branches = [
+  t('calendar.branch_1'),
+  t('calendar.branch_2'),
+  t('calendar.branch_3'),
+  t('calendar.branch_4'),
+  t('calendar.branch_5'),
+  t('calendar.branch_6'),
+  t('calendar.branch_7'),
+  t('calendar.branch_8'),
+  t('calendar.branch_9'),
+  t('calendar.branch_10'),
+  t('calendar.branch_11'),
+  t('calendar.branch_12'),
+];
+---
+
+<BasePage title={title} description={description} activePage={activePage}>
+  <div class="layout">
+    <div class="layout-block" style="flex: 1;">
+      <div class="calendar-container">
+        <!-- Calendar Header -->
+        <div class="calendar-header">
+          <div class="calendar-nav">
+            <button class="calendar-nav-btn" id="prev-year" title={t('calendar.previous_year')}>
+              <svg
+                xmlns="http://www.w3.org/2000/svg"
+                width="18"
+                height="18"
+                viewBox="0 0 24 24"
+                fill="none"
+                stroke="currentColor"
+                stroke-width="2"
+                stroke-linecap="round"
+                stroke-linejoin="round"
+              >
+                <polyline points="11 17 6 12 11 7"></polyline>
+                <polyline points="18 17 13 12 18 7"></polyline>
+              </svg>
+            </button>
+            <button class="calendar-nav-btn" id="prev-month" title={t('calendar.previous_month')}>
+              <svg
+                xmlns="http://www.w3.org/2000/svg"
+                width="18"
+                height="18"
+                viewBox="0 0 24 24"
+                fill="none"
+                stroke="currentColor"
+                stroke-width="2"
+                stroke-linecap="round"
+                stroke-linejoin="round"
+              >
+                <polyline points="15 18 9 12 15 6"></polyline>
+              </svg>
+            </button>
+          </div>
+
+          <div class="calendar-title">
+            <select id="month-select" title={t('calendar.select_month')}>
+              {months.map((month, index) => <option value={index}>{month}</option>)}
+            </select>
+            <select id="year-select" title={t('calendar.select_year')}>
+              <!-- Years will be populated by JavaScript -->
+            </select>
+          </div>
+
+          <div class="calendar-nav">
+            <button class="calendar-nav-btn" id="next-month" title={t('calendar.next_month')}>
+              <svg
+                xmlns="http://www.w3.org/2000/svg"
+                width="18"
+                height="18"
+                viewBox="0 0 24 24"
+                fill="none"
+                stroke="currentColor"
+                stroke-width="2"
+                stroke-linecap="round"
+                stroke-linejoin="round"
+              >
+                <polyline points="9 18 15 12 9 6"></polyline>
+              </svg>
+            </button>
+            <button class="calendar-nav-btn" id="next-year" title={t('calendar.next_year')}>
+              <svg
+                xmlns="http://www.w3.org/2000/svg"
+                width="18"
+                height="18"
+                viewBox="0 0 24 24"
+                fill="none"
+                stroke="currentColor"
+                stroke-width="2"
+                stroke-linecap="round"
+                stroke-linejoin="round"
+              >
+                <polyline points="13 17 18 12 13 7"></polyline>
+                <polyline points="6 17 11 12 6 7"></polyline>
+              </svg>
+            </button>
+            <button class="btn-today" id="btn-today">{t('calendar.today')}</button>
+          </div>
+        </div>
+
+        <!-- Calendar Grid -->
+        <div class="calendar-grid">
+          <div class="calendar-weekdays">
+            {
+              weekdays.map((day, index) => (
+                <div class={`calendar-weekday${index === 0 || index === 6 ? ' weekend' : ''}`}>
+                  {day}
+                </div>
+              ))
+            }
+          </div>
+          <div class="calendar-days" id="calendar-days">
+            <!-- Days will be rendered by JavaScript -->
+          </div>
+        </div>
+
+        <!-- Selected Date Details -->
+        <div class="selected-date-card">
+          <div id="selected-date-details">
+            <!-- Selected date details will be rendered by JavaScript -->
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <BaseSettingBlock title={t('settings')}>
+      <div class="setting">
+        <p style="font-size: 0.875rem; color: var(--text-secondary);">
+          {t('calendar.help_text')}
+        </p>
+      </div>
+
+      <div class="setting">
+        <div class="calendar-settings">
+          <div class="calendar-toggle">
+            <div class="calendar-toggle-switch active" id="lunar-toggle"></div>
+            <span class="calendar-toggle-label">{t('calendar.show_lunar')}</span>
+          </div>
+        </div>
+      </div>
+    </BaseSettingBlock>
+  </div>
+
+  <script
+    is:inline
+    define:vars={{
+      t_today: t('calendar.today'),
+      t_solarDate: t('calendar.solar_date'),
+      t_lunarDate: t('calendar.lunar_date'),
+      t_lunarMonth: t('calendar.lunar_month'),
+      t_lunarYear: t('calendar.lunar_year'),
+      t_zodiacYear: t('calendar.zodiac_year'),
+      t_zodiacDay: t('calendar.zodiac_day'),
+      t_showLunar: t('calendar.show_lunar'),
+      t_goToToday: t('calendar.go_to_today'),
+      t_previousMonth: t('calendar.previous_month'),
+      t_nextMonth: t('calendar.next_month'),
+      t_previousYear: t('calendar.previous_year'),
+      t_nextYear: t('calendar.next_year'),
+      t_selectMonth: t('calendar.select_month'),
+      t_selectYear: t('calendar.select_year'),
+      t_selectedDate: t('calendar.selected_date'),
+      t_helpText: t('calendar.help_text'),
+      t_weekdays: weekdays,
+      t_months: months,
+      t_leapMonth: t('calendar.leap_month'),
+      t_stems: stems,
+      t_branches: branches,
+      t_locale: lang,
+    }}
+  >
+    window.calendarTranslations = {
+      today: t_today,
+      solarDate: t_solarDate,
+      lunarDate: t_lunarDate,
+      lunarMonth: t_lunarMonth,
+      lunarYear: t_lunarYear,
+      zodiacYear: t_zodiacYear,
+      zodiacDay: t_zodiacDay,
+      showLunar: t_showLunar,
+      goToToday: t_goToToday,
+      previousMonth: t_previousMonth,
+      nextMonth: t_nextMonth,
+      previousYear: t_previousYear,
+      nextYear: t_nextYear,
+      selectMonth: t_selectMonth,
+      selectYear: t_selectYear,
+      selectedDate: t_selectedDate,
+      helpText: t_helpText,
+      weekdays: t_weekdays,
+      months: t_months,
+      leapMonth: t_leapMonth,
+      stems: t_stems,
+      branches: t_branches,
+      locale: t_locale,
+    };
+  </script>
+
+  <script>
+    import { initCalendar, type CalendarTranslations } from '../../../../scripts/calendar';
+
+    declare global {
+      interface Window {
+        calendarTranslations: CalendarTranslations;
+      }
+    }
+
+    // Wait for DOM to be ready
+    if (document.readyState === 'loading') {
+      document.addEventListener('DOMContentLoaded', () => {
+        initCalendar(window.calendarTranslations);
+      });
+    } else {
+      initCalendar(window.calendarTranslations);
+    }
+  </script>
+</BasePage>

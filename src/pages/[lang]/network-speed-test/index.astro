@@ -1,0 +1,246 @@
+---
+import BasePage from '../../../components/BasePage.astro';
+import BaseSettingBlock from '../../../components/BaseSettingBlock.astro';
+import { languages } from '../../../i18n/ui';
+import { useTranslations } from '../../../i18n/utils';
+import '../../../styles/speed-test.css';
+
+export function getStaticPaths() {
+  return Object.keys(languages).map((lang) => {
+    return { params: { lang } };
+  });
+}
+
+const { lang = 'en' } = Astro.params;
+const t = useTranslations(lang as any);
+
+const title = t('speed_test.title');
+const description = t('speed_test.description');
+const activePage = 'network-speed-test';
+---
+
+<BasePage title={title} description={description} activePage={activePage}>
+  <div class="layout">
+    <div class="layout-block" style="flex: 1;">
+      <div class="speed-test-container">
+        <!-- Speed Gauge -->
+        <div class="speed-gauge-wrapper">
+          <div class="speed-gauge" id="speed-gauge">
+            <svg viewBox="0 0 200 200">
+              <circle class="speed-gauge-bg" cx="100" cy="100" r="90"></circle>
+              <circle class="speed-gauge-progress" id="progress-ring" cx="100" cy="100" r="90"
+              ></circle>
+            </svg>
+            <div class="speed-gauge-content">
+              <span class="current-speed-value" id="current-speed-value">0</span>
+              <span class="current-speed-unit">{t('speed_test.mbps')}</span>
+              <span class="current-speed-label" id="current-speed-label"></span>
+            </div>
+          </div>
+        </div>
+
+        <!-- Status and Start Button -->
+        <div style="text-align: center;">
+          <p class="status-text" id="status-text">{t('speed_test.ready')}</p>
+          <button class="start-btn" id="start-test">
+            <svg
+              xmlns="http://www.w3.org/2000/svg"
+              width="24"
+              height="24"
+              viewBox="0 0 24 24"
+              fill="none"
+              stroke="currentColor"
+              stroke-width="2"
+              stroke-linecap="round"
+              stroke-linejoin="round"
+            >
+              <polygon points="5 3 19 12 5 21 5 3"></polygon>
+            </svg>
+            {t('speed_test.startTest')}
+          </button>
+        </div>
+
+        <!-- Results Grid -->
+        <div class="results-grid">
+          <div class="result-card">
+            <div class="result-card-header">
+              <div class="result-icon download">
+                <svg
+                  xmlns="http://www.w3.org/2000/svg"
+                  width="20"
+                  height="20"
+                  viewBox="0 0 24 24"
+                  fill="none"
+                  stroke="currentColor"
+                  stroke-width="2"
+                  stroke-linecap="round"
+                  stroke-linejoin="round"
+                >
+                  <path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"></path>
+                  <polyline points="7 10 12 15 17 10"></polyline>
+                  <line x1="12" y1="15" x2="12" y2="3"></line>
+                </svg>
+              </div>
+              <span class="result-label">{t('speed_test.download')}</span>
+            </div>
+            <span class="result-value" id="download-value">-- {t('speed_test.mbps')}</span>
+          </div>
+
+          <div class="result-card">
+            <div class="result-card-header">
+              <div class="result-icon upload">
+                <svg
+                  xmlns="http://www.w3.org/2000/svg"
+                  width="20"
+                  height="20"
+                  viewBox="0 0 24 24"
+                  fill="none"
+                  stroke="currentColor"
+                  stroke-width="2"
+                  stroke-linecap="round"
+                  stroke-linejoin="round"
+                >
+                  <path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"></path>
+                  <polyline points="17 8 12 3 7 8"></polyline>
+                  <line x1="12" y1="3" x2="12" y2="15"></line>
+                </svg>
+              </div>
+              <span class="result-label">{t('speed_test.upload')}</span>
+            </div>
+            <span class="result-value" id="upload-value">-- {t('speed_test.mbps')}</span>
+          </div>
+
+          <div class="result-card">
+            <div class="result-card-header">
+              <div class="result-icon latency">
+                <svg
+                  xmlns="http://www.w3.org/2000/svg"
+                  width="20"
+                  height="20"
+                  viewBox="0 0 24 24"
+                  fill="none"
+                  stroke="currentColor"
+                  stroke-width="2"
+                  stroke-linecap="round"
+                  stroke-linejoin="round"
+                >
+                  <polyline points="22 12 18 12 15 21 9 3 6 12 2 12"></polyline>
+                </svg>
+              </div>
+              <span class="result-label">{t('speed_test.latency')}</span>
+            </div>
+            <span class="result-value" id="latency-value">-- {t('speed_test.ms')}</span>
+          </div>
+
+          <div class="result-card ip">
+            <div class="result-card-header">
+              <div class="result-icon ip">
+                <svg
+                  xmlns="http://www.w3.org/2000/svg"
+                  width="20"
+                  height="20"
+                  viewBox="0 0 24 24"
+                  fill="none"
+                  stroke="currentColor"
+                  stroke-width="2"
+                  stroke-linecap="round"
+                  stroke-linejoin="round"
+                >
+                  <circle cx="12" cy="12" r="10"></circle>
+                  <line x1="2" y1="12" x2="22" y2="12"></line>
+                  <path
+                    d="M12 2a15.3 15.3 0 0 1 4 10 15.3 15.3 0 0 1-4 10 15.3 15.3 0 0 1-4-10 15.3 15.3 0 0 1 4-10z"
+                  ></path>
+                </svg>
+              </div>
+              <span class="result-label">{t('speed_test.ipAddress')}</span>
+            </div>
+            <span class="result-value" id="ip-value">--</span>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <BaseSettingBlock title={t('settings')}>
+      <div class="setting">
+        <p class="help-text">
+          {t('speed_test.help_text')}
+        </p>
+      </div>
+    </BaseSettingBlock>
+  </div>
+
+  <script
+    is:inline
+    define:vars={{
+      t_download: t('speed_test.download'),
+      t_upload: t('speed_test.upload'),
+      t_latency: t('speed_test.latency'),
+      t_mbps: t('speed_test.mbps'),
+      t_ms: t('speed_test.ms'),
+      t_startTest: t('speed_test.startTest'),
+      t_testing: t('speed_test.testing'),
+      t_testComplete: t('speed_test.testComplete'),
+      t_error: t('speed_test.error'),
+      t_downloadSpeed: t('speed_test.downloadSpeed'),
+      t_uploadSpeed: t('speed_test.uploadSpeed'),
+      t_ping: t('speed_test.ping'),
+      t_testAgain: t('speed_test.testAgain'),
+      t_ipAddress: t('speed_test.ipAddress'),
+      t_unknown: t('speed_test.unknown'),
+    }}
+  >
+    window.speedTestTranslations = {
+      download: t_download,
+      upload: t_upload,
+      latency: t_latency,
+      mbps: t_mbps,
+      ms: t_ms,
+      startTest: t_startTest,
+      testing: t_testing,
+      testComplete: t_testComplete,
+      error: t_error,
+      downloadSpeed: t_downloadSpeed,
+      uploadSpeed: t_uploadSpeed,
+      ping: t_ping,
+      testAgain: t_testAgain,
+      ipAddress: t_ipAddress,
+      unknown: t_unknown,
+    };
+  </script>
+
+  <script>
+    import { initSpeedTest } from '../../../scripts/speed-test';
+
+    declare global {
+      interface Window {
+        speedTestTranslations: {
+          download: string;
+          upload: string;
+          latency: string;
+          mbps: string;
+          ms: string;
+          startTest: string;
+          testing: string;
+          testComplete: string;
+          error: string;
+          downloadSpeed: string;
+          uploadSpeed: string;
+          ping: string;
+          testAgain: string;
+          ipAddress: string;
+          unknown: string;
+        };
+      }
+    }
+
+    // Wait for DOM to be ready
+    if (document.readyState === 'loading') {
+      document.addEventListener('DOMContentLoaded', () => {
+        initSpeedTest(window.speedTestTranslations);
+      });
+    } else {
+      initSpeedTest(window.speedTestTranslations);
+    }
+  </script>
+</BasePage>

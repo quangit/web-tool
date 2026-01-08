@@ -47,6 +47,7 @@ export const toolSections: ToolSection[] = [
           { url: 'compare', name: 'Compare Files & Folders', icon: 'git-compare' },
           { url: 'calculator', name: 'Calculator', icon: 'calculator' },
           { url: 'keyboard-test', name: 'Keyboard Test', icon: 'keyboard' },
+          { url: 'typing-practice', name: 'Typing Practice', icon: 'type' },
         ],
       },
       {
@@ -65,11 +66,16 @@ export const toolSections: ToolSection[] = [
           { url: 'clock/stopwatch', name: 'Stopwatch', icon: 'timer' },
           { url: 'clock/timer', name: 'Timer', icon: 'hourglass' },
           { url: 'clock/alarm', name: 'Alarm', icon: 'alarm-clock' },
+          { url: 'clock/calendar', name: 'Calendar', icon: 'calendar' },
         ],
       },
       {
         title: 'Weather',
         items: [{ url: 'weather', name: 'Weather', icon: 'cloud-sun' }],
+      },
+      {
+        title: 'Network',
+        items: [{ url: 'network-speed-test', name: 'Speed Test', icon: 'gauge' }],
       },
     ],
   },
